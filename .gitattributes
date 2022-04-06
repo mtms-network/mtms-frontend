@@ -1,0 +1,3 @@
+*.txt -crlf
+*.sh -lf
+*.bash -lf
