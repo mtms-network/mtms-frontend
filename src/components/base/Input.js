@@ -7,7 +7,7 @@ export const InputSingle = ({
   error,
   className,
   disabled,
-  registered,
+  register,
   containerClass,
   ...rest
 }) => {
@@ -21,14 +21,14 @@ export const InputSingle = ({
           className || "input-md",
         )}
         disabled={disabled}
-        {...registered}
+        {...register}
         {...rest}
       />
     </div>
   );
 };
 
-const Input = ({ className, label, type, error, registered, disabled, required, ...rest }) => {
+const Input = ({ className, label, type, error, register, disabled, required, ...rest }) => {
   return (
     <FormControl required={required} label={label} error={error}>
       <InputSingle
@@ -36,7 +36,7 @@ const Input = ({ className, label, type, error, registered, disabled, required, 
         error={error}
         className={className}
         disabled={disabled}
-        register={registered}
+        register={register}
         {...rest}
       />
     </FormControl>

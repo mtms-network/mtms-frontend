@@ -1,6 +1,8 @@
 export const routeUrls = {
-    login: {
-      path: 'login',
-    },
-  };
-  
+  login: {
+    path: "login",
+  },
+  register: {
+    path: "register",
+  },
+};
