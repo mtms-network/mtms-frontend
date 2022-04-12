@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Input } from "components";
+import { Alert, GuestFormLayout, Input } from "components";
+import { useNavigate } from "react-router-dom";
+import { ALERT_TYPE, routeUrls } from "configs";
+import { login } from "services";
 
 export default function Login() {
-  const remember = true;
+  const navigate = useNavigate();
+  const remember = false;
+  const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
 
   const schema = yup
     .object()
     .shape({
-      email: yup.string().email("Invalid email").required("Email is required"),
+      email: yup.string().required("Email is required"),
       password: yup.string().required("Password is required"),
     })
     .required();
@@ -24,26 +29,31 @@ export default function Login() {
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
+    try {
+      const data = await login({
+        email: values.email,
+        password: values.password,
+        device_name: "1",
+      });
+    } catch (error) {
+      if (error) {
+        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: "kk" });
+      }
+    }
   };
 
-  const LoginLayout = ({ children }) => (
-    <div className="flex w-screen h-screen justify-center items-center px-4 md:px-0">
-      <div className="w-full md:w-[35%] h-auto">
-        <div className="flex flex-col items-center form-base w-full h-auto p-6">
-          <div>
-            <img src="/images/mtms-logo.png" alt="logo" />
-          </div>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
+  const onForgetPassword = () => {
+    navigate(`/${routeUrls.reset.path}`);
+  };
+
+  const onLogin = () => {
+    navigate(`/${routeUrls.login.path}`);
+  };
 
   const renderLogin = () => {
     return (
-      <LoginLayout>
-        <div className="pt-12 pb-6">
+      <GuestFormLayout>
+        <div className="pt-8 pb-4">
           <p className="text-white text-lg">Login to your Account</p>
         </div>
         <div className="w-full">
@@ -51,6 +61,14 @@ export default function Login() {
         </div>
         <div className="w-full pt-4">
           <button className="btn btn-base">Connect Avalanche</button>
+        </div>
+        <div className="pt-4 w-full">
+          <Alert
+            {...{ ...alert }}
+            onClose={() => {
+              setAlert({ ...alert, show: false });
+            }}
+          />
         </div>
         <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full pt-6">
@@ -73,17 +91,21 @@ export default function Login() {
           </div>
         </form>
         <div className="flex flex-row justify-between w-full pt-6">
-          <a className="text-[13px] btn-link-dark">Forget Password?</a>
-          <a className="text-[13px] btn-link-light">Click to Register</a>
+          <a className="text-[13px] btn-link-dark" onClick={onForgetPassword}>
+            Forget Password?
+          </a>
+          <a className="text-[13px] btn-link-light" onClick={onLogin}>
+            Click to Register
+          </a>
         </div>
-      </LoginLayout>
+      </GuestFormLayout>
     );
   };
 
   const renderUnlock = () => {
     return (
-      <LoginLayout>
-        <div className="pt-12 pb-6">
+      <GuestFormLayout>
+        <div className="pt-8 pb-4">
           <div className="w-32 h-32 border-base rounded-full flex justify-center items-center bg-color-base-200">
             <p className="text-4xl">AV</p>
           </div>
@@ -106,10 +128,12 @@ export default function Login() {
           </div>
         </form>
         <div className="flex flex-row justify-between w-full pt-6">
-          <a className="text-[13px] btn-link-dark">Forget Password?</a>
-          <a className="text-[13px] btn-link-light">Logout</a>
+          <a className="text-xs btn-link-dark" onClick={onForgetPassword}>
+            Forget Password?
+          </a>
+          <a className="text-xs btn-link-light">Logout</a>
         </div>
-      </LoginLayout>
+      </GuestFormLayout>
     );
   };
 

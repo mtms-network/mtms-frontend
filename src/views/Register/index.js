@@ -1,10 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Input } from "components";
+import { GuestFormLayout, Input } from "components";
 
 export default function Register() {
+  const navigate = useNavigate();
   const schema = yup
     .object()
     .shape({
@@ -29,25 +31,15 @@ export default function Register() {
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
   };
 
-  const LoginLayout = ({ children }) => (
-    <div className="flex w-screen h-screen justify-center items-center px-4 md:px-0">
-      <div className="w-full md:w-[35%] h-auto">
-        <div className="flex flex-col items-center form-base w-full h-auto p-6">
-          <div>
-            <img src="/images/mtms-logo.png" alt="logo" />
-          </div>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
+  const onLogin = () => {
+    navigate("/");
+  };
 
   return (
-    <LoginLayout>
-      <div className="pt-12 pb-6">
+    <GuestFormLayout>
+      <div className="pt-8 pb-4">
         <p className="text-white text-lg">Create Your Account</p>
       </div>
       <div className="w-full">
@@ -65,7 +57,7 @@ export default function Register() {
             error={errors.name}
           />
         </div>
-        <div className="pt-2 w-full flex flex-row justify-between space-x-4">
+        <div className="pt-1 w-full flex flex-row justify-between space-x-4">
           <div className="flex-1">
             <Input
               register={register("email")}
@@ -83,7 +75,7 @@ export default function Register() {
             />
           </div>
         </div>
-        <div className="pt-2 w-full flex flex-row justify-between space-x-4">
+        <div className="pt-1 w-full flex flex-row justify-between space-x-4">
           <div className="flex-1">
             <Input
               type="password"
@@ -103,14 +95,22 @@ export default function Register() {
             />
           </div>
         </div>
-        <div className="w-full pt-9">
+        <div className="flex text-text-200 items-start pt-4">
+          <p className="text-sm">
+            By clicking on Register, you agree to our Terms of Service and Privacy Policy.
+          </p>
+        </div>
+        <div className="w-full pt-7">
           <button className="btn btn-block btn-primary">Login</button>
         </div>
       </form>
-      <div className="flex flex-row justify-between w-full pt-6">
-        <a className="text-[13px] btn-link-dark">Forget Password?</a>
-        <a className="text-[13px] btn-link-light">Click to Register</a>
+
+      <div className="flex flex-row justify-center w-full pt-6">
+        <p className="text-text-200 pr-2 text-xs">Have an account?</p>
+        <a className="btn-link-light text-xs" onClick={onLogin}>
+          Click to Login
+        </a>
       </div>
-    </LoginLayout>
+    </GuestFormLayout>
   );
 }

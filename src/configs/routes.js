@@ -5,4 +5,7 @@ export const routeUrls = {
   register: {
     path: "register",
   },
+  reset: {
+    path: "reset",
+  },
 };
