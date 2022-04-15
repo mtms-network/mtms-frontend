@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { GuestFormLayout, Input } from "components";
+import { handleHttpError } from "helpers";
+import { ALERT_TYPE } from "configs";
 
 export default function Register() {
+  const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const navigate = useNavigate();
   const schema = yup
     .object()
@@ -31,6 +34,14 @@ export default function Register() {
   });
 
   const onSubmit = async (values) => {
+    try {
+      setAlert({ ...alert, show: false, message: "" });
+    } catch (error) {
+      if (error) {
+        const errorData = handleHttpError(error);
+        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
+      }
+    }
   };
 
   const onLogin = () => {

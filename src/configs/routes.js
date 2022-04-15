@@ -8,4 +8,7 @@ export const routeUrls = {
   reset: {
     path: "reset",
   },
+  overview: {
+    path: "overview",
+  },
 };

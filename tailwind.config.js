@@ -42,6 +42,7 @@ module.exports = {
       "text-200": "rgba(255, 255, 255, 0.4)",
       "color-base-100": "rgba(255, 255, 255, 0.02)",
       "color-base-200": "rgba(255, 255, 255, 0.1)",
+      "dark-base": "#1D2122",
     },
     screens: {
       sm: "480px",
@@ -69,7 +70,7 @@ module.exports = {
           success: "#36D399",
           warning: "#FBBD23",
           error: "#F87272",
-          "base-100": "#1D2122",
+          // "base-100": "#1D2122",
         },
       },
     ],

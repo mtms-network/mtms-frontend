@@ -1,6 +1,6 @@
 import { createStore } from "./store";
 
-export const AppStore = createStore({
+const AppStore = createStore({
   language: "en",
   loading: false,
   isAuthenticated: false,
@@ -13,3 +13,4 @@ export const AppStore = createStore({
 });
 
 export const useAppStore = AppStore.useStore;
+export const AppStoreProvider = AppStore.Provider;

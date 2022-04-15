@@ -32,10 +32,16 @@ export const createInstance = (path, options) => {
 
 export const createPublicInstance = (path, options) => {
   const { origin } = window && window.location;
+  console.log(`${origin}${path}`);
   const instance = axios.create({
     baseURL: `${origin}${path}`,
-    headers: { Accept: "application/json" },
+    headers: {
+      Accept: "application/json",
+    },
     ...options,
+  });
+  instance.interceptors.response.use((data) => {
+    return data;
   });
   return instance;
 };

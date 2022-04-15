@@ -18,3 +18,18 @@ export const createStore = (initialState) => {
 
   return { Provider: StoreProvider, useStore };
 };
+
+export const combineProviders = (...providers) => {
+  return providers.reduce(
+    (AccumulatedComponents, CurrentComponent) => {
+      return ({ children }) => {
+        return (
+          <AccumulatedComponents>
+            <CurrentComponent>{children}</CurrentComponent>
+          </AccumulatedComponents>
+        );
+      };
+    },
+    ({ children }) => <>{children}</>,
+  );
+};

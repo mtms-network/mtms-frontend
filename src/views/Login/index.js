@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -6,6 +6,7 @@ import { Alert, GuestFormLayout, Input } from "components";
 import { useNavigate } from "react-router-dom";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { login } from "services";
+import { getAccessToken, handleHttpError, setTokenLoginSucceeded } from "helpers";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -30,14 +31,18 @@ export default function Login() {
 
   const onSubmit = async (values) => {
     try {
+      setAlert({ ...alert, show: false, message: "" });
       const data = await login({
         email: values.email,
         password: values.password,
         device_name: "1",
       });
+      console.log("TODO:", data);
+      // setTokenLoginSucceeded({ accessToken: data?.token, user:data?.user} });
     } catch (error) {
       if (error) {
-        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: "kk" });
+        const errorData = handleHttpError(error);
+        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
       }
     }
   };
@@ -49,6 +54,17 @@ export default function Login() {
   const onLogin = () => {
     navigate(`/${routeUrls.login.path}`);
   };
+
+  const checkToken = () => {
+    const token = getAccessToken();
+    if (token) {
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   const renderLogin = () => {
     return (

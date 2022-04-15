@@ -38,8 +38,12 @@ module.exports = {
     proxy: {
       "/api": {
         target: env.API_PROXY,
+        pathRewrite: {
+          "^/api": "/", // rewrite path
+        },
         secure: true,
         changeOrigin: true,
+        logLevel: "debug",
       },
     },
   },
