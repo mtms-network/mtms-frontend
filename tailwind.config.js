@@ -23,6 +23,33 @@ const componentPlugins = {
       color: "white",
     },
   },
+  ".btn-link-primary": {
+    cursor: "pointer",
+    color: "black",
+    "&:hover": {
+      color: "#0981A2",
+    },
+  },
+  ".btn-outlined-base": {
+    fontWeight: 300,
+    color: "#0981A2",
+    backgroundColor: "rgba(9, 129, 162, 0.1)",
+    "&:hover": {
+      color: "white",
+      backgroundColor: "#0981A2",
+    },
+  },
+  ".btn-fill-base": {
+    fontWeight: 300,
+    color: "#1F1F1F",
+    backgroundColor: "#F7F7F7",
+    border: 0,
+    "&:hover": {
+      color: "#0981A2",
+      borderColor: "#0981A2",
+      backgroundColor: "rgba(9, 129, 162, 0.1)",
+    },
+  },
   ".form-base": {
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",
@@ -34,23 +61,56 @@ const componentPlugins = {
     borderColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 10,
   },
+  ".border-group": {
+    borderWidth: 1.5,
+    borderColor: " #EBEBEB",
+    borderRadius: 10,
+  },
+  ".nav-link": {
+    color: "white",
+  },
+  ".label-base": {
+    color: "black",
+    paddingBottom: 12,
+  },
+  ".bg-white": {
+    backgroundColor: "#fff",
+  },
+  ".bg-black": {
+    backgroundColor: "#000",
+  },
+  ".text-white": {
+    color: "#fff",
+  },
+  ".text-black": {
+    color: "#000",
+  },
+  ".text-cl-base": {
+    color: "#1F1F1F",
+  },
 };
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    colors: {
-      "text-200": "rgba(255, 255, 255, 0.4)",
-      "color-base-100": "rgba(255, 255, 255, 0.02)",
-      "color-base-200": "rgba(255, 255, 255, 0.1)",
-      "dark-base": "#1D2122",
+    extend: {
+      colors: {
+        "text-200": "rgba(255, 255, 255, 0.4)",
+        "color-base-100": "rgba(255, 255, 255, 0.02)",
+        "color-base-200": "rgba(255, 255, 255, 0.1)",
+        "dark-base": "#1D2122",
+        "gray-base-100": "#F7F7F7",
+      },
+      screens: {
+        sm: "480px",
+        md: "768px",
+        lg: "976px",
+        xl: "1440px",
+      },
+      borderWidth: {
+        // DEFAULT: '1px',
+        1: "1px",
+      },
     },
-    screens: {
-      sm: "480px",
-      md: "768px",
-      lg: "976px",
-      xl: "1440px",
-    },
-    extend: {},
   },
   daisyui: {
     styled: true,
@@ -70,7 +130,6 @@ module.exports = {
           success: "#36D399",
           warning: "#FBBD23",
           error: "#F87272",
-          // "base-100": "#1D2122",
         },
       },
     ],

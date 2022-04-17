@@ -9,14 +9,15 @@ export const InputSingle = ({
   disabled,
   register,
   containerClass,
+  rightButton,
   ...rest
 }) => {
   return (
-    <div className={classnames("relative", containerClass)}>
+    <div className={classnames("relative flex items-center justify-center", containerClass)}>
       <input
         type={type}
         className={classnames(
-          "input input-bordered text-base-content w-full",
+          "input input-bordered w-full max-w-xs text-[#000]",
           error && "input-error",
           className || "input-md",
         )}
@@ -24,6 +25,8 @@ export const InputSingle = ({
         {...register}
         {...rest}
       />
+
+      <div className="absolute right-4">{rightButton}</div>
     </div>
   );
 };
