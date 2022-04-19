@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Alert, GuestFormLayout, Input } from "components";
+import { Alert, Button, GuestFormLayout, Input } from "components";
 import { useNavigate } from "react-router-dom";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { login } from "services";
-import { getAccessToken, handleHttpError, setTokenLoginSucceeded } from "helpers";
+import { getUser, handleHttpError, resetUserInfo, setTokenLoginSucceeded } from "helpers";
+import { useAuth } from "hooks";
+import { useAppStore } from "stores/app.store";
 
 export default function Login() {
   const navigate = useNavigate();
-  const remember = false;
+  const [, setAppStore] = useAppStore();
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
 
   const schema = yup
     .object()
@@ -29,22 +33,79 @@ export default function Login() {
     resolver: yupResolver(schema),
   });
 
+  const {
+    register: registerUnlock,
+    handleSubmit: handleSubmitUnlock,
+    formState: { errors: errorsUnlock },
+  } = useForm({
+    resolver: yupResolver(
+      yup
+        .object()
+        .shape({
+          password: yup.string().required("Password is required"),
+        })
+        .required(),
+    ),
+  });
+
   const onSubmit = async (values) => {
     try {
       setAlert({ ...alert, show: false, message: "" });
+      setLoading(true);
       const data = await login({
         email: values.email,
         password: values.password,
         device_name: "1",
       });
-      console.log("TODO:", data);
-      // setTokenLoginSucceeded({ accessToken: data?.token, user:data?.user} });
+
+      setLoading(false);
+      setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
+      setAppStore((draft) => {
+        draft.isAuthenticated = true;
+      });
+      navigate("/");
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
         setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
       }
+      setAppStore((draft) => {
+        draft.isAuthenticated = false;
+      });
+      setLoading(false);
     }
+  };
+
+  const onUnlock = async (values) => {
+    try {
+      setAlert({ ...alert, show: false, message: "" });
+      setLoading(true);
+      const data = await login({
+        email: user?.username,
+        password: values.password,
+        device_name: "1",
+      });
+      setLoading(false);
+      setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
+      setAppStore((draft) => {
+        draft.isAuthenticated = true;
+      });
+      navigate("/");
+    } catch (error) {
+      if (error) {
+        const errorData = handleHttpError(error);
+        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
+      }
+      setAppStore((draft) => {
+        draft.isAuthenticated = false;
+      });
+      setLoading(false);
+    }
+  };
+
+  const onClearUserInfo = () => {
+    resetUserInfo();
+    setUser(null);
   };
 
   const onForgetPassword = () => {
@@ -55,15 +116,13 @@ export default function Login() {
     navigate(`/${routeUrls.login.path}`);
   };
 
-  const checkToken = () => {
-    const token = getAccessToken();
-    if (token) {
-      navigate("/");
-    }
-  };
+  useAuth();
 
   useEffect(() => {
-    checkToken();
+    const userInfo = getUser();
+    if (userInfo) {
+      setUser(userInfo);
+    }
   }, []);
 
   const renderLogin = () => {
@@ -89,12 +148,14 @@ export default function Login() {
         <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full pt-6">
             <Input
+              className="w-full"
               register={register("email")}
               label="Email"
               placeholder="Enter your email"
               error={errors.email}
             />
             <Input
+              className="w-full"
               type="password"
               register={register("password")}
               label="Password"
@@ -103,7 +164,9 @@ export default function Login() {
             />
           </div>
           <div className="w-full pt-9">
-            <button className="btn btn-block btn-primary">Login</button>
+            <Button className="btn-block btn-primary" isLoading={loading}>
+              Login
+            </Button>
           </div>
         </form>
         <div className="flex flex-row justify-between w-full pt-6">
@@ -123,35 +186,48 @@ export default function Login() {
       <GuestFormLayout>
         <div className="pt-8 pb-4">
           <div className="w-32 h-32 border-base rounded-full flex justify-center items-center bg-color-base-200">
-            <p className="text-4xl">AV</p>
+            <p className="text-4xl uppercase">{user?.username.slice(0, 2) || HI}</p>
           </div>
         </div>
         <div className="pt-10 pb-14">
           <p className="text-white text-lg">Login to your Account</p>
         </div>
-        <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
+        <div className="pt-4 w-full">
+          <Alert
+            {...{ ...alert }}
+            onClose={() => {
+              setAlert({ ...alert, show: false });
+            }}
+          />
+        </div>
+        <form className="w-full h-auto" onSubmit={handleSubmitUnlock(onUnlock)}>
           <div className="w-full">
             <Input
+              className="w-full"
               type="password"
-              register={register("password")}
+              register={registerUnlock("password")}
               label="Password"
-              placeholder="Enter your password"
-              error={errors.password}
+              placeholder="***********"
+              error={errorsUnlock.password}
             />
           </div>
           <div className="w-full pt-9">
-            <button className="btn btn-block btn-primary">Login</button>
+            <Button className="btn-block btn-primary" isLoading={loading}>
+              Login
+            </Button>
           </div>
         </form>
         <div className="flex flex-row justify-between w-full pt-6">
           <a className="text-xs btn-link-dark" onClick={onForgetPassword}>
             Forget Password?
           </a>
-          <a className="text-xs btn-link-light">Logout</a>
+          <a className="text-xs btn-link-light" onClick={onClearUserInfo}>
+            Logout
+          </a>
         </div>
       </GuestFormLayout>
     );
   };
 
-  return remember ? renderUnlock() : renderLogin();
+  return user?.username ? renderUnlock() : renderLogin();
 }

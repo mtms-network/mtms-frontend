@@ -32,7 +32,6 @@ export const createInstance = (path, options) => {
 
 export const createPublicInstance = (path, options) => {
   const { origin } = window && window.location;
-  console.log(`${origin}${path}`);
   const instance = axios.create({
     baseURL: `${origin}${path}`,
     headers: {

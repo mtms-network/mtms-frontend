@@ -6,7 +6,7 @@ import { GroupLayout, GroupTitle, Input } from "components";
 const StartInstantMeeting = ({ className }) => {
   return (
     <div className={classnames([className])}>
-      <GroupLayout className="flex flex-col justify-between">
+      <GroupLayout className="flex flex-col justify-between w-full">
         <GroupTitle icon={<IoCalendarClear />} title="Start Instant Meeting" />
         <div className="flex flex-row space-x-4 py-4">
           <div className="basis-1/2">
@@ -37,8 +37,8 @@ const StartInstantMeeting = ({ className }) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-row">
-          <div className="basis-1/2 flex flex-col justify-start items-start">
+        <div className="flex flex-col sm:flex-row">
+          <div className="basis-full sm:basis-1/2 flex flex-col justify-start items-start">
             <div className="form-control">
               <label className="label cursor-pointer flex justify-center items-center gap-2">
                 <input type="checkbox" className="checkbox checkbox-primary checkbox-sm" />
@@ -52,7 +52,7 @@ const StartInstantMeeting = ({ className }) => {
               </label>
             </div>
           </div>
-          <div className="basis-1/2 flex items-end">
+          <div className="basis-full sm:basis-1/2 flex items-end">
             <button className="btn btn-primary btn-block">Start a instant meeting</button>
           </div>
         </div>

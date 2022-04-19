@@ -13,11 +13,11 @@ export const InputSingle = ({
   ...rest
 }) => {
   return (
-    <div className={classnames("relative flex items-center justify-center", containerClass)}>
+    <div className={classnames("relative w-full flex items-center justify-center", containerClass)}>
       <input
         type={type}
         className={classnames(
-          "input input-bordered w-full max-w-xs text-[#000]",
+          "input input-bordered w-full text-black",
           error && "input-error",
           className || "input-md",
         )}

@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IoApps, IoPerson, IoAnalyticsOutline, IoLogoAppleAr, IoMenu } from "react-icons/io5";
 import { FaCalendarPlus, FaPlusCircle } from "react-icons/fa";
+import { resetUserToken } from "helpers";
+import { useAuth } from "hooks";
+import { useAppStore } from "stores/app.store";
 
 const Layout = ({ children }) => {
+  const [, setAppStore] = useAppStore();
+
+  const handleLogout = () => {
+    resetUserToken();
+    setAppStore((draft) => {
+      draft.isAuthenticated = false;
+    });
+  };
+
+  useAuth();
+
   return (
     <>
       <div className="drawer drawer-mobile">
@@ -41,13 +55,34 @@ const Layout = ({ children }) => {
                   </button>
                 </div>
                 <div className="flex flex-row justify-center items-center space-x-2">
-                  <div className="avatar">
-                    <div className="w-12 rounded-full">
-                      <img src="https://api.lorem.space/image/face?hash=28212" />
-                    </div>
-                  </div>
-                  <div className="nav-link">
-                    <p className="font-bold text-lg">Michael Jordan</p>
+                  <div className="dropdown dropdown-end bg-dark-base">
+                    <label
+                      tabIndex="0"
+                      className="hover:cursor-pointer flex flex-row space-x-2 justify-center items-center"
+                    >
+                      <div className="avatar">
+                        <div className="w-12 rounded-full">
+                          <img src="https://api.lorem.space/image/face?hash=28212" />
+                        </div>
+                      </div>
+                      <div className="nav-link">
+                        <p className="font-bold text-lg">Michael Jordan</p>
+                      </div>
+                    </label>
+                    <ul
+                      tabIndex="0"
+                      className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-dark-base rounded-box w-32"
+                    >
+                      <li className="w-full">
+                        <a>Profile</a>
+                      </li>
+                      <li className="w-full">
+                        <a>Settings</a>
+                      </li>
+                      <li className="w-full" onClick={handleLogout}>
+                        <a>Logout</a>
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 <button className="btn btn-primary text-lg">English</button>

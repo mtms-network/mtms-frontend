@@ -17,3 +17,8 @@ export const setTokenLoginSucceeded = ({ accessToken, user }) => {
 export const resetUserToken = () => {
   localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, "");
 };
+
+export const resetUserInfo = () => {
+  localStorage.setItem(LOCAL_STORAGE_KEYS.user, "");
+};
+
