@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { GuestFormLayout, Input } from "components";
-import { handleHttpError } from "helpers";
-import { ALERT_TYPE } from "configs";
+import { Alert, Button, GuestFormLayout, Input } from "components";
+import { handleHttpError, resetUserInfo } from "helpers";
+import { ALERT_TYPE, routeUrls } from "configs";
+import { signUp } from "services";
 
 export default function Register() {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const schema = yup
     .object()
@@ -36,11 +38,31 @@ export default function Register() {
   const onSubmit = async (values) => {
     try {
       setAlert({ ...alert, show: false, message: "" });
+      setLoading(true);
+      const data = await signUp({
+        name: values.name,
+        email: values.email,
+        username: values.username,
+        password: values.password,
+        password_confirmation: values.confirmPassword,
+      });
+      if (data) {
+        resetUserInfo();
+        setAlert({ type: ALERT_TYPE.SUCCESS, show: true, message: `Register successful` });
+        setTimeout(() => {
+          navigate(`/${routeUrls.login.path}`);
+        }, 3000);
+      }
+      setLoading(false);
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
         setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
       }
+      setAppStore((draft) => {
+        draft.isAuthenticated = false;
+      });
+      setLoading(false);
     }
   };
 
@@ -58,6 +80,14 @@ export default function Register() {
       </div>
       <div className="w-full pt-4">
         <button className="btn btn-base">Connect Avalanche</button>
+      </div>
+      <div className="pt-4 w-full">
+        <Alert
+          {...{ ...alert }}
+          onClose={() => {
+            setAlert({ ...alert, show: false });
+          }}
+        />
       </div>
       <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full pt-6">
@@ -111,8 +141,11 @@ export default function Register() {
             By clicking on Register, you agree to our Terms of Service and Privacy Policy.
           </p>
         </div>
+
         <div className="w-full pt-7">
-          <button className="btn btn-block btn-primary">Login</button>
+          <Button className="btn-block btn-primary" isLoading={loading}>
+            Register
+          </Button>
         </div>
       </form>
 

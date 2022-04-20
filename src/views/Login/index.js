@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { Alert, Button, GuestFormLayout, Input } from "components";
 import { useNavigate } from "react-router-dom";
 import { ALERT_TYPE, routeUrls } from "configs";
-import { login } from "services";
+import { signIn } from "services";
 import { getUser, handleHttpError, resetUserInfo, setTokenLoginSucceeded } from "helpers";
 import { useAuth } from "hooks";
 import { useAppStore } from "stores/app.store";
@@ -52,7 +52,7 @@ export default function Login() {
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-      const data = await login({
+      const data = await signIn({
         email: values.email,
         password: values.password,
         device_name: "1",
@@ -80,7 +80,7 @@ export default function Login() {
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-      const data = await login({
+      const data = await signIn({
         email: user?.username,
         password: values.password,
         device_name: "1",
