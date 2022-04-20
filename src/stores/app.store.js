@@ -10,6 +10,10 @@ const AppStore = createStore({
     type: "info",
     message: "",
   },
+  resetPassword: {
+    email: "",
+    code: "",
+  },
 });
 
 export const useAppStore = AppStore.useStore;

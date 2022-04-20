@@ -12,7 +12,7 @@ import { useAppStore } from "stores/app.store";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [, setAppStore] = useAppStore();
+  const [appStore, setAppStore] = useAppStore();
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
@@ -153,6 +153,7 @@ export default function Login() {
               label="Email"
               placeholder="Enter your email"
               error={errors.email}
+              value={appStore.resetPassword.email}
             />
             <Input
               className="w-full"
@@ -186,7 +187,7 @@ export default function Login() {
       <GuestFormLayout>
         <div className="pt-8 pb-4">
           <div className="w-32 h-32 border-base rounded-full flex justify-center items-center bg-color-base-200">
-            <p className="text-4xl uppercase">{user?.username.slice(0, 2) || HI}</p>
+            <p className="text-4xl uppercase">{user?.username.slice(0, 2) || "HI"}</p>
           </div>
         </div>
         <div className="pt-10 pb-14">

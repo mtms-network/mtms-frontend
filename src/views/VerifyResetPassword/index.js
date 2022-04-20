@@ -5,19 +5,26 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { ALERT_TYPE, routeUrls } from "configs";
-import { forgotPassword } from "services";
+import { resetPassword } from "services";
 import { handleHttpError } from "helpers";
 import { useAppStore } from "stores/app.store";
 
-export default function ResetPassword() {
+export default function VerifyResetPassword() {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
-  const [, setAppStore] = useAppStore();
+  const [appStore] = useAppStore();
+
   const navigate = useNavigate();
   const schema = yup
     .object()
     .shape({
       email: yup.string().email("Invalid email").required("Email is required"),
+      code: yup.string().required("Code is required"),
+      password: yup.string().required("Password is required"),
+      confirmPassword: yup
+        .string()
+        .oneOf([yup.ref("password"), null], "Passwords must match")
+        .required("Confirm Password is required"),
     })
     .required();
 
@@ -33,16 +40,20 @@ export default function ResetPassword() {
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-      const data = await forgotPassword({
+      const data = await resetPassword({
         email: values.email,
+        code: values.code,
+        new_password: values.password,
+        new_password_confirmation: values.confirmPassword,
       });
       if (data) {
-        setAppStore((draft) => {
-          draft.resetPassword.email = values.email;
+        setAlert({
+          type: ALERT_TYPE.SUCCESS,
+          show: true,
+          message: `Reset password successful`,
         });
-        setAlert({ type: ALERT_TYPE.SUCCESS, show: true, message: `Request reset password successful` });
         setTimeout(() => {
-          navigate(`/${routeUrls.verifyForgotPassword.path}`);
+          navigate(`/${routeUrls.login.path}`);
         }, 3000);
       }
       setLoading(false);
@@ -66,7 +77,7 @@ export default function ResetPassword() {
   return (
     <GuestFormLayout>
       <div className="pt-8 pb-4">
-        <p className="text-white text-lg">Reset Your Account</p>
+        <p className="text-white text-lg">Forgot your Password</p>
       </div>
       <div className="pt-4 w-full">
         <Alert
@@ -83,11 +94,33 @@ export default function ResetPassword() {
             label="Email"
             placeholder="Enter your email"
             error={errors.email}
+            value={appStore.resetPassword.email || ""}
+          />
+          <Input
+            type="password"
+            register={register("code")}
+            label="Code"
+            placeholder="***********"
+            error={errors.code}
+          />
+          <Input
+            type="password"
+            register={register("password")}
+            label="Password"
+            placeholder="***********"
+            error={errors.password}
+          />
+          <Input
+            type="password"
+            register={register("confirmPassword")}
+            label="Confirm Password"
+            placeholder="***********"
+            error={errors.confirmPassword}
           />
         </div>
         <div className="w-full pt-9">
           <Button className="btn-block btn-primary" isLoading={loading}>
-            Send request
+            Validate code
           </Button>
         </div>
       </form>
