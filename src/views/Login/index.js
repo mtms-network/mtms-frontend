@@ -186,7 +186,7 @@ export default function Login() {
       <GuestFormLayout>
         <div className="pt-8 pb-4">
           <div className="w-32 h-32 border-base rounded-full flex justify-center items-center bg-color-base-200">
-            <p className="text-4xl uppercase">{user?.username.slice(0, 2) || HI}</p>
+            <p className="text-4xl uppercase">{user?.username.slice(0, 2) || "HI"}</p>
           </div>
         </div>
         <div className="pt-10 pb-14">

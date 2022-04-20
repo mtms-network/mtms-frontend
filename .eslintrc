@@ -1,5 +1,5 @@
 {
-	"parser": "babel-eslint",
+	"parser": "@babel/eslint-parser",
 	"extends": [
 		"airbnb",
 		"prettier"
@@ -39,6 +39,7 @@
 				"max": 1
 			}
 		],
+		"camelcase": "warn",
 		"no-unused-vars": "off",
 		"no-param-reassign": "off",
 		"no-unused-expressions": [
@@ -66,10 +67,15 @@
 				]
 			}
 		],
+		"react/function-component-definition": "off",
+		"react/button-has-type": "off",
 		"jsx-a11y/click-events-have-key-events": "off",
 		"jsx-a11y/no-static-element-interactions": "off",
 		"jsx-a11y/anchor-is-valid": "off",
 		"jsx-a11y/mouse-events-have-key-events": "off",
+		"jsx-a11y/label-has-associated-control": "off",
+		"jsx-a11y/no-noninteractive-tabindex": "off",
+		"jsx-a11y/control-has-associated-label": "off",
 		"import/no-unresolved": "off",
 		"import/prefer-default-export": "off",
 		"import/extensions": "off"

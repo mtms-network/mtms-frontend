@@ -1,12 +1,16 @@
-import React from "react";
-import { GuestFormLayout, Input } from "components";
+import React, { useState } from "react";
+import { Alert, Button, GuestFormLayout, Input } from "components";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { routeUrls } from "configs";
+import { ALERT_TYPE, routeUrls } from "configs";
+import { forgotPassword } from "services";
+import { handleHttpError } from "helpers";
 
 export default function ResetPassword() {
+  const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const schema = yup
     .object()
@@ -23,10 +27,28 @@ export default function ResetPassword() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async (values) => {
+    try {
+      setAlert({ ...alert, show: false, message: "" });
+      setLoading(true);
+      const data = await forgotPassword({
+        email: values.email,
+      });
+      if (data) {
+        setAlert({ type: ALERT_TYPE.SUCCESS, show: true, message: `Reset password successful` });
+      }
+      setLoading(false);
+    } catch (error) {
+      if (error) {
+        const errorData = handleHttpError(error);
+        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
+      }
+      setLoading(false);
+    }
+  };
 
   const onLogin = () => {
-    navigate("/");
+    navigate(`/${routeUrls.login.path}`);
   };
 
   const onRegister = () => {
@@ -38,6 +60,14 @@ export default function ResetPassword() {
       <div className="pt-8 pb-4">
         <p className="text-white text-lg">Reset Your Account</p>
       </div>
+      <div className="pt-4 w-full">
+        <Alert
+          {...{ ...alert }}
+          onClose={() => {
+            setAlert({ ...alert, show: false });
+          }}
+        />
+      </div>
       <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full pt-6">
           <Input
@@ -48,7 +78,9 @@ export default function ResetPassword() {
           />
         </div>
         <div className="w-full pt-9">
-          <button className="btn btn-block btn-primary">Login</button>
+          <Button className="btn-block btn-primary" isLoading={loading}>
+            Send request
+          </Button>
         </div>
       </form>
       <div className="flex flex-row justify-between w-full pt-6">

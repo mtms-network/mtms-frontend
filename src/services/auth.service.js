@@ -18,3 +18,10 @@ export const signUp = async ({ name, email, username, password, password_confirm
   });
   return res?.data;
 };
+
+export const forgotPassword = async ({ email }) => {
+  const res = await client.post("/password", {
+    email,
+  });
+  return res?.data;
+};

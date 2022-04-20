@@ -39,10 +39,10 @@ const MeetingHistory = ({ className }) => {
                   <th className="bg-white">Host</th>
                   <th className="bg-white">Type</th>
                   <th className="bg-white">Code</th>
-                  <th className="bg-white"></th>
+                  <th className="bg-white" />
                   <th className="bg-white">Started at</th>
                   <th className="bg-white">Ended at</th>
-                  <th className="bg-white"></th>
+                  <th className="bg-white" />
                 </tr>
               </thead>
               <tbody className="border-0">

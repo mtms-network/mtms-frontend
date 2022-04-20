@@ -6,4 +6,9 @@ export const handleHttpError = (error) => {
       detail: "",
     };
   }
+  return {
+    message: "",
+    code: "",
+    detail: "",
+  };
 };

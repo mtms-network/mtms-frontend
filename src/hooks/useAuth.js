@@ -13,11 +13,9 @@ const useAuth = () => {
     const token = getAccessToken();
     if (token) {
       navigate("/");
-    } else {
-      if (location.pathname === "/") {
+    } else if (location.pathname === "/") {
         navigate(`${routeUrls.login.path}`);
       }
-    }
   };
 
   return useEffect(() => {

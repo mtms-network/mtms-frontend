@@ -30,6 +30,6 @@ export const combineProviders = (...providers) => {
         );
       };
     },
-    ({ children }) => <>{children}</>,
+    ({ children }) => children,
   );
 };

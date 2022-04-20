@@ -59,9 +59,6 @@ export default function Register() {
         const errorData = handleHttpError(error);
         setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
       }
-      setAppStore((draft) => {
-        draft.isAuthenticated = false;
-      });
       setLoading(false);
     }
   };
