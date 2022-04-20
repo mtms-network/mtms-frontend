@@ -1,7 +1,7 @@
-import webpack from 'webpack';
-import dotenv from 'dotenv';
+const webpack = require("webpack");
+const dotenv = require("dotenv");
 
-import paths from './paths';
+const paths = require("./paths");
 
 const env = dotenv.config().parsed;
 const envKeys = Object.keys(env || {}).reduce((prev, next) => {
@@ -10,40 +10,42 @@ const envKeys = Object.keys(env || {}).reduce((prev, next) => {
 }, {});
 
 module.exports = {
-  mode: 'development',
+  mode: "development",
   output: {
-    filename: '[name].js',
+    filename: "[name].js",
     path: paths.outputPath,
-    chunkFilename: '[name].js',
-    publicPath: '/',
+    chunkFilename: "[name].js",
+    publicPath: "/",
   },
   performance: {
-    hints: 'warning',
+    hints: "warning",
     maxAssetSize: 20000000,
     maxEntrypointSize: 8500000,
-    assetFilter: assetFilename => {
-      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
+    assetFilter: (assetFilename) => {
+      return assetFilename.endsWith(".css") || assetFilename.endsWith(".js");
     },
   },
   optimization: {
     splitChunks: {
-      chunks: 'all',
+      chunks: "all",
     },
   },
   devServer: {
     port: 8080,
     compress: true,
     historyApiFallback: true,
+    hot: true,
     proxy: {
-      '/api': {
-        target: process.env.API_URL,
-        changeOrigin: true,
+      "/api": {
+        target: env.API_PROXY,
+        pathRewrite: {
+          "^/api": "/", // rewrite path
+        },
         secure: true,
+        changeOrigin: true,
+        logLevel: "debug",
       },
     },
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin(envKeys),
-  ],
+  plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.DefinePlugin(envKeys)],
 };

@@ -1,11 +1,14 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import Routers from 'routes';
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import Routers from "routes";
+import { AppContextProvider } from "stores";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Routers />
+      <AppContextProvider>
+        <Routers />
+      </AppContextProvider>
     </BrowserRouter>
   );
 };
