@@ -12,7 +12,7 @@ import { useAppStore } from "stores/app.store";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [, setAppStore] = useAppStore();
+  const [appStore, setAppStore] = useAppStore();
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
@@ -153,6 +153,7 @@ export default function Login() {
               label="Email"
               placeholder="Enter your email"
               error={errors.email}
+              value={appStore.resetPassword.email}
             />
             <Input
               className="w-full"

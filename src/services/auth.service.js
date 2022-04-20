@@ -25,3 +25,13 @@ export const forgotPassword = async ({ email }) => {
   });
   return res?.data;
 };
+
+export const resetPassword = async ({ email, code, new_password, new_password_confirmation }) => {
+  const res = await client.post("/reset", {
+    email,
+    code,
+    new_password,
+    new_password_confirmation,
+  });
+  return res?.data;
+};

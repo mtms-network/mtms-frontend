@@ -8,6 +8,9 @@ export const routeUrls = {
   reset: {
     path: "reset",
   },
+  verifyForgotPassword: {
+    path: "verify",
+  },
   overview: {
     path: "overview",
   },

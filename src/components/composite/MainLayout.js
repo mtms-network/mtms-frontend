@@ -73,13 +73,15 @@ const Layout = ({ children }) => {
                     className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-dark-base rounded-box w-32"
                   >
                     <li className="w-full">
-                      <a>Profile</a>
+                      <a className="btn btn-block hover:text-primary">Profile</a>
                     </li>
                     <li className="w-full">
-                      <a>Settings</a>
+                      <a className="btn btn-block hover:text-primary">Settings</a>
                     </li>
                     <li className="w-full">
-                      <a onClick={handleLogout}>Logout</a>
+                      <a className="btn btn-block hover:text-primary" onClick={handleLogout}>
+                        Logout
+                      </a>
                     </li>
                   </ul>
                 </div>
