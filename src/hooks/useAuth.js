@@ -12,10 +12,12 @@ const useAuth = () => {
   const checkToken = () => {
     const token = getAccessToken();
     if (token) {
-      navigate("/");
-    } else if (location.pathname === "/") {
-        navigate(`${routeUrls.login.path}`);
+      if (location.pathname === `/${routeUrls.login.path}`) {
+        navigate("/");
       }
+    } else if (location.pathname === "/") {
+      navigate(`${routeUrls.login.path}`);
+    }
   };
 
   return useEffect(() => {
