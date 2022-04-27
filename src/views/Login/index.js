@@ -153,7 +153,6 @@ export default function Login() {
               label="Email"
               placeholder="Enter your email"
               error={errors.email}
-              value={appStore.resetPassword.email}
             />
             <Input
               className="w-full"

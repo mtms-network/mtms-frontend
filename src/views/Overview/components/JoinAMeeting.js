@@ -19,7 +19,7 @@ const JoinAMeeting = ({ className }) => {
         <div className="flex flex-col">
           <Input placeholder="Enter meeting code" className="bg-gray-base-100 border-0" />
           <div className="w-full pt-4">
-            <button className="btn btn-primary btn-block">Start a instant meeting</button>
+            <button className="btn btn-primary btn-block text-white">Join meeting now</button>
           </div>
         </div>
       </GroupLayout>

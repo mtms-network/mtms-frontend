@@ -14,8 +14,8 @@ const OverviewNavBar = () => {
         className="flex flex-col sm:flex-row basis-1/2 sm:basis-full
       sm:space-x-4 space-y-2  sm:space-y-0 justify-center sm:justify-end"
       >
-        <button className="btn btn-primary btn-sm">M - Wallet</button>
-        <button className="btn btn-primary btn-sm">User Center</button>
+        <button className="btn btn-primary btn-sm text-white">M - Wallet</button>
+        <button className="btn btn-primary btn-sm text-white">User Center</button>
       </div>
     </div>
   );
