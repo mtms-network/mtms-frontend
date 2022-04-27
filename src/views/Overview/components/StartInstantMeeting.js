@@ -53,7 +53,7 @@ const StartInstantMeeting = ({ className }) => {
             </div>
           </div>
           <div className="basis-full sm:basis-1/2 flex items-end">
-            <button className="btn btn-primary btn-block">Start a instant meeting</button>
+            <button className="btn btn-primary btn-block text-white">Start a instant meeting</button>
           </div>
         </div>
       </GroupLayout>

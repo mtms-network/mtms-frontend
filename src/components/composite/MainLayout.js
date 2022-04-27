@@ -4,9 +4,14 @@ import { FaCalendarPlus, FaPlusCircle } from "react-icons/fa";
 import { resetUserToken } from "helpers";
 import { useAuth } from "hooks";
 import { useAppStore } from "stores/app.store";
+import { useLocation, useNavigate } from "react-router-dom";
+import { routeUrls } from "configs";
+import classNames from "classnames";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, bottom }) => {
   const [, setAppStore] = useAppStore();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     resetUserToken();
@@ -14,6 +19,8 @@ const Layout = ({ children }) => {
       draft.isAuthenticated = false;
     });
   };
+
+  const onSelectionLeftNav = () => {};
 
   useAuth();
 
@@ -90,7 +97,14 @@ const Layout = ({ children }) => {
             </div>
           </div>
         </div>
-        <div className="bg-[#fff] w-full h-full overflow-scroll p-4">{children}</div>
+        <div className="bg-white w-full p-4 relative">
+          <div className="flex flex-col pb-16">{children}</div>
+          {bottom && (
+            <div className="absolute pt-4 bg-white bottom-0 w-full pr-16">
+              <div className="flex py-2 flex-1">{bottom}</div>
+            </div>
+          )}
+        </div>
       </div>
       <div className="drawer-side bg-dark-base">
         <label htmlFor="my-drawer-3" className="drawer-overlay" />
@@ -98,33 +112,70 @@ const Layout = ({ children }) => {
           <div>
             <img src="/images/mtms-logo.png" alt="logo" />
           </div>
-          <div className="pt-8 space-y-8">
+          <div className="pt-8 space-y-4">
             <div className="w-full">
-              <button className="text-base font-normal btn btn-base justify-start">
+              <button
+                className={classNames(
+                  "text-base font-normal",
+                  location.pathname !== "/"
+                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
+                    : "font-normal btn btn-base justify-start",
+                )}
+                onClick={() => navigate("/")}
+              >
                 <IoLogoAppleAr />
                 <p className="pl-2">Overview</p>
               </button>
             </div>
             <div className="w-full">
-              <button className="pl-4 text-base btn-link-dark justify- items-center flex flex-row">
+              <button
+                className={classNames(
+                  "text-base font-normal",
+                  location.pathname !== `/${routeUrls.scheduleMeeting.path}`
+                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
+                    : "font-normal btn btn-base justify-start",
+                )}
+                onClick={() => navigate(`/${routeUrls.scheduleMeeting.path}`)}
+              >
                 <FaCalendarPlus />
                 <p className="pl-2">Schedule a Meeting</p>
               </button>
             </div>
             <div className="w-full">
-              <button className="pl-4 text-base btn-link-dark justify- items-center flex flex-row">
+              <button
+                className={classNames(
+                  "text-base font-normal",
+                  location.pathname !== `/${routeUrls.room247.path}`
+                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
+                    : "font-normal btn btn-base justify-start",
+                )}
+              >
                 <IoApps />
                 <p className="pl-2">Rooms 24/7</p>
               </button>
             </div>
             <div className="w-full">
-              <button className="pl-4 text-base btn-link-dark justify- items-center flex flex-row">
+              <button
+                className={classNames(
+                  "text-base font-normal",
+                  location.pathname !== `/${routeUrls.contact.path}`
+                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
+                    : "font-normal btn btn-base justify-start",
+                )}
+              >
                 <IoPerson />
                 <p className="pl-2">Contacts</p>
               </button>
             </div>
             <div className="w-full">
-              <button className="pl-4 text-base btn-link-dark justify- items-center flex flex-row">
+              <button
+                className={classNames(
+                  "text-base font-normal",
+                  location.pathname !== `/${routeUrls.analytic.path}`
+                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
+                    : "font-normal btn btn-base justify-start",
+                )}
+              >
                 <IoAnalyticsOutline />
                 <p className="pl-2">Analytics</p>
               </button>

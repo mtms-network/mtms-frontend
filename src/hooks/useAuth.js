@@ -7,15 +7,21 @@ import { useAppStore } from "stores/app.store";
 const useAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [appStore] = useAppStore();
+  const [appStore, setAppStore] = useAppStore();
 
   const checkToken = () => {
     const token = getAccessToken();
+
     if (token) {
-      navigate("/");
-    } else if (location.pathname === "/") {
-        navigate(`${routeUrls.login.path}`);
+      setAppStore((draft) => {
+        draft.isAuthenticated = true;
+      });
+      if (location.pathname === `/${routeUrls.login.path}`) {
+        navigate("/");
       }
+    } else if (location.pathname !== `/${routeUrls.login.path}`) {
+      navigate(`/${routeUrls.login.path}`);
+    }
   };
 
   return useEffect(() => {
