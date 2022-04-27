@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { IoApps, IoPerson, IoAnalyticsOutline, IoLogoAppleAr, IoMenu } from "react-icons/io5";
 import { FaCalendarPlus, FaPlusCircle } from "react-icons/fa";
 import { resetUserToken } from "helpers";
-import { useAuth } from "hooks";
+import { useAuth, useDimensions } from "hooks";
 import { useAppStore } from "stores/app.store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";
@@ -23,12 +23,16 @@ const Layout = ({ children, bottom }) => {
   const onSelectionLeftNav = () => {};
 
   useAuth();
+  const { width } = useDimensions();
 
   return (
     <div className="drawer drawer-mobile">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <div className="w-full navbar bg-dark-base">
+        <div
+          className="navbar bg-dark-base fixed z-10 h-18"
+          style={{ width: `calc(${width}px - 320px)` }}
+        >
           <div className="flex-none lg:hidden">
             <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
               <IoMenu />
@@ -97,11 +101,14 @@ const Layout = ({ children, bottom }) => {
             </div>
           </div>
         </div>
-        <div className="bg-white w-full p-4 relative">
-          <div className="flex flex-col pb-16">{children}</div>
+        <div className={classNames("bg-white relative")}>
+          <div className="flex flex-col pb-20 pt-28 overflow-y-auto px-4">{children}</div>
           {bottom && (
-            <div className="absolute pt-4 bg-white bottom-0 w-full pr-16">
-              <div className="flex py-2 flex-1">{bottom}</div>
+            <div
+              className="navbar bg-white fixed z-10 bottom-0 px-4"
+              style={{ width: `calc(${width}px - 320px)` }}
+            >
+              <div className="flex py-2 w-full">{bottom}</div>
             </div>
           )}
         </div>
