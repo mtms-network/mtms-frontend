@@ -6,11 +6,10 @@ WORKDIR /app
 COPY package*.json /app/
 COPY ./ /app/
 
-RUN npm install -global yarn
-RUN yarn install \
+RUN npm install \
     && npm rebuild node-sass \
-    && yarn build \
-    && yarn cache clean
+    && npm run build \
+    && npm cache clean -f
     
 # Stage 2, based on Nginx, to have only the compiled app, ready for production with Nginx
 FROM nginx:1.17-alpine
