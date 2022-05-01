@@ -38,16 +38,16 @@ const Layout = ({ children, bottom }) => {
             <div>
               <ul className="menu menu-horizontal p-0 flex flex-row justify-start">
                 <li className="nav-link">
-                  <a className="font-bold text-lg">Home</a>
+                  <a className="font-bold text-base">Home</a>
                 </li>
                 <li className="nav-link">
-                  <a className="font-bold text-lg">Products</a>
+                  <a className="font-bold text-base">Products</a>
                 </li>
                 <li className="nav-link">
-                  <a className="font-bold text-lg">MTMS Farmer</a>
+                  <a className="font-bold text-base">MTMS Farmer</a>
                 </li>
                 <li className="nav-link">
-                  <a className="font-bold text-lg">NFT Marketplace</a>
+                  <a className="font-bold text-base">NFT Marketplace</a>
                 </li>
               </ul>
             </div>
@@ -55,7 +55,7 @@ const Layout = ({ children, bottom }) => {
           <div className="flex-none hidden lg:block px-4">
             <div className="menu menu-horizontal space-x-3 py-4">
               <div>
-                <button className="btn btn-primary gap-2 text-lg">
+                <button className="btn btn-primary gap-2 text-base">
                   <FaPlusCircle />
                   Buy MTMS
                 </button>
@@ -72,7 +72,7 @@ const Layout = ({ children, bottom }) => {
                       </div>
                     </div>
                     <div className="nav-link">
-                      <p className="font-bold text-lg">Michael Jordan</p>
+                      <p className="font-bold text-base">Michael Jordan</p>
                     </div>
                   </label>
                   <ul
@@ -93,12 +93,12 @@ const Layout = ({ children, bottom }) => {
                   </ul>
                 </div>
               </div>
-              <button className="btn btn-primary text-lg">English</button>
+              <button className="btn btn-primary text-base">English</button>
             </div>
           </div>
         </div>
-        <div className="bg-white w-full p-4 relative">
-          <div className="flex flex-col pb-16">{children}</div>
+        <div className="bg-white w-full relative">
+          <div className="flex flex-col pb-16 p-4">{children}</div>
           {bottom && (
             <div className="absolute pt-4 bg-white bottom-0 w-full pr-16">
               <div className="flex py-2 flex-1">{bottom}</div>
