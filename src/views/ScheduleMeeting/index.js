@@ -32,7 +32,7 @@ const ScheduleMeeting = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row sm:flex-col gap-4">
+      <div className="flex flex-row sm:flex-col gap-4 relative">
         <div>
           <GroupTitle title="Meetings today" />
         </div>

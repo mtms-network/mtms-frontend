@@ -22,10 +22,10 @@ const Pagination = ({ limit = 1, page = 1, totalPage = 1, from = 1, to = 1, clas
             className="input input-primary bg-primary text-white w-16 text-center max-w-xs"
           />
           <p className="text-dark-base">{`of ${totalPage}`}</p>
-          <button className="btn btn-square btn-ghost btn-active">
+          <button className="btn btn-square btn-ghost btn-active text-black">
             <IoChevronBack />
           </button>
-          <button className="btn btn-square btn-ghost btn-active">
+          <button className="btn btn-square btn-ghost btn-active text-black">
             <IoChevronForward />
           </button>
         </div>

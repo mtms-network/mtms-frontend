@@ -38,7 +38,7 @@ const Layout = ({ children, bottom }) => {
               <IoMenu />
             </label>
           </div>
-          <div className="flex-1 px-2 mx-2">
+          <div className="flex-1 px-2 mx-2 hidden lg:block">
             <div>
               <ul className="menu menu-horizontal p-0 flex flex-row justify-start">
                 <li className="nav-link">
@@ -101,8 +101,8 @@ const Layout = ({ children, bottom }) => {
             </div>
           </div>
         </div>
-        <div className="bg-white w-full relative">
-          <div className="flex flex-col pb-16 p-4">{children}</div>
+        <div className={classNames("bg-white relative")}>
+          <div className="flex flex-col pb-20 pt-28 overflow-y-auto px-4 relative">{children}</div>
           {bottom && (
             <div
               className="navbar bg-white fixed z-10 bottom-0 px-4"
