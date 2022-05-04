@@ -3,6 +3,7 @@ const plugin = require("tailwindcss/plugin");
 const componentPlugins = {
   ".btn": {
     textTransform: "capitalize",
+    color: "white",
   },
   ".btn-base": {
     width: "100%",
@@ -136,7 +137,7 @@ module.exports = {
   },
   plugins: [
     require("daisyui"),
-    plugin(function ({ addUtilities, addComponents, e, prefix, config }) {
+    plugin(({ addUtilities, addComponents, e, prefix, config }) => {
       addComponents(componentPlugins);
     }),
   ],

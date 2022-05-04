@@ -1,6 +1,7 @@
 export const BASE_API = {
   api: "/api",
   auth: "/api/auth",
+  meeting: "/api/meetings",
 };
 
 export const ALERT_TYPE = {

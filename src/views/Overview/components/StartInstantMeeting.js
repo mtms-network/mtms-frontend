@@ -2,8 +2,11 @@ import React from "react";
 import { IoCalendarClear } from "react-icons/io5";
 import classnames from "classnames";
 import { GroupLayout, GroupTitle, Input } from "components";
+import { useMeetingStore } from "stores/meeting.store";
 
 const StartInstantMeeting = ({ className }) => {
+  const [meetingStore] = useMeetingStore();
+
   return (
     <div className={classnames([className])}>
       <GroupLayout className="flex flex-col justify-between w-full">
@@ -27,13 +30,14 @@ const StartInstantMeeting = ({ className }) => {
         <div className="flex flex-row space-x-4 py-4">
           <div className="flex-1">
             <p className="label-base">Select Meeting Type</p>
-            <div className="flex-wrap flex gap-2 justify-between">
-              <button className="btn btn-primary btn-outlined-base">Audio Conference</button>
-              <button className="btn btn-fill-base">Live class</button>
-              <button className="btn btn-fill-base">Podcast</button>
-              <button className="btn btn-fill-base">Podcast</button>
-              <button className="btn btn-fill-base">Video Conference</button>
-              <button className="btn btn-fill-base">Webinar</button>
+            <div className="flex-wrap flex gap-2 w-full">
+              {meetingStore?.types?.map((item) => {
+                return (
+                  <button className="btn btn-fill-base" key={item.uuid}>
+                    {item.name}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -53,7 +57,7 @@ const StartInstantMeeting = ({ className }) => {
             </div>
           </div>
           <div className="basis-full sm:basis-1/2 flex items-end">
-            <button className="btn btn-primary btn-block text-white">Start a instant meeting</button>
+            <button className="btn btn-primary btn-block">Start a instant meeting</button>
           </div>
         </div>
       </GroupLayout>

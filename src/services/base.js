@@ -9,7 +9,7 @@ export const handleError = (error) => {
   return message;
 };
 
-export const createInstance = (path, options) => {
+export const createPrivateInstance = (path, options) => {
   const { origin } = window && window.location;
   const instance = axios.create({
     baseURL: `${origin}${path}`,

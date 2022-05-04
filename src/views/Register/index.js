@@ -44,7 +44,7 @@ export default function Register() {
         email: values.email,
         username: values.username,
         password: values.password,
-        password_confirmation: values.confirmPassword,
+        passwordConfirmation: values.confirmPassword,
       });
       if (data) {
         resetUserInfo();

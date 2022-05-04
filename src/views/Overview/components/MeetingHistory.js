@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   IoEllipsisHorizontal,
   IoFilterCircle,
@@ -10,8 +10,24 @@ import {
 } from "react-icons/io5";
 import classnames from "classnames";
 import { GroupLayout, GroupTitle, Input } from "components";
+import { getMeetingHistories } from "services/meeting.service";
 
 const MeetingHistory = ({ className }) => {
+  const [histories, setHistories] = useState([]);
+  const fetchData = async () => {
+    try {
+      const res = await getMeetingHistories();
+      if (res?.data) {
+        setHistories(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div className={classnames([className])}>
       <GroupLayout className="flex flex-col w-full">
@@ -46,46 +62,28 @@ const MeetingHistory = ({ className }) => {
                 </tr>
               </thead>
               <tbody className="border-0">
-                <tr className="text-cl-base text-xs border-0">
-                  <td>A VIN (buithinh)</td>
-                  <td>AUDIO CONFERENCE</td>
-                  <td>PoWMwh</td>
-                  <td className="space-x-2">
-                    <button className="btn btn-square btn-xs bg-primary border-0">
-                      <IoShareOutline />
-                    </button>
-                    <button>
-                      <IoPeople />
-                    </button>
-                  </td>
-                  <td>Feb 28, 2022 8:24 AM</td>
-                  <td>Feb 28, 2022 9:31 AM</td>
-                  <td>
-                    <button className="btn btn-square btn-xs border-0">
-                      <IoEllipsisHorizontal />
-                    </button>
-                  </td>
-                </tr>
-                <tr className="text-cl-base text-xs border-0">
-                  <td>A VIN (buithinh)</td>
-                  <td>AUDIO CONFERENCE</td>
-                  <td>PoWMwh</td>
-                  <td className="space-x-2">
-                    <button className="btn btn-square btn-xs bg-primary border-0">
-                      <IoShareOutline />
-                    </button>
-                    <button>
-                      <IoPeople />
-                    </button>
-                  </td>
-                  <td>Feb 28, 2022 8:24 AM</td>
-                  <td>Feb 28, 2022 9:31 AM</td>
-                  <td>
-                    <button className="btn btn-square btn-xs border-0">
-                      <IoEllipsisHorizontal />
-                    </button>
-                  </td>
-                </tr>
+                {histories.map((item) => (
+                  <tr className="text-cl-base text-xs border-0" key={item?.uuid}>
+                    <td>{item?.user?.profile?.name}</td>
+                    <td>{item?.name}</td>
+                    <td>{item?.identifier}</td>
+                    <td className="space-x-2">
+                      <button className="btn btn-square btn-xs bg-primary border-0">
+                        <IoShareOutline />
+                      </button>
+                      <button>
+                        <IoPeople />
+                      </button>
+                    </td>
+                    <td>{item?.start_date_time}</td>
+                    <td>{item?.ended_at || "-"}</td>
+                    <td>
+                      <button className="btn btn-square btn-xs border-0">
+                        <IoEllipsisHorizontal />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

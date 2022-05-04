@@ -55,7 +55,7 @@ export default function Login() {
       const data = await signIn({
         email: values.email,
         password: values.password,
-        device_name: "1",
+        deviceName: "1",
       });
 
       setLoading(false);
@@ -83,7 +83,7 @@ export default function Login() {
       const data = await signIn({
         email: user?.username,
         password: values.password,
-        device_name: "1",
+        deviceName: "1",
       });
       setLoading(false);
       setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });

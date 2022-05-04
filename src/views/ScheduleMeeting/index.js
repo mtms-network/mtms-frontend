@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, GroupTitle, MainLayout, Pagination } from "components";
 import { IoFilterCircle, IoOptions, IoSwapVertical, IoTv } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
+import { getMeetingHistories } from "services/meeting.service";
 import { MeetingItem } from "./components";
 
 const ScheduleMeeting = () => {
-  const items = [...Array(100).keys()];
+  const [histories, setHistories] = useState([]);
+  const fetchData = async () => {
+    try {
+      const res = await getMeetingHistories();
+      if (res?.data) {
+        setHistories(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <MainLayout bottom={<Pagination />}>
       <div className="flex flex-row justify-between w-full py-2">
@@ -37,8 +52,8 @@ const ScheduleMeeting = () => {
           <GroupTitle title="Meetings today" />
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {items.map(() => (
-            <MeetingItem />
+          {histories.map((item) => (
+            <MeetingItem data={item} key={item?.uuid} />
           ))}
         </div>
       </div>

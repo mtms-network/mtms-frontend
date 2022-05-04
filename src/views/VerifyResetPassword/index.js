@@ -43,8 +43,8 @@ export default function VerifyResetPassword() {
       const data = await resetPassword({
         email: values.email,
         code: values.code,
-        new_password: values.password,
-        new_password_confirmation: values.confirmPassword,
+        newPassword: values.password,
+        newPasswordConfirmation: values.confirmPassword,
       });
       if (data) {
         setAlert({
