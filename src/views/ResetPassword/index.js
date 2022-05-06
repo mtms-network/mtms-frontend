@@ -12,7 +12,7 @@ import { useAppStore } from "stores/app.store";
 export default function ResetPassword() {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
-  const [, setAppStore] = useAppStore();
+  const [, updateAppStore] = useAppStore();
   const navigate = useNavigate();
   const schema = yup
     .object()
@@ -37,7 +37,7 @@ export default function ResetPassword() {
         email: values.email,
       });
       if (data) {
-        setAppStore((draft) => {
+        updateAppStore((draft) => {
           draft.resetPassword.email = values.email;
         });
         setAlert({ type: ALERT_TYPE.SUCCESS, show: true, message: `Request reset password successful` });

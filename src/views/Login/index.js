@@ -12,7 +12,7 @@ import { useAppStore } from "stores/app.store";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [appStore, setAppStore] = useAppStore();
+  const [, updateAppStore] = useAppStore();
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
@@ -60,7 +60,7 @@ export default function Login() {
 
       setLoading(false);
       setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
-      setAppStore((draft) => {
+      updateAppStore((draft) => {
         draft.isAuthenticated = true;
       });
       navigate("/");
@@ -69,7 +69,7 @@ export default function Login() {
         const errorData = handleHttpError(error);
         setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
       }
-      setAppStore((draft) => {
+      updateAppStore((draft) => {
         draft.isAuthenticated = false;
       });
       setLoading(false);
@@ -87,7 +87,7 @@ export default function Login() {
       });
       setLoading(false);
       setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
-      setAppStore((draft) => {
+      updateAppStore((draft) => {
         draft.isAuthenticated = true;
       });
       navigate("/");
@@ -96,7 +96,7 @@ export default function Login() {
         const errorData = handleHttpError(error);
         setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
       }
-      setAppStore((draft) => {
+      updateAppStore((draft) => {
         draft.isAuthenticated = false;
       });
       setLoading(false);

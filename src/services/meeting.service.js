@@ -9,12 +9,12 @@ export const getRequirePreMeeting = async () => {
     const res = await client.get("/pre-requisite");
     return res?.data;
   } catch (error) {
-    console.log("getPreRequireMeeting", error);
+    console.error("getPreRequireMeeting", error);
     return null;
   }
 };
 
-export const getMeetingHistories = async () => {
+export const getMeetingHistories = async ({ limit, page }) => {
   try {
     const defaultFilters = {
       sort_by: "",
@@ -24,8 +24,8 @@ export const getMeetingHistories = async () => {
       start_date: "",
       end_date: "",
       name: "",
-      current_page: 1,
-      per_page: 10,
+      current_page: page || 1,
+      per_page: limit || 10,
       instant: false,
     };
 
@@ -33,7 +33,47 @@ export const getMeetingHistories = async () => {
     const res = await client.get(`?${query}`);
     return res?.data;
   } catch (error) {
-    console.log("getMeetingHistories", error);
+    console.error("getMeetingHistories", error);
+    return null;
+  }
+};
+
+export const joinMeetingByCode = async ({ code }) => {
+  try {
+    const res = await client.get(`/m/${code}`);
+    return res;
+  } catch (error) {
+    console.error("joinMeetingByCode", error);
+    return null;
+  }
+};
+
+export const startMeeting = async ({
+  instant = true,
+  type = {
+    uuid: "audio_conference",
+    name: "Audio Conference",
+  },
+  maxParticipant = 1000,
+  isActiveMember = false,
+  isKeepAlive = false,
+  fee = 0,
+}) => {
+  try {
+    const res = await client.post(`/`, {
+      instant,
+      type,
+      max_participant_count: maxParticipant,
+      accessible_to_members: isActiveMember,
+      identifier: "",
+      keep_alive: isKeepAlive,
+      is_pam: false,
+      is_paid: false,
+      fee,
+    });
+    return res;
+  } catch (error) {
+    console.error("startMeeting", error);
     return null;
   }
 };

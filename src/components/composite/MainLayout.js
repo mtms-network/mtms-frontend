@@ -7,13 +7,13 @@ import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
 
 const Layout = ({ children, bottom }) => {
-  const [, setAppStore] = useAppStore();
+  const [, updateAppStore] = useAppStore();
 
   const { width } = useDimensions();
 
   const handleLogout = () => {
     resetUserToken();
-    setAppStore((draft) => {
+    updateAppStore((draft) => {
       draft.isAuthenticated = false;
     });
   };

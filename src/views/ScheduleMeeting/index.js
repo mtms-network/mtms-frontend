@@ -14,7 +14,7 @@ const ScheduleMeeting = () => {
         setHistories(res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.info(error);
     }
   };
   useEffect(() => {

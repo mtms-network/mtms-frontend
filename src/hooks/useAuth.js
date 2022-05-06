@@ -9,14 +9,14 @@ import { useMeetingStore } from "stores/meeting.store";
 const useAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [appStore, setAppStore] = useAppStore();
-  const [, setMeetingStore] = useMeetingStore();
+  const [appStore, updateAppStore] = useAppStore();
+  const [, updateMeetingStore] = useMeetingStore();
 
   const fetchCommonData = async () => {
     try {
       const res = await getRequirePreMeeting();
       if (res) {
-        setMeetingStore((draft) => {
+        updateMeetingStore((draft) => {
           draft.categories = res?.categories;
           draft.types = res?.types;
           draft.statuses = res?.statuses;
@@ -31,7 +31,7 @@ const useAuth = () => {
     if (token) {
       if (!appStore.isAuthenticated) {
         const me = getUser();
-        setAppStore((draft) => {
+        updateAppStore((draft) => {
           draft.isAuthenticated = true;
           draft.user = me;
         });
