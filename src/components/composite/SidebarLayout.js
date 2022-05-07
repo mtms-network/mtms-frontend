@@ -34,9 +34,10 @@ const SidebarLayout = () => {
             <button
               className={classNames(
                 "text-base font-normal",
-                location.pathname !== `/${routeUrls.scheduleMeeting.path}`
-                  ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
-                  : "font-normal btn btn-base justify-start",
+                location.pathname === `/${routeUrls.scheduleMeeting.path}` ||
+                  location.pathname === `/${routeUrls.newScheduleMeeting.path}`
+                  ? "font-normal btn btn-base justify-start"
+                  : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
               )}
               onClick={() => navigate(`/${routeUrls.scheduleMeeting.path}`)}
             >

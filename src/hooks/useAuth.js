@@ -30,12 +30,12 @@ const useAuth = () => {
 
     if (token) {
       if (!appStore.isAuthenticated) {
+        fetchCommonData();
         const me = getUser();
         updateAppStore((draft) => {
           draft.isAuthenticated = true;
           draft.user = me;
         });
-        fetchCommonData();
       }
 
       if (location.pathname === `/${routeUrls.login.path}`) {

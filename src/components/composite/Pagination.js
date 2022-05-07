@@ -24,9 +24,10 @@ const Pagination = ({
         <div className="flex flex-row space-x-4 justify-center items-center">
           <p className="text-dark-base">Page</p>
           <input
+            disabled
             maxLength={4}
             placeholder="1"
-            className="input input-primary bg-primary text-white w-16 text-center max-w-xs"
+            className="input input-primary !bg-primary !text-white w-16 text-center max-w-xs border-0"
             value={page}
           />
           <p className="text-dark-base">{`of ${totalPage}`}</p>

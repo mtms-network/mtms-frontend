@@ -6,7 +6,7 @@ import classNames from "classnames";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
 
-const Layout = ({ children, bottom }) => {
+const Layout = ({ children, bottom, contentClassName = "" }) => {
   const [, updateAppStore] = useAppStore();
 
   const { width } = useDimensions();
@@ -26,7 +26,14 @@ const Layout = ({ children, bottom }) => {
       <div className="drawer-content flex flex-col">
         <NavbarLayout width={width} onLogout={handleLogout} />
         <div className={classNames("bg-white relative")}>
-          <div className="flex flex-col pb-20 pt-28 overflow-y-auto px-4 relative">{children}</div>
+          <div
+            className={classNames(
+              "flex flex-col pb-20 pt-28 overflow-y-auto px-4 relative",
+              contentClassName,
+            )}
+          >
+            {children}
+          </div>
           {bottom && (
             <div
               className="navbar bg-white fixed z-10 bottom-0 px-4"

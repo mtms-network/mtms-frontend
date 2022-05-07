@@ -20,7 +20,7 @@ const MeetingHistory = ({ className }) => {
   });
 
   const [filter, setFilter] = useState({
-    limit: 5,
+    limit: 10,
     page: 1,
   });
   const [meetingStore] = useMeetingStore();
@@ -41,9 +41,7 @@ const MeetingHistory = ({ className }) => {
       if (res?.data) {
         setHistories({ data: res.data, pagination: res.meta });
       }
-    } catch (error) {
-      console.info(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchData();
@@ -122,16 +120,13 @@ const MeetingHistory = ({ className }) => {
                 from={histories.pagination?.from}
                 to={histories.pagination?.to}
                 onNext={() => {
-                  if (histories.pagination?.current_page < histories.pagination?.last_page) {
+                  if (filter.page < histories.pagination?.last_page) {
                     const nextPage = filter.page + 1;
                     setFilter({ ...filter, page: nextPage });
                   }
                 }}
                 onBack={() => {
-                  if (
-                    histories.pagination?.current_page >= histories.pagination?.last_page &&
-                    histories.pagination?.current_page > 1
-                  ) {
+                  if (filter.page <= histories.pagination?.last_page && filter.page > 1) {
                     const nextPage = filter.page - 1;
                     setFilter({ ...filter, page: nextPage });
                   }

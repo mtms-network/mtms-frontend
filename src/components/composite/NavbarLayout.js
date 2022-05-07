@@ -1,8 +1,10 @@
 import React from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
+import { useAppStore } from "stores/app.store";
 
 const NavbarLayout = ({ width, onLogout }) => {
+  const [appStore] = useAppStore();
   return (
     <div
       className="navbar bg-dark-base fixed z-10 h-18"
@@ -47,11 +49,17 @@ const NavbarLayout = ({ width, onLogout }) => {
               >
                 <div className="avatar">
                   <div className="w-12 rounded-full">
-                    <img src="https://api.lorem.space/image/face?hash=28212" alt="avatar" />
+                    <img
+                      src={
+                        appStore?.user?.profile?.avatar ||
+                        "https://api.lorem.space/image/face?hash=28212"
+                      }
+                      alt="avatar"
+                    />
                   </div>
                 </div>
                 <div className="nav-link">
-                  <p className="font-bold text-base">Michael Jordan</p>
+                  <p className="font-bold text-base">{appStore?.user?.profile?.name}</p>
                 </div>
               </label>
               <ul

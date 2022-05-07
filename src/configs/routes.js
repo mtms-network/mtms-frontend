@@ -17,6 +17,9 @@ export const routeUrls = {
   scheduleMeeting: {
     path: "schedule-meeting",
   },
+  newScheduleMeeting: {
+    path: "new-schedule-meeting",
+  },
   room247: {
     path: "room-247",
   },

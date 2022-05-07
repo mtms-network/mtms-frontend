@@ -38,6 +38,22 @@ export const getMeetingHistories = async ({ limit, page }) => {
   }
 };
 
+export const getScheduleMeetings = async ({ limit, page }) => {
+  try {
+    const defaultFilters = {
+      current_page: page || 1,
+      per_page: limit || 10,
+    };
+
+    const query = QueryString.stringify({ ...defaultFilters });
+    const res = await client.get(`?${query}`);
+    return res?.data;
+  } catch (error) {
+    console.error("getMeetingHistories", error);
+    return null;
+  }
+};
+
 export const joinMeetingByCode = async ({ code }) => {
   try {
     const res = await client.get(`/m/${code}`);
