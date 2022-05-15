@@ -89,6 +89,7 @@ export default function Register() {
       <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full pt-6">
           <Input
+            isLabelWhite
             register={register("name")}
             label="Enter your name"
             placeholder="Enter your name"
@@ -98,6 +99,7 @@ export default function Register() {
         <div className="pt-1 w-full flex flex-row justify-between space-x-4">
           <div className="flex-1">
             <Input
+              isLabelWhite
               register={register("email")}
               label="Email"
               placeholder="Enter your email"
@@ -106,6 +108,7 @@ export default function Register() {
           </div>
           <div className="flex-1">
             <Input
+              isLabelWhite
               register={register("username")}
               label="Username"
               placeholder="Enter your username"
@@ -116,6 +119,7 @@ export default function Register() {
         <div className="pt-1 w-full flex flex-row justify-between space-x-4">
           <div className="flex-1">
             <Input
+              isLabelWhite
               type="password"
               register={register("password")}
               label="Password"
@@ -125,6 +129,7 @@ export default function Register() {
           </div>
           <div className="flex-1">
             <Input
+              isLabelWhite
               type="password"
               register={register("confirmPassword")}
               label="Confirm Password"

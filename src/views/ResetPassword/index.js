@@ -40,7 +40,11 @@ export default function ResetPassword() {
         updateAppStore((draft) => {
           draft.resetPassword.email = values.email;
         });
-        setAlert({ type: ALERT_TYPE.SUCCESS, show: true, message: `Request reset password successful` });
+        setAlert({
+          type: ALERT_TYPE.SUCCESS,
+          show: true,
+          message: `Request reset password successful`,
+        });
         setTimeout(() => {
           navigate(`/${routeUrls.verifyForgotPassword.path}`);
         }, 3000);
@@ -79,6 +83,7 @@ export default function ResetPassword() {
       <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full pt-6">
           <Input
+            isLabelWhite
             register={register("email")}
             label="Email"
             placeholder="Enter your email"

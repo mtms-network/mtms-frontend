@@ -26,6 +26,7 @@
   "dependencies": {
     "@babel/preset-env": "^7.16.11",
     "@hookform/resolvers": "^2.8.8",
+    "antd": "^4.20.3",
     "axios": "^0.26.1",
     "classnames": "^2.3.1",
     "core-js": "^3.21.1",

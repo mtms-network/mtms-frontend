@@ -90,6 +90,7 @@ export default function VerifyResetPassword() {
       <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full pt-6">
           <Input
+            isLabelWhite
             register={register("email")}
             label="Email"
             placeholder="Enter your email"
@@ -97,6 +98,7 @@ export default function VerifyResetPassword() {
             value={appStore.resetPassword.email || ""}
           />
           <Input
+            isLabelWhite
             type="password"
             register={register("code")}
             label="Code"
@@ -104,6 +106,7 @@ export default function VerifyResetPassword() {
             error={errors.code}
           />
           <Input
+            isLabelWhite
             type="password"
             register={register("password")}
             label="Password"
@@ -111,6 +114,7 @@ export default function VerifyResetPassword() {
             error={errors.password}
           />
           <Input
+            isLabelWhite
             type="password"
             register={register("confirmPassword")}
             label="Confirm Password"

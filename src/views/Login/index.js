@@ -148,6 +148,7 @@ export default function Login() {
         <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full pt-6">
             <Input
+              isLabelWhite
               className="w-full"
               register={register("email")}
               label="Email"
@@ -155,6 +156,7 @@ export default function Login() {
               error={errors.email}
             />
             <Input
+              isLabelWhite
               className="w-full"
               type="password"
               register={register("password")}
@@ -203,6 +205,7 @@ export default function Login() {
         <form className="w-full h-auto" onSubmit={handleSubmitUnlock(onUnlock)}>
           <div className="w-full">
             <Input
+              isLabelWhite
               className="w-full"
               type="password"
               register={registerUnlock("password")}

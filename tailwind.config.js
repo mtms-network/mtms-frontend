@@ -51,6 +51,18 @@ const componentPlugins = {
       backgroundColor: "rgba(9, 129, 162, 0.1)",
     },
   },
+  ".btn-outline-base": {
+    color: "#000",
+    borderWidth: 1,
+    borderColor: "#000",
+    fontWeight: "bold",
+    backgroundColor: "white",
+    "&:hover": {
+      color: "#0981A2",
+      borderColor: "#0981A2",
+      backgroundColor: "rgba(9, 129, 162, 0.1)",
+    },
+  },
   ".form-base": {
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",
@@ -115,7 +127,6 @@ module.exports = {
   },
   daisyui: {
     styled: true,
-    themes: true,
     base: true,
     utils: true,
     logs: true,

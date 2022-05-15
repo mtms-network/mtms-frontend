@@ -14,7 +14,7 @@ const ScheduleMeetingHistories = () => {
     pagination: null,
   });
   const [filter, setFilter] = useState({
-    limit: 2,
+    limit: 10,
     page: 1,
   });
   const fetchData = async () => {
