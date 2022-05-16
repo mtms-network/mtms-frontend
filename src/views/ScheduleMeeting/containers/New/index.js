@@ -167,8 +167,7 @@ const ScheduleMeetingItem = () => {
                   <input
                     type="checkbox"
                     className="checkbox checkbox-primary checkbox-sm"
-                    onChange={() => {
-                    }}
+                    onChange={() => {}}
                   />
                   <span className="label-base pb-0">Accessible via link</span>
                 </label>
@@ -178,8 +177,7 @@ const ScheduleMeetingItem = () => {
                   <input
                     type="checkbox"
                     className="checkbox checkbox-primary checkbox-sm"
-                    onChange={() => {
-                    }}
+                    onChange={() => {}}
                   />
                   <span className="label-base pb-0">Only accessible to active member</span>
                 </label>
@@ -187,7 +185,22 @@ const ScheduleMeetingItem = () => {
             </div>
           </GroupLayout>
           <GroupLayout className="flex flex-col justify-between">
-            <div className="w-full pt-9 flex flex-row justify-between">
+            <div className="w-full h-auto">
+              <Select
+                label="Add Invitees"
+                mode="multiple"
+                options={types}
+                placeholder="Select Invitees"
+              />
+              <Select
+                label="Enter Email"
+                mode="tags"
+                placeholder="Input invitees"
+              />
+            </div>
+          </GroupLayout>
+          <GroupLayout className="flex flex-col justify-between">
+            <div className="w-full flex flex-row justify-between">
               <div className="space-x-4">
                 <Button className="btn btn-primary" isLoading={loading}>
                   Save meeting

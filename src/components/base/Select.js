@@ -14,6 +14,7 @@ const Select = ({
   options = [],
   onChange,
   defaultValue,
+  placeholder,
   ...rest
 }) => {
   const { Option } = SelectBase;
@@ -26,15 +27,14 @@ const Select = ({
         className={classNames(
           "w-full text-black",
           "input input-bordered",
-          "flex justify-center items-center",
+          "flex items-center",
           "ml-0 pl-0",
           error && "input-error",
           className || "input-md",
         )}
         defaultValue={defaultValue}
+        placeholder={placeholder || `Select ${label}`}
         onChange={onChange}
-        dropdownClassName=""
-        {...rest}
       >
         {options.map((item) => (
           <Option key={item?.key} value={item?.key}>
