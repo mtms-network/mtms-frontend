@@ -15,6 +15,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useMeetingStore } from "stores/meeting.store";
 
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
+import { convertFromHTML, convertToRaw } from "draft-js";
+
 const timeFormat = "MMM DD, yyyy HH:mm";
 
 const ScheduleMeetingItem = () => {
@@ -22,6 +26,7 @@ const ScheduleMeetingItem = () => {
   const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [types, setTypes] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [description, setDescription] = useState(null);
 
   const schema = yup
     .object()
@@ -62,6 +67,7 @@ const ScheduleMeetingItem = () => {
     try {
       console.log(values);
       setLoading(false);
+      console.log(draftToHtml(convertToRaw(description.getCurrentContent())));
     } catch (error) {}
   };
 
@@ -192,15 +198,22 @@ const ScheduleMeetingItem = () => {
                 options={types}
                 placeholder="Select Invitees"
               />
-              <Select
-                label="Enter Email"
-                mode="tags"
-                placeholder="Input invitees"
-              />
+              <Select label="Enter Email" mode="tags" placeholder="Input invitees" />
             </div>
           </GroupLayout>
           <GroupLayout className="flex flex-col justify-between">
-            <div className="w-full flex flex-row justify-between">
+            <div className="border-1 rounded-xl p-4">
+              <Editor
+                editorState={description}
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
+                onEditorStateChange={(editor) => {
+                  setDescription(editor);
+                }}
+              />
+            </div>
+            <div className="w-full flex flex-row justify-between pt-8">
               <div className="space-x-4">
                 <Button className="btn btn-primary" isLoading={loading}>
                   Save meeting

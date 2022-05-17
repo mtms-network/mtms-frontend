@@ -10,7 +10,7 @@ import {
   ScheduleMeetingHistories,
   ScheduleMeetingItem,
   VerifyResetPassword,
-} from "views";
+} from "./views";
 
 const Routers = () => {
   return (
