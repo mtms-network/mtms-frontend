@@ -14,11 +14,11 @@ export const getRequirePreMeeting = async () => {
   }
 };
 
-export const getMeetingHistories = async ({ limit, page }) => {
+export const getMeetingHistories = async ({ limit, page, sort_by, order }) => {
   try {
     const defaultFilters = {
-      sort_by: "",
-      order: "",
+      sort_by,
+      order,
       type: "",
       status: "",
       start_date: "",
@@ -38,11 +38,13 @@ export const getMeetingHistories = async ({ limit, page }) => {
   }
 };
 
-export const getScheduleMeetings = async ({ limit, page }) => {
+export const getScheduleMeetings = async ({ limit, page, order, sort_by }) => {
   try {
     const defaultFilters = {
       current_page: page || 1,
       per_page: limit || 10,
+      order,
+      sort_by,
     };
 
     const query = QueryString.stringify({ ...defaultFilters });

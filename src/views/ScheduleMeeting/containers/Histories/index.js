@@ -6,6 +6,8 @@ import { getScheduleMeetings } from "services/meeting.service";
 import { useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";
 import { MeetingItem } from "../../components";
+import Sort from "../../../../components/base/Sort";
+import { ConfigScheduleMeeting } from "../../config";
 
 const ScheduleMeetingHistories = () => {
   const navigate = useNavigate();
@@ -16,7 +18,28 @@ const ScheduleMeetingHistories = () => {
   const [filter, setFilter] = useState({
     limit: 10,
     page: 1,
+    order: 'asc',
+    sort_by: 'id',
   });
+  const [sort, setSort] = useState(false);
+
+  const onChangeFilter = (type, value) => {
+    const cloneFilter = {...filter};
+    switch (type){
+      case 'sort_by':
+        cloneFilter.sort_by = value;
+        break;
+      case 'order':
+        cloneFilter.order = value;
+        break;
+      default:
+        break;
+    }
+
+    setFilter(cloneFilter);
+    setSort(false);
+  };
+
   const fetchData = async () => {
     try {
       const res = await getScheduleMeetings({ ...filter });
@@ -77,7 +100,8 @@ const ScheduleMeetingHistories = () => {
               <IoFilterCircle className="text-black" />
             </button>
             <button>
-              <IoSwapVertical className="text-black" />
+              <IoSwapVertical className="text-black" onClick={() => { setSort(!sort) }}/>
+              { sort ? <Sort onSort={onChangeFilter} contentField={ConfigScheduleMeeting.arrSort} order={filter.order} sortBy={filter.sort_by} /> : null }
             </button>
             <button>
               <IoOptions className="text-black" />

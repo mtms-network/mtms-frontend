@@ -12,6 +12,9 @@ import classnames from "classnames";
 import { GroupLayout, GroupTitle, Input, Pagination } from "components";
 import { getMeetingHistories } from "services/meeting.service";
 import { useMeetingStore } from "stores/meeting.store";
+import { BsSortAlphaDown } from "react-icons/bs";
+import Sort from "../../../components/base/Sort";
+import { ConfigOverview } from "../config";
 
 const MeetingHistory = ({ className }) => {
   const [histories, setHistories] = useState({
@@ -22,7 +25,10 @@ const MeetingHistory = ({ className }) => {
   const [filter, setFilter] = useState({
     limit: 10,
     page: 1,
+    sort_by: "id",
+    order: 'ASC'
   });
+  const [sort, setSort] = useState(false);
   const [meetingStore] = useMeetingStore();
 
   const mapHistories = (item) => {
@@ -43,8 +49,26 @@ const MeetingHistory = ({ className }) => {
       }
     } catch (error) {}
   };
+
+  const onChangeFilter = (type, value) => {
+    const cloneFilter = {...filter};
+    switch (type){
+      case 'sort_by':
+        cloneFilter.sort_by = value;
+        break;
+      case 'order':
+        cloneFilter.order = value;
+        break;
+      default:
+        break;
+    }
+
+    setFilter(cloneFilter);
+    setSort(false);
+  };
+
   useEffect(() => {
-    fetchData();
+    fetchData().then();
   }, [meetingStore.isForceLoadMeetingHistories, filter]);
 
   return (
@@ -59,7 +83,8 @@ const MeetingHistory = ({ className }) => {
               <IoFilterCircle className="text-black" />
             </button>
             <button>
-              <IoSwapVertical className="text-black" />
+              <IoSwapVertical className="text-black" onClick={() => { setSort(!sort) }}/>
+              { sort ? <Sort onSort={onChangeFilter} order={filter.order} sortBy={ filter.sort_by } contentField={ConfigOverview.arrFieldSort} /> : null }
             </button>
             <button>
               <IoOptions className="text-black" />
