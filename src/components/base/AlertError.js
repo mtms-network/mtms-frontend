@@ -62,7 +62,7 @@ const AlertError = ({
       }
     }
   }, [message]);
-  console.log(error);
+
   return (
     show &&
     message && (

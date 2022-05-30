@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   DateTimePicker,
@@ -77,7 +77,7 @@ const ScheduleMeetingItem = () => {
     }
   };
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values, sendInvite = false) => {
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
@@ -97,7 +97,14 @@ const ScheduleMeetingItem = () => {
 
       const client = createPrivateInstance(BASE_API.meeting);
       const res = await client.post('', values);
+      console.log(res, res.data, res.data.meeting, res.data.meeting.uuid);
+      const uuid = res.data.meeting.uuid;
 
+      if(sendInvite) {
+        const client = createPrivateInstance(`/meetings/${uuid}/invitation`);
+        const res = await client.post('', values);
+      }
+      
       setLoading(false);
       navigate(`/${routeUrls.scheduleMeeting.path}`);
     } catch (error) {
@@ -126,6 +133,11 @@ const ScheduleMeetingItem = () => {
 
   const handleChange = (e) => {
     console.log(e);
+  }
+
+  const handleSaveAndSave = (e) => {
+    e.preventDefault();
+    handleSubmit(onSubmit)(true)
   }
 
   useEffect(() => {
@@ -299,7 +311,7 @@ const ScheduleMeetingItem = () => {
                 </Button>
               </div>
               <div className="space-x-4">
-                <Button className="btn btn-primary" isLoading={loading}>
+                <Button onClick={(e) => handleSaveAndSave(e)} className="btn btn-primary" isLoading={loading}>
                   Save and Send meeting
                 </Button>
                 <Button className="btn-outline-base" type="button" isLoading={loading}>
