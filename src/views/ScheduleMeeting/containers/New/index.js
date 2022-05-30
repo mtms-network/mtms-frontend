@@ -8,7 +8,7 @@ import {
   MainLayout,
   Select,
   TextArea,
-  Alert,
+  AlertError,
 } from "components";
 import { IoOptions, IoTv } from "react-icons/io5";
 import { useForm } from "react-hook-form";
@@ -40,7 +40,7 @@ const ScheduleMeetingItem = () => {
   const [contacts, setContacts] = useState([]);
   const [category, setCategory] = useState(null);
   const [type, setType] = useState(null);
-  const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
+  const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR, error: [] });
 
   const schema = yup
     .object()
@@ -103,7 +103,7 @@ const ScheduleMeetingItem = () => {
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
+        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message, error: errorData.detail });
       }
       setLoading(false);
     }
@@ -135,7 +135,7 @@ const ScheduleMeetingItem = () => {
   return (
     <MainLayout>
       <div className="pt-4 w-full">
-        <Alert
+        <AlertError
           {...{ ...alert }}
           onClose={() => {
             setAlert({ ...alert, show: false });
@@ -302,7 +302,7 @@ const ScheduleMeetingItem = () => {
                 <Button className="btn btn-primary" isLoading={loading}>
                   Save and Send meeting
                 </Button>
-                <Button className="btn-outline-base" isLoading={loading}>
+                <Button className="btn-outline-base" type="button" isLoading={loading}>
                   Reset
                 </Button>
                 <Button className="btn btn-primary" isLoading={loading}>
