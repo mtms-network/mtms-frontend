@@ -5,6 +5,7 @@ const MeetingStore = createStore({
   types: null,
   statuses: null,
   isForceLoadMeetingHistories: false,
+  meeting: null,
 });
 
 export const useMeetingStore = MeetingStore.useStore;

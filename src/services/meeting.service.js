@@ -93,3 +93,24 @@ export const startMeeting = async ({
     return null;
   }
 };
+
+export const getMeetingDetail = async (uuid) => {
+  try {
+    const res = await client.get(`/${uuid}`);
+    return res?.data;
+  } catch (error) {
+    console.error("getMeetingDetail", error);
+    return null;
+  }
+};
+
+export const getMeetingContact = async () => {
+  try {
+    const Axios = createPrivateInstance('');
+    const res = await Axios.get(`/contacts?per_page=-1`);
+    return res?.data;
+  } catch (error) {
+    console.error("getMeetingContact", error);
+    return null;
+  }
+}
