@@ -108,15 +108,13 @@ const ScheduleMeetingDetail = () => {
       values.type.uuid = type;
 
       const client = createPrivateInstance(BASE_API.meeting);
-      
-      const res = await client.patch(`/${params.mettingId}/`, values);
-      const uuid = res.data.meeting.uuid;
+      const res = await client.patch(`/${params.mettingId}`, values);
 
       if(sendInvite === true) {
         const client = createPrivateInstance(`/meetings/${uuid}/invitation`);
         const res = await client.post('', values);
       }
-
+      
       setLoading(false);
       navigate(`/${routeUrls.scheduleMeeting.path}`);
     } catch (error) {
