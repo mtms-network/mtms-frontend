@@ -1,5 +1,5 @@
 import React from "react";
-import classnames from "classnames";
+import classNames from "classnames";
 import FormControl from "./FormControl";
 
 export const InputSingle = ({
@@ -13,10 +13,10 @@ export const InputSingle = ({
   ...rest
 }) => {
   return (
-    <div className={classnames("relative w-full flex items-center justify-center", containerClass)}>
+    <div className={classNames("relative w-full flex items-center justify-center", containerClass)}>
       <input
         type={type}
-        className={classnames(
+        className={classNames(
           "input input-bordered w-full text-black",
           error && "input-error",
           className || "input-md",
@@ -31,9 +31,25 @@ export const InputSingle = ({
   );
 };
 
-const Input = ({ className, label, type, error, register, disabled, required, ...rest }) => {
+const Input = ({
+  className,
+  label,
+  type,
+  error,
+  register,
+  disabled,
+  required,
+  labelClassName,
+  isLabelWhite,
+  ...rest
+}) => {
   return (
-    <FormControl required={required} label={label} error={error}>
+    <FormControl
+      required={required}
+      label={label}
+      error={error}
+      labelClassName={classNames(isLabelWhite && "!text-white", labelClassName)}
+    >
       <InputSingle
         type={type}
         error={error}

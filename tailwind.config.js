@@ -3,6 +3,7 @@ const plugin = require("tailwindcss/plugin");
 const componentPlugins = {
   ".btn": {
     textTransform: "capitalize",
+    color: "white",
   },
   ".btn-base": {
     width: "100%",
@@ -44,6 +45,18 @@ const componentPlugins = {
     color: "#1F1F1F",
     backgroundColor: "#F7F7F7",
     border: 0,
+    "&:hover": {
+      color: "#0981A2",
+      borderColor: "#0981A2",
+      backgroundColor: "rgba(9, 129, 162, 0.1)",
+    },
+  },
+  ".btn-outline-base": {
+    color: "#000",
+    borderWidth: 1,
+    borderColor: "#000",
+    fontWeight: "bold",
+    backgroundColor: "white",
     "&:hover": {
       color: "#0981A2",
       borderColor: "#0981A2",
@@ -114,7 +127,6 @@ module.exports = {
   },
   daisyui: {
     styled: true,
-    themes: true,
     base: true,
     utils: true,
     logs: true,
@@ -136,7 +148,7 @@ module.exports = {
   },
   plugins: [
     require("daisyui"),
-    plugin(function ({ addUtilities, addComponents, e, prefix, config }) {
+    plugin(({ addUtilities, addComponents, e, prefix, config }) => {
       addComponents(componentPlugins);
     }),
   ],

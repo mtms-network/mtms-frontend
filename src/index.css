@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "antd/dist/antd.css";
+@import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 * {
   box-sizing: border-box;
@@ -24,4 +26,8 @@ a {
 
 td {
   border: 0;
+}
+
+.ant-select-multiple .ant-select-selector {
+  width: 100%;
 }

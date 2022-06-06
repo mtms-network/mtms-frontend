@@ -9,8 +9,9 @@ export const handleError = (error) => {
   return message;
 };
 
-export const createInstance = (path, options) => {
-  const { origin } = window && window.location;
+export const createPrivateInstance = (path, options) => {
+  //const { origin } = window && window.location;
+  const origin = 'https://api.mtms.live/api';
   const instance = axios.create({
     baseURL: `${origin}${path}`,
     headers: { Accept: "application/json" },

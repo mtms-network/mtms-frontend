@@ -1,12 +1,20 @@
 import React from "react";
 import classnames from "classnames";
 
-const FormControl = ({ label, error, children, className, center = false, required }) => {
+const FormControl = ({
+  label,
+  error,
+  children,
+  className,
+  center = false,
+  required,
+  labelClassName,
+}) => {
   return (
     <div className={classnames("form-control", className)}>
       {label && (
         <label className="label">
-          <p className="label-text text-white">
+          <p className={classnames("label-text text-black", labelClassName)}>
             {label}
             {required && <span className="inline-block ml-1 text-error">*</span>}
           </p>

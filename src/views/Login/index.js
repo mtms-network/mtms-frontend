@@ -12,7 +12,7 @@ import { useAppStore } from "stores/app.store";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [appStore, setAppStore] = useAppStore();
+  const [, updateAppStore] = useAppStore();
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
@@ -55,12 +55,12 @@ export default function Login() {
       const data = await signIn({
         email: values.email,
         password: values.password,
-        device_name: "1",
+        deviceName: "1",
       });
 
       setLoading(false);
       setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
-      setAppStore((draft) => {
+      updateAppStore((draft) => {
         draft.isAuthenticated = true;
       });
       navigate("/");
@@ -69,7 +69,7 @@ export default function Login() {
         const errorData = handleHttpError(error);
         setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
       }
-      setAppStore((draft) => {
+      updateAppStore((draft) => {
         draft.isAuthenticated = false;
       });
       setLoading(false);
@@ -83,11 +83,11 @@ export default function Login() {
       const data = await signIn({
         email: user?.username,
         password: values.password,
-        device_name: "1",
+        deviceName: "1",
       });
       setLoading(false);
       setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
-      setAppStore((draft) => {
+      updateAppStore((draft) => {
         draft.isAuthenticated = true;
       });
       navigate("/");
@@ -96,7 +96,7 @@ export default function Login() {
         const errorData = handleHttpError(error);
         setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
       }
-      setAppStore((draft) => {
+      updateAppStore((draft) => {
         draft.isAuthenticated = false;
       });
       setLoading(false);
@@ -148,6 +148,7 @@ export default function Login() {
         <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full pt-6">
             <Input
+              isLabelWhite
               className="w-full"
               register={register("email")}
               label="Email"
@@ -155,6 +156,7 @@ export default function Login() {
               error={errors.email}
             />
             <Input
+              isLabelWhite
               className="w-full"
               type="password"
               register={register("password")}
@@ -203,6 +205,7 @@ export default function Login() {
         <form className="w-full h-auto" onSubmit={handleSubmitUnlock(onUnlock)}>
           <div className="w-full">
             <Input
+              isLabelWhite
               className="w-full"
               type="password"
               register={registerUnlock("password")}
