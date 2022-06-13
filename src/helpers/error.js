@@ -3,7 +3,7 @@ export const handleHttpError = (error) => {
     return {
       message: error?.response?.data?.message,
       code: error?.response.status,
-      detail: "",
+      detail: error?.response?.data?.errors,
     };
   }
   return {

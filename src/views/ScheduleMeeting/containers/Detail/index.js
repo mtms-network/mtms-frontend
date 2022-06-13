@@ -18,16 +18,18 @@ import { useMeetingStore } from "stores/meeting.store";
 
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
-import { convertFromHTML, convertToRaw } from "draft-js";
+import { convertFromHTML, convertToRaw, EditorState, ContentState } from "draft-js";
 import { createPrivateInstance } from "services/base";
 import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
 import { handleHttpError } from "helpers";
-import { useNavigate } from "react-router-dom";
-import { getMeetingContact } from "services/meeting.service";
+import { useNavigate, useParams } from "react-router-dom";
+import { getMeetingDetail, getMeetingContact } from "services/meeting.service";
+import moment from 'moment';
 
 const timeFormat = "MMM DD, yyyy HH:mm";
 
-const ScheduleMeetingItem = () => {
+const ScheduleMeetingDetail = () => {
+  let params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
@@ -56,11 +58,15 @@ const ScheduleMeetingItem = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    setFocus,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const prepareData = () => {
+    
+    fetchMeeting();
     fetchContact();
 
     if (meetingStore?.types) {
@@ -92,7 +98,7 @@ const ScheduleMeetingItem = () => {
       values.fee = 0;
       values.is_paid = false;
       values.is_pam = false;
-      values.uuid = null;
+      values.uuid = params.mettingId;
       values.start_date_time = startDateTime;
       values.emails = emails;
       values.contacts = contacts.map((value) => {
@@ -102,8 +108,7 @@ const ScheduleMeetingItem = () => {
       values.type.uuid = type;
 
       const client = createPrivateInstance(BASE_API.meeting);
-      const res = await client.post('', values);
-      const uuid = res.data.meeting.uuid;
+      const res = await client.patch(`/${params.mettingId}`, values);
 
       if(sendInvite === true) {
         const client = createPrivateInstance(`/meetings/${uuid}/invitation`);
@@ -123,12 +128,14 @@ const ScheduleMeetingItem = () => {
 
   const onOk = (e) => {
     setStartDateTime(
+      moment(
       e._d.getFullYear()+'-'+
       (e._d.getMonth()+1).toString().padStart(2, '0')+'-'+
       e._d.getDate().toString().padStart(2, '0')+' '+
       e._d.getHours().toString().padStart(2, '0')+':'+
       e._d.getMinutes().toString().padStart(2, '0')+':'+
       e._d.getSeconds().toString().padStart(2, '0')
+      , 'YYYY-MM-DD HH:mm:ss')
     );
   };
 
@@ -143,6 +150,36 @@ const ScheduleMeetingItem = () => {
   const handleSaveAndSave = (e) => {
     e.preventDefault();
     handleSubmit(onSubmit)(true)
+  }
+
+  const fetchMeeting = async () => {
+    try {
+      const res = await getMeetingDetail(params.mettingId);
+      if (res) {
+          updateMeetingStore((draft) => {
+            draft.meeting = res;
+          });
+          setCategory(res.category.uuid);
+          setType(res.type.uuid);
+          setValue('agenda', res.agenda);
+          setValue('title', res.title);
+          setValue('period', res.period);
+          setValue('identifier', res.identifier);
+          setValue('max_participant_count', res.max_participant_count);
+          setAccessibleViaLink(res.accessible_via_link);
+          setAccessibleToMembers(res.accessible_to_members);
+          setDescription(EditorState.createWithContent(
+            ContentState.createFromBlockArray(
+              convertFromHTML(res.description)
+          )));
+          setStartDateTime(moment(res.start_date_time, 'YYYY-MM-DD HH:mm:ss'));
+          const currentContacts = [];
+          res.invitees.map((item, idx) => {
+            currentContacts.push(item.contact.uuid);
+          })
+          setContacts(currentContacts);
+      }
+    } catch (error) {}
   }
 
   const fetchContact = async () => {
@@ -217,6 +254,7 @@ const ScheduleMeetingItem = () => {
                   label="Type" 
                   options={types} 
                   register={register('type.uuid')} 
+                  value={type}
                   onChange={(e) => setType(e)} 
                 />
               </div>
@@ -224,6 +262,7 @@ const ScheduleMeetingItem = () => {
                 <Select 
                   label="Meeting Category" 
                   options={categories} 
+                  value={category}
                   register={register('category.uuid')} 
                   onChange={(e) => setCategory(e)}
                 />
@@ -236,6 +275,7 @@ const ScheduleMeetingItem = () => {
                   onOk={onOk}
                   format={timeFormat}
                   register={register("start_date_time")}
+                  value={startDateTime}
                 />
               </div>
             </div>
@@ -276,6 +316,7 @@ const ScheduleMeetingItem = () => {
               <div className="form-control">
                 <label className="label cursor-pointer flex justify-center items-center gap-2">
                   <input
+                    checked={accessibleViaLink}
                     type="checkbox"
                     className="checkbox checkbox-primary checkbox-sm"
                     onChange={() => setAccessibleViaLink(!accessibleViaLink)}
@@ -287,6 +328,7 @@ const ScheduleMeetingItem = () => {
               <div className="form-control">
                 <label className="label cursor-pointer flex justify-center items-center gap-2">
                   <input
+                    checked={accessibleToMembers}
                     type="checkbox"
                     className="checkbox checkbox-primary checkbox-sm"
                     onChange={() => setAccessibleToMembers(!accessibleToMembers)}
@@ -306,6 +348,7 @@ const ScheduleMeetingItem = () => {
                 placeholder="Select Invitees"
                 onChange={(e) => setContacts(e)}
                 register={register("contacts")}
+                value={contacts}
               />
               <Select label="Enter Email" mode="tags" placeholder="Input invitees" register={register("emails")} onChange={(e) => setEmails(e)} />
             </div>
@@ -348,4 +391,4 @@ const ScheduleMeetingItem = () => {
   );
 };
 
-export default ScheduleMeetingItem;
+export default ScheduleMeetingDetail;
