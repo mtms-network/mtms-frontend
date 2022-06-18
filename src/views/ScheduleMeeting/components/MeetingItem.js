@@ -17,26 +17,20 @@ const MeetingItem = ({ data, className }) => {
           className,
         )}
       >
-        <div className="flex flex-col w-full flex-1 h-full justify-between">
-          <p className="label-base text-lg font-semibold group-hover:text-primary line-clamp-2 overflow-hidden min-h-16t">
-            {data?.title}
-          </p>
-          <div>
-            <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
-              <IoCalendarNumberOutline />
-              <p className="label-base p-0 group-hover:text-primary">{data?.start_date_time}</p>
-            </div>
-            <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
-              <IoTimerOutline />
-              <p className="label-base p-0 group-hover:text-primary">
-                {calculateDuration(data.start_date_time, data.estimated_end_time)}
-              </p>
-            </div>
-            <div className="flex flex-row w-full pt-4">
-              <button className="btn btn-active btn-ghost btn-sm text-black font-normal">
-                {data?.type.name}
-              </button>
-            </div>
+        <div className="flex flex-col w-full">
+          <p className="label-base text-xl">{data?.title}</p>
+          <div className="flex flex-row space-x-2 items-center pt-2">
+            <IoCalendarNumberOutline />
+            <p className="label-base p-0">{data?.start_date_time}</p>
+          </div>
+          <div className="flex flex-row space-x-2 items-center pt-2">
+            <IoTimerOutline />
+            <p className="label-base p-0">
+              {calculateDuration("2022-04-27 22:59:51", "2022-04-27 22:00:51")}
+            </p>
+          </div>
+          <div className="flex flex-row pt-6 w-full">
+            <button className="btn btn-active btn-ghost btn-sm text-black font-normal">{data?.type.name}</button>
           </div>
         </div>
       </GroupLayout>

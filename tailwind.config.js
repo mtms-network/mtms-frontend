@@ -111,6 +111,7 @@ module.exports = {
         "color-base-200": "rgba(255, 255, 255, 0.1)",
         "dark-base": "#1D2122",
         "gray-base-100": "#F7F7F7",
+        "white": "#fff",
       },
       screens: {
         sm: "480px",

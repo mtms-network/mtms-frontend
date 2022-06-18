@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { withNamespaces } from 'react-i18next';
 
 const Pagination = ({
   page = 1,
@@ -11,6 +12,7 @@ const Pagination = ({
   className,
   onNext = () => {},
   onBack = () => {},
+  t,
 }) => {
   return (
     <div
@@ -27,7 +29,7 @@ const Pagination = ({
 
       <div className="pl-4">
         <div className="flex flex-row space-x-4 justify-center items-center">
-          <p className="text-dark-base">Page</p>
+          <p className="text-dark-base">{ t('general.page') }</p>
           <input
             disabled
             maxLength={4}
@@ -56,4 +58,4 @@ const Pagination = ({
   );
 };
 
-export default Pagination;
+export default withNamespaces()(Pagination);

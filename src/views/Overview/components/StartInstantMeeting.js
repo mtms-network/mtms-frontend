@@ -5,8 +5,9 @@ import { Button, GroupLayout, GroupTitle, Input } from "components";
 import { useMeetingStore } from "stores/meeting.store";
 import { startMeeting } from "services/meeting.service";
 import { LIVE_MEETING_URL } from "configs";
+import { withNamespaces } from 'react-i18next';
 
-const StartInstantMeeting = ({ className }) => {
+const StartInstantMeeting = ({ className, t }) => {
   const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState("");
@@ -58,9 +59,9 @@ const StartInstantMeeting = ({ className }) => {
         <GroupTitle icon={<IoCalendarClear />} title="Start Instant Meeting" />
         <div className="flex flex-row space-x-4 py-4">
           <div className="basis-1/2">
-            <p className="label-base">Meeting code</p>
+            <p className="label-base">{ t('meeting.meeting_code') }</p>
             <Input
-              placeholder="Enter meeting code"
+              placeholder={ t('meeting.enter_meeting_code') }
               className="bg-gray-base-100 border-0"
               value={code}
               onChange={(e) => {
@@ -72,7 +73,7 @@ const StartInstantMeeting = ({ className }) => {
                     className="btn btn-primary btn-outlined-base btn-xs"
                     onClick={handleCopyCode}
                   >
-                    copy
+                    { t('general.copy') }
                   </button>
                   {isCopied && (
                     <ul
@@ -110,7 +111,7 @@ const StartInstantMeeting = ({ className }) => {
         </div>
         <div className="flex flex-row space-x-4 py-4">
           <div className="flex-1">
-            <p className="label-base">Select Meeting Type</p>
+            <p className="label-base">{ t('meeting.select_meeting_type') }</p>
             <div className="flex-wrap flex gap-2 w-full">
               {meetingStore?.types?.map((item) => {
                 return (
@@ -144,7 +145,7 @@ const StartInstantMeeting = ({ className }) => {
                     setIsKeepALive(!isKeepAlive);
                   }}
                 />
-                <span className="label-base pb-0">Keep meeting live</span>
+                <span className="label-base pb-0">{ t('meeting.keep_meeting_live') }</span>
               </label>
             </div>
             <div className="form-control">
@@ -157,7 +158,7 @@ const StartInstantMeeting = ({ className }) => {
                     setIsOnlyActiveMember(!isOnlyActiveMember);
                   }}
                 />
-                <span className="label-base pb-0">Only accessible to active member</span>
+                <span className="label-base pb-0">{ t('meeting.props.only_accessible_to_members') }</span>
               </label>
             </div>
           </div>
@@ -172,4 +173,4 @@ const StartInstantMeeting = ({ className }) => {
   );
 };
 
-export default StartInstantMeeting;
+export default withNamespaces()(StartInstantMeeting);

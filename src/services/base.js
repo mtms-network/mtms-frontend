@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "helpers";
+import { LIVE_API } from "configs";
 
 export const handleError = (error) => {
   const { response, message } = error;
@@ -10,10 +11,8 @@ export const handleError = (error) => {
 };
 
 export const createPrivateInstance = (path, options) => {
-  //const { origin } = window && window.location;
-  const origin = 'https://api.mtms.live/api';
   const instance = axios.create({
-    baseURL: `${origin}${path}`,
+    baseURL: `${LIVE_API}${path}`,
     headers: { Accept: "application/json" },
     ...options,
   });

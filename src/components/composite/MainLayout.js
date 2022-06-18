@@ -5,8 +5,10 @@ import { useAppStore } from "stores/app.store";
 import classNames from "classnames";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
+import { withNamespaces } from 'react-i18next';
+import { createPrivateInstance } from "services/base";
 
-const Layout = ({ children, bottom, contentClassName = "" }) => {
+const Layout = ({ children, bottom, contentClassName = "", t, i18n }) => {
   const [, updateAppStore] = useAppStore();
 
   const { width } = useDimensions();
@@ -20,6 +22,21 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
 
   useAuth();
 
+  useEffect(() => {
+    const setLanguage = async () => {
+      const client = createPrivateInstance('/locale/en');
+      const res = await client.get('');
+
+      const resources  = { en: { translation: res.data } };
+
+      i18n.init({
+        resources,
+        lng: "en",
+      })
+    }
+
+    setLanguage();
+  }, [])
   return (
     <div className="drawer drawer-mobile">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -49,4 +66,4 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
   );
 };
 
-export default Layout;
+export default withNamespaces()(Layout);

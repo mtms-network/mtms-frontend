@@ -24,10 +24,11 @@ import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate } from "react-router-dom";
 import { getMeetingContact } from "services/meeting.service";
+import { withNamespaces } from 'react-i18next';
 
 const timeFormat = "MMM DD, yyyy HH:mm";
 
-const ScheduleMeetingItem = () => {
+const ScheduleMeetingItem = ({t}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
@@ -193,7 +194,7 @@ const ScheduleMeetingItem = () => {
                 className="w-full"
                 labelClassName="text-base"
                 register={register("title")}
-                label="Title"
+                label={ t('meeting.props.title') }
                 placeholder="Enter title meeting"
                 rules={[
                   {
@@ -205,7 +206,7 @@ const ScheduleMeetingItem = () => {
               <TextArea
                 className="w-full"
                 register={register("agenda")}
-                label="Agenda"
+                label={ t('meeting.props.agenda') }
                 placeholder="Enter agenda meeting"
               />
             </div>
@@ -214,7 +215,7 @@ const ScheduleMeetingItem = () => {
             <div className="flex flex-row justify-between space-x-4">
               <div className="flex-1">
                 <Select 
-                  label="Type" 
+                  label={ t('meeting.props.type') }
                   options={types} 
                   register={register('type.uuid')} 
                   onChange={(e) => setType(e)} 
@@ -222,7 +223,7 @@ const ScheduleMeetingItem = () => {
               </div>
               <div className="flex-1">
                 <Select 
-                  label="Meeting Category" 
+                  label={ t('meeting.meeting_category.category') }
                   options={categories} 
                   register={register('category.uuid')} 
                   onChange={(e) => setCategory(e)}
@@ -230,7 +231,7 @@ const ScheduleMeetingItem = () => {
               </div>
               <div className="flex-1">
                 <DateTimePicker
-                  label="Start Date Time"
+                  label={ t('meeting.props.start_date_time') }
                   placeholder="Mar 2, 2022 5:02 PM"
                   showTime
                   onOk={onOk}
@@ -243,7 +244,7 @@ const ScheduleMeetingItem = () => {
               <div className="flex-1">
                 <Input
                   register={register("period")}
-                  label="Estimated Period"
+                  label={ t('meeting.props.estimated_period') }
                   placeholder="60"
                   type="number"
                   min="1"
@@ -252,14 +253,14 @@ const ScheduleMeetingItem = () => {
               <div className="flex-1">
                 <Input
                   register={register("identifier")}
-                  label="Meeting code"
-                  placeholder="Enter Meeting Code"
+                  label={ t('meeting.meeting_code') }
+                  placeholder={ t('meeting.enter_meeting_code') }
                 />
               </div>
               <div className="flex-1">
                 <Input
                   register={register("max_participant_count")}
-                  label="Maximum Participant Count"
+                  label={ t('meeting.config.max_participant_count') }
                   placeholder="1000"
                   type="number"
                   min="1"
@@ -281,7 +282,7 @@ const ScheduleMeetingItem = () => {
                     onChange={() => setAccessibleViaLink(!accessibleViaLink)}
                     register={register("accessible_via_link")}
                   />
-                  <span className="label-base pb-0">Accessible via link</span>
+                  <span className="label-base pb-0">{ t('meeting.props.accessible_via_link') }</span>
                 </label>
               </div>
               <div className="form-control">
@@ -292,7 +293,7 @@ const ScheduleMeetingItem = () => {
                     onChange={() => setAccessibleToMembers(!accessibleToMembers)}
                     register={register("accessible_to_members")}
                   />
-                  <span className="label-base pb-0">Only accessible to active member</span>
+                  <span className="label-base pb-0">{ t('meeting.props.only_accessible_to_members') }</span>
                 </label>
               </div>
             </div>
@@ -334,7 +335,7 @@ const ScheduleMeetingItem = () => {
                   Save and Send meeting
                 </Button>
                 <Button className="btn-outline-base" type="button" isLoading={loading}>
-                  Reset
+                { t('general.reset') }
                 </Button>
                 <Button className="btn btn-primary" isLoading={loading}>
                   Save meeting
@@ -348,4 +349,4 @@ const ScheduleMeetingItem = () => {
   );
 };
 
-export default ScheduleMeetingItem;
+export default withNamespaces()(ScheduleMeetingItem);

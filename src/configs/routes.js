@@ -29,4 +29,7 @@ export const routeUrls = {
   analytic: {
     path: "analytic",
   },
+  profile: {
+    path: "profile",
+  },
 };

@@ -11,6 +11,7 @@ import {
   ScheduleMeetingItem,
   VerifyResetPassword,
   ScheduleMeetingDetail,
+  Profile,
 } from "./views";
 
 const Routers = () => {
@@ -22,11 +23,9 @@ const Routers = () => {
         <Route path={`/${routeUrls.reset.path}`} element={<ResetPassword />} />
         <Route path={`/${routeUrls.verifyForgotPassword.path}`} element={<VerifyResetPassword />} />
         <Route path={`/${routeUrls.scheduleMeeting.path}`} element={<ScheduleMeetingHistories />} />
-        <Route path={`/${routeUrls.scheduleMeeting.path}/new`} element={<ScheduleMeetingItem />} />
-        <Route
-          path={`/${routeUrls.scheduleMeeting.path}/:meetingId`}
-          element={<ScheduleMeetingDetail />}
-        />
+        <Route path={`/${routeUrls.newScheduleMeeting.path}`} element={<ScheduleMeetingItem />} />
+        <Route path={`/meeting/:mettingId`} element={<ScheduleMeetingDetail />} />
+        <Route path={`/${routeUrls.profile.path}`} element={<Profile />} />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
