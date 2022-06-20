@@ -112,8 +112,8 @@ export default function Login() {
     navigate(`/${routeUrls.reset.path}`);
   };
 
-  const onLogin = () => {
-    navigate(`/${routeUrls.login.path}`);
+  const onRegister = () => {
+    navigate(`/${routeUrls.register.path}`);
   };
 
   useAuth();
@@ -175,7 +175,7 @@ export default function Login() {
           <a className="text-[13px] btn-link-dark" onClick={onForgetPassword}>
             Forget Password?
           </a>
-          <a className="text-[13px] btn-link-light" onClick={onLogin}>
+          <a className="text-[13px] btn-link-light" onClick={onRegister}>
             Click to Register
           </a>
         </div>

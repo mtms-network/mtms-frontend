@@ -7,8 +7,8 @@ const NavbarLayout = ({ width, onLogout }) => {
   const [appStore] = useAppStore();
   return (
     <div
-      className="navbar bg-dark-base fixed z-10 h-18"
-      style={{ width: `calc(${width}px - 320px)` }}
+      className="navbar bg-dark-base fixed z-30 h-18 w-full"
+      style={{ width: width > 768 && `calc(${width}px - 320px)` }}
     >
       <div className="flex-none lg:hidden">
         <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
@@ -49,13 +49,11 @@ const NavbarLayout = ({ width, onLogout }) => {
               >
                 <div className="avatar">
                   <div className="w-12 rounded-full">
-                    <img
-                      src={
-                        appStore?.user?.profile?.avatar ||
-                        "https://api.lorem.space/image/face?hash=28212"
-                      }
-                      alt="avatar"
-                    />
+                    {appStore?.user?.profile?.avatar ? (
+                      <img src={`https://api.mtms.live/${appStore?.user?.profile?.avatar}`} alt="avatar" />
+                    ) : (
+                      <span className="text-3xl">appStore?.user?.profile?.name[0]</span>
+                    )}
                   </div>
                 </div>
                 <div className="nav-link">
