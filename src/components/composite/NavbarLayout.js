@@ -52,13 +52,11 @@ const NavbarLayout = ({ width, onLogout, t }) => {
               >
                 <div className="avatar">
                   <div className="w-12 rounded-full">
-                    <img
-                      src={
-                        LIVE_URL + appStore?.user?.profile?.avatar ||
-                        "https://api.lorem.space/image/face?hash=28212"
-                      }
-                      alt="avatar"
-                    />
+                    {appStore?.user?.profile?.avatar ? (
+                      <img src={ LIVE_URL + appStore?.user?.profile?.avatar} alt="avatar" />
+                    ) : (
+                      <span className="text-3xl">{ appStore?.user?.profile?.name[0] }</span>
+                    )}
                   </div>
                 </div>
                 <div className="nav-link">
