@@ -38,11 +38,13 @@ export const getMeetingHistories = async ({ limit, page }) => {
   }
 };
 
-export const getScheduleMeetings = async ({ limit, page, title = "" }) => {
+export const getScheduleMeetings = async ({ limit, page, title = "", type, status }) => {
   try {
     const defaultFilters = {
       current_page: page || 1,
       per_page: limit || 10,
+      type,
+      status,
     };
     if (title) {
       defaultFilters.keyword = title;

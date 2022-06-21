@@ -152,14 +152,6 @@ const ScheduleMeetingDetail = () => {
     );
   };
 
-  const onChange = (e) => {
-    console.log(e);
-  };
-
-  const handleChange = (e) => {
-    console.log(e);
-  };
-
   const handleSaveAndSave = (e) => {
     e.preventDefault();
     handleSubmit(onSubmit)(true);

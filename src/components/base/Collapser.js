@@ -14,12 +14,12 @@ const Collapser = ({
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
-    setIsShow(true);
-  }, []);
+    setIsShow(!isShow);
+  }, [show]);
 
   return (
     isShow && (
-      <GroupLayout>
+      <GroupLayout className="delay-700">
         <div className="justify-between flex w-full">
           <p className="text-md font-semibold">{title}</p>
           <button

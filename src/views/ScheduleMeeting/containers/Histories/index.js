@@ -88,7 +88,7 @@ const ScheduleMeetingHistories = () => {
             <button
               className=""
               onClick={() => {
-                setIsShowFilter(true);
+                setIsShowFilter(!isShowFilter);
               }}
             >
               <IoFilterCircle className="text-black" />
