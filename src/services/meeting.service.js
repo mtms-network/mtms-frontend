@@ -38,12 +38,17 @@ export const getMeetingHistories = async ({ limit, page }) => {
   }
 };
 
-export const getScheduleMeetings = async ({ limit, page }) => {
+export const getScheduleMeetings = async ({ limit, page, title = "", type, status }) => {
   try {
     const defaultFilters = {
       current_page: page || 1,
       per_page: limit || 10,
+      type,
+      status,
     };
+    if (title) {
+      defaultFilters.keyword = title;
+    }
 
     const query = QueryString.stringify({ ...defaultFilters });
     const res = await client.get(`?${query}`);
@@ -106,11 +111,11 @@ export const getMeetingDetail = async (uuid) => {
 
 export const getMeetingContact = async () => {
   try {
-    const Axios = createPrivateInstance('');
+    const Axios = createPrivateInstance("");
     const res = await Axios.get(`/contacts?per_page=-1`);
     return res?.data;
   } catch (error) {
     console.error("getMeetingContact", error);
     return null;
   }
-}
+};

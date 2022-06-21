@@ -14,10 +14,15 @@ const Pagination = ({
 }) => {
   return (
     <div
-      className={classNames("flex flex-row items-center justify-between w-full right-8", className)}
+      className={classNames(
+        "flex flex-col sm:flex-row items-center justify-between w-full right-8",
+        className,
+      )}
     >
-      <div>
-        <p className="text-md text-dark-base">{`Total ${total} result found - showing records from ${from} to ${to}`}</p>
+      <div className="pb-2 sm:pb-0">
+        <p className="text-md text-dark-base">{`Total ${total} result found - showing records from ${
+          from || 0
+        } to ${to || 0}`}</p>
       </div>
 
       <div className="pl-4">

@@ -28,7 +28,7 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
         <div className={classNames("bg-white relative")}>
           <div
             className={classNames(
-              "flex flex-col pb-20 pt-28 overflow-y-auto px-4 relative",
+              "flex flex-col pt-20 sm:pt-28 pb-28 overflow-y-auto px-4 relative",
               contentClassName,
             )}
           >
@@ -37,7 +37,7 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
           {bottom && (
             <div
               className="navbar bg-white fixed z-10 bottom-0 px-4"
-              style={{ width: `calc(${width}px - 320px)` }}
+              style={{ width: width > 768 && `calc(${width}px - 320px)` }}
             >
               <div className="flex py-2 w-full">{bottom}</div>
             </div>

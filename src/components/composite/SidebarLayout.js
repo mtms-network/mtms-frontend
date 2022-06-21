@@ -34,8 +34,7 @@ const SidebarLayout = () => {
             <button
               className={classNames(
                 "text-base font-normal",
-                location.pathname === `/${routeUrls.scheduleMeeting.path}` ||
-                  location.pathname === `/${routeUrls.newScheduleMeeting.path}`
+                location.pathname.includes(routeUrls.scheduleMeeting.path)
                   ? "font-normal btn btn-base justify-start"
                   : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
               )}

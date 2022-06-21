@@ -96,14 +96,14 @@ const ScheduleMeetingItem = () => {
       values.start_date_time = startDateTime;
       values.emails = emails;
       values.contacts = contacts.map((value) => {
-        return {uuid: value}
+        return {uuid: value};
       });
       values.category.uuid = category;
       values.type.uuid = type;
 
       const client = createPrivateInstance(BASE_API.meeting);
       const res = await client.post('', values);
-      const uuid = res.data.meeting.uuid;
+      const {uuid} = res.data.meeting;
 
       if(sendInvite === true) {
         const client = createPrivateInstance(`/meetings/${uuid}/invitation`);
@@ -123,12 +123,12 @@ const ScheduleMeetingItem = () => {
 
   const onOk = (e) => {
     setStartDateTime(
-      e._d.getFullYear()+'-'+
-      (e._d.getMonth()+1).toString().padStart(2, '0')+'-'+
-      e._d.getDate().toString().padStart(2, '0')+' '+
-      e._d.getHours().toString().padStart(2, '0')+':'+
-      e._d.getMinutes().toString().padStart(2, '0')+':'+
-      e._d.getSeconds().toString().padStart(2, '0')
+      `${e._d.getFullYear()}-${
+      (e._d.getMonth()+1).toString().padStart(2, '0')}-${
+      e._d.getDate().toString().padStart(2, '0')} ${
+      e._d.getHours().toString().padStart(2, '0')}:${
+      e._d.getMinutes().toString().padStart(2, '0')}:${
+      e._d.getSeconds().toString().padStart(2, '0')}`
     );
   };
 
@@ -138,12 +138,12 @@ const ScheduleMeetingItem = () => {
 
   const handleChange = (e) => {
     console.log(e);
-  }
+  };
 
   const handleSaveAndSave = (e) => {
     e.preventDefault();
-    handleSubmit(onSubmit)(true)
-  }
+    handleSubmit(onSubmit)(true);
+  };
 
   const fetchContact = async () => {
     try {
@@ -157,7 +157,7 @@ const ScheduleMeetingItem = () => {
         setListContacts(list);
       }
     } catch (error) {}
-  }
+  };
 
   useEffect(() => {
     prepareData();
