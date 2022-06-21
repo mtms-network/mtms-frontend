@@ -11,6 +11,7 @@ import {
   ScheduleMeetingItem,
   VerifyResetPassword,
   ScheduleMeetingDetail,
+  Profile,
 } from "./views";
 
 const Routers = () => {
@@ -27,6 +28,7 @@ const Routers = () => {
           path={`/${routeUrls.scheduleMeeting.path}/:meetingId`}
           element={<ScheduleMeetingDetail />}
         />
+        <Route path={`/${routeUrls.profile.path}`} element={<Profile />} />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

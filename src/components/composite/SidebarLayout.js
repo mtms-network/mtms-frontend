@@ -4,8 +4,9 @@ import React from "react";
 import { FaCalendarPlus } from "react-icons/fa";
 import { IoAnalyticsOutline, IoApps, IoLogoAppleAr, IoPerson } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
+import { withNamespaces } from 'react-i18next';
 
-const SidebarLayout = () => {
+const SidebarLayout = ({ t }) => {
   const navigate = useNavigate();
   const location = useLocation();
   return (
@@ -27,7 +28,7 @@ const SidebarLayout = () => {
               onClick={() => navigate("/")}
             >
               <IoLogoAppleAr />
-              <p className="pl-2">Overview</p>
+              <p className="pl-2">{ t('dashboard.dashboard') }</p>
             </button>
           </div>
           <div className="w-full">
@@ -41,7 +42,7 @@ const SidebarLayout = () => {
               onClick={() => navigate(`/${routeUrls.scheduleMeeting.path}`)}
             >
               <FaCalendarPlus />
-              <p className="pl-2">Schedule a Meeting</p>
+              <p className="pl-2">{ t('meeting.meetings') }</p>
             </button>
           </div>
           <div className="w-full">
@@ -54,7 +55,7 @@ const SidebarLayout = () => {
               )}
             >
               <IoApps />
-              <p className="pl-2">Rooms 24/7</p>
+              <p className="pl-2">{ t('room.rooms') }</p>
             </button>
           </div>
           <div className="w-full">
@@ -67,7 +68,7 @@ const SidebarLayout = () => {
               )}
             >
               <IoPerson />
-              <p className="pl-2">Contacts</p>
+              <p className="pl-2">{ t('contact.contacts') }</p>
             </button>
           </div>
           <div className="w-full">
@@ -89,4 +90,4 @@ const SidebarLayout = () => {
   );
 };
 
-export default SidebarLayout;
+export default withNamespaces()(SidebarLayout);

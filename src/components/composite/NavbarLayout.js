@@ -2,8 +2,11 @@ import React from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
 import { useAppStore } from "stores/app.store";
+import { LIVE_URL } from "configs";
+import { withNamespaces } from 'react-i18next';
+import { Link } from "react-router-dom";
 
-const NavbarLayout = ({ width, onLogout }) => {
+const NavbarLayout = ({ width, onLogout, t }) => {
   const [appStore] = useAppStore();
   return (
     <div
@@ -19,7 +22,7 @@ const NavbarLayout = ({ width, onLogout }) => {
         <div>
           <ul className="menu menu-horizontal p-0 flex flex-row justify-start">
             <li className="nav-link">
-              <a className="font-bold text-base">Home</a>
+              <a className="font-bold text-base">{ t('general.home') }</a>
             </li>
             <li className="nav-link">
               <a className="font-bold text-base">Products</a>
@@ -50,9 +53,9 @@ const NavbarLayout = ({ width, onLogout }) => {
                 <div className="avatar">
                   <div className="w-12 rounded-full">
                     {appStore?.user?.profile?.avatar ? (
-                      <img src={`https://api.mtms.live/${appStore?.user?.profile?.avatar}`} alt="avatar" />
+                      <img src={ LIVE_URL + appStore?.user?.profile?.avatar} alt="avatar" />
                     ) : (
-                      <span className="text-3xl">appStore?.user?.profile?.name[0]</span>
+                      <span className="text-3xl">{ appStore?.user?.profile?.name[0] }</span>
                     )}
                   </div>
                 </div>
@@ -65,14 +68,19 @@ const NavbarLayout = ({ width, onLogout }) => {
                 className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-dark-base rounded-box w-32"
               >
                 <li className="w-full">
-                  <a className="btn btn-block hover:text-primary">Profile</a>
+                <Link
+                  to={`/profile`}
+                  className="btn btn-block hover:text-primary"
+                >
+                  { t('user.profile') }
+                </Link>
                 </li>
                 <li className="w-full">
                   <a className="btn btn-block hover:text-primary">Settings</a>
                 </li>
                 <li className="w-full">
                   <a className="btn btn-block hover:text-primary" onClick={onLogout}>
-                    Logout
+                  { t('auth.logout') }
                   </a>
                 </li>
               </ul>
@@ -85,4 +93,4 @@ const NavbarLayout = ({ width, onLogout }) => {
   );
 };
 
-export default NavbarLayout;
+export default withNamespaces()(NavbarLayout);

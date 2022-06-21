@@ -13,8 +13,9 @@ import { getScheduleMeetings } from "services/meeting.service";
 import { useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";
 import { MeetingItem, ScheduleHistoriesFilter } from "../../components";
+import { withNamespaces } from 'react-i18next';
 
-const ScheduleMeetingHistories = () => {
+const ScheduleMeetingHistories = ({t}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [histories, setHistories] = useState({
@@ -79,7 +80,7 @@ const ScheduleMeetingHistories = () => {
               navigate(`/${routeUrls.scheduleMeeting.path}/new`);
             }}
           >
-            Create new
+            { t('general.create_new') }
             <span className="bg-white p-1 rounded-lg">
               <FaPlus className="font-bold text-primary" />
             </span>
@@ -128,4 +129,4 @@ const ScheduleMeetingHistories = () => {
   );
 };
 
-export default ScheduleMeetingHistories;
+export default withNamespaces()(ScheduleMeetingHistories);

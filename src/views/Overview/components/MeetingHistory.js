@@ -12,8 +12,9 @@ import classnames from "classnames";
 import { BrandLogoLoading, GroupLayout, GroupTitle, Input, Pagination } from "components";
 import { getMeetingHistories } from "services/meeting.service";
 import { useMeetingStore } from "stores/meeting.store";
+import { withNamespaces } from 'react-i18next';
 
-const MeetingHistory = ({ className }) => {
+const MeetingHistory = ({ className, t }) => {
   const [loading, setLoading] = useState(false);
   const [histories, setHistories] = useState({
     data: [],
@@ -55,12 +56,12 @@ const MeetingHistory = ({ className }) => {
   return (
     <div className={classnames([className])}>
       <GroupLayout className="flex flex-col w-full">
-        {loading && <BrandLogoLoading />}
+      {loading && <BrandLogoLoading />}
         {!loading && (
           <>
-            <div className="flex-1">
-              <div className="flex flex-row justify-between w-full">
-                <GroupTitle icon={<IoRadio />} title="Meeting History" />
+            <div className="flex flex-row justify-between w-full">
+              <div className="flex-1">
+                <GroupTitle icon={<IoRadio />} title={ t('meeting.meeting_history') } />
               </div>
               <div className="flex-1 space-x-2 flex flex-row w-auto items-center justify-end">
                 <button>
@@ -79,13 +80,13 @@ const MeetingHistory = ({ className }) => {
                 <table className="table w-full">
                   <thead className="border-b-1">
                     <tr className="text-cl-base">
-                      <th className="bg-white">Host</th>
-                      <th className="bg-white">Type</th>
-                      <th className="bg-white">Code</th>
+                      <th className="bg-white">{ t('meeting.host') }</th>
+                      <th className="bg-white">{ t('meeting.props.type') }</th>
+                      <th className="bg-white">{ t('meeting.props.identifier') }</th>
                       <th className="bg-white" />
-                      <th className="bg-white">Status</th>
-                      <th className="bg-white">Started at</th>
-                      <th className="bg-white">Ended at</th>
+                      <th className="bg-white">{ t('meeting.props.status') }</th>
+                      <th className="bg-white">{ t('meeting.started_at') }</th>
+                      <th className="bg-white">{ t('meeting.ended_at') }</th>
                       <th className="bg-white" />
                     </tr>
                   </thead>
@@ -150,4 +151,4 @@ const MeetingHistory = ({ className }) => {
   );
 };
 
-export default MeetingHistory;
+export default withNamespaces()(MeetingHistory);
