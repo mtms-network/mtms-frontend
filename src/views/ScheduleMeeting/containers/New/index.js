@@ -9,6 +9,7 @@ import {
   Select,
   TextArea,
   AlertError,
+  BrandLogoLoading,
 } from "components";
 import { IoOptions, IoTv } from "react-icons/io5";
 import { useForm } from "react-hook-form";
@@ -23,7 +24,7 @@ import { createPrivateInstance } from "services/base";
 import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate } from "react-router-dom";
-import { getMeetingContact } from "services/meeting.service";
+import { getMeetingContact, getRequirePreMeeting } from "services/meeting.service";
 import { withNamespaces } from 'react-i18next';
 
 const timeFormat = "MMM DD, yyyy HH:mm";
@@ -31,6 +32,7 @@ const timeFormat = "MMM DD, yyyy HH:mm";
 const ScheduleMeetingItem = ({t}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [types, setTypes] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -61,9 +63,7 @@ const ScheduleMeetingItem = ({t}) => {
     resolver: yupResolver(schema),
   });
 
-  const prepareData = () => {
-    fetchContact();
-
+  const prepareData = async () => {
     if (meetingStore?.types) {
       const list = meetingStore.types.map((item) => ({
         ...item,
@@ -160,9 +160,37 @@ const ScheduleMeetingItem = ({t}) => {
     } catch (error) {}
   };
 
+  const fetchCommonData = async () => {
+    try {
+      const res = await getRequirePreMeeting();
+      if (res) {
+        updateMeetingStore((draft) => {
+          draft.categories = res?.categories;
+          draft.types = res?.types;
+          draft.statuses = res?.statuses;
+          draft.isForceLoadMeetingHistories = true;
+        });
+      }
+    } catch (error) {}
+  };
+
+  const fetchData = async () => {
+    try {
+      setFetchLoading(true);
+      if(!meetingStore.isForceLoadMeetingHistories) {
+        await fetchCommonData();
+        await fetchContact();
+      }
+      await prepareData();
+      setFetchLoading(false);
+    } catch (error) {
+      setFetchLoading(false);
+    }
+  };
+
   useEffect(() => {
-    prepareData();
-  }, [meetingStore.types]);
+    fetchData();
+  }, [meetingStore.isForceLoadMeetingHistories]);
 
   return (
     <MainLayout>
@@ -174,177 +202,184 @@ const ScheduleMeetingItem = ({t}) => {
           }}
         />
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-row justify-between w-full py-2">
-          <div className="flex-1">
-            <GroupTitle icon={<IoTv />} title="Schedule New Meeting" />
-          </div>
-          <div className="flex-1 space-x-2 flex flex-row items-center justify-end">
-            <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
-              <button>
-                <IoOptions className="text-black" />
-              </button>
-            </div>
-          </div>
+      {fetchLoading && (
+        <div className="h-96">
+          <BrandLogoLoading />
         </div>
-        <div className="space-y-4">
-          <GroupLayout className="flex flex-col justify-between">
-            <div className="w-full h-auto">
-              <Input
-                className="w-full"
-                labelClassName="text-base"
-                register={register("title")}
-                label={ t('meeting.props.title') }
-                placeholder="Enter title meeting"
-                rules={[
-                  {
-                    required: true,
-                    message: "This field is required."
-                  }
-                ]}
-              />
-              <TextArea
-                className="w-full"
-                register={register("agenda")}
-                label={ t('meeting.props.agenda') }
-                placeholder="Enter agenda meeting"
-              />
+      )}
+      {!fetchLoading && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-row justify-between w-full py-2">
+            <div className="flex-1">
+              <GroupTitle icon={<IoTv />} title="Schedule New Meeting" />
             </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col space-y-4">
-            <div className="flex flex-row justify-between space-x-4">
-              <div className="flex-1">
-                <Select 
-                  label={ t('meeting.props.type') }
-                  options={types} 
-                  register={register('type.uuid')} 
-                  onChange={(e) => setType(e)} 
-                />
-              </div>
-              <div className="flex-1">
-                <Select 
-                  label={ t('meeting.meeting_category.category') }
-                  options={categories} 
-                  register={register('category.uuid')} 
-                  onChange={(e) => setCategory(e)}
-                />
-              </div>
-              <div className="flex-1">
-                <DateTimePicker
-                  label={ t('meeting.props.start_date_time') }
-                  placeholder="Mar 2, 2022 5:02 PM"
-                  showTime
-                  onOk={onOk}
-                  format={timeFormat}
-                  register={register("start_date_time")}
-                />
+            <div className="flex-1 space-x-2 flex flex-row items-center justify-end">
+              <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
+                <button>
+                  <IoOptions className="text-black" />
+                </button>
               </div>
             </div>
-            <div className="flex flex-row justify-between space-x-4">
-              <div className="flex-1">
+          </div>
+          <div className="space-y-4">
+            <GroupLayout className="flex flex-col justify-between">
+              <div className="w-full h-auto">
                 <Input
-                  register={register("period")}
-                  label={ t('meeting.props.estimated_period') }
-                  placeholder="60"
-                  type="number"
-                  min="1"
-                />
-              </div>
-              <div className="flex-1">
-                <Input
-                  register={register("identifier")}
-                  label={ t('meeting.meeting_code') }
-                  placeholder={ t('meeting.enter_meeting_code') }
-                />
-              </div>
-              <div className="flex-1">
-                <Input
-                  register={register("max_participant_count")}
-                  label={ t('meeting.config.max_participant_count') }
-                  placeholder="1000"
-                  type="number"
-                  min="1"
-                  onChange={(e) => {
-                    const { value } = e.target;
-                    if (value <= 99999 && value >= 0 && value.length <= 5) {
-                      // setParticipant(e.target.value);
+                  className="w-full"
+                  labelClassName="text-base"
+                  register={register("title")}
+                  label={ t('meeting.props.title') }
+                  placeholder="Enter title meeting"
+                  rules={[
+                    {
+                      required: true,
+                      message: "This field is required."
                     }
-                  }}
+                  ]}
+                />
+                <TextArea
+                  className="w-full"
+                  register={register("agenda")}
+                  label={ t('meeting.props.agenda') }
+                  placeholder="Enter agenda meeting"
                 />
               </div>
-            </div>
-            <div className="flex flex-row items-center space-x-4">
-              <div className="form-control">
-                <label className="label cursor-pointer flex justify-center items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="checkbox checkbox-primary checkbox-sm"
-                    onChange={() => setAccessibleViaLink(!accessibleViaLink)}
-                    register={register("accessible_via_link")}
+            </GroupLayout>
+            <GroupLayout className="flex flex-col space-y-4">
+              <div className="flex flex-row justify-between space-x-4">
+                <div className="flex-1">
+                  <Select 
+                    label={ t('meeting.props.type') }
+                    options={types} 
+                    register={register('type.uuid')} 
+                    onChange={(e) => setType(e)} 
                   />
-                  <span className="label-base pb-0">{ t('meeting.props.accessible_via_link') }</span>
-                </label>
-              </div>
-              <div className="form-control">
-                <label className="label cursor-pointer flex justify-center items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="checkbox checkbox-primary checkbox-sm"
-                    onChange={() => setAccessibleToMembers(!accessibleToMembers)}
-                    register={register("accessible_to_members")}
+                </div>
+                <div className="flex-1">
+                  <Select 
+                    label={ t('meeting.meeting_category.category') }
+                    options={categories} 
+                    register={register('category.uuid')} 
+                    onChange={(e) => setCategory(e)}
                   />
-                  <span className="label-base pb-0">{ t('meeting.props.only_accessible_to_members') }</span>
-                </label>
+                </div>
+                <div className="flex-1">
+                  <DateTimePicker
+                    label={ t('meeting.props.start_date_time') }
+                    placeholder="Mar 2, 2022 5:02 PM"
+                    showTime
+                    onOk={onOk}
+                    format={timeFormat}
+                    register={register("start_date_time")}
+                  />
+                </div>
               </div>
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col justify-between">
-            <div className="w-full h-auto">
-              <Select
-                label="Add Invitees"
-                mode="multiple"
-                options={listContacts}
-                placeholder="Select Invitees"
-                onChange={(e) => setContacts(e)}
-                register={register("contacts")}
-              />
-              <Select label="Enter Email" mode="tags" placeholder="Input invitees" register={register("emails")} onChange={(e) => setEmails(e)} />
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col justify-between">
-            <div className="border-1 rounded-xl p-4">
-              <Editor
-                editorState={description}
-                toolbarClassName="toolbarClassName"
-                wrapperClassName="wrapperClassName"
-                editorClassName="editorClassName"
-                onEditorStateChange={(editor) => {
-                  setDescription(editor);
-                }}
-                register={register("description")}
-              />
-            </div>
-            <div className="w-full flex flex-row justify-between pt-8">
-              <div className="space-x-4">
-                <Button className="btn btn-primary" isLoading={loading}>
-                  Save meeting
-                </Button>
+              <div className="flex flex-row justify-between space-x-4">
+                <div className="flex-1">
+                  <Input
+                    register={register("period")}
+                    label={ t('meeting.props.estimated_period') }
+                    placeholder="60"
+                    type="number"
+                    min="1"
+                  />
+                </div>
+                <div className="flex-1">
+                  <Input
+                    register={register("identifier")}
+                    label={ t('meeting.meeting_code') }
+                    placeholder={ t('meeting.enter_meeting_code') }
+                  />
+                </div>
+                <div className="flex-1">
+                  <Input
+                    register={register("max_participant_count")}
+                    label={ t('meeting.config.max_participant_count') }
+                    placeholder="1000"
+                    type="number"
+                    min="1"
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      if (value <= 99999 && value >= 0 && value.length <= 5) {
+                        // setParticipant(e.target.value);
+                      }
+                    }}
+                  />
+                </div>
               </div>
-              <div className="space-x-4">
-                <Button onClick={(e) => handleSaveAndSave(e)} className="btn btn-primary" isLoading={loading}>
-                  Save and Send meeting
-                </Button>
-                <Button className="btn-outline-base" type="button" isLoading={loading}>
-                { t('general.reset') }
-                </Button>
-                <Button className="btn btn-primary" isLoading={loading}>
-                  Save meeting
-                </Button>
+              <div className="flex flex-row items-center space-x-4">
+                <div className="form-control">
+                  <label className="label cursor-pointer flex justify-center items-center gap-2">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-sm"
+                      onChange={() => setAccessibleViaLink(!accessibleViaLink)}
+                      register={register("accessible_via_link")}
+                    />
+                    <span className="label-base pb-0">{ t('meeting.props.accessible_via_link') }</span>
+                  </label>
+                </div>
+                <div className="form-control">
+                  <label className="label cursor-pointer flex justify-center items-center gap-2">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-sm"
+                      onChange={() => setAccessibleToMembers(!accessibleToMembers)}
+                      register={register("accessible_to_members")}
+                    />
+                    <span className="label-base pb-0">{ t('meeting.props.only_accessible_to_members') }</span>
+                  </label>
+                </div>
               </div>
-            </div>
-          </GroupLayout>
-        </div>
-      </form>
+            </GroupLayout>
+            <GroupLayout className="flex flex-col justify-between">
+              <div className="w-full h-auto">
+                <Select
+                  label="Add Invitees"
+                  mode="multiple"
+                  options={listContacts}
+                  placeholder="Select Invitees"
+                  onChange={(e) => setContacts(e)}
+                  register={register("contacts")}
+                />
+                <Select label="Enter Email" mode="tags" placeholder="Input invitees" register={register("emails")} onChange={(e) => setEmails(e)} />
+              </div>
+            </GroupLayout>
+            <GroupLayout className="flex flex-col justify-between">
+              <div className="border-1 rounded-xl p-4">
+                <Editor
+                  editorState={description}
+                  toolbarClassName="toolbarClassName"
+                  wrapperClassName="wrapperClassName"
+                  editorClassName="editorClassName"
+                  onEditorStateChange={(editor) => {
+                    setDescription(editor);
+                  }}
+                  register={register("description")}
+                />
+              </div>
+              <div className="w-full flex flex-row justify-between pt-8">
+                <div className="space-x-4">
+                  <Button className="btn btn-primary" isLoading={loading}>
+                    Save meeting
+                  </Button>
+                </div>
+                <div className="space-x-4">
+                  <Button onClick={(e) => handleSaveAndSave(e)} className="btn btn-primary" isLoading={loading}>
+                    Save and Send meeting
+                  </Button>
+                  <Button className="btn-outline-base" type="button" isLoading={loading}>
+                  { t('general.reset') }
+                  </Button>
+                  <Button className="btn btn-primary" isLoading={loading}>
+                    Save meeting
+                  </Button>
+                </div>
+              </div>
+            </GroupLayout>
+          </div>
+        </form>
+      )}
     </MainLayout>
   );
 };

@@ -26,7 +26,7 @@ import { createPrivateInstance } from "services/base";
 import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMeetingDetail, getMeetingContact } from "services/meeting.service";
+import { getMeetingDetail, getMeetingContact, getRequirePreMeeting } from "services/meeting.service";
 import { withNamespaces } from 'react-i18next';
 
 const timeFormat = "MMM DD, yyyy HH:mm";
@@ -204,11 +204,29 @@ const ScheduleMeetingDetail = ({t}) => {
     } catch (error) {}
   };
 
+  const fetchCommonData = async () => {
+    try {
+      const res = await getRequirePreMeeting();
+      if (res) {
+        updateMeetingStore((draft) => {
+          draft.categories = res?.categories;
+          draft.types = res?.types;
+          draft.statuses = res?.statuses;
+          draft.isForceLoadMeetingHistories = true;
+        });
+      }
+    } catch (error) {}
+  };
+
   const fetchData = async () => {
     try {
       setFetchLoading(true);
-      await fetchContact();
-      await fetchMeeting();
+      if(!meetingStore.isForceLoadMeetingHistories) {
+        await fetchCommonData();
+        await fetchContact();
+        await fetchMeeting();
+      }
+      await prepareData();
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
@@ -216,9 +234,8 @@ const ScheduleMeetingDetail = ({t}) => {
   };
 
   useEffect(() => {
-    prepareData();
     fetchData();
-  }, [meetingStore.types]);
+  }, [meetingStore.isForceLoadMeetingHistories]);
 
   return (
     <MainLayout>
