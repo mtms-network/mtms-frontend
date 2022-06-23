@@ -43,7 +43,7 @@ const JoinAMeeting = ({ className, t }) => {
           />
           <div className="w-full pt-4">
             <Button className="btn btn-primary btn-block" isLoading={loading} onClick={handleJoin}>
-              Join meeting now
+              { t('home.join_meeting_now') }
             </Button>
           </div>
         </div>

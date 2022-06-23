@@ -71,7 +71,7 @@ const ScheduleMeetingHistories = ({t}) => {
     >
       <div className="flex flex-col sm:flex-row justify-between w-full py-2">
         <div className="flex-1">
-          <GroupTitle icon={<IoTv />} title="Scheduled Meetings" />
+          <GroupTitle icon={<IoTv />} title={ t('schedule_meeting.scheduled_meetings') } />
         </div>
         <div className="flex-1 space-x-2 flex flex-row items-center pt-2 justify-end">
           <Button
@@ -105,12 +105,12 @@ const ScheduleMeetingHistories = ({t}) => {
       </div>
       <div className="flex flex-col gap-4 relative">
         <div>
-          <GroupTitle title="Meetings today" />
+          <GroupTitle title={ t('schedule_meeting.meetings_today') } />
         </div>
         <div>
           <Collapser
             show={isShowFilter}
-            title="Schedule histories filters"
+            title={ t('schedule_meeting.schedule_histories_filters') }
             content={
               <ScheduleHistoriesFilter
                 onChange={(f) => {

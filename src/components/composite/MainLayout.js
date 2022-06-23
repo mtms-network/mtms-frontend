@@ -5,10 +5,11 @@ import { useAppStore } from "stores/app.store";
 import classNames from "classnames";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
+import SidebarUserCenter from "./SidebarUserCenter";
 import { withNamespaces } from 'react-i18next';
 import { createPrivateInstance } from "services/base";
 
-const Layout = ({ children, bottom, contentClassName = "", t, i18n }) => {
+const Layout = ({ children, bottom, contentClassName = "", t, i18n, userCenter = false }) => {
   const [, updateAppStore] = useAppStore();
 
   const { width } = useDimensions();
@@ -61,7 +62,7 @@ const Layout = ({ children, bottom, contentClassName = "", t, i18n }) => {
           )}
         </div>
       </div>
-      <SidebarLayout />
+      { userCenter ? <SidebarUserCenter /> : <SidebarLayout /> }
     </div>
   );
 };

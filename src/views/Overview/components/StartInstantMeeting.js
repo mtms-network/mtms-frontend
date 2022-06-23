@@ -56,7 +56,7 @@ const StartInstantMeeting = ({ className, t }) => {
   return (
     <div className={classNames([className])}>
       <GroupLayout className="flex flex-col justify-between w-full">
-        <GroupTitle icon={<IoCalendarClear />} title="Start Instant Meeting" />
+        <GroupTitle icon={<IoCalendarClear />} title={ t('home.start_instant_meeting') } />
         <div className="flex flex-row space-x-4 py-4">
           <div className="basis-1/2">
             <p className="label-base">{ t('meeting.meeting_code') }</p>
@@ -81,7 +81,7 @@ const StartInstantMeeting = ({ className, t }) => {
                       className="dropdown-content menu p-2 shadow bg-base-100 rounded-box mb-2"
                     >
                       <p className="flex flex-row justify-center items-center space-x-2">
-                        <span className="text-black">Copied</span>
+                        <span className="text-black">{ t('home.copied') }</span>
                         <span className="text-success">
                           <IoCheckmarkCircleOutline />
                         </span>
@@ -93,7 +93,7 @@ const StartInstantMeeting = ({ className, t }) => {
             />
           </div>
           <div className="basis-1/2">
-            <p className="label-base">Maximum participant</p>
+            <p className="label-base">{ t('home.maximum_participant') }</p>
             <Input
               placeholder="1000"
               className="bg-gray-base-100 border-0"
@@ -164,7 +164,7 @@ const StartInstantMeeting = ({ className, t }) => {
           </div>
           <div className="basis-full sm:basis-1/2 flex items-end">
             <Button className="btn btn-primary btn-block" isLoading={loading} onClick={handleStart}>
-              Start a instant meeting
+            { t('home.start_a_instant_meeting') }
             </Button>
           </div>
         </div>

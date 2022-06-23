@@ -10,9 +10,13 @@ import { createPrivateInstance } from "services/base";
 import { BASE_API, ALERT_TYPE, LIVE_URL } from "configs";
 import { FaPencilAlt, FaTrashAlt, FaUserCircle, FaEnvelope, FaPhone } from "react-icons/fa";
 import { useAppStore } from "stores/app.store";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Upload, message, Modal } from 'antd';
 import { handleHttpError, setTokenLoginSucceeded, getAccessToken } from "helpers";
 import { withNamespaces } from 'react-i18next';
+import { data } from "autoprefixer";
+
+const { confirm } = Modal;
 
 const Profile = ({t}) => {
   const [appStore, updateAppStore] = useAppStore();
@@ -66,7 +70,9 @@ const Profile = ({t}) => {
 
   const prepareData = () => {
     setFormUpdateProfile({ ...formUpdateProfile, name: user?.profile?.name, phone: user?.profile?.phone})
-    setAvatar(LIVE_URL + user?.profile?.avatar);
+    if(user?.profile?.avatar) {
+      setAvatar(LIVE_URL + user?.profile?.avatar);
+    }
   };
 
   const updateProfile = async () => {
@@ -116,12 +122,49 @@ const Profile = ({t}) => {
     }
   }
 
+  const handleDeleteAvatar = () => {
+    confirm({
+      title: 'Are you sure delete avatar?',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteAvatar();
+      },
+      onCancel() {
+        //console.log('Cancel');
+      },
+    });
+  }
+
+  const deleteAvatar = async () => {
+    try {
+      setLoading(true);
+      const client = createPrivateInstance(BASE_API.avatar);
+      const res = await client.delete('');
+      if(res.data.status === 'success') {
+        message.success(`File deleted successfully`);
+        const newUser = { ...user, profile: { ...user.profile, avatar: null } };
+        setTokenLoginSucceeded({accessToken: token, user: newUser});
+        updateAppStore((draft) => {
+          draft.user = user;
+        });
+        setAvatar('https://api.lorem.space/image/face?hash=28212');
+      }
+      setLoading(false);
+    } catch (error) {
+      message.error(`Update failed.`);
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     prepareData();
   }, [user]);
   
   return (
-    <MainLayout>
+    <MainLayout userCenter={true} >
       <div className="p-10">
         <AlertError
           {...{ ...alertProfile }}
@@ -130,8 +173,8 @@ const Profile = ({t}) => {
           }}
         />
         <div className="mb-10">
-          <h1 className="font-bold text-lg text-dark-base text-[24px]">Edit Profile</h1>
-          <p>Change and update your personal information</p>
+          <h1 className="font-bold text-lg text-dark-base text-[24px]">{ t('profile.edit') }</h1>
+          <p>{ t('profile.change_information') }</p>
         </div>
         <div className="flex mb-10">
           <div className="mr-[20px]">
@@ -141,12 +184,12 @@ const Profile = ({t}) => {
             <Upload {...propsUpload}>
               <Button className="btn btn-primary" isLoading={loading}>
                 <FaPencilAlt className="mr-2" />
-                Change Photo
+                { t('profile.change_photo') }
               </Button>
             </Upload>
-            <Button className="btn btn-primary" isLoading={loading}>
+            <Button className="btn btn-primary" isLoading={loading} onClick={handleDeleteAvatar} >
               <FaTrashAlt className="mr-2" />
-              Delete Photo
+              { t('profile.delete_photo') }
             </Button>
           </div>
         </div>
@@ -163,11 +206,11 @@ const Profile = ({t}) => {
                   (
                     <div className="border-[1px] flex justify-between items-center rounded-[8px] py-2 px-3">
                       <div className="flex">
-                        <FaUserCircle className="text-[20px] mr-2" /> User Name: {user?.profile?.name}
+                        <FaUserCircle className="text-[20px] mr-2" /> { t('profile.username') }: {user?.profile?.name}
                       </div>
                       <Button className="btn btn-primary" isLoading={loading} onClick={() => setFieldEdit({...fieldEdit, name: true})}>
                         <FaPencilAlt className="mr-2" />
-                        Change
+                        { t('profile.change') }
                       </Button>
                     </div>
                   )
@@ -189,7 +232,7 @@ const Profile = ({t}) => {
                 </div>
                 <Button className="btn btn-primary" isLoading={loading} onClick={() => showModal(true)}>
                   <FaPencilAlt className="mr-2" />
-                  Change
+                  { t('profile.change') }
                 </Button>
               </div>
             </div>
@@ -208,7 +251,7 @@ const Profile = ({t}) => {
                       </div>
                       <Button className="btn btn-primary" isLoading={loading} onClick={() => setFieldEdit({...fieldEdit, phone: true})}>
                         <FaPencilAlt className="mr-2" />
-                        Change
+                        { t('profile.change') }
                       </Button>
                     </div>
                   )
@@ -240,7 +283,7 @@ const Profile = ({t}) => {
             <div className="flex-1">
               <div className="border-[1px] flex justify-between items-center rounded-[8px] py-2 px-3 h-[65px]">
                 <div className="flex">
-                  <FaUserCircle className="text-[20px] mr-2" /> Wallet: X-falfksfj53345ljalkfs
+                  <FaUserCircle className="text-[20px] mr-2" /> { t('profile.wallet') }: X-falfksfj53345ljalkfs
                 </div>
               </div>
             </div>
@@ -251,18 +294,17 @@ const Profile = ({t}) => {
           { t('general.cancel') }
           </Button>
           <Button className="btn btn-primary" isLoading={loading} onClick={updateProfile}>
-            Save Change
+          { t('profile.edit') }
           </Button>
         </div>
       </div>
       <Modal
         visible={visible}
         title={ t('user.change_password') }
-        //onOk={handleOk}
         onCancel={hideModal}
         footer={[
           <Button className="mr-2" key="back" onClick={hideModal}>
-            Return
+            { t('profile.return') }
           </Button>,
           <Button key="submit" type="primary" loading={loading} onClick={submitChangePassword}>
             { t('general.submit') }

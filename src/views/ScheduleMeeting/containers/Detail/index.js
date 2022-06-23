@@ -256,7 +256,7 @@ const ScheduleMeetingDetail = ({t}) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1">
-              <GroupTitle icon={<IoTv />} title="Schedule New Meeting" />
+              <GroupTitle icon={<IoTv />} title={ t('schedule_meeting_new.schedule_new_meeting') } />
             </div>
             <div className="flex-1 space-x-2 flex flex-row items-center justify-end">
               <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
@@ -274,7 +274,7 @@ const ScheduleMeetingDetail = ({t}) => {
                 labelClassName="text-base"
                 register={register("title")}
                 label={ t('meeting.props.title') }
-                placeholder="Enter title meeting"
+                placeholder={ t('schedule_meeting.enter_title_meeting') }
                 rules={[
                   {
                     required: true,
@@ -286,7 +286,7 @@ const ScheduleMeetingDetail = ({t}) => {
                 className="w-full"
                 register={register("agenda")}
                 label={ t('meeting.props.agenda') }
-                placeholder="Enter agenda meeting"
+                placeholder={ t('schedule_meeting_new.enter_agenda_meeting') }
               />
             </div>
           </GroupLayout>
@@ -389,18 +389,18 @@ const ScheduleMeetingDetail = ({t}) => {
             <GroupLayout className="flex flex-col justify-between">
               <div className="w-full h-auto">
                 <Select
-                  label="Add Invitees"
+                  label={ t('schedule_meeting_new.Add_invitees') }
                   mode="multiple"
                   options={listContacts}
-                  placeholder="Select Invitees"
+                  placeholder={ t('schedule_meeting_new.select_invitees') }
                   onChange={(e) => setContacts(e)}
                   register={register("contacts")}
                   value={contacts}
                 />
                 <Select
-                  label="Enter Email"
+                  label={ t('schedule_meeting_new.enter_email') }
                   mode="tags"
-                  placeholder="Input invitees"
+                  placeholder={ t('schedule_meeting_new.input_invitees') }
                   register={register("emails")}
                   onChange={(e) => setEmails(e)}
                 />
@@ -422,7 +422,7 @@ const ScheduleMeetingDetail = ({t}) => {
               <div className="w-full flex flex-row justify-between pt-8">
                 <div className="space-x-4">
                   <Button className="btn btn-primary" isLoading={loading}>
-                    Save meeting
+                  { t('schedule_meeting_new.save_meeting') }
                   </Button>
                 </div>
                 <div className="space-x-4">
@@ -431,13 +431,13 @@ const ScheduleMeetingDetail = ({t}) => {
                     className="btn btn-primary"
                     isLoading={loading}
                   >
-                    Save and Send meeting
+                    { t('schedule_meeting_new.save_and_send_meeting') }
                   </Button>
                   <Button className="btn-outline-base" type="button" isLoading={loading}>
                   { t('general.reset') }
                   </Button>
                   <Button className="btn btn-primary" isLoading={loading}>
-                    Save meeting
+                  { t('schedule_meeting_new.save_meeting') }
                   </Button>
                 </div>
               </div>
