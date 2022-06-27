@@ -27,7 +27,7 @@ const SidebarUserCenter = ({ t }) => {
               )}
               onClick={() => navigate(`/${routeUrls.profile.path}`)}
             >
-              <p className="pl-2">{ t('Update Profile') }</p>
+              <p className="pl-2">{t('Update Profile')}</p>
             </button>
           </div>
           <div className="w-full">
@@ -39,7 +39,7 @@ const SidebarUserCenter = ({ t }) => {
                   : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
               )}
             >
-              <p className="pl-2">{ t('Rewards Center') }</p>
+              <p className="pl-2">{t('Rewards Center')}</p>
             </button>
           </div>
           <div className="w-full">
@@ -51,7 +51,7 @@ const SidebarUserCenter = ({ t }) => {
                   : "font-normal btn btn-base justify-start",
               )}
             >
-              <p className="pl-2">{ t('Registration Invite') }</p>
+              <p className="pl-2">{t('Registration Invite')}</p>
             </button>
           </div>
           <div className="w-full">

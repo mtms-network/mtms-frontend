@@ -41,7 +41,7 @@ const ScheduleHistoriesFilter = ({ onChange, t }) => {
         filter.status = status;
       }
       onChange(filter);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const prepareData = () => {
@@ -81,7 +81,7 @@ const ScheduleHistoriesFilter = ({ onChange, t }) => {
           className="w-full"
           register={register("title")}
           label="Title"
-          placeholder={ t('schedule_meeting.enter_title_meeting') }
+          placeholder={t('schedule_meeting.enter_title_meeting')}
         />
         <Select
           label="Type"

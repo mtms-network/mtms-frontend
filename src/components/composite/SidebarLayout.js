@@ -28,7 +28,7 @@ const SidebarLayout = ({ t }) => {
               onClick={() => navigate("/")}
             >
               <IoLogoAppleAr />
-              <p className="pl-2">{ t('dashboard.dashboard') }</p>
+              <p className="pl-2">{t('dashboard.dashboard')}</p>
             </button>
           </div>
           <div className="w-full">
@@ -42,7 +42,7 @@ const SidebarLayout = ({ t }) => {
               onClick={() => navigate(`/${routeUrls.scheduleMeeting.path}`)}
             >
               <FaCalendarPlus />
-              <p className="pl-2">{ t('meeting.meetings') }</p>
+              <p className="pl-2">{t('meeting.meetings')}</p>
             </button>
           </div>
           <div className="w-full">
@@ -55,7 +55,7 @@ const SidebarLayout = ({ t }) => {
               )}
             >
               <IoApps />
-              <p className="pl-2">{ t('room.rooms') }</p>
+              <p className="pl-2">{t('room.rooms')}</p>
             </button>
           </div>
           <div className="w-full">
@@ -68,7 +68,7 @@ const SidebarLayout = ({ t }) => {
               )}
             >
               <IoPerson />
-              <p className="pl-2">{ t('contact.contacts') }</p>
+              <p className="pl-2">{t('contact.contacts')}</p>
             </button>
           </div>
           <div className="w-full">
@@ -81,7 +81,7 @@ const SidebarLayout = ({ t }) => {
               )}
             >
               <IoAnalyticsOutline />
-              <p className="pl-2">{ t('sidebar.analytics') }</p>
+              <p className="pl-2">{t('sidebar.analytics')}</p>
             </button>
           </div>
         </div>

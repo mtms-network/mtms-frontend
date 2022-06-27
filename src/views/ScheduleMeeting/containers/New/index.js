@@ -29,7 +29,7 @@ import { withNamespaces } from 'react-i18next';
 
 const timeFormat = "MMM DD, yyyy HH:mm";
 
-const ScheduleMeetingItem = ({t}) => {
+const ScheduleMeetingItem = ({ t }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
@@ -97,20 +97,20 @@ const ScheduleMeetingItem = ({t}) => {
       values.start_date_time = startDateTime;
       values.emails = emails;
       values.contacts = contacts.map((value) => {
-        return {uuid: value};
+        return { uuid: value };
       });
       values.category.uuid = category;
       values.type.uuid = type;
 
       const client = createPrivateInstance(BASE_API.meeting);
       const res = await client.post('', values);
-      const {uuid} = res.data.meeting;
+      const { uuid } = res.data.meeting;
 
-      if(sendInvite === true) {
+      if (sendInvite === true) {
         const client = createPrivateInstance(`/meetings/${uuid}/invitation`);
         const res = await client.post('', values);
       }
-      
+
       setLoading(false);
       navigate(`/${routeUrls.scheduleMeeting.path}`);
     } catch (error) {
@@ -124,12 +124,7 @@ const ScheduleMeetingItem = ({t}) => {
 
   const onOk = (e) => {
     setStartDateTime(
-      `${e._d.getFullYear()}-${
-      (e._d.getMonth()+1).toString().padStart(2, '0')}-${
-      e._d.getDate().toString().padStart(2, '0')} ${
-      e._d.getHours().toString().padStart(2, '0')}:${
-      e._d.getMinutes().toString().padStart(2, '0')}:${
-      e._d.getSeconds().toString().padStart(2, '0')}`
+      `${e._d.getFullYear()}-${(e._d.getMonth() + 1).toString().padStart(2, '0')}-${e._d.getDate().toString().padStart(2, '0')} ${e._d.getHours().toString().padStart(2, '0')}:${e._d.getMinutes().toString().padStart(2, '0')}:${e._d.getSeconds().toString().padStart(2, '0')}`
     );
   };
 
@@ -157,7 +152,7 @@ const ScheduleMeetingItem = ({t}) => {
         }));
         setListContacts(list);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const fetchCommonData = async () => {
@@ -171,13 +166,13 @@ const ScheduleMeetingItem = ({t}) => {
           draft.isForceLoadMeetingHistories = true;
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const fetchData = async () => {
     try {
       setFetchLoading(true);
-      if(!meetingStore.isForceLoadMeetingHistories) {
+      if (!meetingStore.isForceLoadMeetingHistories) {
         await fetchCommonData();
         await fetchContact();
       }
@@ -211,7 +206,7 @@ const ScheduleMeetingItem = ({t}) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1">
-              <GroupTitle icon={<IoTv />} title={ t('schedule_meeting_new.schedule_new_meeting') } />
+              <GroupTitle icon={<IoTv />} title={t('schedule_meeting_new.schedule_new_meeting')} />
             </div>
             <div className="flex-1 space-x-2 flex flex-row items-center justify-end">
               <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
@@ -228,8 +223,8 @@ const ScheduleMeetingItem = ({t}) => {
                   className="w-full"
                   labelClassName="text-base"
                   register={register("title")}
-                  label={ t('meeting.props.title') }
-                  placeholder={ t('schedule_meeting.enter_title_meeting') }
+                  label={t('meeting.props.title')}
+                  placeholder={t('schedule_meeting.enter_title_meeting')}
                   rules={[
                     {
                       required: true,
@@ -240,32 +235,32 @@ const ScheduleMeetingItem = ({t}) => {
                 <TextArea
                   className="w-full"
                   register={register("agenda")}
-                  label={ t('meeting.props.agenda') }
-                  placeholder={ t('schedule_meeting_new.enter_agenda_meeting') }
+                  label={t('meeting.props.agenda')}
+                  placeholder={t('schedule_meeting_new.enter_agenda_meeting')}
                 />
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
               <div className="flex flex-row justify-between space-x-4">
                 <div className="flex-1">
-                  <Select 
-                    label={ t('meeting.props.type') }
-                    options={types} 
-                    register={register('type.uuid')} 
-                    onChange={(e) => setType(e)} 
+                  <Select
+                    label={t('meeting.props.type')}
+                    options={types}
+                    register={register('type.uuid')}
+                    onChange={(e) => setType(e)}
                   />
                 </div>
                 <div className="flex-1">
-                  <Select 
-                    label={ t('meeting.meeting_category.category') }
-                    options={categories} 
-                    register={register('category.uuid')} 
+                  <Select
+                    label={t('meeting.meeting_category.category')}
+                    options={categories}
+                    register={register('category.uuid')}
                     onChange={(e) => setCategory(e)}
                   />
                 </div>
                 <div className="flex-1">
                   <DateTimePicker
-                    label={ t('meeting.props.start_date_time') }
+                    label={t('meeting.props.start_date_time')}
                     placeholder="Mar 2, 2022 5:02 PM"
                     showTime
                     onOk={onOk}
@@ -278,7 +273,7 @@ const ScheduleMeetingItem = ({t}) => {
                 <div className="flex-1">
                   <Input
                     register={register("period")}
-                    label={ t('meeting.props.estimated_period') }
+                    label={t('meeting.props.estimated_period')}
                     placeholder="60"
                     type="number"
                     min="1"
@@ -287,14 +282,14 @@ const ScheduleMeetingItem = ({t}) => {
                 <div className="flex-1">
                   <Input
                     register={register("identifier")}
-                    label={ t('meeting.meeting_code') }
-                    placeholder={ t('meeting.enter_meeting_code') }
+                    label={t('meeting.meeting_code')}
+                    placeholder={t('meeting.enter_meeting_code')}
                   />
                 </div>
                 <div className="flex-1">
                   <Input
                     register={register("max_participant_count")}
-                    label={ t('meeting.config.max_participant_count') }
+                    label={t('meeting.config.max_participant_count')}
                     placeholder="1000"
                     type="number"
                     min="1"
@@ -316,7 +311,7 @@ const ScheduleMeetingItem = ({t}) => {
                       onChange={() => setAccessibleViaLink(!accessibleViaLink)}
                       register={register("accessible_via_link")}
                     />
-                    <span className="label-base pb-0">{ t('meeting.props.accessible_via_link') }</span>
+                    <span className="label-base pb-0">{t('meeting.props.accessible_via_link')}</span>
                   </label>
                 </div>
                 <div className="form-control">
@@ -327,7 +322,7 @@ const ScheduleMeetingItem = ({t}) => {
                       onChange={() => setAccessibleToMembers(!accessibleToMembers)}
                       register={register("accessible_to_members")}
                     />
-                    <span className="label-base pb-0">{ t('meeting.props.only_accessible_to_members') }</span>
+                    <span className="label-base pb-0">{t('meeting.props.only_accessible_to_members')}</span>
                   </label>
                 </div>
               </div>
@@ -335,14 +330,14 @@ const ScheduleMeetingItem = ({t}) => {
             <GroupLayout className="flex flex-col justify-between">
               <div className="w-full h-auto">
                 <Select
-                  label={ t('schedule_meeting_new.Add_invitees') }
+                  label={t('schedule_meeting_new.Add_invitees')}
                   mode="multiple"
                   options={listContacts}
-                  placeholder={ t('schedule_meeting_new.select_invitees') }
+                  placeholder={t('schedule_meeting_new.select_invitees')}
                   onChange={(e) => setContacts(e)}
                   register={register("contacts")}
                 />
-                <Select label={ t('schedule_meeting_new.enter_email') } mode="tags" placeholder={ t('schedule_meeting_new.input_invitees') } register={register("emails")} onChange={(e) => setEmails(e)} />
+                <Select label={t('schedule_meeting_new.enter_email')} mode="tags" placeholder={t('schedule_meeting_new.input_invitees')} register={register("emails")} onChange={(e) => setEmails(e)} />
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col justify-between">
@@ -361,18 +356,18 @@ const ScheduleMeetingItem = ({t}) => {
               <div className="w-full flex flex-row justify-between pt-8">
                 <div className="space-x-4">
                   <Button className="btn btn-primary" isLoading={loading}>
-                    { t('schedule_meeting_new.save_meeting') }
+                    {t('schedule_meeting_new.save_meeting')}
                   </Button>
                 </div>
                 <div className="space-x-4">
                   <Button onClick={(e) => handleSaveAndSave(e)} className="btn btn-primary" isLoading={loading}>
-                  { t('schedule_meeting_new.save_and_send_meeting') }
+                    {t('schedule_meeting_new.save_and_send_meeting')}
                   </Button>
                   <Button className="btn-outline-base" type="button" isLoading={loading}>
-                  { t('general.reset') }
+                    {t('general.reset')}
                   </Button>
                   <Button className="btn btn-primary" isLoading={loading}>
-                    { t('schedule_meeting_new.save_meeting') }
+                    {t('schedule_meeting_new.save_meeting')}
                   </Button>
                 </div>
               </div>

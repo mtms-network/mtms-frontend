@@ -14,13 +14,13 @@ export const getRequirePreMeeting = async () => {
   }
 };
 
-export const getMeetingHistories = async ({ limit, page }) => {
+export const getMeetingHistories = async ({ limit, page, title = "", type, status }) => {
   try {
     const defaultFilters = {
       sort_by: "",
       order: "",
-      type: "",
-      status: "",
+      type,
+      status,
       start_date: "",
       end_date: "",
       name: "",
@@ -28,6 +28,9 @@ export const getMeetingHistories = async ({ limit, page }) => {
       per_page: limit || 10,
       instant: false,
     };
+    if (title) {
+      defaultFilters.keyword = title;
+    }
 
     const query = QueryString.stringify({ ...defaultFilters });
     const res = await client.get(`?${query}`);

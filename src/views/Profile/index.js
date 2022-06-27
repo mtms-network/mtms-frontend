@@ -18,14 +18,14 @@ import { data } from "autoprefixer";
 
 const { confirm } = Modal;
 
-const Profile = ({t}) => {
+const Profile = ({ t }) => {
   const [appStore, updateAppStore] = useAppStore();
   const [loading, setLoading] = useState(false);
   const [fieldEdit, setFieldEdit] = useState({ name: false, phone: false, transaction_password: false });
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR, error: [] });
   const [alertProfile, setAlertProfile] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR, error: [] });
-  const [formChangePassword, setFormChangePassword] = useState({current_password: '', new_password: '', new_password_confirmation: ''});
-  const [formUpdateProfile, setFormUpdateProfile] = useState({name: '', phone: ''});
+  const [formChangePassword, setFormChangePassword] = useState({ current_password: '', new_password: '', new_password_confirmation: '' });
+  const [formUpdateProfile, setFormUpdateProfile] = useState({ name: '', phone: '' });
   const [visible, setVisible] = useState(false);
 
   const token = getAccessToken();
@@ -50,13 +50,13 @@ const Profile = ({t}) => {
     onChange(info) {
       setLoading(true);
       if (info.file.status !== 'uploading') {
-        
+
       }
       if (info.file.status === 'done') {
         setLoading(false);
         message.success(`${info.file.name} file uploaded successfully`);
         const newUser = { ...user, profile: { ...user.profile, avatar: info.file.response.avatar } };
-        setTokenLoginSucceeded({accessToken: token, user: newUser});
+        setTokenLoginSucceeded({ accessToken: token, user: newUser });
         updateAppStore((draft) => {
           draft.user = user;
         });
@@ -69,8 +69,8 @@ const Profile = ({t}) => {
   };
 
   const prepareData = () => {
-    setFormUpdateProfile({ ...formUpdateProfile, name: user?.profile?.name, phone: user?.profile?.phone})
-    if(user?.profile?.avatar) {
+    setFormUpdateProfile({ ...formUpdateProfile, name: user?.profile?.name, phone: user?.profile?.phone })
+    if (user?.profile?.avatar) {
       setAvatar(LIVE_URL + user?.profile?.avatar);
     }
   };
@@ -83,7 +83,7 @@ const Profile = ({t}) => {
       const client = createPrivateInstance(BASE_API.profile);
       const res = await client.post('', formUpdateProfile);
       const newUser = { ...user, profile: { ...user.profile, ...formUpdateProfile } };
-      setTokenLoginSucceeded({accessToken: token, user: newUser});
+      setTokenLoginSucceeded({ accessToken: token, user: newUser });
       updateAppStore((draft) => {
         draft.user = newUser;
       });
@@ -102,7 +102,7 @@ const Profile = ({t}) => {
     try {
       setLoading(true);
 
-      if(formChangePassword.new_password !== formChangePassword.new_password_confirmation) {
+      if (formChangePassword.new_password !== formChangePassword.new_password_confirmation) {
         setAlert({ ...alert, show: true, message: "Confirm Password Wrong!" });
         setLoading(false);
         return;
@@ -113,7 +113,7 @@ const Profile = ({t}) => {
 
       setLoading(false);
       hideModal();
-    } catch(error) {
+    } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
         setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message, error: errorData.detail });
@@ -143,10 +143,10 @@ const Profile = ({t}) => {
       setLoading(true);
       const client = createPrivateInstance(BASE_API.avatar);
       const res = await client.delete('');
-      if(res.data.status === 'success') {
+      if (res.data.status === 'success') {
         message.success(`File deleted successfully`);
         const newUser = { ...user, profile: { ...user.profile, avatar: null } };
-        setTokenLoginSucceeded({accessToken: token, user: newUser});
+        setTokenLoginSucceeded({ accessToken: token, user: newUser });
         updateAppStore((draft) => {
           draft.user = user;
         });
@@ -162,7 +162,7 @@ const Profile = ({t}) => {
   useEffect(() => {
     prepareData();
   }, [user]);
-  
+
   return (
     <MainLayout userCenter={true} >
       <div className="p-10">
@@ -173,8 +173,8 @@ const Profile = ({t}) => {
           }}
         />
         <div className="mb-10">
-          <h1 className="font-bold text-lg text-dark-base text-[24px]">{ t('profile.edit') }</h1>
-          <p>{ t('profile.change_information') }</p>
+          <h1 className="font-bold text-lg text-dark-base text-[24px]">{t('profile.edit')}</h1>
+          <p>{t('profile.change_information')}</p>
         </div>
         <div className="flex mb-10">
           <div className="mr-[20px]">
@@ -184,12 +184,12 @@ const Profile = ({t}) => {
             <Upload {...propsUpload}>
               <Button className="btn btn-primary" isLoading={loading}>
                 <FaPencilAlt className="mr-2" />
-                { t('profile.change_photo') }
+                {t('profile.change_photo')}
               </Button>
             </Upload>
             <Button className="btn btn-primary" isLoading={loading} onClick={handleDeleteAvatar} >
               <FaTrashAlt className="mr-2" />
-              { t('profile.delete_photo') }
+              {t('profile.delete_photo')}
             </Button>
           </div>
         </div>
@@ -200,17 +200,17 @@ const Profile = ({t}) => {
                 fieldEdit.name ?
                   (
                     <>
-                      <Input placeholder="name" className="h-[65px]" value={ formUpdateProfile.name || '' } onChange={(e) => setFormUpdateProfile({...formUpdateProfile, name: e.target.value })} />
+                      <Input placeholder="name" className="h-[65px]" value={formUpdateProfile.name || ''} onChange={(e) => setFormUpdateProfile({ ...formUpdateProfile, name: e.target.value })} />
                     </>
                   ) :
                   (
                     <div className="border-[1px] flex justify-between items-center rounded-[8px] py-2 px-3">
                       <div className="flex">
-                        <FaUserCircle className="text-[20px] mr-2" /> { t('profile.username') }: {user?.profile?.name}
+                        <FaUserCircle className="text-[20px] mr-2" /> {t('profile.username')}: {user?.profile?.name}
                       </div>
-                      <Button className="btn btn-primary" isLoading={loading} onClick={() => setFieldEdit({...fieldEdit, name: true})}>
+                      <Button className="btn btn-primary" isLoading={loading} onClick={() => setFieldEdit({ ...fieldEdit, name: true })}>
                         <FaPencilAlt className="mr-2" />
-                        { t('profile.change') }
+                        {t('profile.change')}
                       </Button>
                     </div>
                   )
@@ -228,11 +228,11 @@ const Profile = ({t}) => {
             <div className="flex-1">
               <div className="border-[1px] flex justify-between items-center rounded-[8px] py-2 px-3">
                 <div className="flex">
-                  <FaUserCircle className="text-[20px] mr-2" /> { t('user.props.password') }: ......
+                  <FaUserCircle className="text-[20px] mr-2" /> {t('user.props.password')}: ......
                 </div>
                 <Button className="btn btn-primary" isLoading={loading} onClick={() => showModal(true)}>
                   <FaPencilAlt className="mr-2" />
-                  { t('profile.change') }
+                  {t('profile.change')}
                 </Button>
               </div>
             </div>
@@ -241,7 +241,7 @@ const Profile = ({t}) => {
                 fieldEdit.phone ?
                   (
                     <>
-                      <Input placeholder="Phone" className="h-[65px]" value={ formUpdateProfile.phone || '' } onChange={(e) => setFormUpdateProfile({...formUpdateProfile, phone: e.target.value })} />
+                      <Input placeholder="Phone" className="h-[65px]" value={formUpdateProfile.phone || ''} onChange={(e) => setFormUpdateProfile({ ...formUpdateProfile, phone: e.target.value })} />
                     </>
                   ) :
                   (
@@ -249,9 +249,9 @@ const Profile = ({t}) => {
                       <div className="flex">
                         <FaPhone className="text-[20px] mr-2" /> {user?.profile?.phone}
                       </div>
-                      <Button className="btn btn-primary" isLoading={loading} onClick={() => setFieldEdit({...fieldEdit, phone: true})}>
+                      <Button className="btn btn-primary" isLoading={loading} onClick={() => setFieldEdit({ ...fieldEdit, phone: true })}>
                         <FaPencilAlt className="mr-2" />
-                        { t('profile.change') }
+                        {t('profile.change')}
                       </Button>
                     </div>
                   )
@@ -283,7 +283,7 @@ const Profile = ({t}) => {
             <div className="flex-1">
               <div className="border-[1px] flex justify-between items-center rounded-[8px] py-2 px-3 h-[65px]">
                 <div className="flex">
-                  <FaUserCircle className="text-[20px] mr-2" /> { t('profile.wallet') }: X-falfksfj53345ljalkfs
+                  <FaUserCircle className="text-[20px] mr-2" /> {t('profile.wallet')}: X-falfksfj53345ljalkfs
                 </div>
               </div>
             </div>
@@ -291,23 +291,23 @@ const Profile = ({t}) => {
         </div>
         <div className="flex justify-end">
           <Button className="btn mr-3" isLoading={loading}>
-          { t('general.cancel') }
+            {t('general.cancel')}
           </Button>
           <Button className="btn btn-primary" isLoading={loading} onClick={updateProfile}>
-          { t('profile.edit') }
+            {t('profile.edit')}
           </Button>
         </div>
       </div>
       <Modal
         visible={visible}
-        title={ t('user.change_password') }
+        title={t('user.change_password')}
         onCancel={hideModal}
         footer={[
           <Button className="mr-2" key="back" onClick={hideModal}>
-            { t('profile.return') }
+            {t('profile.return')}
           </Button>,
           <Button key="submit" type="primary" loading={loading} onClick={submitChangePassword}>
-            { t('general.submit') }
+            {t('general.submit')}
           </Button>,
         ]}
       >
@@ -321,20 +321,20 @@ const Profile = ({t}) => {
         </div>
         <div className="flex flex-row justify-between space-x-4 mb-5">
           <div className="flex-1">
-            <label>{ t('auth.password.props.current_password') }:</label>
-            <Input type={'password'} placeholder={ t('auth.password.props.current_password') } onChange={(e) => setFormChangePassword({ ...formChangePassword, current_password: e.target.value})} />
+            <label>{t('auth.password.props.current_password')}:</label>
+            <Input type={'password'} placeholder={t('auth.password.props.current_password')} onChange={(e) => setFormChangePassword({ ...formChangePassword, current_password: e.target.value })} />
           </div>
         </div>
         <div className="flex flex-row justify-between space-x-4 mb-5">
           <div className="flex-1">
-            <label>{ t('auth.password.props.new_password') }:</label>
-            <Input type={'password'} placeholder={ t('auth.password.props.new_password') } onChange={(e) => setFormChangePassword({ ...formChangePassword, new_password: e.target.value})} />
+            <label>{t('auth.password.props.new_password')}:</label>
+            <Input type={'password'} placeholder={t('auth.password.props.new_password')} onChange={(e) => setFormChangePassword({ ...formChangePassword, new_password: e.target.value })} />
           </div>
         </div>
         <div className="flex flex-row justify-between space-x-4 mb-5">
           <div className="flex-1">
-            <label>{ t('auth.password.props.new_password_confirmation') }:</label>
-            <Input type={'password'} placeholder={ t('auth.password.props.new_password_confirmation') } onChange={(e) => setFormChangePassword({ ...formChangePassword, new_password_confirmation: e.target.value})} />
+            <label>{t('auth.password.props.new_password_confirmation')}:</label>
+            <Input type={'password'} placeholder={t('auth.password.props.new_password_confirmation')} onChange={(e) => setFormChangePassword({ ...formChangePassword, new_password_confirmation: e.target.value })} />
           </div>
         </div>
       </Modal>

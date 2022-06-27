@@ -27,23 +27,23 @@ const JoinAMeeting = ({ className, t }) => {
   return (
     <div className={classNames([className])}>
       <GroupLayout className="flex flex-col justify-between">
-        <GroupTitle icon={<IoCalendarSharp />} title={ t('meeting.join_a_meeting') } />
+        <GroupTitle icon={<IoCalendarSharp />} title={t('meeting.join_a_meeting')} />
         <div className="flex flex-col py-4">
           <p className="label-base">
-            { t('meeting.join_a_meeting_desc') }
+            {t('meeting.join_a_meeting_desc')}
           </p>
-          <p className="label-base">{ t('meeting.meeting_code') }</p>
+          <p className="label-base">{t('meeting.meeting_code')}</p>
         </div>
         <div className="flex flex-col">
           <Input
-            placeholder={ t('meeting.enter_meeting_code') }
+            placeholder={t('meeting.enter_meeting_code')}
             className="bg-gray-base-100 border-0"
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
           <div className="w-full pt-4">
             <Button className="btn btn-primary btn-block" isLoading={loading} onClick={handleJoin}>
-              { t('home.join_meeting_now') }
+              {t('home.join_meeting_now')}
             </Button>
           </div>
         </div>
