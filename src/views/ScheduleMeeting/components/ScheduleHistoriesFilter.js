@@ -5,15 +5,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useMeetingStore } from "stores/meeting.store";
 
-const ScheduleHistoriesFilter = ({ onChange }) => {
+const ScheduleHistoriesFilter = ({ onChange, loading }) => {
   const [meetingStore] = useMeetingStore();
-
-  const [submitting, setSubmitting] = useState(false);
   const [types, setTypes] = useState([]);
   const [type, setType] = useState(null);
   const [statuses, setStatuses] = useState([]);
   const [status, setStatus] = useState(null);
-  const [categories, setCategories] = useState([]);
+  const [, setCategories] = useState([]);
 
   const schema = yup
     .object()
@@ -30,7 +28,7 @@ const ScheduleHistoriesFilter = ({ onChange }) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = (values) => {
     try {
       const filter = { ...values };
       if (type) {
@@ -96,7 +94,7 @@ const ScheduleHistoriesFilter = ({ onChange }) => {
         />
       </div>
       <div className="pt-4">
-        <Button className="btn btn-primary btn-sm" isLoading={submitting}>
+        <Button className="btn btn-primary btn-sm" isLoading={loading}>
           Filter
         </Button>
       </div>

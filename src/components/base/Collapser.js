@@ -23,11 +23,12 @@ const Collapser = ({
         <div className="justify-between flex w-full">
           <p className="text-md font-semibold">{title}</p>
           <button
+            className="btn btn-circle btn-xs group bg-transparent border-0 hover:bg-red-500"
             onClick={() => {
               setIsShow(false);
             }}
           >
-            <IoCloseCircle />
+            <IoCloseCircle className="group-hover:text-white text-black " size={20} />
           </button>
         </div>
         <div>{content}</div>

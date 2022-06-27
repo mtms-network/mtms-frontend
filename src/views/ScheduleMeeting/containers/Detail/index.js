@@ -32,7 +32,7 @@ import { withNamespaces } from 'react-i18next';
 const timeFormat = "MMM DD, yyyy HH:mm";
 
 const ScheduleMeetingDetail = ({t}) => {
-  let params = useParams();
+  const params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
@@ -68,7 +68,6 @@ const ScheduleMeetingDetail = ({t}) => {
     handleSubmit,
     formState: { errors },
     setValue,
-    setFocus,
   } = useForm({
     resolver: yupResolver(schema),
   });

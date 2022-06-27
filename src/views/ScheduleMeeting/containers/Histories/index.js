@@ -12,10 +12,10 @@ import { FaPlus } from "react-icons/fa";
 import { getScheduleMeetings } from "services/meeting.service";
 import { useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";
+import { withNamespaces } from "react-i18next";
 import { MeetingItem, ScheduleHistoriesFilter } from "../../components";
-import { withNamespaces } from 'react-i18next';
 
-const ScheduleMeetingHistories = ({t}) => {
+const ScheduleMeetingHistories = ({ t }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [histories, setHistories] = useState({
@@ -80,26 +80,32 @@ const ScheduleMeetingHistories = ({t}) => {
               navigate(`/${routeUrls.scheduleMeeting.path}/new`);
             }}
           >
-            { t('general.create_new') }
+            {t("general.create_new")}
             <span className="bg-white p-1 rounded-lg">
               <FaPlus className="font-bold text-primary" />
             </span>
           </Button>
           <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
-            <button
-              className=""
-              onClick={() => {
-                setIsShowFilter(!isShowFilter);
-              }}
-            >
-              <IoFilterCircle className="text-black" />
-            </button>
-            <button>
-              <IoSwapVertical className="text-black" />
-            </button>
-            <button>
-              <IoOptions className="text-black" />
-            </button>
+            <div className="tooltip" data-tip="Filter">
+              <button
+                className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200"
+                onClick={() => {
+                  setIsShowFilter(!isShowFilter);
+                }}
+              >
+                <IoFilterCircle className="text-black group-hover:text-primary" size={20} />
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Sort">
+              <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+                <IoSwapVertical className="text-black group-hover:text-primary" size={20} />
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Option">
+              <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+                <IoOptions className="text-black group-hover:text-primary" size={20} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -116,6 +122,7 @@ const ScheduleMeetingHistories = ({t}) => {
                 onChange={(f) => {
                   setFilter({ ...filter, ...f });
                 }}
+                loading={loading}
               />
             }
           />

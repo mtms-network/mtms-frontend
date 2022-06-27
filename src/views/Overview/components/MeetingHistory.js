@@ -12,7 +12,7 @@ import classnames from "classnames";
 import { BrandLogoLoading, GroupLayout, GroupTitle, Input, Pagination } from "components";
 import { getMeetingHistories } from "services/meeting.service";
 import { useMeetingStore } from "stores/meeting.store";
-import { withNamespaces } from 'react-i18next';
+import { withNamespaces } from "react-i18next";
 
 const MeetingHistory = ({ className, t }) => {
   const [loading, setLoading] = useState(false);
@@ -56,23 +56,29 @@ const MeetingHistory = ({ className, t }) => {
   return (
     <div className={classnames([className])}>
       <GroupLayout className="flex flex-col w-full">
-      {loading && <BrandLogoLoading />}
+        {loading && <BrandLogoLoading />}
         {!loading && (
           <>
             <div className="flex flex-row justify-between w-full">
               <div className="flex-1">
-                <GroupTitle icon={<IoRadio />} title={ t('meeting.meeting_history') } />
+                <GroupTitle icon={<IoRadio />} title={t("meeting.meeting_history")} />
               </div>
               <div className="flex-1 space-x-2 flex flex-row w-auto items-center justify-end">
-                <button>
-                  <IoFilterCircle className="text-black" />
-                </button>
-                <button>
-                  <IoSwapVertical className="text-black" />
-                </button>
-                <button>
-                  <IoOptions className="text-black" />
-                </button>
+                <div className="tooltip" data-tip="Filter">
+                  <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+                    <IoFilterCircle className="text-black group-hover:text-primary" size={20} />
+                  </button>
+                </div>
+                <div className="tooltip" data-tip="Sort">
+                  <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+                    <IoSwapVertical className="text-black group-hover:text-primary" size={20} />
+                  </button>
+                </div>
+                <div className="tooltip" data-tip="Option">
+                  <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+                    <IoOptions className="text-black group-hover:text-primary" size={20} />
+                  </button>
+                </div>
               </div>
             </div>
             <div className="flex pt-4 w-full flex-1">
@@ -80,13 +86,13 @@ const MeetingHistory = ({ className, t }) => {
                 <table className="table w-full">
                   <thead className="border-b-1">
                     <tr className="text-cl-base">
-                      <th className="bg-white">{ t('meeting.host') }</th>
-                      <th className="bg-white">{ t('meeting.props.type') }</th>
-                      <th className="bg-white">{ t('meeting.props.identifier') }</th>
+                      <th className="bg-white">{t("meeting.host")}</th>
+                      <th className="bg-white">{t("meeting.props.type")}</th>
+                      <th className="bg-white">{t("meeting.props.identifier")}</th>
                       <th className="bg-white" />
-                      <th className="bg-white">{ t('meeting.props.status') }</th>
-                      <th className="bg-white">{ t('meeting.started_at') }</th>
-                      <th className="bg-white">{ t('meeting.ended_at') }</th>
+                      <th className="bg-white">{t("meeting.props.status")}</th>
+                      <th className="bg-white">{t("meeting.started_at")}</th>
+                      <th className="bg-white">{t("meeting.ended_at")}</th>
                       <th className="bg-white" />
                     </tr>
                   </thead>

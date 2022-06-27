@@ -6,6 +6,10 @@ const componentPlugins = {
     textTransform: "capitalize",
     color: "white",
   },
+  ".btn-icon-20": {
+    // height: 20,
+    // width: 20,
+  },
   ".btn-base": {
     width: "100%",
     borderWidth: 1,
@@ -111,7 +115,7 @@ module.exports = {
         "color-base-200": "rgba(255, 255, 255, 0.1)",
         "dark-base": "#1D2122",
         "gray-base-100": "#F7F7F7",
-        "white": "#fff",
+        white: "#fff",
       },
       screens: {
         sm: "480px",

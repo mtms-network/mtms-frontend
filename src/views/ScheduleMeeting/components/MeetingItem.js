@@ -18,7 +18,7 @@ const MeetingItem = ({ data, className }) => {
         )}
       >
         <div className="flex flex-col w-full flex-1 h-full justify-between">
-          <p className="label-base text-lg font-semibold group-hover:text-primary line-clamp-2 overflow-hidden min-h-16t">
+          <p className="label-base text-lg font-semibold group-hover:text-primary line-clamp-2 overflow-hidden min-h-16">
             {data?.title}
           </p>
           <div>
