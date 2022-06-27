@@ -6,7 +6,7 @@ import { IoAnalyticsOutline, IoApps, IoLogoAppleAr, IoPerson } from "react-icons
 import { useLocation, useNavigate } from "react-router-dom";
 import { withNamespaces } from 'react-i18next';
 
-const SidebarLayout = ({ t }) => {
+const SidebarUserCenter = ({ t }) => {
   const navigate = useNavigate();
   const location = useLocation();
   return (
@@ -21,14 +21,13 @@ const SidebarLayout = ({ t }) => {
             <button
               className={classNames(
                 "text-base font-normal",
-                location.pathname !== "/"
+                location.pathname.includes(routeUrls.profile.path)
                   ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
                   : "font-normal btn btn-base justify-start",
               )}
-              onClick={() => navigate("/")}
+              onClick={() => navigate(`/${routeUrls.profile.path}`)}
             >
-              <IoLogoAppleAr />
-              <p className="pl-2">{t('dashboard.dashboard')}</p>
+              <p className="pl-2">{t('Update Profile')}</p>
             </button>
           </div>
           <div className="w-full">
@@ -39,10 +38,8 @@ const SidebarLayout = ({ t }) => {
                   ? "font-normal btn btn-base justify-start"
                   : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
               )}
-              onClick={() => navigate(`/${routeUrls.scheduleMeeting.path}`)}
             >
-              <FaCalendarPlus />
-              <p className="pl-2">{t('meeting.meetings')}</p>
+              <p className="pl-2">{t('Rewards Center')}</p>
             </button>
           </div>
           <div className="w-full">
@@ -54,34 +51,12 @@ const SidebarLayout = ({ t }) => {
                   : "font-normal btn btn-base justify-start",
               )}
             >
-              <IoApps />
-              <p className="pl-2">{t('room.rooms')}</p>
+              <p className="pl-2">{t('Registration Invite')}</p>
             </button>
           </div>
           <div className="w-full">
-            <button
-              className={classNames(
-                "text-base font-normal",
-                location.pathname !== `/${routeUrls.contact.path}`
-                  ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
-                  : "font-normal btn btn-base justify-start",
-              )}
-            >
-              <IoPerson />
-              <p className="pl-2">{t('contact.contacts')}</p>
-            </button>
-          </div>
-          <div className="w-full">
-            <button
-              className={classNames(
-                "text-base font-normal",
-                location.pathname !== `/${routeUrls.analytic.path}`
-                  ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
-                  : "font-normal btn btn-base justify-start",
-              )}
-            >
-              <IoAnalyticsOutline />
-              <p className="pl-2">{t('sidebar.analytics')}</p>
+            <button className="text-base font-normal btn btn btn-primary w-full mt-3">
+              Account: 1000 USD
             </button>
           </div>
         </div>
@@ -90,4 +65,4 @@ const SidebarLayout = ({ t }) => {
   );
 };
 
-export default withNamespaces()(SidebarLayout);
+export default withNamespaces()(SidebarUserCenter);
