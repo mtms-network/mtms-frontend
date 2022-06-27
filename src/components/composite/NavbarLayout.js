@@ -25,13 +25,13 @@ const NavbarLayout = ({ width, onLogout, t }) => {
               <a className="font-bold text-base">{t("general.home")}</a>
             </li>
             <li className="nav-link">
-              <a className="font-bold text-base">Products</a>
+              <a className="font-bold text-base">{t("menu.products")}</a>
             </li>
             <li className="nav-link">
-              <a className="font-bold text-base">MTMS Farmer</a>
+              <a className="font-bold text-base">{t("menu.farmer")}</a>
             </li>
             <li className="nav-link">
-              <a className="font-bold text-base">NFT Marketplace</a>
+              <a className="font-bold text-base">{t("menu.nft_marketplace")}</a>
             </li>
           </ul>
         </div>
@@ -41,7 +41,7 @@ const NavbarLayout = ({ width, onLogout, t }) => {
           <div>
             <button className="btn btn-primary gap-2 text-base">
               <FaPlusCircle />
-              Buy MTMS
+              {t("menu.buy")}
             </button>
           </div>
           <div className="flex flex-row justify-center items-center space-x-2">
@@ -73,7 +73,7 @@ const NavbarLayout = ({ width, onLogout, t }) => {
                   </Link>
                 </li>
                 <li className="w-full">
-                  <a className="btn btn-block hover:text-primary">Settings</a>
+                  <a className="btn btn-block hover:text-primary">{t("menu_avatar.settings")}</a>
                 </li>
                 <li className="w-full">
                   <a className="btn btn-block hover:text-primary" onClick={onLogout}>

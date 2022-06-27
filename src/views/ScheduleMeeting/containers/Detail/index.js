@@ -26,12 +26,16 @@ import { createPrivateInstance } from "services/base";
 import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMeetingDetail, getMeetingContact } from "services/meeting.service";
-import { withNamespaces } from 'react-i18next';
+import {
+  getMeetingDetail,
+  getMeetingContact,
+  getRequirePreMeeting,
+} from "services/meeting.service";
+import { withNamespaces } from "react-i18next";
 
 const timeFormat = "MMM DD, yyyy HH:mm";
 
-const ScheduleMeetingDetail = ({t}) => {
+const ScheduleMeetingDetail = ({ t }) => {
   const params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -203,11 +207,29 @@ const ScheduleMeetingDetail = ({t}) => {
     } catch (error) {}
   };
 
+  const fetchCommonData = async () => {
+    try {
+      const res = await getRequirePreMeeting();
+      if (res) {
+        updateMeetingStore((draft) => {
+          draft.categories = res?.categories;
+          draft.types = res?.types;
+          draft.statuses = res?.statuses;
+          draft.isForceLoadMeetingHistories = true;
+        });
+      }
+    } catch (error) {}
+  };
+
   const fetchData = async () => {
     try {
       setFetchLoading(true);
-      await fetchContact();
-      await fetchMeeting();
+      if (!meetingStore.isForceLoadMeetingHistories) {
+        await fetchCommonData();
+        await fetchContact();
+        await fetchMeeting();
+      }
+      await prepareData();
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
@@ -215,9 +237,8 @@ const ScheduleMeetingDetail = ({t}) => {
   };
 
   useEffect(() => {
-    prepareData();
     fetchData();
-  }, [meetingStore.types]);
+  }, [meetingStore.isForceLoadMeetingHistories]);
 
   return (
     <MainLayout>
@@ -238,7 +259,7 @@ const ScheduleMeetingDetail = ({t}) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1">
-              <GroupTitle icon={<IoTv />} title="Schedule New Meeting" />
+              <GroupTitle icon={<IoTv />} title={t("schedule_meeting_new.schedule_new_meeting")} />
             </div>
             <div className="flex-1 space-x-2 flex flex-row items-center justify-end">
               <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
@@ -249,96 +270,96 @@ const ScheduleMeetingDetail = ({t}) => {
             </div>
           </div>
           <div className="space-y-4">
-          <GroupLayout className="flex flex-col justify-between">
-            <div className="w-full h-auto">
-              <Input
-                className="w-full"
-                labelClassName="text-base"
-                register={register("title")}
-                label={ t('meeting.props.title') }
-                placeholder="Enter title meeting"
-                rules={[
-                  {
-                    required: true,
-                    message: "This field is required."
-                  }
-                ]}
-              />
-              <TextArea
-                className="w-full"
-                register={register("agenda")}
-                label={ t('meeting.props.agenda') }
-                placeholder="Enter agenda meeting"
-              />
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col space-y-4">
-            <div className="flex flex-row justify-between space-x-4">
-              <div className="flex-1">
-                <Select 
-                  label={ t('meeting.props.type') }
-                  options={types} 
-                  register={register('type.uuid')} 
-                  value={type}
-                  onChange={(e) => setType(e)} 
-                />
-              </div>
-              <div className="flex-1">
-                <Select 
-                  label={ t('meeting.meeting_category.category') }
-                  options={categories} 
-                  value={category}
-                  register={register('category.uuid')} 
-                  onChange={(e) => setCategory(e)}
-                />
-              </div>
-              <div className="flex-1">
-                <DateTimePicker
-                  label={ t('meeting.props.start_date_time') }
-                  placeholder="Mar 2, 2022 5:02 PM"
-                  showTime
-                  onOk={onOk}
-                  format={timeFormat}
-                  register={register("start_date_time")}
-                  value={startDateTime}
-                />
-              </div>
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col space-y-4">
-            <div className="flex flex-row justify-between space-x-4">
-              <div className="flex-1">
+            <GroupLayout className="flex flex-col justify-between">
+              <div className="w-full h-auto">
                 <Input
-                  register={register("period")}
-                  label={ t('meeting.props.estimated_period') }
-                  placeholder="60"
-                  type="number"
-                  min="1"
+                  className="w-full"
+                  labelClassName="text-base"
+                  register={register("title")}
+                  label={t("meeting.props.title")}
+                  placeholder={t("schedule_meeting.enter_title_meeting")}
+                  rules={[
+                    {
+                      required: true,
+                      message: "This field is required.",
+                    },
+                  ]}
+                />
+                <TextArea
+                  className="w-full"
+                  register={register("agenda")}
+                  label={t("meeting.props.agenda")}
+                  placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
                 />
               </div>
-              <div className="flex-1">
-                <Input
-                  register={register("identifier")}
-                  label={ t('meeting.meeting_code') }
-                  placeholder={ t('meeting.enter_meeting_code') }
-                />
+            </GroupLayout>
+            <GroupLayout className="flex flex-col space-y-4">
+              <div className="flex flex-row justify-between space-x-4">
+                <div className="flex-1">
+                  <Select
+                    label={t("meeting.props.type")}
+                    options={types}
+                    register={register("type.uuid")}
+                    value={type}
+                    onChange={(e) => setType(e)}
+                  />
+                </div>
+                <div className="flex-1">
+                  <Select
+                    label={t("meeting.meeting_category.category")}
+                    options={categories}
+                    value={category}
+                    register={register("category.uuid")}
+                    onChange={(e) => setCategory(e)}
+                  />
+                </div>
+                <div className="flex-1">
+                  <DateTimePicker
+                    label={t("meeting.props.start_date_time")}
+                    placeholder="Mar 2, 2022 5:02 PM"
+                    showTime
+                    onOk={onOk}
+                    format={timeFormat}
+                    register={register("start_date_time")}
+                    value={startDateTime}
+                  />
+                </div>
               </div>
-              <div className="flex-1">
-                <Input
-                  register={register("max_participant_count")}
-                  label={ t('meeting.config.max_participant_count') }
-                  placeholder="1000"
-                  type="number"
-                  min="1"
-                  onChange={(e) => {
-                    const { value } = e.target;
-                    if (value <= 99999 && value >= 0 && value.length <= 5) {
-                      // setParticipant(e.target.value);
-                    }
-                  }}
-                />
+            </GroupLayout>
+            <GroupLayout className="flex flex-col space-y-4">
+              <div className="flex flex-row justify-between space-x-4">
+                <div className="flex-1">
+                  <Input
+                    register={register("period")}
+                    label={t("meeting.props.estimated_period")}
+                    placeholder="60"
+                    type="number"
+                    min="1"
+                  />
+                </div>
+                <div className="flex-1">
+                  <Input
+                    register={register("identifier")}
+                    label={t("meeting.meeting_code")}
+                    placeholder={t("meeting.enter_meeting_code")}
+                  />
+                </div>
+                <div className="flex-1">
+                  <Input
+                    register={register("max_participant_count")}
+                    label={t("meeting.config.max_participant_count")}
+                    placeholder="1000"
+                    type="number"
+                    min="1"
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      if (value <= 99999 && value >= 0 && value.length <= 5) {
+                        // setParticipant(e.target.value);
+                      }
+                    }}
+                  />
+                </div>
               </div>
-            </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
               <div className="flex flex-row items-center space-x-4">
@@ -351,7 +372,9 @@ const ScheduleMeetingDetail = ({t}) => {
                       onChange={() => setAccessibleViaLink(!accessibleViaLink)}
                       register={register("accessible_via_link")}
                     />
-                    <span className="label-base pb-0">{ t('meeting.props.accessible_via_link') }</span>
+                    <span className="label-base pb-0">
+                      {t("meeting.props.accessible_via_link")}
+                    </span>
                   </label>
                 </div>
                 <div className="form-control">
@@ -363,7 +386,9 @@ const ScheduleMeetingDetail = ({t}) => {
                       onChange={() => setAccessibleToMembers(!accessibleToMembers)}
                       register={register("accessible_to_members")}
                     />
-                    <span className="label-base pb-0">{ t('meeting.props.only_accessible_to_members') }</span>
+                    <span className="label-base pb-0">
+                      {t("meeting.props.only_accessible_to_members")}
+                    </span>
                   </label>
                 </div>
               </div>
@@ -371,18 +396,18 @@ const ScheduleMeetingDetail = ({t}) => {
             <GroupLayout className="flex flex-col justify-between">
               <div className="w-full h-auto">
                 <Select
-                  label="Add Invitees"
+                  label={t("schedule_meeting_new.Add_invitees")}
                   mode="multiple"
                   options={listContacts}
-                  placeholder="Select Invitees"
+                  placeholder={t("schedule_meeting_new.select_invitees")}
                   onChange={(e) => setContacts(e)}
                   register={register("contacts")}
                   value={contacts}
                 />
                 <Select
-                  label="Enter Email"
+                  label={t("schedule_meeting_new.enter_email")}
                   mode="tags"
-                  placeholder="Input invitees"
+                  placeholder={t("schedule_meeting_new.input_invitees")}
                   register={register("emails")}
                   onChange={(e) => setEmails(e)}
                 />
@@ -404,7 +429,7 @@ const ScheduleMeetingDetail = ({t}) => {
               <div className="w-full flex flex-row justify-between pt-8">
                 <div className="space-x-4">
                   <Button className="btn btn-primary" isLoading={loading}>
-                    Save meeting
+                    {t("schedule_meeting_new.save_meeting")}
                   </Button>
                 </div>
                 <div className="space-x-4">
@@ -413,13 +438,13 @@ const ScheduleMeetingDetail = ({t}) => {
                     className="btn btn-primary"
                     isLoading={loading}
                   >
-                    Save and Send meeting
+                    {t("schedule_meeting_new.save_and_send_meeting")}
                   </Button>
                   <Button className="btn-outline-base" type="button" isLoading={loading}>
-                  { t('general.reset') }
+                    {t("general.reset")}
                   </Button>
                   <Button className="btn btn-primary" isLoading={loading}>
-                    Save meeting
+                    {t("schedule_meeting_new.save_meeting")}
                   </Button>
                 </div>
               </div>

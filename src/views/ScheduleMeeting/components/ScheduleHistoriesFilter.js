@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useMeetingStore } from "stores/meeting.store";
+import { withNamespaces } from "react-i18next";
 
 const ScheduleHistoriesFilter = ({ onChange, loading }) => {
   const [meetingStore] = useMeetingStore();
@@ -78,7 +79,7 @@ const ScheduleHistoriesFilter = ({ onChange, loading }) => {
           className="w-full"
           register={register("title")}
           label="Title"
-          placeholder="Enter title meeting"
+          placeholder={t("schedule_meeting.enter_title_meeting")}
         />
         <Select
           label="Type"
@@ -102,4 +103,4 @@ const ScheduleHistoriesFilter = ({ onChange, loading }) => {
   );
 };
 
-export default ScheduleHistoriesFilter;
+export default withNamespaces()(ScheduleHistoriesFilter);

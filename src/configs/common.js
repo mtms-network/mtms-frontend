@@ -9,6 +9,7 @@ export const BASE_API = {
   auth: "/api/auth",
   meeting: "/meetings",
   profile: "/profile",
+  avatar: "/profile/avatar",
   changePassword: "/auth/change-password",
 };
 
