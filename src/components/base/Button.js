@@ -8,7 +8,7 @@ const Button = ({ children, className, isLoading, disabled, ...rest }) => {
     </button>
   ) : (
     <button className={classNames("btn bg-primary loading", className)} disabled>
-      Processing...
+      {children}
     </button>
   );
 };

@@ -15,6 +15,8 @@ const Select = ({
   onChange,
   defaultValue,
   placeholder,
+  value,
+  allowClear,
   ...rest
 }) => {
   const { Option } = SelectBase;
@@ -35,6 +37,7 @@ const Select = ({
         defaultValue={defaultValue}
         placeholder={placeholder || `Select ${label}`}
         onChange={onChange}
+        allowClear
       >
         {options.map((item) => (
           <Option key={item?.key} value={item?.key}>

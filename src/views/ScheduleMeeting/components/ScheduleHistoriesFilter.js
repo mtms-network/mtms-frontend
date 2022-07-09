@@ -4,17 +4,16 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useMeetingStore } from "stores/meeting.store";
-import { withNamespaces } from 'react-i18next';
+import { withNamespaces } from "react-i18next";
+import i18n from "i18n";
 
-const ScheduleHistoriesFilter = ({ onChange, t }) => {
+const ScheduleHistoriesFilter = ({ onChange, loading }) => {
   const [meetingStore] = useMeetingStore();
-
-  const [submitting, setSubmitting] = useState(false);
   const [types, setTypes] = useState([]);
   const [type, setType] = useState(null);
   const [statuses, setStatuses] = useState([]);
   const [status, setStatus] = useState(null);
-  const [categories, setCategories] = useState([]);
+  const [, setCategories] = useState([]);
 
   const schema = yup
     .object()
@@ -31,7 +30,7 @@ const ScheduleHistoriesFilter = ({ onChange, t }) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = (values) => {
     try {
       const filter = { ...values };
       if (type) {
@@ -41,7 +40,7 @@ const ScheduleHistoriesFilter = ({ onChange, t }) => {
         filter.status = status;
       }
       onChange(filter);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const prepareData = () => {
@@ -75,33 +74,38 @@ const ScheduleHistoriesFilter = ({ onChange, t }) => {
   }, [meetingStore.types]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <Input
-          className="w-full"
-          register={register("title")}
-          label="Title"
-          placeholder={t('schedule_meeting.enter_title_meeting')}
-        />
-        <Select
-          label="Type"
-          options={types}
-          register={register("type.uuid")}
-          onChange={(e) => setType(e)}
-        />
-        <Select
-          label="Status"
-          options={statuses}
-          register={register("status.uuid")}
-          onChange={(e) => setStatus(e)}
-        />
-      </div>
+    <>
+      <form>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <Input
+            className="w-full"
+            register={register("title")}
+            label="Title"
+            placeholder={i18n.t("schedule_meeting.enter_title_meeting")}
+          />
+          <Select
+            label="Type"
+            options={types}
+            register={register("type.uuid")}
+            onChange={(e) => setType(e)}
+            allowClear
+          />
+          <Select
+            label="Status"
+            options={statuses}
+            register={register("status.uuid")}
+            onChange={(e) => setStatus(e)}
+            allowClear
+          />
+        </div>
+      </form>
+
       <div className="pt-4">
-        <Button className="btn btn-primary btn-sm" isLoading={submitting}>
+        <Button className="btn btn-primary btn-sm mr-4" isLoading={loading} onClick={handleSubmit(onSubmit)}>
           Filter
         </Button>
       </div>
-    </form>
+    </>
   );
 };
 

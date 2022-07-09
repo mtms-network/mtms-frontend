@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { BASE_API } from "configs";
 import QueryString from "qs";
 import { createPrivateInstance } from "./base";
@@ -14,11 +15,19 @@ export const getRequirePreMeeting = async () => {
   }
 };
 
-export const getMeetingHistories = async ({ limit, page, title = "", type, status }) => {
+export const getMeetingHistories = async ({
+  limit,
+  page,
+  title = "",
+  type,
+  status,
+  sort_by,
+  order,
+}) => {
   try {
     const defaultFilters = {
-      sort_by: "",
-      order: "",
+      sort_by,
+      order,
       type,
       status,
       start_date: "",
@@ -41,13 +50,21 @@ export const getMeetingHistories = async ({ limit, page, title = "", type, statu
   }
 };
 
-export const getScheduleMeetings = async ({ limit, page, title = "", type, status }) => {
+export const getScheduleMeetings = async ({
+  limit,
+  page,
+  title = "",
+  type,
+  status,
+  order,
+  sort_by,
+}) => {
   try {
     const defaultFilters = {
+      order,
+      sort_by,
       current_page: page || 1,
       per_page: limit || 10,
-      type,
-      status,
     };
     if (title) {
       defaultFilters.keyword = title;

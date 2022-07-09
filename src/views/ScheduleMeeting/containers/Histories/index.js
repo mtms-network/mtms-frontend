@@ -13,8 +13,10 @@ import { getScheduleMeetings, getRequirePreMeeting } from "services/meeting.serv
 import { useMeetingStore } from "stores/meeting.store";
 import { useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";
+import { withNamespaces } from "react-i18next";
+import Sort from "../../../../components/base/Sort";
+import { ConfigScheduleMeeting } from "../../config";
 import { MeetingItem, ScheduleHistoriesFilter } from "../../components";
-import { withNamespaces } from 'react-i18next';
 
 const ScheduleMeetingHistories = ({ t }) => {
   const navigate = useNavigate();
@@ -27,9 +29,44 @@ const ScheduleMeetingHistories = ({ t }) => {
   const [filter, setFilter] = useState({
     limit: 12,
     page: 1,
+    order: "desc",
+    sort_by: "start_date_time",
     title: "",
   });
+  const [sort, setSort] = useState(false);
+
+  const onChangeFilter = (type, value) => {
+    const cloneFilter = { ...filter };
+    switch (type) {
+      case "sort_by":
+        cloneFilter.sort_by = value;
+        break;
+      case "order":
+        cloneFilter.order = value;
+        break;
+      default:
+        break;
+    }
+
+    setFilter(cloneFilter);
+    setSort(false);
+  };
+
   const [isShowFilter, setIsShowFilter] = useState(false);
+  const fetchCommonData = async () => {
+    try {
+      const res = await getRequirePreMeeting();
+      if (res) {
+        updateMeetingStore((draft) => {
+          draft.categories = res?.categories;
+          draft.types = res?.types;
+          draft.statuses = res?.statuses;
+          draft.isForceLoadMeetingHistories = true;
+        });
+      }
+    } catch (error) {}
+  };
+
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -43,19 +80,7 @@ const ScheduleMeetingHistories = ({ t }) => {
       setLoading(false);
     }
   };
-  const fetchCommonData = async () => {
-    try {
-      const res = await getRequirePreMeeting();
-      if (res) {
-        updateMeetingStore((draft) => {
-          draft.categories = res?.categories;
-          draft.types = res?.types;
-          draft.statuses = res?.statuses;
-          draft.isForceLoadMeetingHistories = true;
-        });
-      }
-    } catch (error) { }
-  };
+
   useEffect(() => {
     fetchData();
   }, [filter]);
@@ -87,7 +112,7 @@ const ScheduleMeetingHistories = ({ t }) => {
     >
       <div className="flex flex-col sm:flex-row justify-between w-full py-2">
         <div className="flex-1">
-          <GroupTitle icon={<IoTv />} title={t('schedule_meeting.scheduled_meetings')} />
+          <GroupTitle icon={<IoTv />} title={t("schedule_meeting.scheduled_meetings")} />
         </div>
         <div className="flex-1 space-x-2 flex flex-row items-center pt-2 justify-end">
           <Button
@@ -96,42 +121,62 @@ const ScheduleMeetingHistories = ({ t }) => {
               navigate(`/${routeUrls.scheduleMeeting.path}/new`);
             }}
           >
-            {t('general.create_new')}
+            {t("general.create_new")}
             <span className="bg-white p-1 rounded-lg">
               <FaPlus className="font-bold text-primary" />
             </span>
           </Button>
           <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
-            <button
-              className=""
-              onClick={() => {
-                setIsShowFilter(!isShowFilter);
-              }}
-            >
-              <IoFilterCircle className="text-black" />
-            </button>
-            <button>
-              <IoSwapVertical className="text-black" />
-            </button>
-            <button>
-              <IoOptions className="text-black" />
-            </button>
+            <div className="tooltip" data-tip="Filter">
+              <button
+                className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200"
+                onClick={() => {
+                  setIsShowFilter(!isShowFilter);
+                }}
+              >
+                <IoFilterCircle className="text-black group-hover:text-primary" size={20} />
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Sort">
+              <button>
+                <IoSwapVertical
+                  className="text-black"
+                  onClick={() => {
+                    setSort(!sort);
+                  }}
+                />
+                {sort ? (
+                  <Sort
+                    onSort={onChangeFilter}
+                    contentField={ConfigScheduleMeeting.arrSort}
+                    order={filter.order}
+                    sortBy={filter.sort_by}
+                  />
+                ) : null}
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Option">
+              <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+                <IoOptions className="text-black group-hover:text-primary" size={20} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-4 relative">
         <div>
-          <GroupTitle title={t('schedule_meeting.meetings_today')} />
+          <GroupTitle title={t("schedule_meeting.meetings_today")} />
         </div>
         <div>
           <Collapser
             show={isShowFilter}
-            title={t('schedule_meeting.schedule_histories_filters')}
+            title={t("schedule_meeting.schedule_histories_filters")}
             content={
               <ScheduleHistoriesFilter
                 onChange={(f) => {
                   setFilter({ ...filter, ...f });
                 }}
+                loading={loading}
               />
             }
           />
