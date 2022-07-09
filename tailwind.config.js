@@ -1,9 +1,14 @@
 const plugin = require("tailwindcss/plugin");
+const colors = require("tailwindcss/colors");
 
 const componentPlugins = {
   ".btn": {
     textTransform: "capitalize",
     color: "white",
+  },
+  ".btn-icon-20": {
+    // height: 20,
+    // width: 20,
   },
   ".btn-base": {
     width: "100%",
@@ -20,9 +25,7 @@ const componentPlugins = {
   },
   ".btn-link-light": {
     cursor: "pointer",
-    "&:hover": {
-      color: "white",
-    },
+    color: "white",
   },
   ".btn-link-primary": {
     cursor: "pointer",
@@ -84,7 +87,7 @@ const componentPlugins = {
   },
   ".label-base": {
     color: "black",
-    paddingBottom: 12,
+    paddingBottom: 8,
   },
   ".bg-white": {
     backgroundColor: "#fff",
@@ -112,6 +115,7 @@ module.exports = {
         "color-base-200": "rgba(255, 255, 255, 0.1)",
         "dark-base": "#1D2122",
         "gray-base-100": "#F7F7F7",
+        white: "#fff",
       },
       screens: {
         sm: "480px",
@@ -125,11 +129,20 @@ module.exports = {
       },
     },
   },
+  variants: {
+    lineClamp: ["responsive", "hover"],
+  },
   daisyui: {
     styled: true,
     base: true,
     utils: true,
     logs: true,
+    colors: [
+      {
+        ...colors,
+        "light-primary": "#0981a21a",
+      },
+    ],
     themes: [
       {
         app: {
@@ -148,6 +161,7 @@ module.exports = {
   },
   plugins: [
     require("daisyui"),
+    require("@tailwindcss/line-clamp"),
     plugin(({ addUtilities, addComponents, e, prefix, config }) => {
       addComponents(componentPlugins);
     }),

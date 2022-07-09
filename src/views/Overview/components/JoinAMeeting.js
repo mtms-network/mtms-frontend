@@ -4,8 +4,9 @@ import { Button, GroupLayout, GroupTitle, Input } from "components";
 import classNames from "classnames";
 import { joinMeetingByCode } from "services/meeting.service";
 import { LIVE_MEETING_URL } from "configs";
+import { withNamespaces } from 'react-i18next';
 
-const JoinAMeeting = ({ className }) => {
+const JoinAMeeting = ({ className, t }) => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -26,24 +27,23 @@ const JoinAMeeting = ({ className }) => {
   return (
     <div className={classNames([className])}>
       <GroupLayout className="flex flex-col justify-between">
-        <GroupTitle icon={<IoCalendarSharp />} title="Join a meeting" />
+        <GroupTitle icon={<IoCalendarSharp />} title={t('meeting.join_a_meeting')} />
         <div className="flex flex-col py-4">
           <p className="label-base">
-            Join the simplified video conferencing meeting across any device by entering the meeting
-            code.
+            {t('meeting.join_a_meeting_desc')}
           </p>
-          <p className="label-base">Meeting code</p>
+          <p className="label-base">{t('meeting.meeting_code')}</p>
         </div>
         <div className="flex flex-col">
           <Input
-            placeholder="Enter meeting code"
+            placeholder={t('meeting.enter_meeting_code')}
             className="bg-gray-base-100 border-0"
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
           <div className="w-full pt-4">
             <Button className="btn btn-primary btn-block" isLoading={loading} onClick={handleJoin}>
-              Join meeting now
+              {t('home.join_meeting_now')}
             </Button>
           </div>
         </div>
@@ -52,4 +52,4 @@ const JoinAMeeting = ({ className }) => {
   );
 };
 
-export default JoinAMeeting;
+export default withNamespaces()(JoinAMeeting);

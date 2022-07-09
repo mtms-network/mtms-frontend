@@ -5,8 +5,11 @@ import { useAppStore } from "stores/app.store";
 import classNames from "classnames";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
+import SidebarUserCenter from "./SidebarUserCenter";
+import { withNamespaces } from 'react-i18next';
+import { createPrivateInstance } from "services/base";
 
-const Layout = ({ children, bottom, contentClassName = "" }) => {
+const Layout = ({ children, bottom, contentClassName = "", t, i18n, userCenter = false }) => {
   const [, updateAppStore] = useAppStore();
 
   const { width } = useDimensions();
@@ -20,6 +23,21 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
 
   useAuth();
 
+  useEffect(() => {
+    const setLanguage = async () => {
+      const client = createPrivateInstance('/locale/en');
+      const res = await client.get('');
+
+      const resources  = { en: { translation: res.data } };
+
+      i18n.init({
+        resources,
+        lng: "en",
+      })
+    }
+
+    setLanguage();
+  }, [])
   return (
     <div className="drawer drawer-mobile">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -28,7 +46,7 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
         <div className={classNames("bg-white relative")}>
           <div
             className={classNames(
-              "flex flex-col pb-20 pt-28 overflow-y-auto px-4 relative",
+              "flex flex-col pt-20 sm:pt-28 pb-28 overflow-y-auto px-4 relative",
               contentClassName,
             )}
           >
@@ -37,16 +55,16 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
           {bottom && (
             <div
               className="navbar bg-white fixed z-10 bottom-0 px-4"
-              style={{ width: `calc(${width}px - 320px)` }}
+              style={{ width: width > 768 && `calc(${width}px - 320px)` }}
             >
               <div className="flex py-2 w-full">{bottom}</div>
             </div>
           )}
         </div>
       </div>
-      <SidebarLayout />
+      { userCenter ? <SidebarUserCenter /> : <SidebarLayout /> }
     </div>
   );
 };
 
-export default Layout;
+export default withNamespaces()(Layout);

@@ -14,11 +14,11 @@ export const routeUrls = {
   overview: {
     path: "overview",
   },
+  meeting: {
+    path: "meeting",
+  },
   scheduleMeeting: {
     path: "schedule-meeting",
-  },
-  newScheduleMeeting: {
-    path: "new-schedule-meeting",
   },
   room247: {
     path: "room-247",
@@ -28,5 +28,8 @@ export const routeUrls = {
   },
   analytic: {
     path: "analytic",
+  },
+  profile: {
+    path: "profile",
   },
 };

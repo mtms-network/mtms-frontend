@@ -1,20 +1,19 @@
 import React from "react";
 import { BsSortAlphaDown, BsSortAlphaDownAlt, BsCheckLg } from "react-icons/bs";
 
-const Sort = ({
-  onSort,
-  sortBy,
-  order,
-  contentField,
-  ...rest
-}) => {
-
+const Sort = ({ onSort, sortBy, order, contentField, ...rest }) => {
   const renderField = () => {
     return contentField.map((item, index) => {
       return (
-        <a className="block w-full py-2 px-4 clear-both	whitespace-normal	bg-transparent border-0 hover:bg-gray-100" key={index} onClick={() => { onSort('sort_by', item.value);}}>
+        <a
+          className="block w-full py-2 px-4 clear-both	whitespace-normal	bg-transparent border-0 hover:bg-gray-100"
+          key={index}
+          onClick={() => {
+            onSort("sort_by", item.value);
+          }}
+        >
           <div className="flex justify-between items-center">
-            {item.label} { item.value === sortBy ? <BsCheckLg /> : null }
+            {item.label} {item.value === sortBy ? <BsCheckLg /> : null}
           </div>
         </a>
       );
@@ -23,18 +22,30 @@ const Sort = ({
 
   const renderOrder = () => {
     const arrOrder = [
-      {label: 'Ascending', value: 'asc', icon: BsSortAlphaDown},
-      {label: 'Descending', value: 'desc', icon: BsSortAlphaDownAlt},
+      { label: "Ascending", value: "asc", icon: BsSortAlphaDown },
+      { label: "Descending", value: "desc", icon: BsSortAlphaDownAlt },
     ];
     return arrOrder.map((item, index) => {
       return (
-        <a className="block w-full py-2 px-4 clear-both	whitespace-normal	bg-transparent border-0 hover:bg-gray-100" key={index}>
-          <div className="flex items-center" onClick={() => { onSort('order', item.value);}}>
-            <item.icon className="mr-2" />
-            { item.label }
+        <a
+          className="block w-full py-2 px-4 clear-both	whitespace-normal	bg-transparent border-0 hover:bg-gray-100"
+          key={index}
+        >
+          <div
+            className="flex items-center justify-between"
+            onClick={() => {
+              onSort("order", item.value);
+            }}
+          >
+            <div  className="flex items-center">
+              <item.icon className="mr-2 " />
+              {item.label}
+            </div>
+
+            {item.value === order ? <BsCheckLg /> : null}
           </div>
         </a>
-      )
+      );
     });
   };
 
@@ -47,8 +58,8 @@ const Sort = ({
               <div className="relative box-border overflow-hidden h-full">
                 <div className="relative box-border min-w-full	min-h-full w-full">
                   {renderOrder()}
-                  <div className="height-0 my-2 mx-0 overflow-hidden border-t border-slate-100"/>
-                  { renderField() }
+                  <div className="height-0 my-2 mx-0 overflow-hidden border-t border-slate-100" />
+                  {renderField()}
                 </div>
               </div>
             </div>

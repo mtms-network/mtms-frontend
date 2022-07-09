@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { BASE_API } from "configs";
 import QueryString from "qs";
 import { createPrivateInstance } from "./base";
@@ -14,13 +15,21 @@ export const getRequirePreMeeting = async () => {
   }
 };
 
-export const getMeetingHistories = async ({ limit, page, sort_by, order }) => {
+export const getMeetingHistories = async ({
+  limit,
+  page,
+  title = "",
+  type,
+  status,
+  sort_by,
+  order,
+}) => {
   try {
     const defaultFilters = {
       sort_by,
       order,
-      type: "",
-      status: "",
+      type,
+      status,
       start_date: "",
       end_date: "",
       name: "",
@@ -28,6 +37,9 @@ export const getMeetingHistories = async ({ limit, page, sort_by, order }) => {
       per_page: limit || 10,
       instant: false,
     };
+    if (title) {
+      defaultFilters.keyword = title;
+    }
 
     const query = QueryString.stringify({ ...defaultFilters });
     const res = await client.get(`?${query}`);
@@ -38,14 +50,25 @@ export const getMeetingHistories = async ({ limit, page, sort_by, order }) => {
   }
 };
 
-export const getScheduleMeetings = async ({ limit, page, order, sort_by }) => {
+export const getScheduleMeetings = async ({
+  limit,
+  page,
+  title = "",
+  type,
+  status,
+  order,
+  sort_by,
+}) => {
   try {
     const defaultFilters = {
-      current_page: page || 1,
-      per_page: limit || 10,
       order,
       sort_by,
+      current_page: page || 1,
+      per_page: limit || 10,
     };
+    if (title) {
+      defaultFilters.keyword = title;
+    }
 
     const query = QueryString.stringify({ ...defaultFilters });
     const res = await client.get(`?${query}`);
@@ -108,11 +131,11 @@ export const getMeetingDetail = async (uuid) => {
 
 export const getMeetingContact = async () => {
   try {
-    const Axios = createPrivateInstance('');
+    const Axios = createPrivateInstance("");
     const res = await Axios.get(`/contacts?per_page=-1`);
     return res?.data;
   } catch (error) {
     console.error("getMeetingContact", error);
     return null;
   }
-}
+};

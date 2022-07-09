@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { withNamespaces } from 'react-i18next';
 
 const Pagination = ({
   page = 1,
@@ -9,20 +10,24 @@ const Pagination = ({
   from = 1,
   to = 1,
   className,
-  onNext = () => {},
-  onBack = () => {},
+  onNext = () => { },
+  onBack = () => { },
+  t,
 }) => {
   return (
     <div
-      className={classNames("flex flex-row items-center justify-between w-full right-8", className)}
+      className={classNames(
+        "flex flex-col sm:flex-row items-center justify-between w-full right-8",
+        className,
+      )}
     >
-      <div>
-        <p className="text-md text-dark-base">{`Total ${total} result found - showing records from ${from} to ${to}`}</p>
+      <div className="pb-2 sm:pb-0">
+        <p className="text-md text-dark-base">{t('global.total_result_found_with_record', { attribute: total, from: from || 0, to: to || 0 })}</p>
       </div>
 
       <div className="pl-4">
         <div className="flex flex-row space-x-4 justify-center items-center">
-          <p className="text-dark-base">Page</p>
+          <p className="text-dark-base">{t('general.page')}</p>
           <input
             disabled
             maxLength={4}
@@ -51,4 +56,4 @@ const Pagination = ({
   );
 };
 
-export default Pagination;
+export default withNamespaces()(Pagination);
