@@ -12,6 +12,7 @@ import {
   VerifyResetPassword,
   ScheduleMeetingDetail,
   Profile,
+  ComingSoon,
 } from "./views";
 
 const Routers = () => {
@@ -22,6 +23,7 @@ const Routers = () => {
         <Route path={`/${routeUrls.register.path}`} element={<Register />} />
         <Route path={`/${routeUrls.reset.path}`} element={<ResetPassword />} />
         <Route path={`/${routeUrls.verifyForgotPassword.path}`} element={<VerifyResetPassword />} />
+        <Route path={`/${routeUrls.comingSoon.path}`} element={<ComingSoon />} />
         <Route path={`/${routeUrls.scheduleMeeting.path}`} element={<ScheduleMeetingHistories />} />
         <Route path={`/${routeUrls.scheduleMeeting.path}/new`} element={<ScheduleMeetingItem />} />
         <Route

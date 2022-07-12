@@ -32,4 +32,7 @@ export const routeUrls = {
   profile: {
     path: "profile",
   },
+  comingSoon: {
+    path: "coming-soon",
+  },
 };

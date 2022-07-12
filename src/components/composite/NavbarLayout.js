@@ -2,7 +2,7 @@ import React from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
 import { useAppStore } from "stores/app.store";
-import { LIVE_URL } from "configs";
+import { LIVE_URL, routeUrls } from "configs";
 import { withNamespaces } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -22,16 +22,19 @@ const NavbarLayout = ({ width, onLogout, t }) => {
         <div>
           <ul className="menu menu-horizontal p-0 flex flex-row justify-start">
             <li className="nav-link">
-              <a className="font-bold text-base">{t("general.home")}</a>
+              <Link to={`/${routeUrls.comingSoon.path}`}>
+                <a className="font-bold text-base">{t("menu.products")}</a>
+              </Link>
             </li>
             <li className="nav-link">
-              <a className="font-bold text-base">{t("menu.products")}</a>
+              <Link to={`/${routeUrls.comingSoon.path}`}>
+                <a className="font-bold text-base">{t("menu.farmer")}</a>
+              </Link>
             </li>
             <li className="nav-link">
-              <a className="font-bold text-base">{t("menu.farmer")}</a>
-            </li>
-            <li className="nav-link">
-              <a className="font-bold text-base">{t("menu.nft_marketplace")}</a>
+              <Link to={`/${routeUrls.comingSoon.path}`}>
+                <a className="font-bold text-base">{t("menu.nft_marketplace")}</a>
+              </Link>
             </li>
           </ul>
         </div>

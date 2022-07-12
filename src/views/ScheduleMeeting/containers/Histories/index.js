@@ -138,9 +138,9 @@ const ScheduleMeetingHistories = ({ t }) => {
               </button>
             </div>
             <div className="tooltip" data-tip="Sort">
-              <button>
+              <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
                 <IoSwapVertical
-                  className="text-black"
+                  className="text-black group-hover:text-primary"
                   onClick={() => {
                     setSort(!sort);
                   }}
