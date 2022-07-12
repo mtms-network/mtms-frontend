@@ -35,7 +35,7 @@ export const getMeetingHistories = async ({
       name: "",
       current_page: page || 1,
       per_page: limit || 10,
-      instant: false,
+      instant: 0,
     };
     if (title) {
       defaultFilters.keyword = title;

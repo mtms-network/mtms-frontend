@@ -4,7 +4,7 @@ import React from "react";
 import { FaCalendarPlus } from "react-icons/fa";
 import { IoAnalyticsOutline, IoApps, IoLogoAppleAr, IoPerson } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
-import { withNamespaces } from 'react-i18next';
+import { withNamespaces } from "react-i18next";
 
 const SidebarUserCenter = ({ t }) => {
   const navigate = useNavigate();
@@ -14,7 +14,9 @@ const SidebarUserCenter = ({ t }) => {
       <label htmlFor="my-drawer-3" className="drawer-overlay" />
       <div className="menu py-4 px-8 overflow-y-auto w-80 bg-dark-base">
         <div>
-          <img src="/images/mtms-logo.png" alt="logo" />
+          <button onClick={() => navigate("/")}>
+            <img src="/images/mtms-logo.png" alt="logo" />
+          </button>
         </div>
         <div className="pt-8 space-y-4">
           <div className="w-full">
@@ -27,7 +29,7 @@ const SidebarUserCenter = ({ t }) => {
               )}
               onClick={() => navigate(`/${routeUrls.profile.path}`)}
             >
-              <p className="pl-2">{t('Update Profile')}</p>
+              <p className="pl-2">{t("Update Profile")}</p>
             </button>
           </div>
           <div className="w-full">
@@ -39,7 +41,7 @@ const SidebarUserCenter = ({ t }) => {
                   : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
               )}
             >
-              <p className="pl-2">{t('Rewards Center')}</p>
+              <p className="pl-2">{t("Rewards Center")}</p>
             </button>
           </div>
           <div className="w-full">
@@ -51,7 +53,7 @@ const SidebarUserCenter = ({ t }) => {
                   : "font-normal btn btn-base justify-start",
               )}
             >
-              <p className="pl-2">{t('Registration Invite')}</p>
+              <p className="pl-2">{t("Registration Invite")}</p>
             </button>
           </div>
           <div className="w-full">

@@ -34,8 +34,8 @@ const MeetingHistory = ({ className, t }) => {
   const [filter, setFilter] = useState({
     limit: 10,
     page: 1,
-    sort_by: "id",
-    order: "ASC",
+    sort_by: "start_date_time",
+    order: "desc",
   });
   const [sort, setSort] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
@@ -110,9 +110,9 @@ const MeetingHistory = ({ className, t }) => {
             <GroupTitle icon={<IoRadio />} title={t("meeting.meeting_history")} />
           </div>
           <div className="flex-1 space-x-2 flex flex-row w-auto items-center justify-end">
-            <button>
+            <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
               <IoFilterCircle
-                className="text-black"
+                className="text-black group-hover:text-primary"
                 onClick={() => {
                   setIsShowFilter(!isShowFilter);
                 }}
@@ -120,7 +120,7 @@ const MeetingHistory = ({ className, t }) => {
             </button>
             <button>
               <IoSwapVertical
-                className="text-black"
+                className="text-black group-hover:text-primary"
                 onClick={() => {
                   setSort(!sort);
                 }}
@@ -134,8 +134,8 @@ const MeetingHistory = ({ className, t }) => {
                 />
               ) : null}
             </button>
-            <button>
-              <IoOptions className="text-black" />
+            <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+              <IoOptions className="text-black group-hover:text-primary" />
             </button>
           </div>
         </div>

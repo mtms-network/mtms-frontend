@@ -29,9 +29,9 @@ const Profile = ({ t }) => {
   const [visible, setVisible] = useState(false);
 
   const token = getAccessToken();
-  const user = appStore.user;
+  const {user} = appStore;
   const [avatar, setAvatar] = useState('https://api.lorem.space/image/face?hash=28212');
-  //const 
+  // const 
 
   const showModal = () => {
     setVisible(true);
@@ -69,7 +69,7 @@ const Profile = ({ t }) => {
   };
 
   const prepareData = () => {
-    setFormUpdateProfile({ ...formUpdateProfile, name: user?.profile?.name, phone: user?.profile?.phone })
+    setFormUpdateProfile({ ...formUpdateProfile, name: user?.profile?.name, phone: user?.profile?.phone });
     if (user?.profile?.avatar) {
       setAvatar(LIVE_URL + user?.profile?.avatar);
     }
@@ -120,7 +120,7 @@ const Profile = ({ t }) => {
       }
       setLoading(false);
     }
-  }
+  };
 
   const handleDeleteAvatar = () => {
     confirm({
@@ -133,10 +133,10 @@ const Profile = ({ t }) => {
         deleteAvatar();
       },
       onCancel() {
-        //console.log('Cancel');
+        // console.log('Cancel');
       },
     });
-  }
+  };
 
   const deleteAvatar = async () => {
     try {
@@ -157,14 +157,14 @@ const Profile = ({ t }) => {
       message.error(`Update failed.`);
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     prepareData();
   }, [user]);
 
   return (
-    <MainLayout userCenter={true} >
+    <MainLayout userCenter >
       <div className="p-10">
         <AlertError
           {...{ ...alertProfile }}
@@ -199,9 +199,7 @@ const Profile = ({ t }) => {
               {
                 fieldEdit.name ?
                   (
-                    <>
-                      <Input placeholder="name" className="h-[65px]" value={formUpdateProfile.name || ''} onChange={(e) => setFormUpdateProfile({ ...formUpdateProfile, name: e.target.value })} />
-                    </>
+                    <Input placeholder="name" className="h-[65px]" value={formUpdateProfile.name || ''} onChange={(e) => setFormUpdateProfile({ ...formUpdateProfile, name: e.target.value })} />
                   ) :
                   (
                     <div className="border-[1px] flex justify-between items-center rounded-[8px] py-2 px-3">
@@ -240,9 +238,7 @@ const Profile = ({ t }) => {
               {
                 fieldEdit.phone ?
                   (
-                    <>
-                      <Input placeholder="Phone" className="h-[65px]" value={formUpdateProfile.phone || ''} onChange={(e) => setFormUpdateProfile({ ...formUpdateProfile, phone: e.target.value })} />
-                    </>
+                    <Input placeholder="Phone" className="h-[65px]" value={formUpdateProfile.phone || ''} onChange={(e) => setFormUpdateProfile({ ...formUpdateProfile, phone: e.target.value })} />
                   ) :
                   (
                     <div className="border-[1px] flex justify-between items-center rounded-[8px] py-2 px-3">
@@ -322,19 +318,19 @@ const Profile = ({ t }) => {
         <div className="flex flex-row justify-between space-x-4 mb-5">
           <div className="flex-1">
             <label>{t('auth.password.props.current_password')}:</label>
-            <Input type={'password'} placeholder={t('auth.password.props.current_password')} onChange={(e) => setFormChangePassword({ ...formChangePassword, current_password: e.target.value })} />
+            <Input type="password" placeholder={t('auth.password.props.current_password')} onChange={(e) => setFormChangePassword({ ...formChangePassword, current_password: e.target.value })} />
           </div>
         </div>
         <div className="flex flex-row justify-between space-x-4 mb-5">
           <div className="flex-1">
             <label>{t('auth.password.props.new_password')}:</label>
-            <Input type={'password'} placeholder={t('auth.password.props.new_password')} onChange={(e) => setFormChangePassword({ ...formChangePassword, new_password: e.target.value })} />
+            <Input type="password" placeholder={t('auth.password.props.new_password')} onChange={(e) => setFormChangePassword({ ...formChangePassword, new_password: e.target.value })} />
           </div>
         </div>
         <div className="flex flex-row justify-between space-x-4 mb-5">
           <div className="flex-1">
             <label>{t('auth.password.props.new_password_confirmation')}:</label>
-            <Input type={'password'} placeholder={t('auth.password.props.new_password_confirmation')} onChange={(e) => setFormChangePassword({ ...formChangePassword, new_password_confirmation: e.target.value })} />
+            <Input type="password" placeholder={t('auth.password.props.new_password_confirmation')} onChange={(e) => setFormChangePassword({ ...formChangePassword, new_password_confirmation: e.target.value })} />
           </div>
         </div>
       </Modal>

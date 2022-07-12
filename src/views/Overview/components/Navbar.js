@@ -7,10 +7,7 @@ const OverviewNavBar = ({ t }) => {
       <div
         className="flex flex-col sm:flex-row basis-1/2 sm:basis-full
       sm:space-x-4 space-y-2  sm:space-y-0 justify-center sm:justify-start"
-      >
-        <button className="btn-link-primary">{t('home.instant_meeting')}</button>
-        <button className="btn-link-primary">{t('meeting.join_meeting')}</button>
-      </div>
+       />
       <div
         className="flex flex-col sm:flex-row basis-1/2 sm:basis-full
       sm:space-x-4 space-y-2  sm:space-y-0 justify-center sm:justify-end"
