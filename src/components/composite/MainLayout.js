@@ -3,11 +3,11 @@ import { resetUserToken } from "helpers";
 import { useAuth, useDimensions } from "hooks";
 import { useAppStore } from "stores/app.store";
 import classNames from "classnames";
+import { withNamespaces } from 'react-i18next';
+import { createPrivateInstance } from "services/base";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
 import SidebarUserCenter from "./SidebarUserCenter";
-import { withNamespaces } from 'react-i18next';
-import { createPrivateInstance } from "services/base";
 
 const Layout = ({ children, bottom, contentClassName = "", t, i18n, userCenter = false }) => {
   const [, updateAppStore] = useAppStore();
@@ -33,11 +33,11 @@ const Layout = ({ children, bottom, contentClassName = "", t, i18n, userCenter =
       i18n.init({
         resources,
         lng: "en",
-      })
-    }
+      });
+    };
 
     setLanguage();
-  }, [])
+  }, []);
   return (
     <div className="drawer drawer-mobile">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
