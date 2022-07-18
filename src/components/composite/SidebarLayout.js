@@ -4,7 +4,7 @@ import React from "react";
 import { FaCalendarPlus } from "react-icons/fa";
 import { IoAnalyticsOutline, IoApps, IoLogoAppleAr, IoPerson } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
-import { withNamespaces } from "react-i18next";
+import { withTranslation } from "react-i18next";
 
 const SidebarLayout = ({ t }) => {
   const navigate = useNavigate();
@@ -95,4 +95,4 @@ const SidebarLayout = ({ t }) => {
   );
 };
 
-export default withNamespaces()(SidebarLayout);
+export default withTranslation()(SidebarLayout);

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { IoCalendarSharp } from "react-icons/io5";
 import { Button, GroupLayout, GroupTitle, Input } from "components";
 import classNames from "classnames";
-import { joinMeetingByCode } from "services/meeting.service";
+import { joinMeetingByCode } from "services";
 import { LIVE_MEETING_URL } from "configs";
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const JoinAMeeting = ({ className, t }) => {
   const [code, setCode] = useState("");
@@ -52,4 +52,4 @@ const JoinAMeeting = ({ className, t }) => {
   );
 };
 
-export default withNamespaces()(JoinAMeeting);
+export default withTranslation()(JoinAMeeting);

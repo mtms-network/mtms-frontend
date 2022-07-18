@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
 import { useAppStore } from "stores/app.store";
 import { LIVE_URL, routeUrls } from "configs";
-import { withNamespaces } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
 
-const NavbarLayout = ({ width, onLogout, t }) => {
+const NavbarLayout = ({ width, onLogout }) => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [appStore] = useAppStore();
+  const user = useMemo(() => appStore.user, [appStore.user]);
+
   return (
     <div
       className="navbar bg-dark-base fixed z-30 h-18 w-full"
-      style={{ width: width > 768 && `calc(${width}px - 320px)` }}
+      style={{ width: width > 1023 && `calc(${width}px - 320px)` }}
     >
-      <div className="flex-none lg:hidden">
+      <div className="flex justify-between flex-none lg:hidden w-full">
+        <button onClick={() => navigate("/")}>
+          <img src="/images/mtms-logo.png" alt="logo" className="h-10" />
+        </button>
         <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
           <IoMenu />
         </label>
@@ -55,15 +62,15 @@ const NavbarLayout = ({ width, onLogout, t }) => {
               >
                 <div className="avatar">
                   <div className="!flex w-12 rounded-full justify-center items-center bg-primary text-white">
-                    {appStore?.user?.profile?.avatar ? (
+                    {user?.profile?.avatar ? (
                       <img src={`${LIVE_URL}appStore?.user?.profile?.avatar`} alt="avatar" />
                     ) : (
-                      <span className="text-xl">{appStore?.user?.profile?.name[0]}</span>
+                      <span className="text-xl">{user?.profile?.name[0]}</span>
                     )}
                   </div>
                 </div>
                 <div className="nav-link">
-                  <p className="font-bold text-base">{appStore?.user?.profile?.name}</p>
+                  <p className="font-bold text-base">{user?.profile?.name}</p>
                 </div>
               </label>
               <ul
@@ -93,4 +100,4 @@ const NavbarLayout = ({ width, onLogout, t }) => {
   );
 };
 
-export default withNamespaces()(NavbarLayout);
+export default NavbarLayout;
