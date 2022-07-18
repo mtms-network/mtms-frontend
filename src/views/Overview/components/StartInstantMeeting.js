@@ -3,9 +3,9 @@ import { IoCalendarClear, IoCheckmarkCircleOutline } from "react-icons/io5";
 import classNames from "classnames";
 import { Button, GroupLayout, GroupTitle, Input } from "components";
 import { useMeetingStore } from "stores/meeting.store";
-import { startMeeting } from "services/meeting.service";
+import { startMeeting } from "services";
 import { LIVE_MEETING_URL } from "configs";
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const StartInstantMeeting = ({ className, t }) => {
   const [meetingStore, updateMeetingStore] = useMeetingStore();
@@ -57,8 +57,8 @@ const StartInstantMeeting = ({ className, t }) => {
     <div className={classNames([className])}>
       <GroupLayout className="flex flex-col justify-between w-full">
         <GroupTitle icon={<IoCalendarClear />} title={t('home.start_instant_meeting')} />
-        <div className="flex flex-row space-x-4 py-4">
-          <div className="basis-1/2">
+        <div className="flex flex-col sm:flex-row sm:space-x-4 pt-4">
+          <div className="basis-full sm:basis-1/2">
             <p className="label-base">{t('meeting.meeting_code')}</p>
             <Input
               placeholder={t('meeting.enter_meeting_code')}
@@ -92,7 +92,7 @@ const StartInstantMeeting = ({ className, t }) => {
               }
             />
           </div>
-          <div className="basis-1/2">
+          <div className="basis-full sm:basis-1/2 py-4 sm:py-0">
             <p className="label-base">{t('home.maximum_participant')}</p>
             <Input
               placeholder="1000"
@@ -173,4 +173,4 @@ const StartInstantMeeting = ({ className, t }) => {
   );
 };
 
-export default withNamespaces()(StartInstantMeeting);
+export default withTranslation()(StartInstantMeeting);

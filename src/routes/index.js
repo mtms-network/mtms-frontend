@@ -17,7 +17,13 @@ import {
 
 const Routers = () => {
   return (
-    <Suspense fallback={<BrandLogoLoading />}>
+    <Suspense
+      fallback={
+        <div className="h-screen">
+          <BrandLogoLoading />
+        </div>
+      }
+    >
       <Routes>
         <Route path={`/${routeUrls.login.path}`} element={<Login />} />
         <Route path={`/${routeUrls.register.path}`} element={<Register />} />

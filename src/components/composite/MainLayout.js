@@ -1,16 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { resetUserToken } from "helpers";
 import { useAuth, useDimensions } from "hooks";
 import { useAppStore } from "stores/app.store";
 import classNames from "classnames";
+import { I18nextProvider } from "react-i18next";
+import i18next from "i18next";
+import { getLanguages } from "services/common.service";
+import i18n from "i18n";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
 import SidebarUserCenter from "./SidebarUserCenter";
-import { withNamespaces } from 'react-i18next';
-import { createPrivateInstance } from "services/base";
+import BrandLogoLoading from "./BrandLogoLoading";
 
-const Layout = ({ children, bottom, contentClassName = "", t, i18n, userCenter = false }) => {
+const Layout = ({ children, bottom, contentClassName = "", userCenter = false }) => {
   const [, updateAppStore] = useAppStore();
+  const [loading, setLoading] = useState(false);
 
   const { width } = useDimensions();
 
@@ -23,48 +27,59 @@ const Layout = ({ children, bottom, contentClassName = "", t, i18n, userCenter =
 
   useAuth();
 
+  const fetchLanguage = async () => {
+    try {
+      if (!i18next.exists("home.copied")) {
+        setLoading(true);
+        const data = await getLanguages();
+        const resources = { en: { translation: data } };
+
+        i18n.init({
+          resources,
+          lng: "en",
+        });
+        setLoading(false);
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    const setLanguage = async () => {
-      const client = createPrivateInstance('/locale/en');
-      const res = await client.get('');
+    fetchLanguage();
+  }, []);
 
-      const resources  = { en: { translation: res.data } };
-
-      i18n.init({
-        resources,
-        lng: "en",
-      })
-    }
-
-    setLanguage();
-  }, [])
-  return (
-    <div className="drawer drawer-mobile">
-      <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col">
-        <NavbarLayout width={width} onLogout={handleLogout} />
-        <div className={classNames("bg-white relative")}>
-          <div
-            className={classNames(
-              "flex flex-col pt-20 sm:pt-28 pb-28 overflow-y-auto px-4 relative",
-              contentClassName,
-            )}
-          >
-            {children}
-          </div>
-          {bottom && (
-            <div
-              className="navbar bg-white fixed z-10 bottom-0 px-4"
-              style={{ width: width > 768 && `calc(${width}px - 320px)` }}
-            >
-              <div className="flex py-2 w-full">{bottom}</div>
-            </div>
-          )}
-        </div>
-      </div>
-      { userCenter ? <SidebarUserCenter /> : <SidebarLayout /> }
+  return loading ? (
+    <div className="h-screen">
+      <BrandLogoLoading />
     </div>
+  ) : (
+    <I18nextProvider i18n={i18next}>
+      <div className="drawer drawer-mobile">
+        <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col">
+          <NavbarLayout width={width} onLogout={handleLogout} />
+          <div className={classNames("bg-white relative")}>
+            <div
+              className={classNames(
+                "flex flex-col pt-20 sm:pt-28 pb-28 overflow-y-auto px-4 relative",
+                contentClassName,
+              )}
+            >
+              {children}
+            </div>
+            {bottom && (
+              <div
+                className="navbar bg-white fixed z-10 bottom-0 px-4"
+                style={{ width: width > 768 && `calc(${width}px - 320px)` }}
+              >
+                <div className="flex py-2 w-full">{bottom}</div>
+              </div>
+            )}
+          </div>
+        </div>
+        {userCenter ? <SidebarUserCenter /> : <SidebarLayout />}
+      </div>
+    </I18nextProvider>
   );
 };
 
-export default withNamespaces()(Layout);
+export default Layout;

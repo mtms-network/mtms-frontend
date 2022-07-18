@@ -18,9 +18,9 @@ import {
   Sorting,
 } from "components";
 import { ScheduleHistoriesFilter } from "views/ScheduleMeeting/components";
-import { getMeetingHistories, getRequirePreMeeting } from "services/meeting.service";
+import { getMeetingHistories, getRequirePreMeeting } from "services";
 import { useMeetingStore } from "stores/meeting.store";
-import { withNamespaces } from "react-i18next";
+import { withTranslation } from "react-i18next";
 import { ConfigOverview } from "../config";
 
 const MeetingHistory = ({ className, t }) => {
@@ -64,7 +64,9 @@ const MeetingHistory = ({ className, t }) => {
           });
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchData = async () => {
@@ -109,34 +111,40 @@ const MeetingHistory = ({ className, t }) => {
           <div className="flex-1">
             <GroupTitle icon={<IoRadio />} title={t("meeting.meeting_history")} />
           </div>
-          <div className="flex-1 space-x-2 flex flex-row w-auto items-center justify-end">
-            <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
-              <IoFilterCircle
-                className="text-black group-hover:text-primary"
-                onClick={() => {
-                  setIsShowFilter(!isShowFilter);
-                }}
-              />
-            </button>
-            <button>
-              <IoSwapVertical
-                className="text-black group-hover:text-primary"
-                onClick={() => {
-                  setSort(!sort);
-                }}
-              />
-              {sort ? (
-                <Sorting
-                  onSort={onChangeFilter}
-                  order={filter.order}
-                  sortBy={filter.sort_by}
-                  contentField={ConfigOverview.arrFieldSort}
+          <div className="space-x-2 flex flex-row w-auto items-center justify-end">
+            <div className="tooltip" data-tip="Filter">
+              <button>
+                <IoFilterCircle
+                  className="text-black group-hover:text-primary"
+                  onClick={() => {
+                    setIsShowFilter(!isShowFilter);
+                  }}
                 />
-              ) : null}
-            </button>
-            <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
-              <IoOptions className="text-black group-hover:text-primary" />
-            </button>
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Sort">
+              <button>
+                <IoSwapVertical
+                  className="text-black group-hover:text-primary"
+                  onClick={() => {
+                    setSort(!sort);
+                  }}
+                />
+                {sort ? (
+                  <Sorting
+                    onSort={onChangeFilter}
+                    order={filter.order}
+                    sortBy={filter.sort_by}
+                    contentField={ConfigOverview.arrFieldSort}
+                  />
+                ) : null}
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Option">
+              <button>
+                <IoOptions className="text-black group-hover:text-primary" />
+              </button>
+            </div>
           </div>
         </div>
         <div>
@@ -166,7 +174,6 @@ const MeetingHistory = ({ className, t }) => {
                     <th className="bg-white">{t("meeting.props.status")}</th>
                     <th className="bg-white">{t("meeting.started_at")}</th>
                     <th className="bg-white">{t("meeting.ended_at")}</th>
-                    <th className="bg-white" />
                   </tr>
                 </thead>
                 <tbody className="border-0">
@@ -189,12 +196,7 @@ const MeetingHistory = ({ className, t }) => {
                         </p>
                       </td>
                       <td>{item?.start_date_time}</td>
-                      <td>{item?.ended_at || "-"}</td>
-                      <td>
-                        <button className="btn btn-square btn-xs border-0">
-                          <IoEllipsisHorizontal />
-                        </button>
-                      </td>
+                      <td className="flex justify-center align-middle">{item?.ended_at || "-"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -229,4 +231,4 @@ const MeetingHistory = ({ className, t }) => {
   );
 };
 
-export default withNamespaces()(MeetingHistory);
+export default withTranslation()(MeetingHistory);

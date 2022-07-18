@@ -4,7 +4,7 @@ import React from "react";
 import { FaCalendarPlus } from "react-icons/fa";
 import { IoAnalyticsOutline, IoApps, IoLogoAppleAr, IoPerson } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
-import { withNamespaces } from "react-i18next";
+import { withTranslation } from "react-i18next";
 
 const SidebarUserCenter = ({ t }) => {
   const navigate = useNavigate();
@@ -67,4 +67,4 @@ const SidebarUserCenter = ({ t }) => {
   );
 };
 
-export default withNamespaces()(SidebarUserCenter);
+export default withTranslation()(SidebarUserCenter);
