@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Alert, Button, GuestFormLayout, Input } from "components";
+import { Alert, Button, GoogleButton, GuestFormLayout, Input } from "components";
 import { handleHttpError, resetUserInfo } from "helpers";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signUp } from "services";
@@ -64,7 +64,7 @@ export default function Register() {
   };
 
   const onLogin = () => {
-    navigate("/");
+    navigate(`/${routeUrls.login}`);
   };
 
   return (
@@ -78,6 +78,10 @@ export default function Register() {
       <div className="w-full pt-4">
         <button className="btn btn-base">Connect Avalanche</button>
       </div>
+      <div className="w-full pt-4">
+        <GoogleButton />
+      </div>
+
       <div className="pt-4 w-full">
         <Alert
           {...{ ...alert }}

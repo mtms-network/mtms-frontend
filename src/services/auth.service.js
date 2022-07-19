@@ -8,6 +8,15 @@ export const signIn = async ({ email, password, deviceName = "1" }) => {
   return res?.data;
 };
 
+export const signInSocial = async ({ provider = "google", credential }) => {
+  const res = await client.post("/social-media/login", {
+    provider,
+    token_id: credential,
+    device_name: "mtms-app",
+  });
+  return res?.data;
+};
+
 export const signUp = async ({ name, email, username, password, passwordConfirmation }) => {
   const res = await client.post("/register", {
     name,

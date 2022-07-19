@@ -48,12 +48,12 @@ const NavbarLayout = ({ width, onLogout }) => {
       </div>
       <div className="flex-none hidden lg:block px-4">
         <div className="menu menu-horizontal space-x-3 py-4">
-          <div>
+          {/* <div>
             <button className="btn btn-primary gap-2 text-base">
               <FaPlusCircle />
               {t("menu.buy")}
             </button>
-          </div>
+          </div> */}
           <div className="flex flex-row justify-center items-center space-x-2">
             <div className="dropdown dropdown-end bg-dark-base">
               <label
@@ -93,7 +93,7 @@ const NavbarLayout = ({ width, onLogout }) => {
               </ul>
             </div>
           </div>
-          <button className="btn btn-primary text-base">English</button>
+          {/* <button className="btn btn-primary text-base">English</button> */}
         </div>
       </div>
     </div>

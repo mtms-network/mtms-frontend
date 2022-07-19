@@ -5,7 +5,7 @@ import { useAppStore } from "stores/app.store";
 import classNames from "classnames";
 import { I18nextProvider } from "react-i18next";
 import i18next from "i18next";
-import { getLanguages } from "services/common.service";
+import { getLanguages } from "services";
 import i18n from "i18n";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";

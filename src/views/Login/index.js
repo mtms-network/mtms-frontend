@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Alert, Button, GuestFormLayout, Input } from "components";
+import { Alert, Button, GoogleButton, GuestFormLayout, Input } from "components";
 import { useNavigate } from "react-router-dom";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signIn } from "services";
@@ -55,7 +55,7 @@ export default function Login() {
       const data = await signIn({
         email: values.email,
         password: values.password,
-        deviceName: "1",
+        deviceName: "mtms-app",
       });
 
       setLoading(false);
@@ -144,6 +144,9 @@ export default function Login() {
               setAlert({ ...alert, show: false });
             }}
           />
+        </div>
+        <div className="w-full">
+          <GoogleButton />
         </div>
         <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full pt-6">
