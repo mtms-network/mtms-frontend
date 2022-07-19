@@ -64,7 +64,7 @@ export default function Register() {
   };
 
   const onLogin = () => {
-    navigate("/");
+    navigate(`/${routeUrls.login}`);
   };
 
   return (

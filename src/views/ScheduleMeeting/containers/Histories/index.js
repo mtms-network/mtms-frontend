@@ -9,11 +9,11 @@ import {
 } from "components";
 import { IoFilterCircle, IoOptions, IoSwapVertical, IoTv } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
-import { getScheduleMeetings, getRequirePreMeeting } from "services/meeting.service";
+import { getScheduleMeetings, getRequirePreMeeting } from "services";
 import { useMeetingStore } from "stores/meeting.store";
 import { useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";
-import { withNamespaces } from "react-i18next";
+import { withTranslation } from "react-i18next";
 import Sort from "../../../../components/base/Sort";
 import { ConfigScheduleMeeting } from "../../config";
 import { MeetingItem, ScheduleHistoriesFilter } from "../../components";
@@ -114,7 +114,7 @@ const ScheduleMeetingHistories = ({ t }) => {
         <div className="flex-1">
           <GroupTitle icon={<IoTv />} title={t("schedule_meeting.scheduled_meetings")} />
         </div>
-        <div className="flex-1 space-x-2 flex flex-row items-center pt-2 justify-end">
+        <div className="flex-1 space-x-2 flex flex-row items-center pt-2 justify-between sm:justify-end">
           <Button
             className="btn btn-primary border-0 gap-2 btn-sm"
             onClick={() => {
@@ -126,10 +126,9 @@ const ScheduleMeetingHistories = ({ t }) => {
               <FaPlus className="font-bold text-primary" />
             </span>
           </Button>
-          <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
+          <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-center sm:justify-end">
             <div className="tooltip" data-tip="Filter">
               <button
-                className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200"
                 onClick={() => {
                   setIsShowFilter(!isShowFilter);
                 }}
@@ -138,7 +137,7 @@ const ScheduleMeetingHistories = ({ t }) => {
               </button>
             </div>
             <div className="tooltip" data-tip="Sort">
-              <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+              <button>
                 <IoSwapVertical
                   className="text-black group-hover:text-primary"
                   onClick={() => {
@@ -156,7 +155,7 @@ const ScheduleMeetingHistories = ({ t }) => {
               </button>
             </div>
             <div className="tooltip" data-tip="Option">
-              <button className="btn btn-circle btn-sm group bg-transparent border-0 hover:bg-slate-200">
+              <button>
                 <IoOptions className="text-black group-hover:text-primary" size={20} />
               </button>
             </div>
@@ -190,4 +189,4 @@ const ScheduleMeetingHistories = ({ t }) => {
   );
 };
 
-export default withNamespaces()(ScheduleMeetingHistories);
+export default withTranslation()(ScheduleMeetingHistories);

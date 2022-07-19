@@ -13,7 +13,7 @@ import { useAppStore } from "stores/app.store";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Upload, message, Modal } from 'antd';
 import { handleHttpError, setTokenLoginSucceeded, getAccessToken } from "helpers";
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { data } from "autoprefixer";
 
 const { confirm } = Modal;
@@ -338,4 +338,4 @@ const Profile = ({ t }) => {
   );
 };
 
-export default withNamespaces()(Profile);
+export default withTranslation()(Profile);

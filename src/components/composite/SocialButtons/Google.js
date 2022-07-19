@@ -1,6 +1,9 @@
-import { GOOGLE_CLIENT_ID } from "configs";
 import React from "react";
-import GoogleLogin from "react-google-login";
+import { GoogleLogin } from "@react-oauth/google";
+import { signInSocial } from "services";
+import { setTokenLoginSucceeded } from "helpers";
+import { useAppStore } from "stores/app.store";
+import { useNavigate } from "react-router-dom";
 
 function GoogleIcon(props) {
   return (
@@ -32,27 +35,27 @@ function GoogleIcon(props) {
   );
 }
 
-export function GoogleButton(props) {
+export function GoogleButton() {
+  const [, updateAppStore] = useAppStore();
+  const navigate = useNavigate();
+
+  const handleResponse = async (result) => {
+    try {
+      if (result?.credential) {
+        const data = await signInSocial({ credential: result.credential });
+        setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
+        updateAppStore((draft) => {
+          draft.isAuthenticated = true;
+        });
+        navigate("/");
+      }
+    } catch (error) {
+      console.log("GoogleButton:: error:", error);
+    }
+  };
   return (
-    <GoogleLogin
-      clientId={GOOGLE_CLIENT_ID}
-      render={(renderProps) => (
-        <button
-          onClick={renderProps.onClick}
-          className="btn btn-base flex flex-row space-x-2"
-        >
-          <GoogleIcon />
-          <span>Login via Google</span>
-        </button>
-      )}
-      onSuccess={() => {
-        console.log("onSuccess");
-      }}
-      onFailure={() => {
-        console.log("onFailure");
-      }}
-      cookiePolicy="single_host_origin"
-      isSignedIn
-    />
+    <div className="flex justify-center w-full">
+      <GoogleLogin onSuccess={handleResponse} shape="rectangular" size="medium" />
+    </div>
   );
 }

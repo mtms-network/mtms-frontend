@@ -55,7 +55,7 @@ export default function Login() {
       const data = await signIn({
         email: values.email,
         password: values.password,
-        deviceName: "1",
+        deviceName: "mtms-app",
       });
 
       setLoading(false);
@@ -145,7 +145,9 @@ export default function Login() {
             }}
           />
         </div>
-        <GoogleButton />
+        <div className="w-full">
+          <GoogleButton />
+        </div>
         <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full pt-6">
             <Input

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const Pagination = ({
   page = 1,
@@ -25,7 +25,7 @@ const Pagination = ({
         <p className="text-md text-dark-base">{t('global.total_result_found_with_record', { attribute: total, from: from || 0, to: to || 0 })}</p>
       </div>
 
-      <div className="pl-4">
+      <div className="pl-0 sm:pl-4">
         <div className="flex flex-row space-x-4 justify-center items-center">
           <p className="text-dark-base">{t('general.page')}</p>
           <input
@@ -56,4 +56,4 @@ const Pagination = ({
   );
 };
 
-export default withNamespaces()(Pagination);
+export default withTranslation()(Pagination);

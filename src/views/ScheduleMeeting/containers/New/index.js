@@ -19,13 +19,13 @@ import { useMeetingStore } from "stores/meeting.store";
 
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
-import { convertFromHTML, convertToRaw } from "draft-js";
+import { convertToRaw } from "draft-js";
 import { createPrivateInstance } from "services/base";
 import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate } from "react-router-dom";
-import { getMeetingContact, getRequirePreMeeting } from "services/meeting.service";
-import { withNamespaces } from 'react-i18next';
+import { getMeetingContact, getRequirePreMeeting } from "services";
+import { withTranslation } from "react-i18next";
 
 const timeFormat = "MMM DD, yyyy HH:mm";
 
@@ -44,7 +44,12 @@ const ScheduleMeetingItem = ({ t }) => {
   const [contacts, setContacts] = useState([]);
   const [category, setCategory] = useState(null);
   const [type, setType] = useState(null);
-  const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR, error: [] });
+  const [alert, setAlert] = useState({
+    show: false,
+    message: "",
+    type: ALERT_TYPE.ERROR,
+    error: [],
+  });
   const [listContacts, setListContacts] = useState([]);
 
   const schema = yup
@@ -87,7 +92,9 @@ const ScheduleMeetingItem = ({ t }) => {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
 
-      values.description = description ? draftToHtml(convertToRaw(description.getCurrentContent())) : '';
+      values.description = description
+        ? draftToHtml(convertToRaw(description.getCurrentContent()))
+        : "";
       values.accessible_to_members = accessibleToMembers;
       values.accessible_via_link = accessibleViaLink;
       values.fee = 0;
@@ -103,12 +110,12 @@ const ScheduleMeetingItem = ({ t }) => {
       values.type.uuid = type;
 
       const client = createPrivateInstance(BASE_API.meeting);
-      const res = await client.post('', values);
+      const res = await client.post("", values);
       const { uuid } = res.data.meeting;
 
       if (sendInvite === true) {
         const client = createPrivateInstance(`/meetings/${uuid}/invitation`);
-        const res = await client.post('', values);
+        const res = await client.post("", values);
       }
 
       setLoading(false);
@@ -116,7 +123,12 @@ const ScheduleMeetingItem = ({ t }) => {
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message, error: errorData.detail });
+        setAlert({
+          type: ALERT_TYPE.ERROR,
+          show: true,
+          message: errorData.message,
+          error: errorData.detail,
+        });
       }
       setLoading(false);
     }
@@ -124,7 +136,13 @@ const ScheduleMeetingItem = ({ t }) => {
 
   const onOk = (e) => {
     setStartDateTime(
-      `${e._d.getFullYear()}-${(e._d.getMonth() + 1).toString().padStart(2, '0')}-${e._d.getDate().toString().padStart(2, '0')} ${e._d.getHours().toString().padStart(2, '0')}:${e._d.getMinutes().toString().padStart(2, '0')}:${e._d.getSeconds().toString().padStart(2, '0')}`
+      `${e._d.getFullYear()}-${(e._d.getMonth() + 1).toString().padStart(2, "0")}-${e._d
+        .getDate()
+        .toString()
+        .padStart(2, "0")} ${e._d.getHours().toString().padStart(2, "0")}:${e._d
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}:${e._d.getSeconds().toString().padStart(2, "0")}`,
     );
   };
 
@@ -152,7 +170,7 @@ const ScheduleMeetingItem = ({ t }) => {
         }));
         setListContacts(list);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const fetchCommonData = async () => {
@@ -166,7 +184,7 @@ const ScheduleMeetingItem = ({ t }) => {
           draft.isForceLoadMeetingHistories = true;
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const fetchData = async () => {
@@ -203,16 +221,14 @@ const ScheduleMeetingItem = ({ t }) => {
         </div>
       )}
       {!fetchLoading && (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1">
-              <GroupTitle icon={<IoTv />} title={t('schedule_meeting_new.schedule_new_meeting')} />
+              <GroupTitle icon={<IoTv />} title={t("schedule_meeting_new.schedule_new_meeting")} />
             </div>
-            <div className="flex-1 space-x-2 flex flex-row items-center justify-end">
+            <div className="space-x-2 flex flex-row items-center justify-end">
               <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
-                <button>
-                  <IoOptions className="text-black" />
-                </button>
+                <IoOptions className="text-black" />
               </div>
             </div>
           </div>
@@ -223,44 +239,44 @@ const ScheduleMeetingItem = ({ t }) => {
                   className="w-full"
                   labelClassName="text-base"
                   register={register("title")}
-                  label={t('meeting.props.title')}
-                  placeholder={t('schedule_meeting.enter_title_meeting')}
+                  label={t("meeting.props.title")}
+                  placeholder={t("schedule_meeting.enter_title_meeting")}
                   rules={[
                     {
                       required: true,
-                      message: "This field is required."
-                    }
+                      message: "This field is required.",
+                    },
                   ]}
                 />
                 <TextArea
                   className="w-full"
                   register={register("agenda")}
-                  label={t('meeting.props.agenda')}
-                  placeholder={t('schedule_meeting_new.enter_agenda_meeting')}
+                  label={t("meeting.props.agenda")}
+                  placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
                 />
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
-              <div className="flex flex-row justify-between space-x-4">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                 <div className="flex-1">
                   <Select
-                    label={t('meeting.props.type')}
+                    label={t("meeting.props.type")}
                     options={types}
-                    register={register('type.uuid')}
+                    register={register("type.uuid")}
                     onChange={(e) => setType(e)}
                   />
                 </div>
                 <div className="flex-1">
                   <Select
-                    label={t('meeting.meeting_category.category')}
+                    label={t("meeting.meeting_category.category")}
                     options={categories}
-                    register={register('category.uuid')}
+                    register={register("category.uuid")}
                     onChange={(e) => setCategory(e)}
                   />
                 </div>
                 <div className="flex-1">
                   <DateTimePicker
-                    label={t('meeting.props.start_date_time')}
+                    label={t("meeting.props.start_date_time")}
                     placeholder="Mar 2, 2022 5:02 PM"
                     showTime
                     onOk={onOk}
@@ -269,11 +285,11 @@ const ScheduleMeetingItem = ({ t }) => {
                   />
                 </div>
               </div>
-              <div className="flex flex-row justify-between space-x-4">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                 <div className="flex-1">
                   <Input
                     register={register("period")}
-                    label={t('meeting.props.estimated_period')}
+                    label={t("meeting.props.estimated_period")}
                     placeholder="60"
                     type="number"
                     min="1"
@@ -282,14 +298,14 @@ const ScheduleMeetingItem = ({ t }) => {
                 <div className="flex-1">
                   <Input
                     register={register("identifier")}
-                    label={t('meeting.meeting_code')}
-                    placeholder={t('meeting.enter_meeting_code')}
+                    label={t("meeting.meeting_code")}
+                    placeholder={t("meeting.enter_meeting_code")}
                   />
                 </div>
                 <div className="flex-1">
                   <Input
                     register={register("max_participant_count")}
-                    label={t('meeting.config.max_participant_count')}
+                    label={t("meeting.config.max_participant_count")}
                     placeholder="1000"
                     type="number"
                     min="1"
@@ -302,27 +318,31 @@ const ScheduleMeetingItem = ({ t }) => {
                   />
                 </div>
               </div>
-              <div className="flex flex-row items-center space-x-4">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                 <div className="form-control">
-                  <label className="label cursor-pointer flex justify-center items-center gap-2">
+                  <label className="label cursor-pointer flex sm:justify-center justify-start items-center gap-2">
                     <input
                       type="checkbox"
                       className="checkbox checkbox-primary checkbox-sm"
                       onChange={() => setAccessibleViaLink(!accessibleViaLink)}
                       register={register("accessible_via_link")}
                     />
-                    <span className="label-base pb-0">{t('meeting.props.accessible_via_link')}</span>
+                    <span className="label-base pb-0">
+                      {t("meeting.props.accessible_via_link")}
+                    </span>
                   </label>
                 </div>
                 <div className="form-control">
-                  <label className="label cursor-pointer flex justify-center items-center gap-2">
+                  <label className="label cursor-pointer flex sm:justify-center justify-start items-center gap-2">
                     <input
                       type="checkbox"
                       className="checkbox checkbox-primary checkbox-sm"
                       onChange={() => setAccessibleToMembers(!accessibleToMembers)}
                       register={register("accessible_to_members")}
                     />
-                    <span className="label-base pb-0">{t('meeting.props.only_accessible_to_members')}</span>
+                    <span className="label-base pb-0">
+                      {t("meeting.props.only_accessible_to_members")}
+                    </span>
                   </label>
                 </div>
               </div>
@@ -330,14 +350,20 @@ const ScheduleMeetingItem = ({ t }) => {
             <GroupLayout className="flex flex-col justify-between">
               <div className="w-full h-auto">
                 <Select
-                  label={t('schedule_meeting_new.Add_invitees')}
+                  label={t("schedule_meeting_new.Add_invitees")}
                   mode="multiple"
                   options={listContacts}
-                  placeholder={t('schedule_meeting_new.select_invitees')}
+                  placeholder={t("schedule_meeting_new.select_invitees")}
                   onChange={(e) => setContacts(e)}
                   register={register("contacts")}
                 />
-                <Select label={t('schedule_meeting_new.enter_email')} mode="tags" placeholder={t('schedule_meeting_new.input_invitees')} register={register("emails")} onChange={(e) => setEmails(e)} />
+                <Select
+                  label={t("schedule_meeting_new.enter_email")}
+                  mode="tags"
+                  placeholder={t("schedule_meeting_new.input_invitees")}
+                  register={register("emails")}
+                  onChange={(e) => setEmails(e)}
+                />
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col justify-between">
@@ -353,21 +379,14 @@ const ScheduleMeetingItem = ({ t }) => {
                   register={register("description")}
                 />
               </div>
-              <div className="w-full flex flex-row justify-between pt-8">
-                <div className="space-x-4">
-                  <Button className="btn btn-primary" isLoading={loading}>
-                    {t('schedule_meeting_new.save_meeting')}
-                  </Button>
-                </div>
-                <div className="space-x-4">
-                  <Button onClick={(e) => handleSaveAndSave(e)} className="btn btn-primary" isLoading={loading}>
-                    {t('schedule_meeting_new.save_and_send_meeting')}
-                  </Button>
-                  <Button className="btn-outline-base" type="button" isLoading={loading}>
-                    {t('general.reset')}
-                  </Button>
-                  <Button className="btn btn-primary" isLoading={loading}>
-                    {t('schedule_meeting_new.save_meeting')}
+              <div className="w-full sm:flex sm:flex-row justify-between pt-8 space-y-2 sm:space-y-0">
+                <div className="sm:space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
+                  <Button
+                    className="btn btn-primary btn-block sm:btn-wide"
+                    isLoading={loading}
+                    onClick={() => onSubmit()}
+                  >
+                    {t("schedule_meeting_new.save_meeting")}
                   </Button>
                 </div>
               </div>
@@ -379,4 +398,4 @@ const ScheduleMeetingItem = ({ t }) => {
   );
 };
 
-export default withNamespaces()(ScheduleMeetingItem);
+export default withTranslation()(ScheduleMeetingItem);

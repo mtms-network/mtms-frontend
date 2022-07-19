@@ -31,7 +31,7 @@ import {
   getMeetingContact,
   getRequirePreMeeting,
 } from "services/meeting.service";
-import { withNamespaces } from "react-i18next";
+import { withTranslation } from "react-i18next";
 
 const timeFormat = "MMM DD, yyyy HH:mm";
 
@@ -251,21 +251,19 @@ const ScheduleMeetingDetail = ({ t }) => {
         />
       </div>
       {fetchLoading && (
-        <div className="h-96">
+        <div className="h-screen">
           <BrandLogoLoading />
         </div>
       )}
       {!fetchLoading && (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1">
               <GroupTitle icon={<IoTv />} title={t("schedule_meeting_new.schedule_new_meeting")} />
             </div>
-            <div className="flex-1 space-x-2 flex flex-row items-center justify-end">
+            <div className="space-x-2 flex flex-row items-center justify-end">
               <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
-                <button>
-                  <IoOptions className="text-black" />
-                </button>
+                <IoOptions className="text-black" />
               </div>
             </div>
           </div>
@@ -294,9 +292,10 @@ const ScheduleMeetingDetail = ({ t }) => {
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
-              <div className="flex flex-row justify-between space-x-4">
-                <div className="flex-1">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                <div className="sm:flex-1">
                   <Select
+                    className="w-full"
                     label={t("meeting.props.type")}
                     options={types}
                     register={register("type.uuid")}
@@ -304,8 +303,9 @@ const ScheduleMeetingDetail = ({ t }) => {
                     onChange={(e) => setType(e)}
                   />
                 </div>
-                <div className="flex-1">
+                <div className="sm:flex-1">
                   <Select
+                    className="w-full"
                     label={t("meeting.meeting_category.category")}
                     options={categories}
                     value={category}
@@ -313,8 +313,9 @@ const ScheduleMeetingDetail = ({ t }) => {
                     onChange={(e) => setCategory(e)}
                   />
                 </div>
-                <div className="flex-1">
+                <div className="sm:flex-1 w-full">
                   <DateTimePicker
+                    className="w-full"
                     label={t("meeting.props.start_date_time")}
                     placeholder="Mar 2, 2022 5:02 PM"
                     showTime
@@ -327,7 +328,7 @@ const ScheduleMeetingDetail = ({ t }) => {
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
-              <div className="flex flex-row justify-between space-x-4">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                 <div className="flex-1">
                   <Input
                     register={register("period")}
@@ -362,9 +363,9 @@ const ScheduleMeetingDetail = ({ t }) => {
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
-              <div className="flex flex-row items-center space-x-4">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                 <div className="form-control">
-                  <label className="label cursor-pointer flex justify-center items-center gap-2">
+                  <label className="label cursor-pointer flex sm:justify-center justify-start items-center gap-2">
                     <input
                       checked={accessibleViaLink}
                       type="checkbox"
@@ -378,7 +379,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                   </label>
                 </div>
                 <div className="form-control">
-                  <label className="label cursor-pointer flex justify-center items-center gap-2">
+                  <label className="label cursor-pointer flex sm:justify-center justify-start items-center gap-2">
                     <input
                       checked={accessibleToMembers}
                       type="checkbox"
@@ -426,24 +427,13 @@ const ScheduleMeetingDetail = ({ t }) => {
                   register={register("description")}
                 />
               </div>
-              <div className="w-full flex flex-row justify-between pt-8">
-                <div className="space-x-4">
-                  <Button className="btn btn-primary" isLoading={loading}>
-                    {t("schedule_meeting_new.save_meeting")}
-                  </Button>
-                </div>
-                <div className="space-x-4">
+              <div className="w-full sm:flex sm:flex-row justify-between pt-8 space-y-2 sm:space-y-0">
+                <div className="sm:space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
                   <Button
-                    onClick={(e) => handleSaveAndSave(e)}
-                    className="btn btn-primary"
+                    className="btn btn-primary btn-block sm:btn-wide"
                     isLoading={loading}
+                    onClick={() => onSubmit()}
                   >
-                    {t("schedule_meeting_new.save_and_send_meeting")}
-                  </Button>
-                  <Button className="btn-outline-base" type="button" isLoading={loading}>
-                    {t("general.reset")}
-                  </Button>
-                  <Button className="btn btn-primary" isLoading={loading}>
                     {t("schedule_meeting_new.save_meeting")}
                   </Button>
                 </div>
@@ -456,4 +446,4 @@ const ScheduleMeetingDetail = ({ t }) => {
   );
 };
 
-export default withNamespaces()(ScheduleMeetingDetail);
+export default withTranslation()(ScheduleMeetingDetail);
