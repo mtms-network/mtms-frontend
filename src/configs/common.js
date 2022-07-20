@@ -4,7 +4,8 @@ export const LIVE_URL = "https://api.mtms.live/";
 
 export const LIVE_API = "https://api.mtms.live/api";
 
-export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
+export const GOOGLE_CLIENT_ID =
+  "604052992702-lnrd7mi7iapok8jrhiohvok1s9m11k7l.apps.googleusercontent.com";
 
 export const BASE_API = {
   api: "/api",
