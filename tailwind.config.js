@@ -128,6 +128,9 @@ const componentPlugins = {
   ".text-cl-base": {
     color: "#1F1F1F",
   },
+  ".text-gray": {
+    color: "#787878",
+  },
 };
 module.exports = {
   content: ["./src/**/*.{html,js}"],

@@ -37,12 +37,15 @@ const JoinAMeeting = ({ className, t }) => {
         </div>
         <p className="label-base font-bold">{t("meeting.meeting_code")}</p>
         <div className="flex flex-row">
-          <Input
-            placeholder={t("meeting.enter_meeting_code")}
-            className="bg-gray-base-100 border-0"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-          />
+          <div className="w-full flex-1">
+            <Input
+              placeholder={t("meeting.enter_meeting_code")}
+              className="bg-gray-base-100 border-0"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+            />
+          </div>
+
           <div className="pl-2">
             <Button className="btn btn-primary" isLoading={loading} onClick={handleJoin}>
               {t("home.join_meeting_now")}

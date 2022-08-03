@@ -19,7 +19,7 @@ const Collapser = ({
 
   return (
     isShow && (
-      <GroupLayout className="delay-700 pl-0 pr-0 pt-0">
+      <GroupLayout className="delay-700">
         <div className="justify-between flex w-full">
           <p className="text-md font-semibold">{title}</p>
           <button

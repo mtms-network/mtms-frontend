@@ -74,7 +74,7 @@ const ScheduleHistoriesFilter = ({ onChange, loading }) => {
   }, [meetingStore.types]);
 
   return (
-    <div className="pl-4 pr-4">
+    <>
       <form>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <Input
@@ -108,7 +108,7 @@ const ScheduleHistoriesFilter = ({ onChange, loading }) => {
           Filter
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 

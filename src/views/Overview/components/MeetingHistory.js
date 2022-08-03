@@ -165,7 +165,7 @@ const MeetingHistory = ({ className, t }) => {
           />
         </div>
         <div className="flex w-full flex-1">
-          <div className="overflow-x-auto flex-1 border-1 rounded-lg">
+          <div className="overflow-x-auto flex-1 rounded-lg">
             {loading && <BrandLogoLoading />}
             {!loading && (
               <table className="table w-full">
