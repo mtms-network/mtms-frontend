@@ -32,7 +32,7 @@ const Pagination = ({
             disabled
             maxLength={4}
             placeholder="1"
-            className="input input-primary !bg-primary !text-white w-16 text-center max-w-xs border-0"
+            className="input input-primary !bg-primary !text-black w-16 text-center max-w-xs border-0"
             value={page}
           />
           <p className="text-dark-base">{`of ${totalPage}`}</p>

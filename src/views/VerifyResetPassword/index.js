@@ -77,7 +77,7 @@ export default function VerifyResetPassword() {
   return (
     <GuestFormLayout>
       <div className="pt-8 pb-4">
-        <p className="text-white text-lg">Forgot your Password</p>
+        <p className="text-black text-lg">Forgot your Password</p>
       </div>
       <div className="pt-4 w-full">
         <Alert

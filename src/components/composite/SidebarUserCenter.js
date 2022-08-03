@@ -10,12 +10,12 @@ const SidebarUserCenter = ({ t }) => {
   const navigate = useNavigate();
   const location = useLocation();
   return (
-    <div className="drawer-side bg-dark-base">
+    <div className="drawer-side">
       <label htmlFor="my-drawer-3" className="drawer-overlay" />
-      <div className="menu py-4 px-8 overflow-y-auto w-80 bg-dark-base">
+      <div className="menu py-4 px-8 overflow-y-auto w-80">
         <div>
           <button onClick={() => navigate("/")}>
-            <img src="/images/mtms-logo.png" alt="logo" />
+            <img className="h-14" src="/images/mtms-logo.png" alt="logo" />
           </button>
         </div>
         <div className="pt-8 space-y-4">

@@ -17,7 +17,7 @@ export const InputSingle = ({
       <input
         type={type}
         className={classNames(
-          "input input-bordered w-full text-black",
+          "input input-bordered w-full text-black bg-slate-base border-0 rounded-full",
           error && "input-error",
           className || "input-md",
         )}
@@ -48,7 +48,7 @@ const Input = ({
       required={required}
       label={label}
       error={error}
-      labelClassName={classNames(isLabelWhite && "!text-white", labelClassName)}
+      labelClassName={classNames(isLabelWhite && "!text-black", labelClassName)}
     >
       <InputSingle
         type={type}
