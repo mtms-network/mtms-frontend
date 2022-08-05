@@ -70,7 +70,7 @@ export default function ResetPassword() {
   return (
     <GuestFormLayout>
       <div className="pt-8 pb-4">
-        <p className="text-white text-lg">Reset Your Account</p>
+        <p className="text-black text-lg">Reset Your Account</p>
       </div>
       <div className="pt-4 w-full">
         <Alert

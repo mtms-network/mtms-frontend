@@ -105,48 +105,52 @@ const MeetingHistory = ({ className, t }) => {
   }, [meetingStore.isForceLoadMeetingHistories, filter]);
 
   return (
-    <div className={classnames([className])}>
-      <GroupLayout className="flex flex-col w-full">
-        <div className="flex flex-row justify-between w-full mb-3">
-          <div className="flex-1">
-            <GroupTitle icon={<IoRadio />} title={t("meeting.meeting_history")} />
-          </div>
-          <div className="space-x-2 flex flex-row w-auto items-center justify-end">
-            <div className="tooltip" data-tip="Filter">
-              <button>
-                <IoFilterCircle
-                  className="text-black group-hover:text-primary"
-                  onClick={() => {
-                    setIsShowFilter(!isShowFilter);
-                  }}
-                />
-              </button>
+    <div className={classnames([className, "flex flex-col pt-8"])}>
+      <GroupLayout
+        className="flex flex-col w-full"
+        titleComponent={
+          <div className="flex flex-row justify-between w-full">
+            <div className="flex-1">
+              <GroupTitle icon={<IoRadio />} title={t("meeting.meeting_history")} />
             </div>
-            <div className="tooltip" data-tip="Sort">
-              <button>
-                <IoSwapVertical
-                  className="text-black group-hover:text-primary"
-                  onClick={() => {
-                    setSort(!sort);
-                  }}
-                />
-                {sort ? (
-                  <Sorting
-                    onSort={onChangeFilter}
-                    order={filter.order}
-                    sortBy={filter.sort_by}
-                    contentField={ConfigOverview.arrFieldSort}
+            <div className="space-x-2 flex flex-row w-auto items-center justify-end">
+              <div className="tooltip" data-tip="Filter">
+                <button>
+                  <IoFilterCircle
+                    className="text-black group-hover:text-primary"
+                    onClick={() => {
+                      setIsShowFilter(!isShowFilter);
+                    }}
                   />
-                ) : null}
-              </button>
-            </div>
-            <div className="tooltip" data-tip="Option">
-              <button>
-                <IoOptions className="text-black group-hover:text-primary" />
-              </button>
+                </button>
+              </div>
+              <div className="tooltip" data-tip="Sort">
+                <button>
+                  <IoSwapVertical
+                    className="text-black group-hover:text-primary"
+                    onClick={() => {
+                      setSort(!sort);
+                    }}
+                  />
+                  {sort ? (
+                    <Sorting
+                      onSort={onChangeFilter}
+                      order={filter.order}
+                      sortBy={filter.sort_by}
+                      contentField={ConfigOverview.arrFieldSort}
+                    />
+                  ) : null}
+                </button>
+              </div>
+              <div className="tooltip" data-tip="Option">
+                <button>
+                  <IoOptions className="text-black group-hover:text-primary" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        }
+      >
         <div>
           <Collapser
             show={isShowFilter}
@@ -160,8 +164,8 @@ const MeetingHistory = ({ className, t }) => {
             }
           />
         </div>
-        <div className="flex pt-4 w-full flex-1">
-          <div className="overflow-x-auto flex-1  border-1 rounded-lg">
+        <div className="flex w-full flex-1">
+          <div className="overflow-x-auto flex-1 rounded-lg">
             {loading && <BrandLogoLoading />}
             {!loading && (
               <table className="table w-full">
@@ -179,10 +183,10 @@ const MeetingHistory = ({ className, t }) => {
                 <tbody className="border-0">
                   {histories.data?.map((item) => (
                     <tr className="text-cl-base text-xs border-0" key={item?.uuid}>
-                      <td>{item?.user?.profile?.name}</td>
-                      <td>{item?.type?.name.toUpperCase()}</td>
-                      <td>{item?.identifier}</td>
-                      <td className="space-x-2">
+                      <td className="bg-white">{item?.user?.profile?.name}</td>
+                      <td className="bg-white">{item?.type?.name.toUpperCase()}</td>
+                      <td className="bg-white">{item?.identifier}</td>
+                      <td className="space-x-2 bg-white">
                         <button className="btn btn-square btn-xs bg-primary border-0">
                           <IoShareOutline />
                         </button>
@@ -190,13 +194,15 @@ const MeetingHistory = ({ className, t }) => {
                           <IoPeople />
                         </button>
                       </td>
-                      <td>
+                      <td className="bg-white">
                         <p className={item.status === "live" ? "text-primary" : ""}>
                           {mapHistories(item).statusName}
                         </p>
                       </td>
-                      <td>{item?.start_date_time}</td>
-                      <td className="flex justify-center align-middle">{item?.ended_at || "-"}</td>
+                      <td className="bg-white">{item?.start_date_time}</td>
+                      <td className="flex justify-center align-middle bg-white">
+                        {item?.ended_at || "-"}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

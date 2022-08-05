@@ -129,13 +129,13 @@ export default function Login() {
     return (
       <GuestFormLayout>
         <div className="pt-8 pb-4">
-          <p className="text-white text-lg">Login to your Account</p>
+          <p className="text-black text-lg">Login to your Account</p>
         </div>
         <div className="w-full">
-          <button className="btn btn-block btn-primary">Connect Wallet</button>
+          <Button className="btn-block btn-primary">Connect Wallet</Button>
         </div>
         <div className="w-full pt-4">
-          <button className="btn btn-base">Connect Avalanche</button>
+          <Button className="btn-block btn-primary">Connect Avalanche</Button>
         </div>
         <div className="pt-4 w-full">
           <Alert
@@ -195,7 +195,7 @@ export default function Login() {
           </div>
         </div>
         <div className="pt-10 pb-14">
-          <p className="text-white text-lg">Login to your Account</p>
+          <p className="text-black text-lg">Login to your Account</p>
         </div>
         <div className="pt-4 w-full">
           <Alert

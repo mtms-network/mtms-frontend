@@ -27,8 +27,8 @@ const Select = ({
         {...rest}
         bordered={false}
         className={classNames(
-          "w-full text-black",
-          "input input-bordered",
+          "w-full text-black bg-slate-base",
+          "input rounded-full",
           "flex items-center",
           "ml-0 pl-0",
           error && "input-error",

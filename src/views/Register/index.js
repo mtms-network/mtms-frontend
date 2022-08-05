@@ -70,7 +70,7 @@ export default function Register() {
   return (
     <GuestFormLayout>
       <div className="pt-8 pb-4">
-        <p className="text-white text-lg">Create Your Account</p>
+        <p className="text-black text-lg">Create Your Account</p>
       </div>
       <div className="w-full">
         <button className="btn btn-block btn-primary">Connect Wallet</button>

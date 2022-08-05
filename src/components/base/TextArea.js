@@ -9,7 +9,7 @@ const TextArea = ({ className, label, type, error, register, disabled, required,
         <textarea
           type={type}
           className={classNames(
-            "textarea h-24 textarea-bordered w-full text-black",
+            "textarea h-24 w-full text-black bg-slate-base rounded-lg",
             error && "textarea-error",
             className || "textarea-md",
           )}

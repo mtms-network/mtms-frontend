@@ -57,10 +57,11 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
           <NavbarLayout width={width} onLogout={handleLogout} />
-          <div className={classNames("bg-white relative")}>
+          <div className={classNames("relative min-h-screen")}>
             <div
               className={classNames(
-                "flex flex-col pt-20 sm:pt-28 pb-28 overflow-y-auto px-4 relative",
+                "flex flex-col pt-20 sm:pt-22 pb-28 overflow-y-auto px-4 relative",
+                "min-h-full bg-gray-base",
                 contentClassName,
               )}
             >

@@ -99,9 +99,12 @@ const ScheduleHistoriesFilter = ({ onChange, loading }) => {
           />
         </div>
       </form>
-
       <div className="pt-4">
-        <Button className="btn btn-primary btn-sm mr-4" isLoading={loading} onClick={handleSubmit(onSubmit)}>
+        <Button
+          className="btn btn-primary btn-sm mr-4"
+          isLoading={loading}
+          onClick={handleSubmit(onSubmit)}
+        >
           Filter
         </Button>
       </div>

@@ -21,12 +21,12 @@ const DateTimePicker = ({
       required={required}
       label={label}
       error={error}
-      labelClassName={classNames(isLabelWhite && "!text-white", labelClassName)}
+      labelClassName={classNames(isLabelWhite && "!text-black", labelClassName)}
     >
       <DatePicker
         onOk={onOk}
         className={classNames(
-          "input input-bordered w-full text-black hover:border-opacity-20 hover:border-slate-300",
+          "input w-full text-black bg-slate-base rounded-full hover:border-opacity-20 hover:border-slate-300",
           error && "input-error",
           className || "input-md",
         )}
