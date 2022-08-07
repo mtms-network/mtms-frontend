@@ -40,6 +40,7 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
         });
         setLoading(false);
       }
+    // eslint-disable-next-line no-empty
     } catch (error) {}
   };
 

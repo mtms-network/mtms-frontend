@@ -13,9 +13,10 @@ const DateTimePicker = ({
   labelClassName,
   isLabelWhite,
   onChange,
-  onOk,
+  onChangeDateTime,
   ...rest
 }) => {
+
   return (
     <FormControl
       required={required}
@@ -24,13 +25,13 @@ const DateTimePicker = ({
       labelClassName={classNames(isLabelWhite && "!text-black", labelClassName)}
     >
       <DatePicker
-        onOk={onOk}
         className={classNames(
           "input w-full text-black bg-slate-base rounded-full hover:border-opacity-20 hover:border-slate-300",
           error && "input-error",
           className || "input-md",
         )}
         {...rest}
+        onChange={onChangeDateTime}
       />
     </FormControl>
   );

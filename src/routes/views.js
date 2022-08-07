@@ -13,6 +13,7 @@ export const ScheduleMeetingHistories = lazy(() =>
 );
 export const ScheduleMeetingItem = lazy(() => import("views/ScheduleMeeting/containers/New"));
 export const ScheduleMeetingDetail = lazy(() => import("views/ScheduleMeeting/containers/Detail"));
+export const ScheduleMeetingView = lazy(() => import("views/ScheduleMeeting/containers/View"));
 export const VerifyResetPassword = lazy(() => import("views/VerifyResetPassword"));
 export const Profile = lazy(() => import("views/Profile"));
 export const ComingSoon = lazy(() => import("views/Common/ComingSoon"));
