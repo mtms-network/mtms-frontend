@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Alert, Button, GoogleButton, GuestFormLayout, Input } from "components";
+import { Alert, Button, GoogleButton, GuestFormLayout, Input, WalletButton } from "components";
 import { useNavigate } from "react-router-dom";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signIn } from "services";
@@ -116,6 +116,37 @@ export default function Login() {
     navigate(`/${routeUrls.register.path}`);
   };
 
+  const CommonLogin = useMemo(
+    () => (
+      <>
+        <div className="pb-4">
+          <p className="text-black text-3xl font-bold">Login To Your Account</p>
+          <div className="flex flex-row w-full pt-1">
+            <p className="pr-2 text-xs">Don’t have an account?</p>
+            <a className="btn-text-primary text-xs" onClick={onRegister}>
+              Register
+            </a>
+          </div>
+        </div>
+        <div className="pt-6">
+          <p className="text-black-base text-lg font-bold pb-3">Log In With Social</p>
+          <GoogleButton showTitle />
+        </div>
+        <div>
+          <div className="divider mt-2 mb-2 text-hint">Or</div>
+          <p className="text-black-base text-lg font-bold pb-3 pt-4">Log In With Crypto Wallet</p>
+          <div className="flex flex-row space-x-4">
+            <WalletButton name="Oasis" src="/icons/oasis-logo.png" />
+            <WalletButton name="Avalanche" src="/icons/avalanche-logo.png" />
+            <WalletButton name="Binance" src="/icons/binance-logo.png" />
+            <WalletButton name="Metamask" src="/icons/metamask-logo.png" />
+          </div>
+        </div>
+      </>
+    ),
+    [],
+  );
+
   useAuth();
 
   useEffect(() => {
@@ -128,59 +159,55 @@ export default function Login() {
   const renderLogin = () => {
     return (
       <GuestFormLayout>
-        <div className="pt-8 pb-4">
-          <p className="text-black text-lg">Login to your Account</p>
-        </div>
-        <div className="w-full">
-          <Button className="btn-block btn-primary">Connect Wallet</Button>
-        </div>
-        <div className="w-full pt-4">
-          <Button className="btn-block btn-primary">Connect Avalanche</Button>
-        </div>
-        <div className="pt-4 w-full">
-          <Alert
-            {...{ ...alert }}
-            onClose={() => {
-              setAlert({ ...alert, show: false });
-            }}
-          />
-        </div>
-        <div className="w-full">
-          <GoogleButton />
-        </div>
-        <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
-          <div className="w-full pt-6">
-            <Input
-              isLabelWhite
-              className="w-full"
-              register={register("email")}
-              label="Email"
-              placeholder="Enter your email"
-              error={errors.email}
-            />
-            <Input
-              isLabelWhite
-              className="w-full"
-              type="password"
-              register={register("password")}
-              label="Password"
-              placeholder="***********"
-              error={errors.password}
-            />
-          </div>
-          <div className="w-full pt-9">
-            <Button className="btn-block btn-primary" isLoading={loading}>
-              Login
-            </Button>
-          </div>
-        </form>
-        <div className="flex flex-row justify-between w-full pt-6">
-          <a className="text-[13px] btn-link-dark" onClick={onForgetPassword}>
-            Forget Password?
-          </a>
-          <a className="text-[13px] btn-link-light" onClick={onRegister}>
-            Click to Register
-          </a>
+        <div>
+          {CommonLogin}
+          <div className="divider mt-2 mb-2 text-hint">Or</div>
+          <p className="text-black-base text-lg font-bold pb-2 pt-4">Log In With Email</p>
+          {alert?.show && (
+            <div className="py-4 w-full">
+              <Alert
+                {...{ ...alert }}
+                onClose={() => {
+                  setAlert({ ...alert, show: false });
+                }}
+              />
+            </div>
+          )}
+          <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
+            <div className="w-full">
+              <div>
+                <Input
+                  className="w-full"
+                  register={register("email")}
+                  label="Email"
+                  placeholder="Enter your email"
+                  error={errors.email}
+                  labelClassName="font-medium"
+                />
+              </div>
+              <div className="pt-4">
+                <Input
+                  className="w-full"
+                  type="password"
+                  register={register("password")}
+                  label="Password"
+                  placeholder="***********"
+                  error={errors.password}
+                  labelClassName="font-medium"
+                  labelRightComponent={
+                    <a className="btn-text-primary text-md" onClick={onForgetPassword}>
+                      Forget Password?
+                    </a>
+                  }
+                />
+              </div>
+            </div>
+            <div className="w-full pt-5">
+              <Button className="btn-primary rounded-full btn-wide" isLoading={loading}>
+                Login
+              </Button>
+            </div>
+          </form>
         </div>
       </GuestFormLayout>
     );
@@ -189,47 +216,56 @@ export default function Login() {
   const renderUnlock = () => {
     return (
       <GuestFormLayout>
-        <div className="pt-8 pb-4">
-          <div className="w-32 h-32 border-base rounded-full flex justify-center items-center bg-color-base-200">
-            <p className="text-4xl uppercase">{user?.username.slice(0, 2) || "HI"}</p>
-          </div>
-        </div>
-        <div className="pt-10 pb-14">
-          <p className="text-black text-lg">Login to your Account</p>
-        </div>
-        <div className="pt-4 w-full">
-          <Alert
-            {...{ ...alert }}
-            onClose={() => {
-              setAlert({ ...alert, show: false });
-            }}
-          />
-        </div>
-        <form className="w-full h-auto" onSubmit={handleSubmitUnlock(onUnlock)}>
-          <div className="w-full">
-            <Input
-              isLabelWhite
-              className="w-full"
-              type="password"
-              register={registerUnlock("password")}
-              label="Password"
-              placeholder="***********"
-              error={errorsUnlock.password}
-            />
-          </div>
-          <div className="w-full pt-9">
-            <Button className="btn-block btn-primary" isLoading={loading}>
+        {CommonLogin}
+        <div>
+          <div className="divider mt-2 mb-2 text-hint">Or</div>
+          <p className="text-black-base text-lg font-bold pb-2 pt-4">Log in with Email</p>
+          {alert?.show && (
+            <div className="py-4 w-full">
+              <Alert
+                {...{ ...alert }}
+                onClose={() => {
+                  setAlert({ ...alert, show: false });
+                }}
+              />
+            </div>
+          )}
+          <form className="w-full h-auto" onSubmit={handleSubmitUnlock(onUnlock)}>
+            <div className="w-full">
+              <div>
+                <Input
+                  className="w-full"
+                  type="password"
+                  register={registerUnlock("password")}
+                  label="Password"
+                  placeholder="***********"
+                  error={errorsUnlock.password}
+                  labelClassName="font-medium"
+                  labelRightComponent={
+                    <a className="btn-text-primary text-md" onClick={onForgetPassword}>
+                      Forget Password?
+                    </a>
+                  }
+                />
+              </div>
+            </div>
+          </form>
+          <div className="w-full pt-5 flex justify-between items-center">
+            <Button
+              className="btn-primary rounded-full btn-wide"
+              isLoading={loading}
+              onClick={handleSubmitUnlock(onUnlock)}
+            >
               Login
             </Button>
+            <Button
+              className="btn-primary rounded-full btn-wide btn-ghost text-primary"
+              isLoading={loading}
+              onClick={onClearUserInfo}
+            >
+              Logout
+            </Button>
           </div>
-        </form>
-        <div className="flex flex-row justify-between w-full pt-6">
-          <a className="text-xs btn-link-dark" onClick={onForgetPassword}>
-            Forget Password?
-          </a>
-          <a className="text-xs btn-link-light" onClick={onClearUserInfo}>
-            Logout
-          </a>
         </div>
       </GuestFormLayout>
     );

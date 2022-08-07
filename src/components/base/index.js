@@ -8,3 +8,6 @@ export { default as Select } from "./Select";
 export { default as DateTimePicker } from "./DateTimePicker";
 export { default as Collapser } from "./Collapser";
 export { default as Sorting } from "./Sort";
+export { default as Icon } from "./Icon";
+export { default as IconBase } from "./IconBase";
+export { default as IconButton } from "./IconButton";

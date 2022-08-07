@@ -16,6 +16,8 @@ import {
   Pagination,
   Collapser,
   Sorting,
+  Icon,
+  IconButton,
 } from "components";
 import { ScheduleHistoriesFilter } from "views/ScheduleMeeting/components";
 import { getMeetingHistories, getRequirePreMeeting } from "services";
@@ -109,28 +111,28 @@ const MeetingHistory = ({ className, t }) => {
       <GroupLayout
         className="flex flex-col w-full"
         titleComponent={
-          <div className="flex flex-row justify-between w-full">
+          <div className="flex flex-row justify-between items-center w-full">
             <div className="flex-1">
-              <GroupTitle icon={<IoRadio />} title={t("meeting.meeting_history")} />
+              <GroupTitle title={t("meeting.meeting_history")} className="!pb-0" />
             </div>
-            <div className="space-x-2 flex flex-row w-auto items-center justify-end">
+            <div className="space-x-2 py-2 flex flex-row w-auto items-center justify-end">
               <div className="tooltip" data-tip="Filter">
-                <button>
-                  <IoFilterCircle
-                    className="text-black group-hover:text-primary"
-                    onClick={() => {
-                      setIsShowFilter(!isShowFilter);
-                    }}
-                  />
-                </button>
+                <IconButton
+                  onClick={() => {
+                    setIsShowFilter(!isShowFilter);
+                  }}
+                  src="/icons/icons/filter-outline.svg"
+                  alt="Filter"
+                />
               </div>
               <div className="tooltip" data-tip="Sort">
                 <button>
-                  <IoSwapVertical
-                    className="text-black group-hover:text-primary"
+                  <IconButton
                     onClick={() => {
                       setSort(!sort);
                     }}
+                    src="/icons/icons/sort-outline.svg"
+                    alt="Sort"
                   />
                   {sort ? (
                     <Sorting
@@ -143,9 +145,7 @@ const MeetingHistory = ({ className, t }) => {
                 </button>
               </div>
               <div className="tooltip" data-tip="Option">
-                <button>
-                  <IoOptions className="text-black group-hover:text-primary" />
-                </button>
+                <IconButton onClick={() => {}} src="/icons/icons/more-outline.svg" alt="Option" />
               </div>
             </div>
           </div>
@@ -175,61 +175,36 @@ const MeetingHistory = ({ className, t }) => {
                     <th className="bg-white">{t("meeting.props.type")}</th>
                     <th className="bg-white">{t("meeting.props.identifier")}</th>
                     <th className="bg-white" />
-                    <th className="bg-white">{t("meeting.props.status")}</th>
                     <th className="bg-white">{t("meeting.started_at")}</th>
                     <th className="bg-white">{t("meeting.ended_at")}</th>
+                    <th className="bg-white">{t("meeting.props.status")}</th>
                   </tr>
                 </thead>
                 <tbody className="border-0">
                   {histories.data?.map((item) => (
-                    <tr className="text-cl-base text-xs border-0" key={item?.uuid}>
+                    <tr className="text-cl-base text-md border-0 table-row" key={item?.uuid}>
                       <td className="bg-white">{item?.user?.profile?.name}</td>
-                      <td className="bg-white">{item?.type?.name.toUpperCase()}</td>
+                      <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
                       <td className="bg-white">{item?.identifier}</td>
                       <td className="space-x-2 bg-white">
-                        <button className="btn btn-square btn-xs bg-primary border-0">
-                          <IoShareOutline />
-                        </button>
                         <button>
-                          <IoPeople />
+                          <Icon src="/icons/icons/paperclip-fill.svg" alt="share" />
                         </button>
+                      </td>
+                      <td className="bg-white">{item?.start_date_time}</td>
+                      <td className="flex justify-center align-middle bg-white">
+                        {item?.ended_at || "-"}
                       </td>
                       <td className="bg-white">
                         <p className={item.status === "live" ? "text-primary" : ""}>
                           {mapHistories(item).statusName}
                         </p>
                       </td>
-                      <td className="bg-white">{item?.start_date_time}</td>
-                      <td className="flex justify-center align-middle bg-white">
-                        {item?.ended_at || "-"}
-                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             )}
-            <div className="p-4">
-              <Pagination
-                page={histories.pagination?.current_page}
-                totalPage={histories.pagination?.last_page}
-                total={histories.pagination?.total}
-                limit={histories.pagination?.per_page}
-                from={histories.pagination?.from}
-                to={histories.pagination?.to}
-                onNext={() => {
-                  if (filter.page < histories.pagination?.last_page) {
-                    const nextPage = filter.page + 1;
-                    setFilter({ ...filter, page: nextPage });
-                  }
-                }}
-                onBack={() => {
-                  if (filter.page <= histories.pagination?.last_page && filter.page > 1) {
-                    const nextPage = filter.page - 1;
-                    setFilter({ ...filter, page: nextPage });
-                  }
-                }}
-              />
-            </div>
           </div>
         </div>
       </GroupLayout>

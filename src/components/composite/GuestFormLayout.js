@@ -1,15 +1,28 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function GuestFormLayout({ children }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex items-center justify-center px-4 py-6 md:px-0 h-auto min-h-screen">
-      <div className="w-full sm:w-[70%] lg:w-[40%]">
-        <div className="flex flex-col items-center form-base w-full py-8 px-6 sm:p-6">
-          <div>
-            <img className="h-14" src="/images/mtms-logo.png" alt="logo" />
-          </div>
-          {children}
+    <div className="flex flex-row">
+      <div className="flex-1 flex flex-col justify-center bg-blue-base pl-20 pr-12 min-h-screen">
+        <div>
+          <button onClick={() => navigate("/")}>
+            <img className="h-14" src="/images/mtms-logo-white.png" alt="logo" />
+          </button>
         </div>
+        <div>
+          <p className="text-white font-bold text-4xl pt-16">{`THE FIRST AND ONLY
+            MEET & EARN PLATFORM`}</p>
+          <p className="text-white text-base pt-4">MTMS: More Time, More Savings</p>
+        </div>
+        <div>
+          <img src="/images/welcome.png" alt="welcome" />
+        </div>
+      </div>
+      <div className="flex-1 flex flex-col justify-center px-20 bg-white min-h-screen">
+        <div className="">{children}</div>
       </div>
     </div>
   );

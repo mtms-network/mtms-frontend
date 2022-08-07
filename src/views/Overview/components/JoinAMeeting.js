@@ -45,9 +45,8 @@ const JoinAMeeting = ({ className, t }) => {
               onChange={(e) => setCode(e.target.value)}
             />
           </div>
-
           <div className="pl-2">
-            <Button className="btn btn-primary" isLoading={loading} onClick={handleJoin}>
+            <Button className="btn-primary" isLoading={loading} onClick={handleJoin}>
               {t("home.join_meeting_now")}
             </Button>
           </div>

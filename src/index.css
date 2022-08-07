@@ -1,7 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "antd/dist/antd.css";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 @import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 * {
@@ -17,7 +17,7 @@ html {
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 a {
@@ -30,4 +30,9 @@ td {
 
 .ant-select-multiple .ant-select-selector {
   width: 100%;
+}
+.divider:before,
+.divider:after {
+  height: 1px !important;
+  background-color: #ebebeb;
 }

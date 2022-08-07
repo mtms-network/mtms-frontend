@@ -45,6 +45,14 @@ const componentPlugins = {
       color: "#0981A2",
     },
   },
+  ".btn-text-primary": {
+    cursor: "pointer",
+    color: "#0391FE",
+    fontWeight: 700,
+    "&:hover": {
+      color: "#0F56B9",
+    },
+  },
   ".btn-outlined-base": {
     fontWeight: 300,
     color: "#0391fe",
@@ -100,6 +108,11 @@ const componentPlugins = {
     borderColor: " #EBEBEB",
     borderRadius: 10,
   },
+  ".border-wallet-button": {
+    borderWidth: 1,
+    borderColor: "#EBEBEB",
+    borderRadius: 20,
+  },
   ".nav-link": {
     color: "white",
   },
@@ -130,6 +143,21 @@ const componentPlugins = {
   },
   ".text-gray": {
     color: "#787878",
+  },
+  ".bg-blue-base": {
+    backgroundColor: "#0F56B9",
+  },
+  ".text-hint": {
+    color: "#B0B0B0",
+  },
+  ".text-black-base": {
+    color: "#454545",
+  },
+  ".table-row": {
+    ">td": {
+      paddingBottom: 10,
+      paddingTop: 10,
+    },
   },
 };
 module.exports = {
