@@ -205,6 +205,33 @@ const MeetingHistory = ({ className, t }) => {
                 </tbody>
               </table>
             )}
+            <div className="p-4">
+              <Pagination
+                page={histories.pagination?.current_page}
+                totalPage={histories.pagination?.last_page}
+                total={histories.pagination?.total}
+                limit={histories.pagination?.per_page}
+                from={histories.pagination?.from}
+                to={histories.pagination?.to}
+                onNext={() => {
+                  if (filter.page < histories.pagination?.last_page) {
+                    const nextPage = filter.page + 1;
+                    setFilter({ ...filter, page: nextPage });
+                  }
+                }}
+                onBack={() => {
+                  if (filter.page <= histories.pagination?.last_page && filter.page > 1) {
+                    const nextPage = filter.page - 1;
+                    setFilter({ ...filter, page: nextPage });
+                  }
+                }}
+                onPage={(page) => {
+                  if (page !== histories.pagination?.current_page) {
+                    setFilter({ ...filter, page });
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
       </GroupLayout>
