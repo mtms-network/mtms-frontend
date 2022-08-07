@@ -72,6 +72,18 @@ const componentPlugins = {
     height: 10,
     minHeight: 34,
   },
+  ".btn-white": {
+    fontWeight: 900,
+    color: "#454545",
+    borderRadius: '20px',
+    backgroundColor: "#fff",
+    border: 1,
+    borderStyle: 'solid',
+    "&:hover": {
+      color: "#454545",
+      backgroundColor: "#fff",
+    }
+  },
   // ".btn-outline-base": {
   //   color: "#000",
   //   borderWidth: 1,

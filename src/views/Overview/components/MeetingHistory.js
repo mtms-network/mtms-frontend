@@ -184,7 +184,7 @@ const MeetingHistory = ({ className, t }) => {
                   {histories.data?.map((item) => (
                     <tr className="text-cl-base text-xs border-0" key={item?.uuid}>
                       <td className="bg-white">{item?.user?.profile?.name}</td>
-                      <td className="bg-white">{item?.type?.name.toUpperCase()}</td>
+                      <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
                       <td className="bg-white">{item?.identifier}</td>
                       <td className="space-x-2 bg-white">
                         <button className="btn btn-square btn-xs bg-primary border-0">

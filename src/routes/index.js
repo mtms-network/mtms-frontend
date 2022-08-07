@@ -13,6 +13,7 @@ import {
   ScheduleMeetingDetail,
   Profile,
   ComingSoon,
+  ScheduleMeetingView,
 } from "./views";
 
 const Routers = () => {
@@ -35,6 +36,10 @@ const Routers = () => {
         <Route
           path={`/${routeUrls.scheduleMeeting.path}/:meetingId`}
           element={<ScheduleMeetingDetail />}
+        />
+        <Route
+          path={`/${routeUrls.scheduleMeeting.path}/view/:meetingId`}
+          element={<ScheduleMeetingView />}
         />
         <Route path={`/${routeUrls.profile.path}`} element={<Profile />} />
         <Route index element={<Overview />} />

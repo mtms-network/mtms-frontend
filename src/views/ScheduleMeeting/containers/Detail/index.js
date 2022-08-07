@@ -1,5 +1,7 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import {
   Button,
@@ -33,7 +35,7 @@ import {
 } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 
-const timeFormat = "MMM DD, yyyy HH:mm";
+const timeFormat = "MMM DD, yyyy";
 
 const ScheduleMeetingDetail = ({ t }) => {
   const params = useParams();
@@ -42,15 +44,13 @@ const ScheduleMeetingDetail = ({ t }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [types, setTypes] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [description, setDescription] = useState(null);
-  const [accessibleToMembers, setAccessibleToMembers] = useState(false);
-  const [accessibleViaLink, setAccessibleViaLink] = useState(false);
   const [startDateTime, setStartDateTime] = useState(null);
-  const [emails, setEmails] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [category, setCategory] = useState(null);
   const [type, setType] = useState(null);
+  const [startTime, setStartTime] = useState(0);
+  const [durationHour, setDurationHour] = useState(0);
+  const [durationMinute, setDurationMinute] = useState(0);
   const [alert, setAlert] = useState({
     show: false,
     message: "",
@@ -91,39 +91,31 @@ const ScheduleMeetingDetail = ({ t }) => {
         key: item.uuid,
         value: item.name,
       }));
-      setCategories(list);
+      // setCategories(list);
     }
   };
 
-  const onSubmit = async (values, sendInvite = false) => {
+  const onSubmit = async (values) => {
     try {
+
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-
       values.description = description
         ? draftToHtml(convertToRaw(description.getCurrentContent()))
         : "";
-      values.accessible_to_members = accessibleToMembers;
-      values.accessible_via_link = accessibleViaLink;
-      values.fee = 0;
       values.is_paid = false;
       values.is_pam = false;
       values.uuid = params.meetingId;
-      values.start_date_time = startDateTime;
-      values.emails = emails;
+      values.start_date_time = startDateTime.add(startTime, "hours").format('YYYY-MM-DD HH:mm:ss');
+
       values.contacts = contacts.map((value) => {
         return { uuid: value };
       });
-      values.category.uuid = category;
-      values.type.uuid = type;
-
+      values.type = {uuid: type};
+      values.period = durationHour * 60 + durationMinute;
+      delete values.identifier;
       const client = createPrivateInstance(BASE_API.meeting);
-      const res = await client.patch(`/${params.meetingId}`, values);
-
-      if (sendInvite === true) {
-        const client = createPrivateInstance(`/meetings/${params.meetingId}/invitation`);
-        const res = await client.post("", values);
-      }
+      await client.patch(`/${params.meetingId}`, values);
 
       setLoading(false);
       navigate(`/${routeUrls.scheduleMeeting.path}`);
@@ -141,7 +133,7 @@ const ScheduleMeetingDetail = ({ t }) => {
     }
   };
 
-  const onOk = (e) => {
+  const onChangeDateTime = (e) => {
     setStartDateTime(
       moment(
         `${e._d.getFullYear()}-${(e._d.getMonth() + 1).toString().padStart(2, "0")}-${e._d
@@ -151,14 +143,9 @@ const ScheduleMeetingDetail = ({ t }) => {
           .getMinutes()
           .toString()
           .padStart(2, "0")}:${e._d.getSeconds().toString().padStart(2, "0")}`,
-        "YYYY-MM-DD HH:mm:ss",
+        "YYYY-MM-DD",
       ),
     );
-  };
-
-  const handleSaveAndSave = (e) => {
-    e.preventDefault();
-    handleSubmit(onSubmit)(true);
   };
 
   const fetchMeeting = async () => {
@@ -168,29 +155,32 @@ const ScheduleMeetingDetail = ({ t }) => {
         updateMeetingStore((draft) => {
           draft.meeting = res;
         });
-        setCategory(res.category.uuid);
         setType(res.type.uuid);
         setValue("agenda", res.agenda);
         setValue("title", res.title);
-        setValue("period", res.period);
         setValue("identifier", res.identifier);
         setValue("max_participant_count", res.max_participant_count);
-        setAccessibleViaLink(res.accessible_via_link);
-        setAccessibleToMembers(res.accessible_to_members);
+        const startDate = moment(res.start_date_time, "YYYY-MM-DD");
+        const time = parseInt(moment(res.start_date_time).format("HH"), 10);
+        setStartDateTime(startDate);
+        setStartTime(time);
+        setDurationHour(Math.floor(res.period / 60));
+        setDurationMinute(res.period % 60);
         setDescription(
           EditorState.createWithContent(
             ContentState.createFromBlockArray(convertFromHTML(res.description)),
           ),
         );
-        const startDate = moment(res.start_date_time, "YYYY-MM-DD HH:mm:ss");
-        setStartDateTime(startDate);
         const currentContacts = [];
         res.invitees.map((item, idx) => {
           currentContacts.push(item.contact.uuid);
+          return 1;
         });
         setContacts(currentContacts);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("ScheduleMeetingDetail", error);
+    }
   };
 
   const fetchContact = async () => {
@@ -204,7 +194,9 @@ const ScheduleMeetingDetail = ({ t }) => {
         }));
         setListContacts(list);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("ScheduleMeetingDetail fetchContact", error);
+    }
   };
 
   const fetchCommonData = async () => {
@@ -218,17 +210,18 @@ const ScheduleMeetingDetail = ({ t }) => {
           draft.isForceLoadMeetingHistories = true;
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("ScheduleMeetingDetail fetchCommonDate", error);
+    }
   };
 
   const fetchData = async () => {
     try {
       setFetchLoading(true);
-      if (!meetingStore.isForceLoadMeetingHistories) {
-        await fetchCommonData();
-        await fetchContact();
-        await fetchMeeting();
-      }
+      await fetchCommonData();
+      await fetchContact();
+      await fetchMeeting();
+
       await prepareData();
       setFetchLoading(false);
     } catch (error) {
@@ -238,8 +231,7 @@ const ScheduleMeetingDetail = ({ t }) => {
 
   useEffect(() => {
     fetchData();
-  }, [meetingStore.isForceLoadMeetingHistories]);
-
+  }, [params.meetingId]);
   return (
     <MainLayout>
       <div className="pt-4 w-full">
@@ -256,18 +248,13 @@ const ScheduleMeetingDetail = ({ t }) => {
         </div>
       )}
       {!fetchLoading && (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row justify-between w-full py-2">
-            <div className="flex-1">
+            <div className="flex-1 text-center">
               <GroupTitle icon={<IoTv />} title={t("schedule_meeting_new.schedule_new_meeting")} />
             </div>
-            <div className="space-x-2 flex flex-row items-center justify-end">
-              <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
-                <IoOptions className="text-black" />
-              </div>
-            </div>
           </div>
-          <div className="space-y-4">
+          <div className="w-[60%] m-auto bg-white rounded-[20px]">
             <GroupLayout className="flex flex-col justify-between">
               <div className="w-full h-auto">
                 <Input
@@ -283,72 +270,79 @@ const ScheduleMeetingDetail = ({ t }) => {
                     },
                   ]}
                 />
-                <TextArea
-                  className="w-full"
-                  register={register("agenda")}
-                  label={t("meeting.props.agenda")}
-                  placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
-                />
+              </div>
+            </GroupLayout>
+            <GroupLayout className="flex flex-col space-y-4">
+              <div>
+                {meetingStore?.types && meetingStore.types.map((item) => {
+                  return (
+                    <span
+                      className={`rounded-[20px] px-[12px] py-[6px] mr-[12px] bg-slate-base cursor-pointer${
+                        type === item.uuid ? " bg-secondary text-primary" : ""
+                      }`}
+                      onClick={() => setType(item.uuid)}
+                    >
+                      {item.name}
+                    </span>
+                  );
+                })}
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
               <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                <div className="sm:flex-1">
-                  <Select
-                    className="w-full"
-                    label={t("meeting.props.type")}
-                    options={types}
-                    register={register("type.uuid")}
-                    value={type}
-                    onChange={(e) => setType(e)}
-                  />
-                </div>
-                <div className="sm:flex-1">
-                  <Select
-                    className="w-full"
-                    label={t("meeting.meeting_category.category")}
-                    options={categories}
-                    value={category}
-                    register={register("category.uuid")}
-                    onChange={(e) => setCategory(e)}
-                  />
-                </div>
-                <div className="sm:flex-1 w-full">
+                <div>Start Time</div>
+                <div className="flex-1">
                   <DateTimePicker
-                    className="w-full"
-                    label={t("meeting.props.start_date_time")}
                     placeholder="Mar 2, 2022 5:02 PM"
-                    showTime
-                    onOk={onOk}
+                    onChangeDateTime={onChangeDateTime}
                     format={timeFormat}
-                    register={register("start_date_time")}
                     value={startDateTime}
                   />
                 </div>
+                <div className="flex-1">
+                  <Select
+                    options={START_TIME}
+                    defaultValue="01:00"
+                    onChange={(e) => setStartTime(e)}
+                    value={startTime}
+                  />
+                </div>
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
               <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                <div>Duration</div>
                 <div className="flex-1">
-                  <Input
+                  <Select
+                    options={DURATION_HOURS}
+                    defaultValue={0}
+                    value={durationHour}
+                    onChange={(e) => setDurationHour(e)}
+                  />
+                </div>
+                <div className="flex-1">
+                  <Select
+                    options={DURATION_MINUTES}
+                    defaultValue={0}
+                    value={durationMinute}
+                    onChange={(e) => setDurationMinute(e)}
+                  />
+                  {/* <Input
                     register={register("period")}
-                    label={t("meeting.props.estimated_period")}
+                    label="Duration"
                     placeholder="60"
                     type="number"
                     min="1"
-                  />
+                  /> */}
                 </div>
-                <div className="flex-1">
-                  <Input
-                    register={register("identifier")}
-                    label={t("meeting.meeting_code")}
-                    placeholder={t("meeting.enter_meeting_code")}
-                  />
-                </div>
+              </div>
+            </GroupLayout>
+            <GroupLayout className="flex flex-col justify-between">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                 <div className="flex-1">
                   <Input
                     register={register("max_participant_count")}
-                    label={t("meeting.config.max_participant_count")}
+                    label="Maximum participant"
                     placeholder="1000"
                     type="number"
                     min="1"
@@ -360,78 +354,54 @@ const ScheduleMeetingDetail = ({ t }) => {
                     }}
                   />
                 </div>
-              </div>
-            </GroupLayout>
-            <GroupLayout className="flex flex-col space-y-4">
-              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                <div className="form-control">
-                  <label className="label cursor-pointer flex sm:justify-center justify-start items-center gap-2">
-                    <input
-                      checked={accessibleViaLink}
-                      type="checkbox"
-                      className="checkbox checkbox-primary checkbox-sm"
-                      onChange={() => setAccessibleViaLink(!accessibleViaLink)}
-                      register={register("accessible_via_link")}
-                    />
-                    <span className="label-base pb-0">
-                      {t("meeting.props.accessible_via_link")}
-                    </span>
-                  </label>
-                </div>
-                <div className="form-control">
-                  <label className="label cursor-pointer flex sm:justify-center justify-start items-center gap-2">
-                    <input
-                      checked={accessibleToMembers}
-                      type="checkbox"
-                      className="checkbox checkbox-primary checkbox-sm"
-                      onChange={() => setAccessibleToMembers(!accessibleToMembers)}
-                      register={register("accessible_to_members")}
-                    />
-                    <span className="label-base pb-0">
-                      {t("meeting.props.only_accessible_to_members")}
-                    </span>
-                  </label>
+                <div className="flex-1">
+                  <Input
+                    register={register("identifier")}
+                    label={t("meeting.meeting_code")}
+                    placeholder={t("meeting.enter_meeting_code")}
+                    disabled
+                  />
                 </div>
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col justify-between">
               <div className="w-full h-auto">
                 <Select
-                  label={t("schedule_meeting_new.Add_invitees")}
-                  mode="multiple"
+                  label="Email invite"
+                  mode="tags"
                   options={listContacts}
                   placeholder={t("schedule_meeting_new.select_invitees")}
                   onChange={(e) => setContacts(e)}
                   register={register("contacts")}
                   value={contacts}
                 />
-                <Select
-                  label={t("schedule_meeting_new.enter_email")}
-                  mode="tags"
-                  placeholder={t("schedule_meeting_new.input_invitees")}
-                  register={register("emails")}
-                  onChange={(e) => setEmails(e)}
-                />
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-col justify-between">
-              <div className="border-1 rounded-xl p-4">
-                <Editor
-                  editorState={description}
-                  toolbarClassName="toolbarClassName"
-                  wrapperClassName="wrapperClassName"
-                  editorClassName="editorClassName"
-                  onEditorStateChange={(editor) => {
-                    setDescription(editor);
-                  }}
-                  register={register("description")}
-                />
-              </div>
+              <TextArea
+                className="w-full"
+                register={register("agenda")}
+                label={t("meeting.props.agenda")}
+                placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
+              />
+            </GroupLayout>
+            <GroupLayout className="flex flex-col justify-between">
+              <Editor
+                editorState={description}
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
+                onEditorStateChange={(editor) => {
+                  setDescription(editor);
+                }}
+                register={register("description")}
+              />
               <div className="w-full sm:flex sm:flex-row justify-between pt-8 space-y-2 sm:space-y-0">
                 <div className="sm:space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
                   <Button
                     className="btn btn-primary btn-block sm:btn-wide"
                     isLoading={loading}
+                    type="submit"
                     onClick={() => onSubmit()}
                   >
                     {t("schedule_meeting_new.save_meeting")}
@@ -447,3 +417,45 @@ const ScheduleMeetingDetail = ({ t }) => {
 };
 
 export default withTranslation()(ScheduleMeetingDetail);
+
+const DURATION_HOURS = [
+  { value: "0 hour", key: 0 },
+  { value: "1 hour", key: 1 },
+  { value: "2 hour", key: 2 },
+  { value: "3 hour", key: 3 },
+  { value: "4 hour", key: 4 },
+];
+
+const DURATION_MINUTES = [
+  { value: "0 minute", key: 0 },
+  { value: "15 minutes", key: 15 },
+  { value: "30 minutes", key: 30 },
+  { value: "45 minutes", key: 45 },
+];
+
+const START_TIME = [
+  { value: "1:00 am", key: 1 },
+  { value: "2:00 am", key: 2 },
+  { value: "3:00 am", key: 3 },
+  { value: "4:00 am", key: 4 },
+  { value: "5:00 am", key: 5 },
+  { value: "6:00 am", key: 6 },
+  { value: "7:00 am", key: 7 },
+  { value: "8:00 am", key: 8 },
+  { value: "9:00 am", key: 9 },
+  { value: "10:00 am", key: 10 },
+  { value: "11:00 am", key: 11 },
+  { value: "12:00 am", key: 12 },
+  { value: "1:00 pm", key: 13 },
+  { value: "2:00 pm", key: 14 },
+  { value: "3:00 pm", key: 15 },
+  { value: "4:00 pm", key: 16 },
+  { value: "5:00 pm", key: 17 },
+  { value: "6:00 pm", key: 18 },
+  { value: "7:00 pm", key: 19 },
+  { value: "8:00 pm", key: 20 },
+  { value: "9:00 pm", key: 21 },
+  { value: "10:00 pm", key: 22 },
+  { value: "11:00 pm", key: 23 },
+  { value: "12:00 pm", key: 0 },
+];
