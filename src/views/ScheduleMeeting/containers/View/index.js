@@ -134,7 +134,7 @@ const ScheduleMeetingView = ({ t }) => {
       <GroupLayout className="flex flex-col justify-between">
         <h1 className="font-[700] text-[32px]">{meetingStore?.meeting?.title}</h1>
         <div className="text-[16px] text-gray mb-[24px]">{meetingStore?.meeting?.type.name}</div>
-        <div className="flex space-x-5 mb-[24px]">
+        <div className="flex flex-wrap gap-x-5 gap-y-3 mb-[24px]">
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/calender.svg" alt="" />
             <span>Start Time:</span>{" "}

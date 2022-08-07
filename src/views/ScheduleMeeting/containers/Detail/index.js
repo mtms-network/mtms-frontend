@@ -254,7 +254,7 @@ const ScheduleMeetingDetail = ({ t }) => {
               <GroupTitle icon={<IoTv />} title={t("schedule_meeting_new.schedule_new_meeting")} />
             </div>
           </div>
-          <div className="w-[60%] m-auto bg-white rounded-[20px]">
+          <div className="w-[90%] m-auto bg-white rounded-[20px] md:w-[80%] lx:w-[60%]">
             <GroupLayout className="flex flex-col justify-between">
               <div className="w-full h-auto">
                 <Input
@@ -272,21 +272,19 @@ const ScheduleMeetingDetail = ({ t }) => {
                 />
               </div>
             </GroupLayout>
-            <GroupLayout className="flex flex-col space-y-4">
-              <div>
-                {meetingStore?.types && meetingStore.types.map((item) => {
-                  return (
-                    <span
-                      className={`rounded-[20px] px-[12px] py-[6px] mr-[12px] bg-slate-base cursor-pointer${
-                        type === item.uuid ? " bg-secondary text-primary" : ""
-                      }`}
-                      onClick={() => setType(item.uuid)}
-                    >
-                      {item.name}
-                    </span>
-                  );
-                })}
-              </div>
+            <GroupLayout className="flex flex-wrap gap-[12px]">
+              {meetingStore?.types && meetingStore.types.map((item) => {
+                return (
+                  <span
+                    className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
+                      type === item.uuid ? " bg-secondary text-primary" : ""
+                    }`}
+                    onClick={() => setType(item.uuid)}
+                  >
+                    {item.name}
+                  </span>
+                );
+              })}
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
               <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
