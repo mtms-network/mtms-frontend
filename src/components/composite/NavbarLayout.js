@@ -5,6 +5,8 @@ import { useAppStore } from "stores/app.store";
 import { LIVE_URL, routeUrls } from "configs";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
+import { Input } from "components/base";
+import { InputSingle } from "components/base/Input";
 
 const NavbarLayout = ({ width, onLogout }) => {
   const { t } = useTranslation();
@@ -25,9 +27,15 @@ const NavbarLayout = ({ width, onLogout }) => {
           <IoMenu />
         </label>
       </div>
-      
-      <div className="flex-none hidden lg:flex px-4 w-full">
-        <div className="flex-1"/>
+
+      <div className="flex-none hidden lg:flex w-full">
+        <div className="flex-1 flex justify-start items-start pr-10">
+          <InputSingle
+            className="input-sm"
+            placeholder="Search"
+            leftIcon={<img src="/icons/icons/search-normal-outline.svg" alt="search" />}
+          />
+        </div>
         <div className="menu menu-horizontal space-x-3 py-4">
           <div className="flex flex-row justify-center items-center space-x-2">
             <div className="dropdown dropdown-end">
@@ -50,15 +58,23 @@ const NavbarLayout = ({ width, onLogout }) => {
                 className="mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-32 z-50 bg-white space-y-4"
               >
                 <li className="w-full">
-                  <Link to="/profile" className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white">
+                  <Link
+                    to="/profile"
+                    className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white"
+                  >
                     {t("user.profile")}
                   </Link>
                 </li>
                 <li className="w-full">
-                  <a className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white">{t("menu_avatar.settings")}</a>
+                  <a className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white">
+                    {t("menu_avatar.settings")}
+                  </a>
                 </li>
                 <li className="w-full">
-                  <a className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white" onClick={onLogout}>
+                  <a
+                    className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white"
+                    onClick={onLogout}
+                  >
                     {t("auth.logout")}
                   </a>
                 </li>

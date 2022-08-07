@@ -46,7 +46,7 @@ export default function ResetPassword() {
           message: `Request reset password successful`,
         });
         setTimeout(() => {
-          navigate(`/${routeUrls.verifyForgotPassword.path}`);
+          navigate(`/${routeUrls.resetResult.path}`);
         }, 3000);
       }
       setLoading(false);
@@ -59,50 +59,45 @@ export default function ResetPassword() {
     }
   };
 
-  const onLogin = () => {
-    navigate(`/${routeUrls.login.path}`);
-  };
-
-  const onRegister = () => {
-    navigate(`/${routeUrls.register.path}`);
-  };
-
   return (
     <GuestFormLayout>
-      <div className="pt-8 pb-4">
-        <p className="text-black text-lg">Reset Your Account</p>
+      <div className="pb-5">
+        <img src="/images/mtms-logo.png" alt="logo" className="w-32" />
       </div>
-      <div className="pt-4 w-full">
-        <Alert
-          {...{ ...alert }}
-          onClose={() => {
-            setAlert({ ...alert, show: false });
-          }}
-        />
+      <div className="pb-4">
+        <p className="text-black text-3xl font-bold">Reset Your Account</p>
       </div>
-      <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full pt-6">
-          <Input
-            isLabelWhite
-            register={register("email")}
-            label="Email"
-            placeholder="Enter your email"
-            error={errors.email}
+      {alert?.show && (
+        <div className="py-4 w-full">
+          <Alert
+            {...{ ...alert }}
+            onClose={() => {
+              setAlert({ ...alert, show: false });
+            }}
           />
         </div>
-        <div className="w-full pt-9">
-          <Button className="btn-block btn-primary" isLoading={loading}>
-            Send request
-          </Button>
+      )}
+      <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-full">
+          <div>
+            <Input
+              register={register("email")}
+              label="Email"
+              placeholder="Enter your email"
+              error={errors.email}
+              labelClassName="font-medium"
+            />
+          </div>
         </div>
       </form>
-      <div className="flex flex-row justify-between w-full pt-6">
-        <a className="text-xs btn-link-dark" onClick={onLogin}>
-          Click to login
-        </a>
-        <a className="text-xs btn-link-light" onClick={onRegister}>
-          Click to Register
-        </a>
+      <div className="w-full pt-5 flex justify-between items-center">
+        <Button
+          className="btn-primary rounded-full btn-wide"
+          isLoading={loading}
+          onClick={handleSubmit(onSubmit)}
+        >
+          Send request
+        </Button>
       </div>
     </GuestFormLayout>
   );
