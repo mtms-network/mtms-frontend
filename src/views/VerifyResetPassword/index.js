@@ -70,71 +70,84 @@ export default function VerifyResetPassword() {
     navigate(`/${routeUrls.login.path}`);
   };
 
-  const onRegister = () => {
-    navigate(`/${routeUrls.register.path}`);
-  };
-
   return (
     <GuestFormLayout>
-      <div className="pt-8 pb-4">
-        <p className="text-black text-lg">Forgot your Password</p>
+      <div className="pb-5">
+        <img src="/images/mtms-logo.png" alt="logo" className="w-32" />
       </div>
-      <div className="pt-4 w-full">
-        <Alert
-          {...{ ...alert }}
-          onClose={() => {
-            setAlert({ ...alert, show: false });
-          }}
-        />
+      <div className="pb-4">
+        <p className="text-black text-3xl font-bold">Reset Your Account</p>
+        <div className="flex flex-row w-full pt-1">
+          <p className="pr-2 text-xs">Already have an account?</p>
+          <a className="btn-text-primary text-xs" onClick={onLogin}>
+            Login
+          </a>
+        </div>
       </div>
-      <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full pt-6">
-          <Input
-            isLabelWhite
-            register={register("email")}
-            label="Email"
-            placeholder="Enter your email"
-            error={errors.email}
-            value={appStore.resetPassword.email || ""}
-          />
-          <Input
-            isLabelWhite
-            type="password"
-            register={register("code")}
-            label="Code"
-            placeholder="***********"
-            error={errors.code}
-          />
-          <Input
-            isLabelWhite
-            type="password"
-            register={register("password")}
-            label="Password"
-            placeholder="***********"
-            error={errors.password}
-          />
-          <Input
-            isLabelWhite
-            type="password"
-            register={register("confirmPassword")}
-            label="Confirm Password"
-            placeholder="***********"
-            error={errors.confirmPassword}
+      {alert?.show && (
+        <div className="py-4 w-full">
+          <Alert
+            {...{ ...alert }}
+            onClose={() => {
+              setAlert({ ...alert, show: false });
+            }}
           />
         </div>
-        <div className="w-full pt-9">
-          <Button className="btn-block btn-primary" isLoading={loading}>
-            Validate code
-          </Button>
+      )}
+      <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-full">
+          <div className="pt-4 w-full flex flex-row justify-between space-x-4">
+            <div className="flex-1">
+              <Input
+                register={register("email")}
+                label="Email"
+                placeholder="Enter your email"
+                error={errors.email}
+                value={appStore.resetPassword.email || ""}
+                labelClassName="font-medium"
+              />
+            </div>
+            <div className="flex-1">
+              <Input
+                type="password"
+                register={register("code")}
+                label="Code"
+                placeholder="***********"
+                error={errors.code}
+                labelClassName="font-medium"
+              />
+            </div>
+          </div>
+          <div className="pt-4 w-full flex flex-row justify-between space-x-4">
+            <div className="flex-1">
+              <Input
+                type="password"
+                register={register("password")}
+                label="Password"
+                placeholder="***********"
+                error={errors.password}
+              />
+            </div>
+            <div className="flex-1">
+              <Input
+                type="password"
+                register={register("confirmPassword")}
+                label="Confirm Password"
+                placeholder="***********"
+                error={errors.confirmPassword}
+              />
+            </div>
+          </div>
         </div>
       </form>
-      <div className="flex flex-row justify-between w-full pt-6">
-        <a className="text-xs btn-link-dark" onClick={onLogin}>
-          Click to login
-        </a>
-        <a className="text-xs btn-link-light" onClick={onRegister}>
-          Click to Register
-        </a>
+      <div className="w-full pt-5 flex justify-between items-center">
+        <Button
+          className="btn-primary rounded-full btn-wide"
+          isLoading={loading}
+          onClick={handleSubmit(onSubmit)}
+        >
+          Validate code
+        </Button>
       </div>
     </GuestFormLayout>
   );

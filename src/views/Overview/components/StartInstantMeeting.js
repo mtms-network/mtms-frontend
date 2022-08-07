@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { IoCalendarClear, IoCheckmarkCircleOutline, IoCopyOutline } from "react-icons/io5";
+import { IoCalendarClear, IoCheckmarkCircleOutline } from "react-icons/io5";
 import classNames from "classnames";
-import { Button, GroupLayout, GroupTitle, Input } from "components";
+import { Button, GroupLayout, GroupTitle, Icon, Input } from "components";
 import { useMeetingStore } from "stores/meeting.store";
 import { startMeeting } from "services";
 import { LIVE_MEETING_URL } from "configs";
@@ -112,9 +112,18 @@ const StartInstantMeeting = ({ className, t }) => {
                 setCode(e.target.value);
               }}
               rightButton={
-                <div className={classNames("dropdown", isCopied && "dropdown-top")}>
+                <div
+                  className={classNames(
+                    "dropdown flex justify-center items-center",
+                    isCopied && "dropdown-top",
+                  )}
+                >
                   <button onClick={handleCopyCode}>
-                    <IoCopyOutline size="24" />
+                    <Icon
+                      className="h-6 w-6"
+                      src="/icons/icons/copy-light-outline.svg"
+                      alt="copy"
+                    />
                   </button>
                   {isCopied && (
                     <ul

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Alert, Button, GoogleButton, GuestFormLayout, Input } from "components";
+import { Alert, Button, GoogleButton, GuestFormLayout, Input, WalletButton } from "components";
 import { handleHttpError, resetUserInfo } from "helpers";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signUp } from "services";
@@ -19,6 +19,7 @@ export default function Register() {
       email: yup.string().email("Invalid email").required("Email is required"),
       username: yup.string().required("Username is required"),
       password: yup.string().required("Password is required"),
+      phone: yup.string().required("Phone number is required"),
       confirmPassword: yup
         .string()
         .oneOf([yup.ref("password"), null], "Passwords must match")
@@ -69,97 +70,119 @@ export default function Register() {
 
   return (
     <GuestFormLayout>
-      <div className="pt-8 pb-4">
-        <p className="text-black text-lg">Create Your Account</p>
-      </div>
-      <div className="w-full">
-        <button className="btn btn-block btn-primary">Connect Wallet</button>
-      </div>
-      <div className="w-full pt-4">
-        <button className="btn btn-base">Connect Avalanche</button>
-      </div>
-      <div className="w-full pt-4">
-        <GoogleButton />
-      </div>
-
-      <div className="pt-4 w-full">
-        <Alert
-          {...{ ...alert }}
-          onClose={() => {
-            setAlert({ ...alert, show: false });
-          }}
-        />
-      </div>
-      <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full pt-6">
-          <Input
-            isLabelWhite
-            register={register("name")}
-            label="Enter your name"
-            placeholder="Enter your name"
-            error={errors.name}
-          />
+      <div className="py-4">
+        <p className="text-black text-3xl font-bold">Create An Account</p>
+        <div className="flex flex-row w-full pt-1">
+          <p className="pr-2 text-xs">Already have an account?</p>
+          <a className="btn-text-primary text-xs" onClick={onLogin}>
+            Login
+          </a>
         </div>
-        <div className="pt-1 w-full flex flex-row justify-between space-x-4">
-          <div className="flex-1">
-            <Input
-              isLabelWhite
-              register={register("email")}
-              label="Email"
-              placeholder="Enter your email"
-              error={errors.email}
+      </div>
+      <div className="pt-6">
+        <p className="text-black-base text-lg font-bold pb-3">Sign Up With Social</p>
+        <GoogleButton showTitle />
+      </div>
+      <div>
+        <div className="divider mt-2 mb-2 text-hint">Or</div>
+        <p className="text-black-base text-lg font-bold pb-3 pt-4">Sign Up With Crypto Wallet</p>
+        <div className="flex flex-row space-x-4">
+          <WalletButton name="Oasis" src="/icons/oasis-logo.png" />
+          <WalletButton name="Avalanche" src="/icons/avalanche-logo.png" />
+          <WalletButton name="Binance" src="/icons/binance-logo.png" />
+          <WalletButton name="Metamask" src="/icons/metamask-logo.png" />
+        </div>
+      </div>
+      <div>
+        <div className="divider mt-2 mb-2 text-hint">Or</div>
+        <p className="text-black-base text-lg font-bold pb-2 pt-4">Sign Up With Email</p>
+        {alert?.show && (
+          <div className="py-4 w-full">
+            <Alert
+              {...{ ...alert }}
+              onClose={() => {
+                setAlert({ ...alert, show: false });
+              }}
             />
           </div>
-          <div className="flex-1">
-            <Input
-              isLabelWhite
-              register={register("username")}
-              label="Username"
-              placeholder="Enter your username"
-              error={errors.username}
-            />
+        )}
+        <form className="w-full h-auto" onSubmit={handleSubmit(onSubmit)}>
+          <div className="pt-1 w-full flex flex-row justify-between space-x-4">
+            <div className="flex-1">
+              <Input
+                register={register("name")}
+                label="Name"
+                placeholder="Enter your name"
+                error={errors.name}
+                labelClassName="font-medium"
+              />
+            </div>
+            <div className="flex-1">
+              <Input
+                register={register("username")}
+                label="Username"
+                placeholder="Enter your username"
+                error={errors.username}
+                labelClassName="font-medium"
+              />
+            </div>
           </div>
-        </div>
-        <div className="pt-1 w-full flex flex-row justify-between space-x-4">
-          <div className="flex-1">
-            <Input
-              isLabelWhite
-              type="password"
-              register={register("password")}
-              label="Password"
-              placeholder="***********"
-              error={errors.password}
-            />
+          <div className="pt-4 w-full flex flex-row justify-between space-x-4">
+            <div className="flex-1">
+              <Input
+                register={register("email")}
+                label="Email"
+                placeholder="Enter your email"
+                error={errors.email}
+                labelClassName="font-medium"
+              />
+            </div>
+            <div className="flex-1">
+              <Input
+                register={register("phone")}
+                label="Phone Number"
+                placeholder="Enter your phone number"
+                error={errors.phone}
+                labelClassName="font-medium"
+              />
+            </div>
           </div>
-          <div className="flex-1">
-            <Input
-              isLabelWhite
-              type="password"
-              register={register("confirmPassword")}
-              label="Confirm Password"
-              placeholder="***********"
-              error={errors.confirmPassword}
-            />
+          <div className="pt-4 w-full flex flex-row justify-between space-x-4">
+            <div className="flex-1">
+              <Input
+                type="password"
+                register={register("password")}
+                label="Password"
+                placeholder="***********"
+                error={errors.password}
+              />
+            </div>
+            <div className="flex-1">
+              <Input
+                type="password"
+                register={register("confirmPassword")}
+                label="Confirm Password"
+                placeholder="***********"
+                error={errors.confirmPassword}
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex text-text-200 items-start pt-4">
-          <p className="text-sm">
-            By clicking on Register, you agree to our Terms of Service and Privacy Policy.
-          </p>
-        </div>
-
-        <div className="w-full pt-7">
-          <Button className="btn-block btn-primary" isLoading={loading}>
+          <div className="flex items-start pt-4">
+            <p className="text-sm">
+              By clicking on Register, you agree to our
+              <span className="text-primary"> Terms of Service and Privacy Policy.</span>
+            </p>
+          </div>
+        </form>
+        <div className="w-full py-5 flex justify-between items-center">
+          <Button
+            className="btn-primary rounded-full btn-wide"
+            isLoading={loading}
+            onClick={handleSubmit(onSubmit)}
+          >
             Register
           </Button>
         </div>
-      </form>
-
-      <div className="flex flex-row justify-center w-full pt-6">
-        <p className="text-text-200 pr-2 text-xs">Have an account?</p>
-        <a className="btn-link-light text-xs" onClick={onLogin}>
-          Click to Login
-        </a>
       </div>
     </GuestFormLayout>
   );

@@ -20,7 +20,6 @@ const Select = ({
   ...rest
 }) => {
   const { Option } = SelectBase;
-
   return (
     <FormControl required={required} label={label} error={error}>
       <SelectBase
@@ -38,6 +37,7 @@ const Select = ({
         placeholder={placeholder || `Select ${label}`}
         onChange={onChange}
         allowClear
+        value={value}
       >
         {options.map((item) => (
           <Option key={item?.key} value={item?.key}>

@@ -1,7 +1,9 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable no-plusplus */
 import classNames from "classnames";
 import React from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from "react-i18next";
 
 const Pagination = ({
   page = 1,
@@ -10,41 +12,86 @@ const Pagination = ({
   from = 1,
   to = 1,
   className,
-  onNext = () => { },
-  onBack = () => { },
+  onNext = () => {},
+  onBack = () => {},
+  onPage,
   t,
 }) => {
+  let start = page;
+  let end;
+  const html = [];
+  if (page > 1) {
+    start = page - 1;
+    if (page > 3) {
+      html.push(
+        <>
+          <div
+            onClick={() => onPage(1)}
+            className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer"
+          >
+            1
+          </div>
+          <div>...</div>
+        </>,
+      );
+    }
+  }
+
+  if (page > totalPage - 2) {
+    start = totalPage - 2;
+  }
+
+  end = start + 3;
+  if (end > totalPage + 1) {
+    end = totalPage + 1;
+  }
+
+  for (let i = start; i < end; i++) {
+    html.push(
+      <div
+        abc={i}
+        key={i}
+        onClick={() => {
+          onPage(i);
+        }}
+        className={`rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer${
+          page === i ? " bg-primary text-white" : ""
+        }`}
+      >
+        {i}
+      </div>,
+    );
+  }
+
+  if (page < totalPage - 2) {
+    html.push(
+      <>
+        <div>...</div>
+        <div
+          onClick={() => onPage(totalPage)}
+          className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer"
+        >
+          {totalPage}
+        </div>
+      </>,
+    );
+  }
   return (
     <div
-      className={classNames(
-        "flex flex-col sm:flex-row items-center justify-between w-full right-8",
-        className,
-      )}
+      className={classNames("flex flex-col sm:flex-row items-center justify-between", className)}
     >
-      <div className="pb-2 sm:pb-0">
-        <p className="text-md text-dark-base">{t('global.total_result_found_with_record', { attribute: total, from: from || 0, to: to || 0 })}</p>
-      </div>
-
       <div className="pl-0 sm:pl-4">
         <div className="flex flex-row space-x-4 justify-center items-center">
-          <p className="text-dark-base">{t('general.page')}</p>
-          <input
-            disabled
-            maxLength={4}
-            placeholder="1"
-            className="input input-primary !bg-primary !text-black w-16 text-center max-w-xs border-0"
-            value={page}
-          />
-          <p className="text-dark-base">{`of ${totalPage}`}</p>
           <button
-            className="btn btn-square btn-ghost btn-active text-black"
+            className={classNames("bg-transparent hover:text-primary", )}
             onClick={onBack}
             disabled={page === 1}
           >
             <IoChevronBack />
           </button>
+          {html}
           <button
-            className="btn btn-square btn-ghost btn-active text-black"
+            className="bg-transparent hover:text-primary"
             onClick={onNext}
             disabled={page === totalPage}
           >

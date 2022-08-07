@@ -8,11 +8,12 @@ export const signIn = async ({ email, password, deviceName = "1" }) => {
   return res?.data;
 };
 
-export const signInSocial = async ({ provider = "google", credential }) => {
+export const signInSocial = async ({ provider = "google", code, redirectUri }) => {
   const res = await client.post("/social-media/login", {
     provider,
-    token_id: credential,
+    code,
     device_name: "mtms-app",
+    redirect_uri: redirectUri,
   });
   return res?.data;
 };
