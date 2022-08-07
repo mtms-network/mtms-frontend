@@ -1,11 +1,9 @@
 import React, { useMemo } from "react";
-import { FaPlusCircle } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
 import { useAppStore } from "stores/app.store";
-import { LIVE_URL, routeUrls } from "configs";
+import { LIVE_URL } from "configs";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { Input } from "components/base";
 import { InputSingle } from "components/base/Input";
 
 const NavbarLayout = ({ width, onLogout }) => {
