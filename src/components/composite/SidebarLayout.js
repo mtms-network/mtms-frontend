@@ -30,8 +30,8 @@ const SidebarLayout = ({ t }) => {
             >
               <IconBase
                 icon="/icons/icons/home-outline.svg"
-                iconActivated="/icons/icons/home-outline.svg"
-                isActive={location.pathname !== "/"}
+                iconActivated="/icons/icons/home-fill.svg"
+                isActive={location.pathname === "/"}
               />
               <p className="pl-2">{t("sidebar.meeting")}</p>
             </button>
@@ -48,7 +48,7 @@ const SidebarLayout = ({ t }) => {
             >
               <IconBase
                 icon="/icons/icons/calendar-outline.svg"
-                iconActivated="/icons/icons/calendar-outline.svg"
+                iconActivated="/icons/icons/calendar-fill.svg"
                 isActive={location.pathname.includes(routeUrls.scheduleMeeting.path)}
               />
               <p className="pl-2">{t("sidebar.schedule_a_meeting")}</p>

@@ -97,7 +97,6 @@ const ScheduleMeetingDetail = ({ t }) => {
 
   const onSubmit = async (values) => {
     try {
-
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
       values.description = description
@@ -106,12 +105,12 @@ const ScheduleMeetingDetail = ({ t }) => {
       values.is_paid = false;
       values.is_pam = false;
       values.uuid = params.meetingId;
-      values.start_date_time = startDateTime.add(startTime, "hours").format('YYYY-MM-DD HH:mm:ss');
+      values.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
 
       values.contacts = contacts.map((value) => {
         return { uuid: value };
       });
-      values.type = {uuid: type};
+      values.type = { uuid: type };
       values.period = durationHour * 60 + durationMinute;
       delete values.identifier;
       const client = createPrivateInstance(BASE_API.meeting);
@@ -273,18 +272,19 @@ const ScheduleMeetingDetail = ({ t }) => {
               </div>
             </GroupLayout>
             <GroupLayout className="flex flex-wrap gap-[12px]">
-              {meetingStore?.types && meetingStore.types.map((item) => {
-                return (
-                  <span
-                    className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
-                      type === item.uuid ? " bg-secondary text-primary" : ""
-                    }`}
-                    onClick={() => setType(item.uuid)}
-                  >
-                    {item.name}
-                  </span>
-                );
-              })}
+              {meetingStore?.types &&
+                meetingStore.types.map((item) => {
+                  return (
+                    <span
+                      className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
+                        type === item.uuid ? " bg-secondary text-primary" : ""
+                      }`}
+                      onClick={() => setType(item.uuid)}
+                    >
+                      {item.name}
+                    </span>
+                  );
+                })}
             </GroupLayout>
             <GroupLayout className="flex flex-col space-y-4">
               <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
@@ -357,6 +357,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                     register={register("identifier")}
                     label={t("meeting.meeting_code")}
                     placeholder={t("meeting.enter_meeting_code")}
+                    className="!bg-disable"
                     disabled
                   />
                 </div>

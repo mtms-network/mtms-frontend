@@ -33,7 +33,7 @@ const MeetingItem = ({ data, className }) => {
           </div>
         </div>
         <div className="text-gray">{data?.type.name}</div>
-        <div>
+        <div className="flex justify-center flex-col">
           <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
             <img src="/images/icon/calender.svg" alt="" />
             <p className="label-base p-0 group-hover:text-primary">{data?.start_date_time}</p>

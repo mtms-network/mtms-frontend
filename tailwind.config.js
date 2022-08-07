@@ -83,14 +83,14 @@ const componentPlugins = {
   ".btn-white": {
     fontWeight: 900,
     color: "#454545",
-    borderRadius: '20px',
+    borderRadius: "20px",
     backgroundColor: "#fff",
     border: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     "&:hover": {
       color: "#454545",
       backgroundColor: "#fff",
-    }
+    },
   },
   // ".btn-outline-base": {
   //   color: "#000",
@@ -164,6 +164,9 @@ const componentPlugins = {
   },
   ".text-black-base": {
     color: "#454545",
+  },
+  ".bg-disable": {
+    backgroundColor: "#F7F7F7",
   },
   ".table-row": {
     ">td": {
