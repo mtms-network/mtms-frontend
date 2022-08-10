@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import React, { useState, useEffect } from "react";
 import { Button, MainLayout, AlertError } from "components";
 
@@ -5,10 +6,8 @@ import { BASE_API, ALERT_TYPE } from "configs";
 import { useWalletStore } from "stores/wallet.store";
 import { handleHttpError } from "helpers";
 import { useTranslation } from "react-i18next";
-import { IoCalendarClearSharp, IoCalendar } from "react-icons/io5";
 import { getRequirePreWallet } from "services/wallet.service";
 import { createPrivateInstance } from "services/base";
-import { OverviewNavBar } from "views/Overview/components";
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
@@ -45,7 +44,7 @@ const Rewards = () => {
 
       const client = createPrivateInstance(BASE_API.wallet);
       const res = await client.post("/claim/meeting/today");
-      const total_token = walletStore.wallet.user.total_token + res.data.amount;
+      const total_token = walletStore.wallet.token_per_checkin + res.data.amount;
       const newWallet = {
         ...walletStore.wallet,
         total_token_today: 0,
@@ -83,7 +82,6 @@ const Rewards = () => {
         total_checkin_token: 0,
         user: { ...walletStore.wallet.user, total_token },
       };
-      console.log(newWallet);
       updateWalletStore((draft) => {
         draft.wallet = newWallet;
       });
@@ -152,7 +150,7 @@ const Rewards = () => {
     }
     prepareData();
   }, [walletStore]);
-
+console.log(walletStore?.wallet);
   return (
     <MainLayout>
       <div className="p-2 min-h-full">
@@ -168,7 +166,7 @@ const Rewards = () => {
               <div>
                 <p className="font-bold text-2xl">Daily Task</p>
                 <p className="text-base">{`Check in to receive ${
-                  walletStore?.wallet?.user?.total_token || 0
+                  walletStore?.wallet?.token_per_checkin || 0
                 } MTMS Token`}</p>
               </div>
               <div className="flex flex-row items-end space-x-2">
@@ -176,7 +174,7 @@ const Rewards = () => {
                   Check in
                 </Button>
                 <Button className="btn-primary" disabled isLoading={loading} onClick={() => {}}>
-                  {`Claim ${walletStore?.wallet?.user?.total_token} MTMS Token`}
+                  {`Claim ${walletStore?.wallet?.token_per_checkin} MTMS Token`}
                 </Button>
               </div>
             </div>
@@ -217,8 +215,8 @@ const Rewards = () => {
                     <span className="font-bold text-lg text-black-base">{` ${walletStore?.wallet?.user?.oasis?.address}`}</span>
                   </p>
                   <p className="text-base pt-5">
-                    You are a good staff, you are working hard this weeks with 20 hours meeting and
-                    received 14 MTMS Tokens.
+                    You are a good staff, you are working hard this weeks with {timeWeek.hour} hours meeting and
+                    received {walletStore?.wallet?.total_token_week} MTMS Tokens.
                   </p>
                 </div>
               </div>
@@ -227,12 +225,12 @@ const Rewards = () => {
               <div className="flex flex-col justify-center items-center">
                 <p className="text-base text-gray">Total MTMS tokens</p>
                 <p className="text-orange-base font-bold text-5xl">{`${
-                  walletStore?.wallet?.total_token_all_days || 0
+                  walletStore?.wallet?.user?.total_token || 0
                 }`}</p>
                 <div className="pt-8">
                   <Button
                     className="btn btn-primary rounded-3xl btn-lg h-[54px] min-h-[54px]"
-                    disabled={!walletStore?.wallet?.total_token_all_days}
+                    disabled={!walletStore?.wallet?.user?.total_token}
                     isLoading={loading}
                   >
                     Withdraw
