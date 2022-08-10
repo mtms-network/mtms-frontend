@@ -9,6 +9,7 @@ import { signIn } from "services";
 import { getUser, handleHttpError, resetUserInfo, setTokenLoginSucceeded } from "helpers";
 import { useAuth } from "hooks";
 import { useAppStore } from "stores/app.store";
+import Wallet from "components/base/Wallet";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -116,9 +117,9 @@ export default function Login() {
     navigate(`/${routeUrls.register.path}`);
   };
 
-  const CommonLogin = useMemo(
+  /* const CommonLogin = useMemo(
     () => (
-      <>
+      {<>
         <div className="pb-4">
           <p className="text-black text-3xl font-bold">Login To Your Account</p>
           <div className="flex flex-row w-full pt-1">
@@ -138,14 +139,14 @@ export default function Login() {
           <div className="flex flex-row space-x-4">
             <WalletButton name="Oasis" src="/icons/oasis-logo.png" />
             <WalletButton name="Avalanche" src="/icons/avalanche-logo.png" />
-            <WalletButton name="Binance" src="/icons/binance-logo.png" />
-            <WalletButton name="Metamask" src="/icons/metamask-logo.png" />
+            <WalletButton name="Binance" src="/icons/binance-logo.png" onClick={() => connect('injected')} />
+            <WalletButton name="Metamask" src="/icons/metamask-logo.png" onClick={handleConnectMetaMask} />
           </div>
         </div>
-      </>
+      </>}
     ),
     [],
-  );
+  ); */
 
   useAuth();
 
@@ -160,7 +161,7 @@ export default function Login() {
     return (
       <GuestFormLayout>
         <div>
-          {CommonLogin}
+          <Wallet />
           <div className="divider mt-2 mb-2 text-hint">Or</div>
           <p className="text-black-base text-lg font-bold pb-2 pt-4">Log In With Email</p>
           {alert?.show && (
@@ -216,7 +217,7 @@ export default function Login() {
   const renderUnlock = () => {
     return (
       <GuestFormLayout>
-        {CommonLogin}
+        <Wallet />
         <div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
           <p className="text-black-base text-lg font-bold pb-2 pt-4">Log in with Email</p>
