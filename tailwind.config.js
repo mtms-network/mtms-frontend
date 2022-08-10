@@ -165,6 +165,9 @@ const componentPlugins = {
   ".text-black-base": {
     color: "#454545",
   },
+  ".text-orange-base": {
+    color: "#FF903F",
+  },
   ".bg-disable": {
     backgroundColor: "#F7F7F7",
   },

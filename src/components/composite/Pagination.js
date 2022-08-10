@@ -63,7 +63,7 @@ const Pagination = ({
     );
   }
 
-  if (page < totalPage - 2) {
+  if (page < totalPage - 2 && totalPage > 4) {
     html.push(
       <>
         <div>...</div>
@@ -83,7 +83,10 @@ const Pagination = ({
       <div className="pl-0 sm:pl-4">
         <div className="flex flex-row space-x-4 justify-center items-center">
           <button
-            className={classNames("bg-transparent hover:text-primary", )}
+            className={classNames(
+              "bg-transparent hover:text-primary",
+              page === 1 && "cursor-not-allowed text-slate-200 hover:text-slate-200",
+            )}
             onClick={onBack}
             disabled={page === 1}
           >
@@ -91,7 +94,10 @@ const Pagination = ({
           </button>
           {html}
           <button
-            className="bg-transparent hover:text-primary"
+            className={classNames(
+              "bg-transparent hover:text-primary",
+              page === totalPage && "cursor-not-allowed text-slate-200 hover:text-slate-200",
+            )}
             onClick={onNext}
             disabled={page === totalPage}
           >

@@ -5,6 +5,7 @@ import { LIVE_URL } from "configs";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { InputSingle } from "components/base/Input";
+import { Button } from "components/base";
 
 const NavbarLayout = ({ width, onLogout }) => {
   const { t } = useTranslation();
@@ -29,7 +30,7 @@ const NavbarLayout = ({ width, onLogout }) => {
       <div className="flex-none hidden lg:flex w-full">
         <div className="flex-1 flex justify-start items-start pr-10">
           <InputSingle
-            className="input-sm"
+            className="h-[40px]"
             placeholder="Search"
             leftIcon={<img src="/icons/icons/search-normal-outline.svg" alt="search" />}
           />
@@ -41,6 +42,12 @@ const NavbarLayout = ({ width, onLogout }) => {
                 tabIndex="0"
                 className="hover:cursor-pointer flex flex-row space-x-2 justify-center items-center"
               >
+                <div>
+                  <Button className="btn btn-primary" onClick={() => {}}>
+                    <img src="/icons/icons/add-white-fill.svg" alt="buy mtms" className="pr-2" />
+                    {t("menu.buy")}
+                  </Button>
+                </div>
                 <div className="avatar">
                   <div className="!flex w-12 rounded-full justify-center items-center bg-primary text-black">
                     {user?.profile?.avatar ? (

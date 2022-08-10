@@ -16,4 +16,5 @@ export const ScheduleMeetingDetail = lazy(() => import("views/ScheduleMeeting/co
 export const ScheduleMeetingView = lazy(() => import("views/ScheduleMeeting/containers/View"));
 export const VerifyResetPassword = lazy(() => import("views/VerifyResetPassword"));
 export const Profile = lazy(() => import("views/Profile"));
+export const Rewards = lazy(() => import("views/Rewards"));
 export const ComingSoon = lazy(() => import("views/Common/ComingSoon"));
