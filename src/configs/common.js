@@ -14,6 +14,7 @@ export const BASE_API = {
   profile: "/profile",
   avatar: "/profile/avatar",
   changePassword: "/auth/change-password",
+  wallet: "/wallet",
 };
 
 export const ALERT_TYPE = {

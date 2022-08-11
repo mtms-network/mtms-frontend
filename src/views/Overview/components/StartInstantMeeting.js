@@ -150,7 +150,7 @@ const StartInstantMeeting = ({ className, t }) => {
                 <input
                   type="checkbox"
                   value={isKeepAlive}
-                  className="checkbox checkbox-primary checkbox-sm"
+                  className="checkbox checkbox-primary checkbox-sm bg-secondary border-0 rounded-md"
                   onChange={() => {
                     setIsKeepALive(!isKeepAlive);
                   }}
@@ -162,7 +162,7 @@ const StartInstantMeeting = ({ className, t }) => {
               <label className="label cursor-pointer flex justify-center items-center gap-2">
                 <input
                   type="checkbox"
-                  className="checkbox checkbox-primary checkbox-sm"
+                  className="checkbox checkbox-primary checkbox-sm bg-secondary border-0 rounded-md"
                   value={isOnlyActiveMember}
                   onChange={() => {
                     setIsOnlyActiveMember(!isOnlyActiveMember);
@@ -175,7 +175,8 @@ const StartInstantMeeting = ({ className, t }) => {
             </div>
           </div>
           <div className="basis-full sm:basis-1/2 flex items-end">
-            <Button className="btn btn-primary btn-block" isLoading={loading} onClick={handleStart}>
+            <Button className="btn btn-primary btn-wide" isLoading={loading} onClick={handleStart}>
+              <img src="/icons/icons/add-white-fill.svg" alt="buy mtms" className="pr-2" />
               {t("home.start_a_instant_meeting")}
             </Button>
           </div>

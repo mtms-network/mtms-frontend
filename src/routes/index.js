@@ -15,6 +15,7 @@ import {
   ComingSoon,
   ResetPasswordResult,
   ScheduleMeetingView,
+  Rewards,
 } from "./views";
 
 const Routers = () => {
@@ -44,6 +45,7 @@ const Routers = () => {
           element={<ScheduleMeetingView />}
         />
         <Route path={`/${routeUrls.profile.path}`} element={<Profile />} />
+        <Route path={`/${routeUrls.rewards.path}`} element={<Rewards />} />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

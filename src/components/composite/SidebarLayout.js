@@ -58,16 +58,16 @@ const SidebarLayout = ({ t }) => {
             <button
               className={classNames(
                 "text-base font-normal",
-                location.pathname.includes(routeUrls.rewardCenter.path)
+                location.pathname.includes(routeUrls.rewards.path)
                   ? "btn btn-base justify-start font-medium"
                   : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
               )}
-              onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}
+              onClick={() => navigate(`/${routeUrls.rewards.path}`)}
             >
               <IconBase
                 icon="/icons/icons/gift-outline.svg"
                 iconActivated="/icons/icons/gift-fill.svg"
-                isActive={location.pathname.includes(routeUrls.rewardCenter.path)}
+                isActive={location.pathname.includes(routeUrls.rewards.path)}
               />
               <p className="pl-2">{t("sidebar.reward_center")}</p>
             </button>

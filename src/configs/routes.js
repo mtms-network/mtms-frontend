@@ -23,8 +23,8 @@ export const routeUrls = {
   scheduleMeeting: {
     path: "schedule-meeting",
   },
-  rewardCenter: {
-    path: "reward-center",
+  rewards: {
+    path: "rewards",
   },
   room247: {
     path: "room-247",
