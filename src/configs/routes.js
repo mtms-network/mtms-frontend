@@ -44,6 +44,12 @@ export const routeUrls = {
   profile: {
     path: "profile",
   },
+  profileChangePassword: {
+    path: "profile/change-password",
+  },
+  profileUpdate: {
+    path: "profile/update",
+  },
   comingSoon: {
     path: "coming-soon",
   },

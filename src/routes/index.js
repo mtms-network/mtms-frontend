@@ -11,11 +11,12 @@ import {
   ScheduleMeetingItem,
   VerifyResetPassword,
   ScheduleMeetingDetail,
-  Profile,
   ComingSoon,
   ResetPasswordResult,
   ScheduleMeetingView,
   Rewards,
+  ProfileChangePassword,
+  ProfileUpdate,
 } from "./views";
 
 const Routers = () => {
@@ -44,7 +45,11 @@ const Routers = () => {
           path={`/${routeUrls.scheduleMeeting.path}/view/:meetingId`}
           element={<ScheduleMeetingView />}
         />
-        <Route path={`/${routeUrls.profile.path}`} element={<Profile />} />
+        <Route
+          path={`/${routeUrls.profileChangePassword.path}`}
+          element={<ProfileChangePassword />}
+        />
+        <Route path={`/${routeUrls.profileUpdate.path}`} element={<ProfileUpdate />} />
         <Route path={`/${routeUrls.rewards.path}`} element={<Rewards />} />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />

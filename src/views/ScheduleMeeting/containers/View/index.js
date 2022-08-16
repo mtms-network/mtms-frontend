@@ -15,14 +15,12 @@ import {
 import { IoTv } from "react-icons/io5";
 import { useMeetingStore } from "stores/meeting.store";
 import { createPrivateInstance } from "services/base";
-import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
+import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL } from "configs";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import {
-  getMeetingDetail,
-} from "services/meeting.service";
+import { getMeetingDetail } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { message, Modal } from 'antd';
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { message, Modal } from "antd";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -62,17 +60,23 @@ const ScheduleMeetingView = ({ t }) => {
 
   const handleDeleteMeeting = () => {
     confirm({
-      title: 'Are you sure delete avatar?',
+      title: "Are you sure delete avatar?",
       icon: <ExclamationCircleOutlined />,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
         deleteMeeting();
       },
-      onCancel() {
-      },
+      onCancel() {},
     });
+  };
+
+  const handleCopyLink = () => {
+    const meetingUrl = `${LIVE_MEETING_URL}/${meetingStore?.meeting?.identifier}`;
+    navigator.clipboard.writeText(meetingUrl);
+    setTimeout(() => {
+    }, [1000]);
   };
 
   const deleteMeeting = async () => {
@@ -80,7 +84,7 @@ const ScheduleMeetingView = ({ t }) => {
       setLoading(true);
       const client = createPrivateInstance(BASE_API.meeting);
       const res = await client.delete(`/${params.meetingId}`);
-      if (res.data.status === 'success') {
+      if (res.data.status === "success") {
         message.success(`Meeting deleted successfully`);
         navigate(`/${routeUrls.scheduleMeeting.path}`);
       } else {
@@ -138,7 +142,9 @@ const ScheduleMeetingView = ({ t }) => {
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/calender.svg" alt="" />
             <span>Start Time:</span>{" "}
-            <span className="font-[700] text-[16px]">{moment(meetingStore?.meeting?.start_date_time).format('MMM DD, yyyy h:mm A')}</span>
+            <span className="font-[700] text-[16px]">
+              {moment(meetingStore?.meeting?.start_date_time).format("MMM DD, yyyy h:mm A")}
+            </span>
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
@@ -154,16 +160,30 @@ const ScheduleMeetingView = ({ t }) => {
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
-            <span>Meeting Code:</span> <span className="font-[700] text-[16px]">{meetingStore?.meeting?.identifier}</span>
+            <span>Meeting Code:</span>{" "}
+            <span className="font-[700] text-[16px]">{meetingStore?.meeting?.identifier}</span>
           </div>
         </div>
         <div className="flex space-x-[24px] mb-[24px]">
-          <Button className="btn btn-primary">Start</Button>
-          <Button className="btn btn-white">Copy link</Button>
-          <Link className="btn btn-white" to={`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`}>
+          <Button className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]">Start</Button>
+          <Button
+            className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+            onClick={handleCopyLink}
+          >
+            Copy link
+          </Button>
+          <Link
+            className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+            to={`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`}
+          >
             Edit
           </Link>
-          <Button className="btn btn-white" onClick={handleDeleteMeeting}>Delete</Button>
+          <Button
+            className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+            onClick={handleDeleteMeeting}
+          >
+            Delete
+          </Button>
         </div>
         <hr className="mb-[24px]" />
         <div>

@@ -1,18 +1,17 @@
 import React, { useMemo } from "react";
 import { IoMenu } from "react-icons/io5";
 import { useAppStore } from "stores/app.store";
-import { LIVE_URL } from "configs";
+import { LIVE_URL, routeUrls } from "configs";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { InputSingle } from "components/base/Input";
-import { Button } from "components/base";
+import { Button, IconBase } from "components/base";
 
 const NavbarLayout = ({ width, onLogout }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [appStore] = useAppStore();
   const user = useMemo(() => appStore.user, [appStore.user]);
-
   return (
     <div
       className="navbar fixed z-30 h-16 w-full bg-white flex-1"
@@ -30,56 +29,67 @@ const NavbarLayout = ({ width, onLogout }) => {
       <div className="flex-none hidden lg:flex w-full">
         <div className="flex-1 flex justify-start items-start pr-10">
           <InputSingle
-            className="h-[40px]"
+            compactInput
             placeholder="Search"
             leftIcon={<img src="/icons/icons/search-normal-outline.svg" alt="search" />}
           />
         </div>
         <div className="menu menu-horizontal space-x-3 py-4">
           <div className="flex flex-row justify-center items-center space-x-2">
+            <div>
+              <Button
+                className="btn btn-primary"
+                onClick={() => {
+                  navigate(`/${routeUrls.scheduleMeeting.path}/new`);
+                }}
+              >
+                <img src="/icons/icons/camera-white-fill.svg" alt="buy mtms" className="pr-2" />
+                {t("home.start_a_instant_meeting")}
+              </Button>
+            </div>
             <div className="dropdown dropdown-end">
               <label
                 tabIndex="0"
                 className="hover:cursor-pointer flex flex-row space-x-2 justify-center items-center"
               >
-                <div>
-                  <Button className="btn btn-primary" onClick={() => {}}>
-                    <img src="/icons/icons/add-white-fill.svg" alt="buy mtms" className="pr-2" />
-                    {t("menu.buy")}
-                  </Button>
-                </div>
                 <div className="avatar">
-                  <div className="!flex w-12 rounded-full justify-center items-center bg-primary text-black">
-                    {user?.profile?.avatar ? (
-                      <img src={`${LIVE_URL}appStore?.user?.profile?.avatar`} alt="avatar" />
-                    ) : (
+                  {user?.profile?.avatar ? (
+                    <div className="!flex w-12 rounded-lg justify-center items-center text-black">
+                      <img src={`${LIVE_URL}${user?.profile?.avatar}`} alt="avatar" />
+                    </div>
+                  ) : (
+                    <div className="!flex w-12 rounded-lg justify-center items-center bg-primary text-black">
                       <span className="text-xl text-white">{user?.profile?.name[0]}</span>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </label>
               <ul
                 tabIndex="0"
-                className="mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-32 z-50 bg-white space-y-4"
+                className="mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-44 z-50 bg-white space-y-4"
               >
-                <li className="w-full">
+                <li className="w-full hover:bg-primary">
                   <Link
-                    to="/profile"
-                    className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white"
+                    to={`/${routeUrls.profileUpdate.path}`}
+                    className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white hover:bg-transparent flex justify-start"
                   >
-                    {t("user.profile")}
+                    {t("profile.edit")}
                   </Link>
                 </li>
-                <li className="w-full">
-                  <a className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white">
-                    {t("menu_avatar.settings")}
-                  </a>
+                <li className="w-full hover:bg-primary text-left">
+                  <Link
+                    to={`/${routeUrls.profileChangePassword.path}`}
+                    className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white hover:bg-transparent flex justify-start"
+                  >
+                    {t("user.change_password")}
+                  </Link>
                 </li>
-                <li className="w-full">
+                <li className="w-full hover:bg-primary text-left">
                   <a
-                    className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white"
+                    className="btn btn-block btn-primary bg-transparent border-0 text-black hover:text-white hover:bg-transparent flex justify-start"
                     onClick={onLogout}
                   >
+                    <IconBase icon="/icons/icons/logout-outline.svg" alt="logout-icon" />{" "}
                     {t("auth.logout")}
                   </a>
                 </li>

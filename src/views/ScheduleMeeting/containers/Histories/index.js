@@ -1,12 +1,6 @@
 /* eslint-disable no-empty */
 import React, { useEffect, useState } from "react";
-import {
-  BrandLogoLoading,
-  Button,
-  GroupTitle,
-  MainLayout,
-  Pagination,
-} from "components";
+import { BrandLogoLoading, Button, GroupTitle, MainLayout, Pagination } from "components";
 import { IoTv } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import { getScheduleMeetings, getRequirePreMeeting } from "services";
@@ -31,25 +25,9 @@ const ScheduleMeetingHistories = ({ t }) => {
     sort_by: "start_date_time",
     title: "",
   });
-
-  const fetchCommonData = async () => {
-    try {
-      const res = await getRequirePreMeeting();
-      if (res) {
-        updateMeetingStore((draft) => {
-          draft.categories = res?.categories;
-          draft.types = res?.types;
-          draft.statuses = res?.statuses;
-          draft.isForceLoadMeetingHistories = true;
-        });
-      }
-    } catch (error) {}
-  };
-
   const fetchData = async () => {
     try {
       setLoading(true);
-      await fetchCommonData();
       const res = await getScheduleMeetings({ ...filter });
       if (res?.data) {
         setHistories({ data: res.data, pagination: res.meta });
@@ -104,7 +82,7 @@ const ScheduleMeetingHistories = ({ t }) => {
               }
             }}
             onPage={(page) => {
-              if(page !== histories.pagination?.current_page) {
+              if (page !== histories.pagination?.current_page) {
                 setFilter({ ...filter, page });
               }
             }}
