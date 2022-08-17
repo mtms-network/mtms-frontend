@@ -1,15 +1,25 @@
 import React from "react";
 import { GoogleButton, WalletButton } from "components";
-import { useWallet } from 'react-binance-wallet';
+import { useWallet } from "react-binance-wallet";
 import { createPrivateInstance } from "services/base";
 import { useMetaMask } from "metamask-react";
+import { routeUrls } from "configs";
+import { useNavigate } from "react-router-dom";
 
 const Wallet = () => {
-  const { account: accountBinance, connect: connectBinance, reset, status, balance, chainId } = useWallet();
+  const navigate = useNavigate();
+  const {
+    account: accountBinance,
+    connect: connectBinance,
+    reset,
+    status,
+    balance,
+    chainId,
+  } = useWallet();
   const { connect: connectMetaMask, account: accountMetaMask } = useMetaMask();
 
   const handleConnectBinaceWallet = async () => {
-    await connectBinance('bsc');
+    await connectBinance("bsc");
 
     // const client = createPrivateInstance('/meetings');
     // const res = await client.post("", {accountBinance});
@@ -18,7 +28,10 @@ const Wallet = () => {
 
   const handleConnectMetaMaskWallet = async () => {
     const res = await connectMetaMask();
-    console.log(res);
+  };
+
+  const onRegister = () => {
+    navigate(`/${routeUrls.register.path}`);
   };
 
   return (
@@ -27,7 +40,7 @@ const Wallet = () => {
         <p className="text-black text-3xl font-bold">Login To Your Account</p>
         <div className="flex flex-row w-full pt-1">
           <p className="pr-2 text-xs">Don’t have an account?</p>
-          <a className="btn-text-primary text-xs">
+          <a onClick={onRegister} className="btn-text-primary text-xs">
             Register
           </a>
         </div>
@@ -42,8 +55,16 @@ const Wallet = () => {
         <div className="flex flex-row space-x-4">
           <WalletButton name="Oasis" src="/icons/oasis-logo.png" />
           <WalletButton name="Avalanche" src="/icons/avalanche-logo.png" />
-          <WalletButton name="Binance" src="/icons/binance-logo.png" onClick={handleConnectBinaceWallet} />
-          <WalletButton name="Metamask" src="/icons/metamask-logo.png" onClick={handleConnectMetaMaskWallet} />
+          <WalletButton
+            name="Binance"
+            src="/icons/binance-logo.png"
+            onClick={handleConnectBinaceWallet}
+          />
+          <WalletButton
+            name="Metamask"
+            src="/icons/metamask-logo.png"
+            onClick={handleConnectMetaMaskWallet}
+          />
         </div>
       </div>
     </>

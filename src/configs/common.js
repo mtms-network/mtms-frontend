@@ -1,6 +1,6 @@
 export const LIVE_MEETING_URL = "https://meeting.mtms.live";
 
-export const LIVE_URL = "https://api.mtms.live/";
+export const LIVE_URL = "https://api.mtms.live";
 
 export const LIVE_API = "https://api.mtms.live/api";
 
@@ -23,4 +23,8 @@ export const ALERT_TYPE = {
   WARNING: "WARNING",
   ERROR: "ERROR",
   MESSAGE: "MESSAGE",
+};
+
+export const API_RESPONSE_STATUS = {
+  success: "success",
 };

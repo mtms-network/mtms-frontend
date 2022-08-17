@@ -102,11 +102,11 @@ const ScheduleMeetingItem = ({ t }) => {
       values.is_paid = false;
       values.is_pam = false;
       values.uuid = null;
-      values.start_date_time = startDateTime.add(startTime, "hours").format('YYYY-MM-DD HH:mm:ss');
+      values.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
       values.contacts = contacts.map((value) => {
         return { uuid: value };
       });
-      values.type = {uuid: type};
+      values.type = { uuid: type };
       values.period = durationHour * 60 + durationMinute;
 
       const client = createPrivateInstance(BASE_API.meeting);
@@ -141,7 +141,7 @@ const ScheduleMeetingItem = ({ t }) => {
         "YYYY-MM-DD",
       ),
     );
-  }
+  };
 
   const fetchContact = async () => {
     try {
@@ -204,172 +204,167 @@ const ScheduleMeetingItem = ({ t }) => {
       )}
       {!fetchLoading && (
         <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-row justify-between w-full py-2">
-          <div className="flex-1 text-center">
-            <GroupTitle icon={<IoTv />} title={t("schedule_meeting_new.schedule_new_meeting")} />
-          </div>
-          <div className="space-x-2 flex flex-row items-center justify-end">
-            <div className="px-2 space-x-4 flex flex-row w-auto items-center justify-end">
-              <IoOptions className="text-black" />
+          <div className="flex flex-row justify-between w-full py-2">
+            <div className="flex-1 text-center">
+              <GroupTitle icon={<IoTv />} title={t("schedule_meeting.scheduled_meetings")} />
             </div>
           </div>
-        </div>
-        <div className="w-[60%] m-auto bg-white rounded-[20px]">
-          <GroupLayout className="flex flex-col justify-between">
-            <div className="w-full h-auto">
-              <Input
-                className="w-full"
-                labelClassName="text-base"
-                register={register("title")}
-                label={t("meeting.props.title")}
-                placeholder={t("schedule_meeting.enter_title_meeting")}
-                rules={[
-                  {
-                    required: true,
-                    message: "This field is required.",
-                  },
-                ]}
-              />
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col space-y-4">
-            <div>
-              {types.map((item) => {
-                return (
-                  <span
-                    className={`rounded-[20px] px-[12px] py-[6px] mr-[12px] bg-slate-base cursor-pointer${
-                      type === item.uuid ? " bg-secondary text-primary" : ""
-                    }`}
-                    onClick={() => setType(item.uuid)}
-                  >
-                    {item.name}
-                  </span>
-                );
-              })}
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col space-y-4">
-            <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-              <div>Start Time</div>
-              <div className="flex-1">
-                <DateTimePicker
-                  placeholder="Mar 2, 2022 5:02 PM"
-                  onChangeDateTime={onChangeDateTime}
-                  format={timeFormat}
-                  value={startDateTime}
+          <div className="w-[60%] m-auto bg-white rounded-[20px]">
+            <GroupLayout className="flex flex-col justify-between">
+              <div className="w-full h-auto">
+                <Input
+                  className="w-full"
+                  labelClassName="text-base"
+                  register={register("title")}
+                  label={t("meeting.props.title")}
+                  placeholder={t("schedule_meeting.enter_title_meeting")}
+                  rules={[
+                    {
+                      required: true,
+                      message: "This field is required.",
+                    },
+                  ]}
                 />
               </div>
-              <div className="flex-1">
-                <Select
-                  options={START_TIME}
-                  defaultValue="01:00"
-                  onChange={(e) => setStartTime(e)}
-                  value={startTime}
-                />
+            </GroupLayout>
+            <GroupLayout className="flex flex-wrap gap-[12px]">
+              {meetingStore?.types &&
+                meetingStore.types.map((item) => {
+                  return (
+                    <span
+                      className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
+                        type === item.uuid ? " bg-secondary text-primary" : ""
+                      }`}
+                      onClick={() => setType(item.uuid)}
+                    >
+                      {item.name}
+                    </span>
+                  );
+                })}
+            </GroupLayout>
+            <GroupLayout className="flex flex-col space-y-4">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                <div>Start Time</div>
+                <div className="flex-1">
+                  <DateTimePicker
+                    placeholder="Mar 2, 2022 5:02 PM"
+                    onChangeDateTime={onChangeDateTime}
+                    format={timeFormat}
+                    value={startDateTime}
+                  />
+                </div>
+                <div className="flex-1">
+                  <Select
+                    options={START_TIME}
+                    defaultValue="01:00"
+                    onChange={(e) => setStartTime(e)}
+                    value={startTime}
+                  />
+                </div>
               </div>
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col space-y-4">
-            <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-              <div>Duration</div>
-              <div className="flex-1">
-                <Select
-                  options={DURATION_HOURS}
-                  defaultValue={0}
-                  value={durationHour}
-                  onChange={(e) => setDurationHour(e)}
-                />
-              </div>
-              <div className="flex-1">
-                <Select
-                  options={DURATION_MINUTES}
-                  defaultValue={0}
-                  value={durationMinute}
-                  onChange={(e) => setDurationMinute(e)}
-                />
-                {/* <Input
+            </GroupLayout>
+            <GroupLayout className="flex flex-col space-y-4">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                <div>Duration</div>
+                <div className="flex-1">
+                  <Select
+                    options={DURATION_HOURS}
+                    defaultValue={0}
+                    value={durationHour}
+                    onChange={(e) => setDurationHour(e)}
+                  />
+                </div>
+                <div className="flex-1">
+                  <Select
+                    options={DURATION_MINUTES}
+                    defaultValue={0}
+                    value={durationMinute}
+                    onChange={(e) => setDurationMinute(e)}
+                  />
+                  {/* <Input
                   register={register("period")}
                   label="Duration"
                   placeholder="60"
                   type="number"
                   min="1"
                 /> */}
+                </div>
               </div>
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col justify-between">
-            <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-              <div className="flex-1">
-                <Input
-                  register={register("max_participant_count")}
-                  label="Maximum participant"
-                  placeholder="1000"
-                  type="number"
-                  min="1"
-                  onChange={(e) => {
-                    const { value } = e.target;
-                    if (value <= 99999 && value >= 0 && value.length <= 5) {
-                      // setParticipant(e.target.value);
-                    }
-                  }}
+            </GroupLayout>
+            <GroupLayout className="flex flex-col justify-between">
+              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                <div className="flex-1">
+                  <Input
+                    register={register("max_participant_count")}
+                    label="Maximum participant"
+                    placeholder="1000"
+                    type="number"
+                    min="1"
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      if (value <= 99999 && value >= 0 && value.length <= 5) {
+                        // setParticipant(e.target.value);
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex-1">
+                  <Input
+                    label={t("meeting.meeting_code")}
+                    placeholder={t("meeting.enter_meeting_code")}
+                    className="!bg-disable"
+                    disabled
+                  />
+                </div>
+              </div>
+            </GroupLayout>
+            <GroupLayout className="flex flex-col justify-between">
+              <div className="w-full h-auto">
+                <Select
+                  label="Email invite"
+                  mode="tags"
+                  options={listContacts}
+                  placeholder={t("schedule_meeting_new.select_invitees")}
+                  onChange={(e) => setContacts(e)}
+                  register={register("contacts")}
+                  value={contacts}
                 />
               </div>
-              <div className="flex-1">
-                <Input
-                  label={t("meeting.meeting_code")}
-                  placeholder={t("meeting.enter_meeting_code")}
-                  disabled
-                />
-              </div>
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col justify-between">
-            <div className="w-full h-auto">
-              <Select
-                label="Email invite"
-                mode="tags"
-                options={listContacts}
-                placeholder={t("schedule_meeting_new.select_invitees")}
-                onChange={(e) => setContacts(e)}
-                register={register("contacts")}
-                value={contacts}
+            </GroupLayout>
+            <GroupLayout className="flex flex-col justify-between">
+              <TextArea
+                className="w-full"
+                register={register("agenda")}
+                label={t("meeting.props.agenda")}
+                placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
               />
-            </div>
-          </GroupLayout>
-          <GroupLayout className="flex flex-col justify-between">
-            <TextArea
-              className="w-full"
-              register={register("agenda")}
-              label={t("meeting.props.agenda")}
-              placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
-            />
-          </GroupLayout>
-          <GroupLayout className="flex flex-col justify-between">
-            <Editor
-              editorState={description}
-              toolbarClassName="toolbarClassName"
-              wrapperClassName="wrapperClassName"
-              editorClassName="editorClassName"
-              onEditorStateChange={(editor) => {
-                setDescription(editor);
-              }}
-              register={register("description")}
-            />
-            <div className="w-full sm:flex sm:flex-row justify-between pt-8 space-y-2 sm:space-y-0">
-              <div className="sm:space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
-                <Button
-                  className="btn btn-primary btn-block sm:btn-wide"
-                  isLoading={loading}
-                  type="submit"
-                  onClick={() => onSubmit()}
-                >
-                  {t("schedule_meeting_new.save_meeting")}
-                </Button>
+            </GroupLayout>
+            <GroupLayout className="flex flex-col justify-between">
+              <Editor
+                editorState={description}
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
+                onEditorStateChange={(editor) => {
+                  setDescription(editor);
+                }}
+                register={register("description")}
+              />
+              <div className="w-full sm:flex sm:flex-row justify-between pt-8 space-y-2 sm:space-y-0">
+                <div className="sm:space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
+                  <Button
+                    className="btn btn-primary btn-block sm:btn-wide"
+                    isLoading={loading}
+                    type="submit"
+                    onClick={() => onSubmit()}
+                  >
+                    {t("schedule_meeting_new.save_meeting")}
+                  </Button>
+                </div>
               </div>
-            </div>
-          </GroupLayout>
-        </div>
-      </form>
+            </GroupLayout>
+          </div>
+        </form>
       )}
     </MainLayout>
   );

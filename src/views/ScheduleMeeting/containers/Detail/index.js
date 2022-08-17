@@ -85,14 +85,7 @@ const ScheduleMeetingDetail = ({ t }) => {
       }));
       setTypes(list);
     }
-    if (meetingStore?.categories) {
-      const list = meetingStore.categories.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
-      // setCategories(list);
-    }
+   
   };
 
   const onSubmit = async (values) => {

@@ -11,10 +11,17 @@ export const InputSingle = ({
   containerClass,
   rightButton,
   leftIcon,
+  compactInput = false,
   ...rest
 }) => {
   return (
-    <div className={classNames("relative w-full flex items-center justify-center", containerClass)}>
+    <div
+      className={classNames(
+        "relative w-full flex items-center justify-center",
+        compactInput && "h-[40px]",
+        containerClass,
+      )}
+    >
       <div className="absolute left-3">{leftIcon}</div>
       <input
         type={type}

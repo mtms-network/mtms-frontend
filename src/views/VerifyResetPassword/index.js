@@ -8,6 +8,7 @@ import { ALERT_TYPE, routeUrls } from "configs";
 import { resetPassword } from "services";
 import { handleHttpError } from "helpers";
 import { useAppStore } from "stores/app.store";
+import { message } from "antd";
 
 export default function VerifyResetPassword() {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
@@ -32,6 +33,7 @@ export default function VerifyResetPassword() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -47,11 +49,7 @@ export default function VerifyResetPassword() {
         newPasswordConfirmation: values.confirmPassword,
       });
       if (data) {
-        setAlert({
-          type: ALERT_TYPE.SUCCESS,
-          show: true,
-          message: `Reset password successful`,
-        });
+        message.success("Reset password successful");
         setTimeout(() => {
           navigate(`/${routeUrls.login.path}`);
         }, 3000);
@@ -103,7 +101,6 @@ export default function VerifyResetPassword() {
                 label="Email"
                 placeholder="Enter your email"
                 error={errors.email}
-                value={appStore.resetPassword.email || ""}
                 labelClassName="font-medium"
               />
             </div>

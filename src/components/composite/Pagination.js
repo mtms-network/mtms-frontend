@@ -20,30 +20,41 @@ const Pagination = ({
   let start = page;
   let end;
   const html = [];
-  if (page > 1) {
-    start = page - 1;
-    if (page > 3) {
-      html.push(
-        <>
-          <div
-            onClick={() => onPage(1)}
-            className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer"
-          >
-            1
-          </div>
-          <div>...</div>
-        </>,
-      );
+  if (totalPage > 1) {
+    if (page > 1) {
+      start = page - 1;
+      if (page > 3) {
+        html.push(
+          <>
+            <div
+              onClick={() => onPage(1)}
+              className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer"
+            >
+              1
+            </div>
+            <div>...</div>
+          </>,
+        );
+      }
     }
-  }
 
-  if (page > totalPage - 2) {
-    start = totalPage - 2;
-  }
+    if (page > totalPage - 2) {
+      start = totalPage - 2;
+    }
 
-  end = start + 3;
-  if (end > totalPage + 1) {
-    end = totalPage + 1;
+    end = start + 3;
+    if (end > totalPage + 1) {
+      end = totalPage + 1;
+    }
+  } else {
+    html.push(
+      <div
+          onClick={() => onPage(1)}
+          className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer bg-primary text-white"
+        >
+          1
+        </div>,
+    );
   }
 
   for (let i = start; i < end; i++) {

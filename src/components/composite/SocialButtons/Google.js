@@ -18,6 +18,7 @@ export function GoogleButton({ showTitle = true }) {
         setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
         updateAppStore((draft) => {
           draft.isAuthenticated = true;
+          draft.user = data?.user;
         });
         navigate("/");
       }

@@ -1,6 +1,6 @@
 /* eslint-disable no-empty */
 import React, { useState, useEffect } from "react";
-import { Button, MainLayout, AlertError } from "components";
+import { Button, MainLayout, AlertError, BrandLogoLoading } from "components";
 
 import { BASE_API, ALERT_TYPE } from "configs";
 import { useWalletStore } from "stores/wallet.store";
@@ -12,6 +12,8 @@ import { createPrivateInstance } from "services/base";
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
   const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
+
   const [alert, setAlert] = useState({
     show: false,
     message: "",
@@ -27,14 +29,18 @@ const Rewards = () => {
   const prepareData = async () => {
     try {
       if (walletStore.wallet === null) {
+        setFetchLoading(true);
         const res = await getRequirePreWallet();
         if (res) {
           updateWalletStore((draft) => {
             draft.wallet = res;
           });
         }
+        setFetchLoading(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      setFetchLoading(false);
+    }
   };
 
   const handleClaimTokenToday = async () => {
@@ -44,11 +50,11 @@ const Rewards = () => {
 
       const client = createPrivateInstance(BASE_API.wallet);
       const res = await client.post("/claim/meeting/today");
-      const total_token = walletStore.wallet.token_per_checkin + res.data.amount;
+      const totalToken = walletStore.wallet.token_per_checkin + res.data.amount;
       const newWallet = {
         ...walletStore.wallet,
         total_token_today: 0,
-        user: { ...walletStore.wallet.user, total_token },
+        user: { ...walletStore.wallet.user, total_token: totalToken },
       };
       updateWalletStore((draft) => {
         draft.wallet = newWallet;
@@ -76,11 +82,11 @@ const Rewards = () => {
 
       const client = createPrivateInstance(BASE_API.wallet);
       const res = await client.post("/claim/checkin");
-      const total_token = walletStore.wallet.user.total_token + res.data.amount;
+      const totalToken = walletStore.wallet.user.total_token + res.data.amount;
       const newWallet = {
         ...walletStore.wallet,
         total_checkin_token: 0,
-        user: { ...walletStore.wallet.user, total_token },
+        user: { ...walletStore.wallet.user, total_token: totalToken },
       };
       updateWalletStore((draft) => {
         draft.wallet = newWallet;
@@ -150,7 +156,7 @@ const Rewards = () => {
     }
     prepareData();
   }, [walletStore]);
-console.log(walletStore?.wallet);
+
   return (
     <MainLayout>
       <div className="p-2 min-h-full">
@@ -160,6 +166,11 @@ console.log(walletStore?.wallet);
             setAlert({ ...alert, show: false });
           }}
         />
+        {fetchLoading && (
+          <div className="h-screen">
+            <BrandLogoLoading />
+          </div>
+        )}
         <div className="space-y-6">
           <div className="flex w-full bg-white rounded-3xl py-6 px-8">
             <div className="flex flex-1 flex-row justify-between">
@@ -215,8 +226,8 @@ console.log(walletStore?.wallet);
                     <span className="font-bold text-lg text-black-base">{` ${walletStore?.wallet?.user?.oasis?.address}`}</span>
                   </p>
                   <p className="text-base pt-5">
-                    You are a good staff, you are working hard this weeks with {timeWeek.hour} hours meeting and
-                    received {walletStore?.wallet?.total_token_week} MTMS Tokens.
+                    You are a good staff, you are working hard this weeks with {timeWeek.hour} hours
+                    meeting and received {walletStore?.wallet?.total_token_week} MTMS Tokens.
                   </p>
                 </div>
               </div>

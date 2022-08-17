@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Alert, Button, GoogleButton, GuestFormLayout, Input, WalletButton } from "components";
+import { Alert, Button, GuestFormLayout, Input } from "components";
 import { useNavigate } from "react-router-dom";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signIn } from "services";
@@ -58,12 +58,13 @@ export default function Login() {
         password: values.password,
         deviceName: "mtms-app",
       });
-
-      setLoading(false);
       setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
       updateAppStore((draft) => {
         draft.isAuthenticated = true;
+        draft.user = data?.user;
       });
+      setLoading(false);
+
       navigate("/");
     } catch (error) {
       if (error) {
@@ -90,6 +91,7 @@ export default function Login() {
       setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
       updateAppStore((draft) => {
         draft.isAuthenticated = true;
+        draft.user = data?.user;
       });
       navigate("/");
     } catch (error) {
@@ -112,41 +114,6 @@ export default function Login() {
   const onForgetPassword = () => {
     navigate(`/${routeUrls.reset.path}`);
   };
-
-  const onRegister = () => {
-    navigate(`/${routeUrls.register.path}`);
-  };
-
-  /* const CommonLogin = useMemo(
-    () => (
-      {<>
-        <div className="pb-4">
-          <p className="text-black text-3xl font-bold">Login To Your Account</p>
-          <div className="flex flex-row w-full pt-1">
-            <p className="pr-2 text-xs">Don’t have an account?</p>
-            <a className="btn-text-primary text-xs" onClick={onRegister}>
-              Register
-            </a>
-          </div>
-        </div>
-        <div className="pt-6">
-          <p className="text-black-base text-lg font-bold pb-3">Log In With Social</p>
-          <GoogleButton showTitle />
-        </div>
-        <div>
-          <div className="divider mt-2 mb-2 text-hint">Or</div>
-          <p className="text-black-base text-lg font-bold pb-3 pt-4">Log In With Crypto Wallet</p>
-          <div className="flex flex-row space-x-4">
-            <WalletButton name="Oasis" src="/icons/oasis-logo.png" />
-            <WalletButton name="Avalanche" src="/icons/avalanche-logo.png" />
-            <WalletButton name="Binance" src="/icons/binance-logo.png" onClick={() => connect('injected')} />
-            <WalletButton name="Metamask" src="/icons/metamask-logo.png" onClick={handleConnectMetaMask} />
-          </div>
-        </div>
-      </>}
-    ),
-    [],
-  ); */
 
   useAuth();
 
@@ -261,7 +228,6 @@ export default function Login() {
             </Button>
             <Button
               className="btn-primary rounded-full btn-wide btn-ghost text-primary"
-              isLoading={loading}
               onClick={onClearUserInfo}
             >
               Logout
