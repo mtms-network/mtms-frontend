@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { BASE_API } from "configs";
+import { BASE_API, COMMON } from "configs";
 import QueryString from "qs";
 import { createPrivateInstance } from "./base";
 
@@ -11,7 +11,7 @@ export const getRequirePreMeeting = async () => {
     return res?.data;
   } catch (error) {
     console.error("getPreRequireMeeting", error);
-    return null;
+    return error;
   }
 };
 
@@ -46,7 +46,7 @@ export const getMeetingHistories = async ({
     return res?.data;
   } catch (error) {
     console.error("getMeetingHistories", error);
-    return null;
+    return error;
   }
 };
 
@@ -85,7 +85,7 @@ export const joinMeetingByCode = async ({ code }) => {
     return res;
   } catch (error) {
     console.error("joinMeetingByCode", error);
-    return null;
+    return error;
   }
 };
 
@@ -95,18 +95,19 @@ export const startMeeting = async ({
     uuid: "audio_conference",
     name: "Audio Conference",
   },
-  maxParticipant = 1000,
+  maxParticipant = COMMON.MAX_PARTICIPANT,
   isActiveMember = false,
   isKeepAlive = false,
   fee = 0,
+  code = "",
 }) => {
   try {
-    const res = await client.post(`/`, {
+    const res = await client.post(``, {
       instant,
       type,
       max_participant_count: maxParticipant,
       accessible_to_members: isActiveMember,
-      identifier: "",
+      identifier: code,
       keep_alive: isKeepAlive,
       is_pam: false,
       is_paid: false,
@@ -115,7 +116,7 @@ export const startMeeting = async ({
     return res;
   } catch (error) {
     console.error("startMeeting", error);
-    return null;
+    return error;
   }
 };
 
@@ -125,7 +126,41 @@ export const getMeetingDetail = async (uuid) => {
     return res?.data;
   } catch (error) {
     console.error("getMeetingDetail", error);
-    return null;
+    return error;
+  }
+};
+
+export const createInstantMeeting = async (data) => {
+  try {
+    const res = await client.post(``, {
+      ...data,
+    });
+    return res;
+  } catch (error) {
+    console.error("createInstantMeeting", error);
+    return error;
+  }
+};
+
+export const updateInstantMeeting = async (meetingId, data) => {
+  try {
+    const res = await client.put(`/${meetingId}`, {
+      ...data,
+    });
+    return res;
+  } catch (error) {
+    console.error("updateInstantMeeting", error);
+    return error;
+  }
+};
+
+export const sendEmailToMemberInMeeting = async (meetingId) => {
+  try {
+    const res = await client.post(`/${meetingId}/invitation`);
+    return res;
+  } catch (error) {
+    console.error("sendEmailToMemberInMeeting", error);
+    return error;
   }
 };
 
@@ -136,6 +171,6 @@ export const getMeetingContact = async () => {
     return res?.data;
   } catch (error) {
     console.error("getMeetingContact", error);
-    return null;
+    return error;
   }
 };

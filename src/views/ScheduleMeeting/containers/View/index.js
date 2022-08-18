@@ -75,8 +75,7 @@ const ScheduleMeetingView = ({ t }) => {
   const handleCopyLink = () => {
     const meetingUrl = `${LIVE_MEETING_URL}/${meetingStore?.meeting?.identifier}`;
     navigator.clipboard.writeText(meetingUrl);
-    setTimeout(() => {
-    }, [1000]);
+    setTimeout(() => {}, [1000]);
   };
 
   const deleteMeeting = async () => {
@@ -153,7 +152,7 @@ const ScheduleMeetingView = ({ t }) => {
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
-            <span>Maximum Participant:</span>{" "}
+            <span>Maximum Participant: </span>
             <span className="font-[700] text-[16px]">
               {meetingStore?.meeting?.max_participant_count}
             </span>

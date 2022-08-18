@@ -28,3 +28,7 @@ export const ALERT_TYPE = {
 export const API_RESPONSE_STATUS = {
   success: "success",
 };
+
+export const COMMON = {
+  MAX_PARTICIPANT: 50,
+};

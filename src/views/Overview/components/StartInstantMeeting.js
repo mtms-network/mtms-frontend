@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { Button, GroupLayout, GroupTitle, Icon, Input } from "components";
 import { useMeetingStore } from "stores/meeting.store";
 import { startMeeting } from "services";
-import { LIVE_MEETING_URL } from "configs";
+import { COMMON, LIVE_MEETING_URL } from "configs";
 import { withTranslation } from "react-i18next";
 
 const StartInstantMeeting = ({ className, t }) => {
@@ -30,7 +30,8 @@ const StartInstantMeeting = ({ className, t }) => {
     try {
       setLoading(true);
       const res = await startMeeting({
-        maxParticipant: participant > 0 ? participant : 1000,
+        maxParticipant: participant > 0 ? participant : COMMON.MAX_PARTICIPANT,
+        code,
         type,
         isKeepAlive,
         isActiveMember: isOnlyActiveMember,
@@ -89,7 +90,7 @@ const StartInstantMeeting = ({ className, t }) => {
           <div className="basis-full sm:basis-1/2 py-4 sm:py-0">
             <p className="label-base font-bold">{t("home.maximum_participant")}</p>
             <Input
-              placeholder="1000"
+              placeholder={COMMON.MAX_PARTICIPANT}
               className="bg-gray-base-100 border-0"
               value={participant}
               type="number"
@@ -174,9 +175,9 @@ const StartInstantMeeting = ({ className, t }) => {
               </label>
             </div>
           </div>
-          <div className="basis-full sm:basis-1/2 flex items-end">
+          <div className="basis-full sm:basis-1/2 flex items-center">
             <Button className="btn btn-primary btn-wide" isLoading={loading} onClick={handleStart}>
-              <img src="/icons/icons/add-white-fill.svg" alt="buy mtms" className="pr-2" />
+              <img src="/icons/icons/camera-white-fill.svg" alt="buy mtms" className="pr-2" />
               {t("home.start_a_instant_meeting")}
             </Button>
           </div>

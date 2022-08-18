@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Alert, Button, GuestFormLayout, Input } from "components";
+import { Alert, Button, GoogleButton, GuestFormLayout, Input } from "components";
 import { useNavigate } from "react-router-dom";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signIn } from "services";
@@ -115,6 +115,10 @@ export default function Login() {
     navigate(`/${routeUrls.reset.path}`);
   };
 
+  const onRegister = () => {
+    navigate(`/${routeUrls.register.path}`);
+  };
+
   useAuth();
 
   useEffect(() => {
@@ -128,7 +132,26 @@ export default function Login() {
     return (
       <GuestFormLayout>
         <div>
-          <Wallet />
+          <div className="pb-4">
+            <p className="text-black text-3xl font-bold">Login To Your Account</p>
+            <div className="flex flex-row w-full pt-1">
+              <p className="pr-2 text-xs">Don’t have an account?</p>
+              <a onClick={onRegister} className="btn-text-primary text-xs">
+                Register
+              </a>
+            </div>
+          </div>
+          <div className="pt-6">
+            <p className="text-black-base text-lg font-bold pb-3">Log In With Social</p>
+            <GoogleButton showTitle />
+          </div>
+          <div>
+            <div className="divider mt-2 mb-2 text-hint">Or</div>
+            <p className="text-black-base text-lg font-bold pb-3 pt-4">Log In With Crypto Wallet</p>
+            <div className="flex flex-row space-x-4">
+              <Wallet />
+            </div>
+          </div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
           <p className="text-black-base text-lg font-bold pb-2 pt-4">Log In With Email</p>
           {alert?.show && (
@@ -184,7 +207,26 @@ export default function Login() {
   const renderUnlock = () => {
     return (
       <GuestFormLayout>
-        <Wallet />
+        <div className="pb-4">
+          <p className="text-black text-3xl font-bold">Login To Your Account</p>
+          <div className="flex flex-row w-full pt-1">
+            <p className="pr-2 text-xs">Don’t have an account?</p>
+            <a onClick={onRegister} className="btn-text-primary text-xs">
+              Register
+            </a>
+          </div>
+        </div>
+        <div className="pt-6">
+          <p className="text-black-base text-lg font-bold pb-3">Log In With Social</p>
+          <GoogleButton showTitle />
+        </div>
+        <div>
+          <div className="divider mt-2 mb-2 text-hint">Or</div>
+          <p className="text-black-base text-lg font-bold pb-3 pt-4">Log In With Crypto Wallet</p>
+          <div className="flex flex-row space-x-4">
+            <Wallet />
+          </div>
+        </div>
         <div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
           <p className="text-black-base text-lg font-bold pb-2 pt-4">Log in with Email</p>

@@ -125,11 +125,6 @@ const ChangePassword = ({ t }) => {
             {t("user.change_password")}
           </Button>
         </div>
-        <div className="pt-4">
-          <a className="btn-text-primary text-md" onClick={onForgetPassword}>
-            Forget Password?
-          </a>
-        </div>
       </div>
     </MainLayout>
   );

@@ -7,6 +7,7 @@ import { Alert, Button, GoogleButton, GuestFormLayout, Input, WalletButton } fro
 import { handleHttpError, resetUserInfo } from "helpers";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signUp } from "services";
+import Wallet from "components/base/Wallet";
 
 export default function Register() {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
@@ -87,10 +88,7 @@ export default function Register() {
         <div className="divider mt-2 mb-2 text-hint">Or</div>
         <p className="text-black-base text-lg font-bold pb-3 pt-4">Sign Up With Crypto Wallet</p>
         <div className="flex flex-row space-x-4">
-          <WalletButton name="Oasis" src="/icons/oasis-logo.png" />
-          <WalletButton name="Avalanche" src="/icons/avalanche-logo.png" />
-          <WalletButton name="Binance" src="/icons/binance-logo.png" />
-          <WalletButton name="Metamask" src="/icons/metamask-logo.png" />
+          <Wallet />
         </div>
       </div>
       <div>
