@@ -111,18 +111,18 @@ const ScheduleMeetingDetail = ({ t }) => {
       delete data.identifier;
 
       const res = await updateInstantMeeting(params.meetingId, data);
-      if (res.data) {
+      if (res?.data) {
         message.success(res.data?.message);
         await sendEmailToMemberInMeeting(params.meetingId);
-      } else {
+      } else if (res?.request) {
         const errorData = handleHttpError(res);
-        message.error(errorData.detail?.message.join(", "));
+        message.error(errorData.message);
       }
       setLoading(false);
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        message.error(errorData);
+        message.error(errorData.message);
       }
       setLoading(false);
     }
@@ -243,168 +243,182 @@ const ScheduleMeetingDetail = ({ t }) => {
         </div>
       )}
       {!fetchLoading && (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1 text-center">
               <GroupTitle icon={<IoTv />} title={t("schedule_meeting_new.schedule_new_meeting")} />
             </div>
           </div>
           <div className="w-[90%] m-auto bg-white rounded-[20px] md:w-[80%] lx:w-[60%]">
-            <GroupLayout className="flex flex-col justify-between">
-              <div className="w-full h-auto">
-                <Input
-                  className="w-full"
-                  labelClassName="text-base"
-                  register={register("title")}
-                  label={t("meeting.props.title")}
-                  placeholder={t("schedule_meeting.enter_title_meeting")}
-                  rules={[
-                    {
-                      required: true,
-                      message: "This field is required.",
-                    },
-                  ]}
-                />
-              </div>
-            </GroupLayout>
-            <GroupLayout className="flex flex-wrap gap-[12px]">
-              {meetingStore?.types &&
-                meetingStore.types.map((item) => {
-                  return (
-                    <span
-                      className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
-                        type === item.uuid ? " bg-secondary text-primary" : ""
-                      }`}
-                      onClick={() => setType(item.uuid)}
-                    >
-                      {item.name}
-                    </span>
-                  );
-                })}
-            </GroupLayout>
-            <GroupLayout className="flex flex-col space-y-4">
-              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                <div>Start Time</div>
-                <div className="flex-1">
-                  <DateTimePicker
-                    placeholder="Mar 2, 2022 5:02 PM"
-                    onChangeDateTime={onChangeDateTime}
-                    format={timeFormat}
-                    value={startDateTime}
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <GroupLayout className="flex flex-col justify-between">
+                <div className="w-full h-auto">
+                  <Input
+                    className="w-full"
+                    labelClassName="text-base"
+                    register={register("title")}
+                    label={t("meeting.props.title")}
+                    placeholder={t("schedule_meeting.enter_title_meeting")}
+                    rules={[
+                      {
+                        required: true,
+                        message: "This field is required.",
+                      },
+                    ]}
                   />
                 </div>
-                <div className="flex-1">
-                  <Select
-                    options={START_TIME}
-                    defaultValue="01:00"
-                    onChange={(e) => setStartTime(e)}
-                    value={startTime}
-                  />
+              </GroupLayout>
+              <GroupLayout className="flex flex-wrap gap-[12px]">
+                {meetingStore?.types &&
+                  meetingStore.types.map((item) => {
+                    return (
+                      <span
+                        className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
+                          type === item.uuid ? " bg-secondary text-primary" : ""
+                        }`}
+                        onClick={() => setType(item.uuid)}
+                      >
+                        {item.name}
+                      </span>
+                    );
+                  })}
+              </GroupLayout>
+              <GroupLayout className="flex flex-col space-y-4">
+                <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                  <div>Start Time</div>
+                  <div className="flex-1">
+                    <DateTimePicker
+                      placeholder="Mar 2, 2022 5:02 PM"
+                      onChangeDateTime={onChangeDateTime}
+                      format={timeFormat}
+                      value={startDateTime}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Select
+                      options={START_TIME}
+                      defaultValue="01:00"
+                      onChange={(e) => setStartTime(e)}
+                      value={startTime}
+                    />
+                  </div>
                 </div>
-              </div>
-            </GroupLayout>
-            <GroupLayout className="flex flex-col space-y-4">
-              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                <div>Duration</div>
-                <div className="flex-1">
-                  <Select
-                    options={DURATION_HOURS}
-                    defaultValue={0}
-                    value={durationHour}
-                    onChange={(e) => setDurationHour(e)}
-                  />
-                </div>
-                <div className="flex-1">
-                  <Select
-                    options={DURATION_MINUTES}
-                    defaultValue={0}
-                    value={durationMinute}
-                    onChange={(e) => setDurationMinute(e)}
-                  />
-                  {/* <Input
+              </GroupLayout>
+              <GroupLayout className="flex flex-col space-y-4">
+                <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                  <div>Duration</div>
+                  <div className="flex-1">
+                    <Select
+                      options={DURATION_HOURS}
+                      defaultValue={0}
+                      value={durationHour}
+                      onChange={(e) => setDurationHour(e)}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Select
+                      options={DURATION_MINUTES}
+                      defaultValue={0}
+                      value={durationMinute}
+                      onChange={(e) => setDurationMinute(e)}
+                    />
+                    {/* <Input
                     register={register("period")}
                     label="Duration"
                     placeholder="60"
                     type="number"
                     min="1"
                   /> */}
+                  </div>
                 </div>
-              </div>
-            </GroupLayout>
-            <GroupLayout className="flex flex-col justify-between">
-              <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                <div className="flex-1">
-                  <Input
-                    register={register("max_participant_count")}
-                    label="Maximum participant"
-                    placeholder={COMMON.MAX_PARTICIPANT}
-                    type="number"
-                    min="1"
-                    onChange={(e) => {
-                      const { value } = e.target;
-                      if (value <= 99999 && value >= 0 && value.length <= 5) {
-                        // setParticipant(e.target.value);
-                      }
-                    }}
+              </GroupLayout>
+              <GroupLayout className="flex flex-col justify-between">
+                <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                  <div className="flex-1">
+                    <Input
+                      register={register("max_participant_count")}
+                      label="Maximum participant"
+                      placeholder={COMMON.MAX_PARTICIPANT}
+                      type="number"
+                      min="1"
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        if (value <= 99999 && value >= 0 && value.length <= 5) {
+                          // setParticipant(e.target.value);
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      register={register("identifier")}
+                      label={t("meeting.meeting_code")}
+                      placeholder={t("meeting.enter_meeting_code")}
+                      className="!bg-disable"
+                      disabled
+                    />
+                  </div>
+                </div>
+              </GroupLayout>
+              <GroupLayout className="flex flex-col justify-between">
+                <div className="w-full h-auto">
+                  <Select
+                    label="Email invite"
+                    mode="tags"
+                    options={listContacts}
+                    placeholder={t("schedule_meeting_new.select_invitees")}
+                    onChange={(e) => setContacts(e)}
+                    register={register("contacts")}
+                    value={contacts}
                   />
                 </div>
-                <div className="flex-1">
-                  <Input
-                    register={register("identifier")}
-                    label={t("meeting.meeting_code")}
-                    placeholder={t("meeting.enter_meeting_code")}
-                    className="!bg-disable"
-                    disabled
-                  />
-                </div>
-              </div>
-            </GroupLayout>
-            <GroupLayout className="flex flex-col justify-between">
-              <div className="w-full h-auto">
-                <Select
-                  label="Email invite"
-                  mode="tags"
-                  options={listContacts}
-                  placeholder={t("schedule_meeting_new.select_invitees")}
-                  onChange={(e) => setContacts(e)}
-                  register={register("contacts")}
-                  value={contacts}
+              </GroupLayout>
+              <GroupLayout className="flex flex-col justify-between">
+                <TextArea
+                  className="w-full"
+                  register={register("agenda")}
+                  label={t("meeting.props.agenda")}
+                  placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
                 />
+              </GroupLayout>
+              <GroupLayout className="flex flex-col justify-between">
+                <Editor
+                  editorState={description}
+                  toolbarClassName="toolbarClassName rounded-lg"
+                  wrapperClassName="wrapperClassName bg-slate-base rounded-lg"
+                  editorClassName="editorClassName px-2"
+                  placeholder="Enter Description"
+                  onEditorStateChange={(editor) => {
+                    setDescription(editor);
+                  }}
+                  register={register("description")}
+                />
+              </GroupLayout>
+            </form>
+            <div className="w-full sm:flex sm:flex-row justify-between pt-2 pb-8 space-y-2 sm:space-y-0">
+              <div className="sm:space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
+                <Button
+                  className="btn btn-primary btn-outline"
+                  type="submit"
+                  onClick={() => {
+                    navigate(`/${routeUrls.scheduleMeetingView.path}/${params.meetingId}`);
+                  }}
+                  disabled={loading}
+                >
+                  {t("general.cancel")}
+                </Button>
+                <Button
+                  className="btn btn-primary"
+                  isLoading={loading}
+                  type="submit"
+                  onClick={() => onSubmit()}
+                >
+                  {t("general.create")}
+                </Button>
               </div>
-            </GroupLayout>
-            <GroupLayout className="flex flex-col justify-between">
-              <TextArea
-                className="w-full"
-                register={register("agenda")}
-                label={t("meeting.props.agenda")}
-                placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
-              />
-            </GroupLayout>
-            <GroupLayout className="flex flex-col justify-between">
-              <Editor
-                editorState={description}
-                toolbarClassName="toolbarClassName"
-                wrapperClassName="wrapperClassName"
-                editorClassName="editorClassName"
-                onEditorStateChange={(editor) => {
-                  setDescription(editor);
-                }}
-                register={register("description")}
-              />
-              <div className="w-full sm:flex sm:flex-row justify-between pt-8 space-y-2 sm:space-y-0">
-                <div className="sm:space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
-                  <Button
-                    className="btn btn-primary btn-block sm:btn-wide"
-                    isLoading={loading}
-                    type="submit"
-                  >
-                    {t("schedule_meeting_new.save_meeting")}
-                  </Button>
-                </div>
-              </div>
-            </GroupLayout>
+            </div>
           </div>
-        </form>
+        </>
       )}
     </MainLayout>
   );

@@ -23,6 +23,9 @@ export const routeUrls = {
   scheduleMeeting: {
     path: "schedule-meeting",
   },
+  scheduleMeetingView: {
+    path: "schedule-meeting/view",
+  },
   rewards: {
     path: "rewards",
   },
