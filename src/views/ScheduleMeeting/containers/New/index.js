@@ -25,12 +25,18 @@ import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import { convertToRaw } from "draft-js";
 import { createPrivateInstance } from "services/base";
-import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
+import { BASE_API, ALERT_TYPE, routeUrls, COMMON } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMeetingContact, getRequirePreMeeting } from "services";
+import {
+  createInstantMeeting,
+  getMeetingContact,
+  getRequirePreMeeting,
+  sendEmailToMemberInMeeting,
+} from "services";
 import { withTranslation } from "react-i18next";
 import moment from "moment";
+import { message } from "antd";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -48,6 +54,7 @@ const ScheduleMeetingItem = ({ t }) => {
   const [startTime, setStartTime] = useState(1);
   const [durationHour, setDurationHour] = useState(0);
   const [durationMinute, setDurationMinute] = useState(0);
+  // const [code, setCode] = useState("");
   const [alert, setAlert] = useState({
     show: false,
     message: "",
@@ -93,36 +100,36 @@ const ScheduleMeetingItem = ({ t }) => {
 
   const onSubmit = async (values) => {
     try {
+      const data = { ...values };
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
 
-      values.description = description
-        ? draftToHtml(convertToRaw(description.getCurrentContent()))
+      data.description = description
+        ? draftToHtml(convertToRaw(description?.getCurrentContent()))
         : "";
-      values.is_paid = false;
-      values.is_pam = false;
-      values.uuid = null;
-      values.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
-      values.contacts = contacts.map((value) => {
+      data.is_paid = false;
+      data.is_pam = false;
+      data.uuid = null;
+      data.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
+      data.contacts = contacts.map((value) => {
         return { uuid: value };
       });
-      values.type = { uuid: type };
-      values.period = durationHour * 60 + durationMinute;
+      data.type = { uuid: type };
+      data.period = durationHour * 60 + durationMinute;
+      const res = await createInstantMeeting(data);
 
-      const client = createPrivateInstance(BASE_API.meeting);
-      const res = await client.post("", values);
-
+      if (res) {
+        message.success(res?.message);
+        await sendEmailToMemberInMeeting(params.meetingId);
+      } else {
+        const errorData = handleHttpError(res);
+        message.error(errorData.detail?.message.join(", "));
+      }
       setLoading(false);
-      navigate(`/${routeUrls.scheduleMeeting.path}`);
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        setAlert({
-          type: ALERT_TYPE.ERROR,
-          show: true,
-          message: errorData.message,
-          error: errorData.detail,
-        });
+        message.error(errorData?.message);
       }
       setLoading(false);
     }
@@ -167,6 +174,7 @@ const ScheduleMeetingItem = ({ t }) => {
           draft.statuses = res?.statuses;
           draft.isForceLoadMeetingHistories = true;
         });
+        setType(res?.types.length > 0 && res?.types[0].uuid);
       }
     } catch (error) {}
   };
@@ -218,6 +226,7 @@ const ScheduleMeetingItem = ({ t }) => {
                   register={register("title")}
                   label={t("meeting.props.title")}
                   placeholder={t("schedule_meeting.enter_title_meeting")}
+                  required
                   rules={[
                     {
                       required: true,
@@ -297,7 +306,7 @@ const ScheduleMeetingItem = ({ t }) => {
                   <Input
                     register={register("max_participant_count")}
                     label="Maximum participant"
-                    placeholder="1000"
+                    placeholder={COMMON.MAX_PARTICIPANT}
                     type="number"
                     min="1"
                     onChange={(e) => {
@@ -312,8 +321,7 @@ const ScheduleMeetingItem = ({ t }) => {
                   <Input
                     label={t("meeting.meeting_code")}
                     placeholder={t("meeting.enter_meeting_code")}
-                    className="!bg-disable"
-                    disabled
+                    register={register("identifier")}
                   />
                 </div>
               </div>
@@ -337,6 +345,7 @@ const ScheduleMeetingItem = ({ t }) => {
                 register={register("agenda")}
                 label={t("meeting.props.agenda")}
                 placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
+                required
               />
             </GroupLayout>
             <GroupLayout className="flex flex-col justify-between">

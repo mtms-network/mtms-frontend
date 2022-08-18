@@ -1,3 +1,4 @@
+import { COMMON } from "configs";
 import { createStore } from "./store";
 
 const MeetingStore = createStore({
@@ -6,6 +7,11 @@ const MeetingStore = createStore({
   statuses: null,
   isForceLoadMeetingHistories: false,
   meeting: null,
+  defaultStartInstantMeeting: {
+    maxParticipant: COMMON.MAX_PARTICIPANT,
+    isKeepAlive: false,
+    isActiveMember: false,
+  },
 });
 
 export const useMeetingStore = MeetingStore.useStore;

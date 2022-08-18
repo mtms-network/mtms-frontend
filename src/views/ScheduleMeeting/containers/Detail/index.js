@@ -25,15 +25,18 @@ import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import { convertFromHTML, convertToRaw, EditorState, ContentState } from "draft-js";
 import { createPrivateInstance } from "services/base";
-import { BASE_API, ALERT_TYPE, routeUrls } from "configs";
+import { BASE_API, ALERT_TYPE, routeUrls, COMMON } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getMeetingDetail,
   getMeetingContact,
   getRequirePreMeeting,
+  updateInstantMeeting,
+  sendEmailToMemberInMeeting,
 } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
+import { message } from "antd";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -44,7 +47,7 @@ const ScheduleMeetingDetail = ({ t }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [types, setTypes] = useState([]);
-  const [description, setDescription] = useState(null);
+  const [description, setDescription] = useState("");
   const [startDateTime, setStartDateTime] = useState(null);
   const [contacts, setContacts] = useState([]);
   const [type, setType] = useState(null);
@@ -85,41 +88,41 @@ const ScheduleMeetingDetail = ({ t }) => {
       }));
       setTypes(list);
     }
-   
   };
 
   const onSubmit = async (values) => {
+    const data = { ...values };
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-      values.description = description
-        ? draftToHtml(convertToRaw(description.getCurrentContent()))
+      data.description = description
+        ? draftToHtml(convertToRaw(description?.getCurrentContent()))
         : "";
-      values.is_paid = false;
-      values.is_pam = false;
-      values.uuid = params.meetingId;
-      values.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
+      data.is_paid = false;
+      data.is_pam = false;
+      data.uuid = params.meetingId;
+      data.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
 
-      values.contacts = contacts.map((value) => {
+      data.contacts = contacts.map((value) => {
         return { uuid: value };
       });
-      values.type = { uuid: type };
-      values.period = durationHour * 60 + durationMinute;
-      delete values.identifier;
-      const client = createPrivateInstance(BASE_API.meeting);
-      await client.patch(`/${params.meetingId}`, values);
+      data.type = { uuid: type };
+      data.period = durationHour * 60 + durationMinute;
+      delete data.identifier;
 
+      const res = await updateInstantMeeting(params.meetingId, data);
+      if (res.data) {
+        message.success(res.data?.message);
+        await sendEmailToMemberInMeeting(params.meetingId);
+      } else {
+        const errorData = handleHttpError(res);
+        message.error(errorData.detail?.message.join(", "));
+      }
       setLoading(false);
-      navigate(`/${routeUrls.scheduleMeeting.path}`);
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        setAlert({
-          type: ALERT_TYPE.ERROR,
-          show: true,
-          message: errorData.message,
-          error: errorData.detail,
-        });
+        message.error(errorData);
       }
       setLoading(false);
     }
@@ -160,7 +163,7 @@ const ScheduleMeetingDetail = ({ t }) => {
         setDurationMinute(res.period % 60);
         setDescription(
           EditorState.createWithContent(
-            ContentState.createFromBlockArray(convertFromHTML(res.description)),
+            ContentState.createFromBlockArray(convertFromHTML(res?.description || "")),
           ),
         );
         const currentContacts = [];
@@ -334,7 +337,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                   <Input
                     register={register("max_participant_count")}
                     label="Maximum participant"
-                    placeholder="1000"
+                    placeholder={COMMON.MAX_PARTICIPANT}
                     type="number"
                     min="1"
                     onChange={(e) => {
@@ -394,7 +397,6 @@ const ScheduleMeetingDetail = ({ t }) => {
                     className="btn btn-primary btn-block sm:btn-wide"
                     isLoading={loading}
                     type="submit"
-                    onClick={() => onSubmit()}
                   >
                     {t("schedule_meeting_new.save_meeting")}
                   </Button>

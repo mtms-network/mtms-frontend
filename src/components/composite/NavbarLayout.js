@@ -1,17 +1,31 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { IoMenu } from "react-icons/io5";
 import { useAppStore } from "stores/app.store";
-import { LIVE_URL, routeUrls } from "configs";
+import { COMMON, LIVE_MEETING_URL, LIVE_URL, routeUrls } from "configs";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { InputSingle } from "components/base/Input";
 import { Button, IconBase } from "components/base";
+import { startMeeting } from "services";
+import { getAccessToken } from "helpers";
 
 const NavbarLayout = ({ width, onLogout }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [appStore] = useAppStore();
   const user = useMemo(() => appStore.user, [appStore.user]);
+
+  const onStartAnInstant = useCallback(async () => {
+    try {
+      const res = await startMeeting({
+        instant: true,
+      });
+      if (res?.data?.meeting?.uuid) {
+        window.open(`${LIVE_MEETING_URL}/${res?.data?.meeting.identifier}`, "_blank");
+      }
+    } catch (error) {}
+  }, []);
+
   return (
     <div
       className="navbar fixed z-30 h-16 w-full bg-white flex-1"
@@ -36,17 +50,10 @@ const NavbarLayout = ({ width, onLogout }) => {
         </div>
         <div className="menu menu-horizontal space-x-3 py-4">
           <div className="flex flex-row justify-center items-center space-x-2">
-            <div>
-              <Button
-                className="btn btn-primary"
-                onClick={() => {
-                  navigate(`/${routeUrls.scheduleMeeting.path}/new`);
-                }}
-              >
-                <img src="/icons/icons/camera-white-fill.svg" alt="buy mtms" className="pr-2" />
-                {t("home.start_a_instant_meeting")}
-              </Button>
-            </div>
+            <Button className="btn btn-primary" onClick={onStartAnInstant}>
+              <img src="/icons/icons/camera-white-fill.svg" alt="buy mtms" className="pr-2" />
+              {t("home.start_a_instant_meeting")}
+            </Button>
             <div className="dropdown dropdown-end">
               <label
                 tabIndex="0"
@@ -89,7 +96,7 @@ const NavbarLayout = ({ width, onLogout }) => {
                     className="btn btn-block btn-primary bg-transparent border-0 text-black hover:text-white hover:bg-transparent flex justify-start"
                     onClick={onLogout}
                   >
-                    <IconBase icon="/icons/icons/logout-outline.svg" alt="logout-icon" />{" "}
+                    <IconBase icon="/icons/icons/logout-outline.svg" alt="logout-icon" />
                     {t("auth.logout")}
                   </a>
                 </li>
