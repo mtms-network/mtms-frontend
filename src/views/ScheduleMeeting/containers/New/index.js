@@ -47,7 +47,6 @@ const ScheduleMeetingItem = ({ t }) => {
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
-  const [types, setTypes] = useState([]);
   const [description, setDescription] = useState(null);
   const [startDateTime, setStartDateTime] = useState(moment());
   const [contacts, setContacts] = useState([]);
@@ -80,27 +79,9 @@ const ScheduleMeetingItem = ({ t }) => {
     resolver: yupResolver(schema),
   });
 
-  const prepareData = async () => {
-    if (meetingStore?.types) {
-      const list = meetingStore.types.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
-      setTypes(list);
-    }
-    if (meetingStore?.categories) {
-      const list = meetingStore.categories.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
-      // setCategories(list);
-    }
-  };
-
   const onSubmit = async (values) => {
     try {
+      console.log("values", values);
       const data = { ...values };
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
@@ -120,11 +101,13 @@ const ScheduleMeetingItem = ({ t }) => {
       const res = await createInstantMeeting(data);
 
       if (res?.data) {
-        message.success(res?.message);
-        await sendEmailToMemberInMeeting(params.meetingId);
+        message.success(res?.data?.message);
+        if (data.contacts?.length > 0) {
+          await sendEmailToMemberInMeeting(params.meetingId);
+        }
       } else if (res?.request) {
         const errorData = handleHttpError(res);
-        message.error(errorData.message);
+        message.error(errorData.messageDetail);
       }
       setLoading(false);
     } catch (error) {
@@ -185,7 +168,6 @@ const ScheduleMeetingItem = ({ t }) => {
       setFetchLoading(true);
       await fetchCommonData();
       await fetchContact();
-      await prepareData();
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
@@ -380,7 +362,7 @@ const ScheduleMeetingItem = ({ t }) => {
                   className="btn btn-primary"
                   isLoading={loading}
                   type="submit"
-                  onClick={() => onSubmit()}
+                  onClick={handleSubmit(onSubmit)}
                 >
                   {t("general.create")}
                 </Button>
