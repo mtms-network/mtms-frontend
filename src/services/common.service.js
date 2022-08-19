@@ -3,9 +3,9 @@ import { createPrivateInstance } from "./base";
 
 const client = createPrivateInstance("/");
 
-export const getLanguages = async () => {
+export const getLanguages = async (language = "en") => {
   try {
-    const res = await client.get("/locale/en");
+    const res = await client.get(`/locale/${language}`);
     return res?.data;
   } catch (error) {
     console.error("getLanguages", error);

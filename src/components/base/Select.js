@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { Select as SelectBase } from "antd";
+import { t } from "i18next";
 import FormControl from "./FormControl";
 
 const Select = ({
@@ -34,7 +35,7 @@ const Select = ({
           className || "input-md",
         )}
         defaultValue={defaultValue}
-        placeholder={placeholder || `Select ${label}`}
+        placeholder={placeholder || `${label}`}
         onChange={onChange}
         allowClear
         value={value}

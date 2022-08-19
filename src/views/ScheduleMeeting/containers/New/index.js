@@ -38,6 +38,7 @@ import { withTranslation } from "react-i18next";
 import moment from "moment";
 import { message } from "antd";
 import classNames from "classnames";
+import { t } from "i18next";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -47,7 +48,6 @@ const ScheduleMeetingItem = ({ t }) => {
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
-  const [types, setTypes] = useState([]);
   const [description, setDescription] = useState(null);
   const [startDateTime, setStartDateTime] = useState(moment());
   const [contacts, setContacts] = useState([]);
@@ -80,27 +80,9 @@ const ScheduleMeetingItem = ({ t }) => {
     resolver: yupResolver(schema),
   });
 
-  const prepareData = async () => {
-    if (meetingStore?.types) {
-      const list = meetingStore.types.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
-      setTypes(list);
-    }
-    if (meetingStore?.categories) {
-      const list = meetingStore.categories.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
-      // setCategories(list);
-    }
-  };
-
   const onSubmit = async (values) => {
     try {
+      console.log("values", values);
       const data = { ...values };
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
@@ -120,11 +102,13 @@ const ScheduleMeetingItem = ({ t }) => {
       const res = await createInstantMeeting(data);
 
       if (res?.data) {
-        message.success(res?.message);
-        await sendEmailToMemberInMeeting(params.meetingId);
+        message.success(res?.data?.message);
+        if (data.contacts?.length > 0) {
+          await sendEmailToMemberInMeeting(params.meetingId);
+        }
       } else if (res?.request) {
         const errorData = handleHttpError(res);
-        message.error(errorData.message);
+        message.error(errorData.messageDetail);
       }
       setLoading(false);
     } catch (error) {
@@ -185,7 +169,6 @@ const ScheduleMeetingItem = ({ t }) => {
       setFetchLoading(true);
       await fetchCommonData();
       await fetchContact();
-      await prepareData();
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
@@ -380,7 +363,7 @@ const ScheduleMeetingItem = ({ t }) => {
                   className="btn btn-primary"
                   isLoading={loading}
                   type="submit"
-                  onClick={() => onSubmit()}
+                  onClick={handleSubmit(onSubmit)}
                 >
                   {t("general.create")}
                 </Button>
@@ -396,18 +379,18 @@ const ScheduleMeetingItem = ({ t }) => {
 export default withTranslation()(ScheduleMeetingItem);
 
 const DURATION_HOURS = [
-  { label: "0 hour", value: 0, key: 0 },
-  { label: "1 hour", value: 1, key: 1 },
-  { label: "2 hour", value: 2, key: 2 },
-  { label: "3 hour", value: 3, key: 3 },
-  { label: "4 hour", value: 4, key: 4 },
+  { label: `0 ${t("list.general.durations.h")}`, value: 0, key: 0 },
+  { label: `1 ${t("list.general.durations.h")}`, value: 1, key: 1 },
+  { label: `2 ${t("list.general.durations.hours")}`, value: 2, key: 2 },
+  { label: `3 ${t("list.general.durations.hours")}`, value: 3, key: 3 },
+  { label: `4 ${t("list.general.durations.hours")}`, value: 4, key: 4 },
 ];
 
 const DURATION_MINUTES = [
-  { value: "0 minute", key: 0 },
-  { value: "15 minutes", key: 15 },
-  { value: "30 minutes", key: 30 },
-  { value: "45 minutes", key: 45 },
+  { value: `0 ${t("list.general.durations.m")}`, key: 0 },
+  { value: `15 ${t("list.general.durations.minutes")}`, key: 15 },
+  { value: `30 ${t("list.general.durations.minutes")}`, key: 30 },
+  { value: `45 ${t("list.general.durations.minutes")}`, key: 45 },
 ];
 
 const START_TIME = [

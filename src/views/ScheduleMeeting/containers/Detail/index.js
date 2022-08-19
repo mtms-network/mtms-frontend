@@ -113,10 +113,12 @@ const ScheduleMeetingDetail = ({ t }) => {
       const res = await updateInstantMeeting(params.meetingId, data);
       if (res?.data) {
         message.success(res.data?.message);
-        await sendEmailToMemberInMeeting(params.meetingId);
+        if (data.contacts?.length > 0) {
+          await sendEmailToMemberInMeeting(params.meetingId);
+        }
       } else if (res?.request) {
         const errorData = handleHttpError(res);
-        message.error(errorData.message);
+        message.error(errorData.messageDetail);
       }
       setLoading(false);
     } catch (error) {
