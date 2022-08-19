@@ -80,18 +80,18 @@ const ScheduleHistoriesFilter = ({ onChange, loading }) => {
           <Input
             className="w-full"
             register={register("title")}
-            label="Title"
+            label={t("meeting.props.title")}
             placeholder={t("schedule_meeting.enter_title_meeting")}
           />
           <Select
-            label="Type"
+            label={t("meeting.props.type")}
             options={types}
             register={register("type.uuid")}
             onChange={(e) => setType(e)}
             allowClear
           />
           <Select
-            label="Status"
+            label={t("meeting.props.status")}
             options={statuses}
             register={register("status.uuid")}
             onChange={(e) => setStatus(e)}
@@ -105,7 +105,7 @@ const ScheduleHistoriesFilter = ({ onChange, loading }) => {
           isLoading={loading}
           onClick={handleSubmit(onSubmit)}
         >
-          Filter
+          {t("general.filter")}
         </Button>
       </div>
     </>

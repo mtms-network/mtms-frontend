@@ -4,6 +4,7 @@ import { GroupLayout } from "components";
 import { calculateDuration } from "helpers";
 import { Link } from "react-router-dom";
 import { routeUrls } from "configs";
+import { t } from "i18next";
 
 const MeetingItem = ({ data, className }) => {
   return (
@@ -42,7 +43,8 @@ const MeetingItem = ({ data, className }) => {
             <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
               <img src="/images/icon/clock.svg" alt="" />
               <p className="label-base p-0 group-hover:text-primary">
-                {calculateDuration(data.start_date_time, data.estimated_end_time)} Minutes
+                {calculateDuration(data.start_date_time, data.estimated_end_time)}{" "}
+                {t("list.general.durations.minutes")}
               </p>
             </div>
           </div>

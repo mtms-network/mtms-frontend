@@ -38,6 +38,7 @@ import { withTranslation } from "react-i18next";
 import moment from "moment";
 import { message } from "antd";
 import classNames from "classnames";
+import { t } from "i18next";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -378,18 +379,18 @@ const ScheduleMeetingItem = ({ t }) => {
 export default withTranslation()(ScheduleMeetingItem);
 
 const DURATION_HOURS = [
-  { label: "0 hour", value: 0, key: 0 },
-  { label: "1 hour", value: 1, key: 1 },
-  { label: "2 hour", value: 2, key: 2 },
-  { label: "3 hour", value: 3, key: 3 },
-  { label: "4 hour", value: 4, key: 4 },
+  { label: `0 ${t("list.general.durations.h")}`, value: 0, key: 0 },
+  { label: `1 ${t("list.general.durations.h")}`, value: 1, key: 1 },
+  { label: `2 ${t("list.general.durations.hours")}`, value: 2, key: 2 },
+  { label: `3 ${t("list.general.durations.hours")}`, value: 3, key: 3 },
+  { label: `4 ${t("list.general.durations.hours")}`, value: 4, key: 4 },
 ];
 
 const DURATION_MINUTES = [
-  { value: "0 minute", key: 0 },
-  { value: "15 minutes", key: 15 },
-  { value: "30 minutes", key: 30 },
-  { value: "45 minutes", key: 45 },
+  { value: `0 ${t("list.general.durations.m")}`, key: 0 },
+  { value: `15 ${t("list.general.durations.minutes")}`, key: 15 },
+  { value: `30 ${t("list.general.durations.minutes")}`, key: 30 },
+  { value: `45 ${t("list.general.durations.minutes")}`, key: 45 },
 ];
 
 const START_TIME = [

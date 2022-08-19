@@ -13,8 +13,9 @@ import SidebarUserCenter from "./SidebarUserCenter";
 import BrandLogoLoading from "./BrandLogoLoading";
 
 const Layout = ({ children, bottom, contentClassName = "", userCenter = false }) => {
-  const [, updateAppStore] = useAppStore();
+  const [appStore, updateAppStore] = useAppStore();
   const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState(appStore.language);
 
   const { width } = useDimensions();
 
@@ -29,9 +30,10 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
 
   const fetchLanguage = async () => {
     try {
-      if (!i18next.exists("home.copied")) {
+      if (!i18next.exists("general.cancel") || language !== appStore.language) {
         setLoading(true);
-        const data = await getLanguages();
+        const data = await getLanguages(appStore.language);
+        setLanguage(appStore.language);
         const resources = { en: { translation: data } };
 
         i18n.init({
@@ -40,13 +42,12 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
         });
         setLoading(false);
       }
-    // eslint-disable-next-line no-empty
+      // eslint-disable-next-line no-empty
     } catch (error) {}
   };
-
   useEffect(() => {
     fetchLanguage();
-  }, []);
+  }, [appStore.language]);
 
   return loading ? (
     <div className="h-screen">

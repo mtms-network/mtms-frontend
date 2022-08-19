@@ -147,8 +147,10 @@ const ScheduleMeetingView = ({ t }) => {
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
-            <span>Duration:</span>{" "}
-            <span className="font-[700] text-[16px]">{meetingStore?.meeting?.period} Minutes</span>
+            <span>{t("config.ui.duration")}:</span>{" "}
+            <span className="font-[700] text-[16px]">
+              {meetingStore?.meeting?.period} {t("list.general.durations.minutes")}
+            </span>
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />

@@ -44,7 +44,7 @@ const NavbarLayout = ({ width, onLogout }) => {
         <div className="flex-1 flex justify-start items-start pr-10">
           <InputSingle
             compactInput
-            placeholder="Search"
+            placeholder={t("general.search")}
             leftIcon={<img src="/icons/icons/search-normal-outline.svg" alt="search" />}
           />
         </div>
