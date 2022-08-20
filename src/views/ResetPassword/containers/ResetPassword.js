@@ -8,8 +8,9 @@ import { ALERT_TYPE, routeUrls } from "configs";
 import { forgotPassword } from "services";
 import { handleHttpError } from "helpers";
 import { useAppStore } from "stores/app.store";
+import { withTranslation } from "react-i18next";
 
-export default function ResetPassword() {
+function ResetPassword({ t }) {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const [, updateAppStore] = useAppStore();
@@ -65,7 +66,7 @@ export default function ResetPassword() {
         <img src="/images/mtms-logo.png" alt="logo" className="w-32" />
       </div>
       <div className="pb-4">
-        <p className="text-black text-3xl font-bold">Reset Your Account</p>
+        <p className="text-black text-3xl font-bold">{t("auth.password.reset.page_title")}</p>
       </div>
       {alert?.show && (
         <div className="py-4 w-full">
@@ -82,8 +83,8 @@ export default function ResetPassword() {
           <div>
             <Input
               register={register("email")}
-              label="Email"
-              placeholder="Enter your email"
+              label={t("auth.login.props.email")}
+              placeholder={t("auth.login.props.enter_your_email")}
               error={errors.email}
               labelClassName="font-medium"
             />
@@ -96,9 +97,11 @@ export default function ResetPassword() {
           isLoading={loading}
           onClick={handleSubmit(onSubmit)}
         >
-          Send request
+          {t("auth.send_request")}
         </Button>
       </div>
     </GuestFormLayout>
   );
 }
+
+export default withTranslation()(ResetPassword);

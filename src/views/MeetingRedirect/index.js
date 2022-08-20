@@ -17,7 +17,7 @@ const MeetingRedirect = () => {
         if(res?.meeting?.jwt){
           url += `?jwt=${res.meeting.jwt}`;
         }
-        
+
         window.location = url;
       }else{
         navigate('/')
