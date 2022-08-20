@@ -17,6 +17,7 @@ import {
   Rewards,
   ProfileChangePassword,
   ProfileUpdate,
+  MeetingRedirect,
 } from "./views";
 
 const Routers = () => {
@@ -51,6 +52,7 @@ const Routers = () => {
         />
         <Route path={`/${routeUrls.profileUpdate.path}`} element={<ProfileUpdate />} />
         <Route path={`/${routeUrls.rewards.path}`} element={<Rewards />} />
+        <Route path={`/${routeUrls.meetingRedirect.path}/:meetingId`} element={<MeetingRedirect />} />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
