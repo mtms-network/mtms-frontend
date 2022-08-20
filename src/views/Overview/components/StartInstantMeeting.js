@@ -37,7 +37,10 @@ const StartInstantMeeting = ({ className, t }) => {
         isActiveMember: isOnlyActiveMember,
       });
       if (res?.data?.meeting?.uuid) {
-        window.open(`${LIVE_MEETING_URL}/${res?.data?.meeting.identifier}`, "_blank");
+        window.open(
+          `${LIVE_MEETING_URL}/${res?.data?.meeting.identifier}?jwt=${res?.data?.meeting?.tokenJWT}`,
+          "_blank",
+        );
         updateMeetingStore((draft) => {
           draft.isForceLoadMeetingHistories = true;
         });
