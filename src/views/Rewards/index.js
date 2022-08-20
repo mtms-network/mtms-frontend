@@ -190,7 +190,6 @@ const Rewards = () => {
                   {`${t("rewards.claim_value_token", {
                     token: walletStore?.wallet?.token_per_checkin || 0,
                   })}`}
-                  {`Claim ${walletStore?.wallet?.token_per_checkin} MTMS Token`}
                 </Button>
               </div>
             </div>
