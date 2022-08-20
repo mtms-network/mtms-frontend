@@ -45,3 +45,10 @@ export const resetPassword = async ({ email, code, newPassword, newPasswordConfi
   });
   return res?.data;
 };
+
+export const verifyActiveToken = async ({ token }) => {
+  const res = await client.post("/verify", {
+    token
+  });
+  return res?.data;
+};
