@@ -1,13 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  IoEllipsisHorizontal,
-  IoFilterCircle,
-  IoOptions,
-  IoPeople,
-  IoRadio,
-  IoShareOutline,
-  IoSwapVertical,
-} from "react-icons/io5";
 import classnames from "classnames";
 import {
   BrandLogoLoading,
@@ -20,7 +11,7 @@ import {
   IconButton,
 } from "components";
 import { ScheduleHistoriesFilter } from "views/ScheduleMeeting/components";
-import { getMeetingHistories, getRequirePreMeeting } from "services";
+import { getMeetingHistories } from "services";
 import { useMeetingStore } from "stores/meeting.store";
 import { withTranslation } from "react-i18next";
 import { ConfigOverview } from "../config";
@@ -40,7 +31,7 @@ const MeetingHistory = ({ className, t }) => {
     order: "desc",
   });
   const [sort, setSort] = useState(false);
-  const [meetingStore, updateMeetingStore] = useMeetingStore();
+  const [meetingStore] = useMeetingStore();
 
   const mapHistories = (item) => {
     const newItem = { ...item };
@@ -53,28 +44,9 @@ const MeetingHistory = ({ className, t }) => {
     return newItem;
   };
 
-  const fetchCommonData = async () => {
-    try {
-      if (!meetingStore.categories || !Array.isArray(meetingStore.categories)) {
-        const res = await getRequirePreMeeting();
-        if (res) {
-          updateMeetingStore((draft) => {
-            draft.categories = res?.categories;
-            draft.types = res?.types;
-            draft.statuses = res?.statuses;
-            draft.isForceLoadMeetingHistories = true;
-          });
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const fetchData = async () => {
     try {
       setLoading(true);
-      await fetchCommonData();
       const res = await getMeetingHistories({ ...filter });
       if (res?.data) {
         setHistories({ data: res.data, pagination: res.meta });

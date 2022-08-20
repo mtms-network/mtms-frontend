@@ -175,16 +175,21 @@ const Rewards = () => {
           <div className="flex w-full bg-white rounded-3xl py-6 px-8">
             <div className="flex flex-1 flex-row justify-between">
               <div>
-                <p className="font-bold text-2xl">Daily Task</p>
-                <p className="text-base">{`Check in to receive ${
-                  walletStore?.wallet?.token_per_checkin || 0
-                } MTMS Token`}</p>
+                <p className="font-bold text-2xl">{t("rewards.daily_task")}</p>
+                <p className="text-base">
+                  {`${t("rewards.receive_token", {
+                    token: walletStore?.wallet?.token_per_checkin || 0,
+                  })}`}
+                </p>
               </div>
               <div className="flex flex-row items-end space-x-2">
                 <Button className="btn-primary" isLoading={loading} onClick={() => {}}>
-                  Check in
+                  {t("rewards.check_in")}
                 </Button>
                 <Button className="btn-primary" disabled isLoading={loading} onClick={() => {}}>
+                  {`${t("rewards.claim_value_token", {
+                    token: walletStore?.wallet?.token_per_checkin || 0,
+                  })}`}
                   {`Claim ${walletStore?.wallet?.token_per_checkin} MTMS Token`}
                 </Button>
               </div>
@@ -194,13 +199,13 @@ const Rewards = () => {
             <div className="flex flex-1 flex-row justify-between">
               <div className="flex flex-row space-x-20">
                 <div>
-                  <p className="text-base text-gray">Meeting Time (hhh/mm/ss)</p>
+                  <p className="text-base text-gray">{t("rewards.meeting_time")} (hhh/mm/ss)</p>
                   <p className="text-orange-base font-bold text-xl">
                     {`${timeToday.hour}:${timeToday.minute}`}
                   </p>
                 </div>
                 <div>
-                  <p className="text-base text-gray">Total Earn</p>
+                  <p className="text-base text-gray">{t("rewards.total_earn")}</p>
                   <p className="text-orange-base font-bold text-xl">
                     {`${walletStore?.wallet?.total_token_today} MTMS`}
                   </p>
@@ -212,7 +217,7 @@ const Rewards = () => {
                   isLoading={loading}
                   onClick={handleClaimCheckInToday}
                 >
-                  Claim Token
+                  {t("rewards.claim_token")}
                 </Button>
               </div>
             </div>
@@ -222,19 +227,21 @@ const Rewards = () => {
               <div className="flex flex-1 flex-row justify-between">
                 <div>
                   <p className="text-lg text-gray">
-                    Your wallet
+                    {t("rewards.your_wallet")}
                     <span className="font-bold text-lg text-black-base">{` ${walletStore?.wallet?.user?.oasis?.address}`}</span>
                   </p>
                   <p className="text-base pt-5">
-                    You are a good staff, you are working hard this weeks with {timeWeek.hour} hours
-                    meeting and received {walletStore?.wallet?.total_token_week} MTMS Tokens.
+                    {t("rewards.message_receive_token", {
+                      hours: timeWeek.hour,
+                      token: walletStore?.wallet?.total_token_week,
+                    })}
                   </p>
                 </div>
               </div>
             </div>
             <div className="basis-1/3 bg-white rounded-3xl py-6 px-8">
               <div className="flex flex-col justify-center items-center">
-                <p className="text-base text-gray">Total MTMS tokens</p>
+                <p className="text-base text-gray">{t("rewards.total_token")}</p>
                 <p className="text-orange-base font-bold text-5xl">{`${
                   walletStore?.wallet?.user?.total_token || 0
                 }`}</p>
@@ -244,7 +251,7 @@ const Rewards = () => {
                     disabled={!walletStore?.wallet?.user?.total_token}
                     isLoading={loading}
                   >
-                    Withdraw
+                    {t("rewards.withdraw")}
                   </Button>
                 </div>
               </div>

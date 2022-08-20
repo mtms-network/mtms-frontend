@@ -140,59 +140,59 @@ const ScheduleMeetingView = ({ t }) => {
         <div className="flex flex-wrap gap-x-5 gap-y-3 mb-[24px]">
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/calender.svg" alt="" />
-            <span>Start Time:</span>{" "}
+            <span>{t("meeting.view.start_time")}: </span>
             <span className="font-[700] text-[16px]">
               {moment(meetingStore?.meeting?.start_date_time).format("MMM DD, yyyy h:mm A")}
             </span>
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
-            <span>{t("config.ui.duration")}:</span>{" "}
+            <span>{t("config.ui.duration")}: </span>
             <span className="font-[700] text-[16px]">
               {meetingStore?.meeting?.period} {t("list.general.durations.minutes")}
             </span>
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
-            <span>Maximum Participant: </span>
+            <span>{t("home.maximum_participant")}: </span>
             <span className="font-[700] text-[16px]">
               {meetingStore?.meeting?.max_participant_count}
             </span>
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
-            <span>Meeting Code:</span>{" "}
+            <span>{t("meeting.meeting_code")}: </span>
             <span className="font-[700] text-[16px]">{meetingStore?.meeting?.identifier}</span>
           </div>
         </div>
         <div className="flex space-x-[24px] mb-[24px]">
-          <Button className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]">Start</Button>
+          <Button className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]">{t("general.start")}</Button>
           <Button
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
             onClick={handleCopyLink}
           >
-            Copy link
+           {t("general.copy_link")}
           </Button>
           <Link
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
             to={`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`}
           >
-            Edit
+            {t("general.edit")}
           </Link>
           <Button
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
             onClick={handleDeleteMeeting}
           >
-            Delete
+            {t("general.delete")}
           </Button>
         </div>
         <hr className="mb-[24px]" />
         <div>
-          <GroupTitle icon={<IoTv />} title="Agenda" />
+          <GroupTitle icon={<IoTv />} title={t("general.agenda")} />
         </div>
         <p className="mb-[24px]">{meetingStore?.meeting?.agenda}</p>
         <div>
-          <GroupTitle icon={<IoTv />} title="Description" />
+          <GroupTitle icon={<IoTv />} title={t("meeting.props.description")} />
         </div>
         <p dangerouslySetInnerHTML={{ __html: meetingStore?.meeting?.description }} />
       </GroupLayout>

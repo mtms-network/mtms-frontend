@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { resetUserToken } from "helpers";
+import { getLanguage, resetUserToken, setLanguage } from "helpers";
 import { useAuth, useDimensions } from "hooks";
 import { useAppStore } from "stores/app.store";
 import classNames from "classnames";
 import { I18nextProvider } from "react-i18next";
 import i18next from "i18next";
-import { getLanguages } from "services";
+import { getLanguages, getRequirePreMeeting } from "services";
 import i18n from "i18n";
+import { useMeetingStore } from "stores/meeting.store";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
 import SidebarUserCenter from "./SidebarUserCenter";
@@ -14,8 +15,9 @@ import BrandLogoLoading from "./BrandLogoLoading";
 
 const Layout = ({ children, bottom, contentClassName = "", userCenter = false }) => {
   const [appStore, updateAppStore] = useAppStore();
+  const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState(appStore.language);
+  const [language, setCurrentLanguage] = useState(appStore.language);
 
   const { width } = useDimensions();
 
@@ -28,14 +30,34 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
 
   useAuth();
 
+  const fetchCommonData = async () => {
+    try {
+      const storeLanguage = getLanguage();
+      if (
+        appStore.language !== storeLanguage ||
+        !meetingStore.types ||
+        !meetingStore.types?.length === 0
+      ) {
+        const res = await getRequirePreMeeting();
+        if (res) {
+          updateMeetingStore((draft) => {
+            draft.categories = res?.categories;
+            draft.types = res?.types;
+            draft.statuses = res?.statuses;
+            draft.isForceLoadMeetingHistories = true;
+          });
+        }
+      }
+    } catch (error) {}
+  };
+
   const fetchLanguage = async () => {
     try {
       if (!i18next.exists("general.cancel") || language !== appStore.language) {
         setLoading(true);
         const data = await getLanguages(appStore.language);
-        setLanguage(appStore.language);
+        setCurrentLanguage(appStore.language);
         const resources = { en: { translation: data } };
-
         i18n.init({
           resources,
           lng: "en",
@@ -46,8 +68,17 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
     } catch (error) {}
   };
   useEffect(() => {
+    setLanguage(appStore.language);
     fetchLanguage();
+    fetchCommonData();
   }, [appStore.language]);
+
+  useEffect(() => {
+    const currentLanguage = getLanguage();
+    updateAppStore((draft) => {
+      draft.language = currentLanguage;
+    });
+  }, []);
 
   return loading ? (
     <div className="h-screen">

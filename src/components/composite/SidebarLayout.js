@@ -5,20 +5,32 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import { IconBase } from "components/base";
 import { useAppStore } from "stores/app.store";
+import { setLanguage } from "helpers";
+import { useMeetingStore } from "stores/meeting.store";
+import { getRequirePreMeeting } from "services";
 
 const SidebarLayout = ({ t }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [appStore, updateAppStore] = useAppStore();
+  const [, updateMeetingStore] = useMeetingStore();
 
-  const onToggleLanguage = () => {
+  const onToggleLanguage = async () => {
+    const newLanguage = appStore.language === "en" ? "vn" : "en";
+    setLanguage(newLanguage);
     updateAppStore((draft) => {
-      if (appStore.language === "en") {
-        draft.language = "vn";
-      } else {
-        draft.language = "en";
-      }
+      draft.language = newLanguage;
     });
+
+    const res = await getRequirePreMeeting();
+    if (res) {
+      updateMeetingStore((draft) => {
+        draft.categories = res?.categories;
+        draft.types = res?.types;
+        draft.statuses = res?.statuses;
+        draft.isForceLoadMeetingHistories = true;
+      });
+    }
   };
 
   return (
@@ -47,7 +59,7 @@ const SidebarLayout = ({ t }) => {
                   iconActivated="/icons/icons/home-fill.svg"
                   isActive={location.pathname === "/"}
                 />
-                <p className="pl-2">{t("sidebar.meeting")}</p>
+                <p className="pl-2">{t("meeting.meeting")}</p>
               </button>
             </div>
             <div className="w-full">

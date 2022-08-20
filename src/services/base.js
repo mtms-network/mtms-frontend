@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken } from "helpers";
+import { getAccessToken, getLanguage } from "helpers";
 import { LIVE_API } from "configs";
 
 export const handleError = (error) => {
@@ -19,7 +19,10 @@ export const createPrivateInstance = (path, options) => {
 
   instance.interceptors.request.use((request) => {
     const token = getAccessToken();
+    const language = getLanguage();
+
     request.headers.Authorization = `Bearer ${token}`;
+    request.headers["x-localization"] = language;
     return request;
   });
 

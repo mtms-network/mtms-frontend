@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getAccessToken, getUser } from "helpers";
+import { getAccessToken, getUser, setLanguage } from "helpers";
 import { useNavigate, useLocation } from "react-router-dom";
 import { routeUrls } from "configs";
 import { useAppStore } from "stores/app.store";
