@@ -26,10 +26,12 @@ const MeetingItem = ({ data, className }) => {
               <div className="group">
                 <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
                 <div className="absolute right-0 w-[160px] bg-white rounded-[20px] py-[16px] shadow-[0_1px_12px_rgba(169,169,169,0.2)] hidden group-hover:block">
-                  <div className="p-[16px] hover:bg-primary hover:text-white">
-                    Duplicate Meeting
+                  <div className="p-[16px] hover:bg-primary text-black hover:text-white">
+                    {t("meeting.config.duplicate_meeting")}
                   </div>
-                  <div className="p-[16px] hover:bg-primary hover:text-white">Delete Meeting</div>
+                  <div className="p-[16px] hover:bg-primary text-black hover:text-white">
+                    {t("meeting.config.delete_meeting")}
+                  </div>
                 </div>
               </div>
             </div>

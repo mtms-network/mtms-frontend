@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BrandLogoLoading, Button, GroupTitle, MainLayout, Pagination } from "components";
 import { IoTv } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
-import { getScheduleMeetings, getRequirePreMeeting } from "services";
+import { getScheduleMeetings } from "services";
 import { useMeetingStore } from "stores/meeting.store";
 import { useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";

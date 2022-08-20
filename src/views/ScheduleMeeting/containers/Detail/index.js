@@ -15,7 +15,7 @@ import {
   AlertError,
   BrandLogoLoading,
 } from "components";
-import { IoOptions, IoTv } from "react-icons/io5";
+import { IoTv } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -24,23 +24,37 @@ import { useMeetingStore } from "stores/meeting.store";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import { convertFromHTML, convertToRaw, EditorState, ContentState } from "draft-js";
-import { createPrivateInstance } from "services/base";
-import { BASE_API, ALERT_TYPE, routeUrls, COMMON } from "configs";
+import { ALERT_TYPE, routeUrls, COMMON } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getMeetingDetail,
   getMeetingContact,
-  getRequirePreMeeting,
   updateInstantMeeting,
   sendEmailToMemberInMeeting,
 } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { message } from "antd";
+import { t } from "i18next";
 
 const timeFormat = "MMM DD, yyyy";
 
 const ScheduleMeetingDetail = ({ t }) => {
+  const DURATION_HOURS = [
+    { label: `0 ${t("list.general.durations.h")}`, value: 0, key: 0 },
+    { label: `1 ${t("list.general.durations.h")}`, value: 1, key: 1 },
+    { label: `2 ${t("list.general.durations.hours")}`, value: 2, key: 2 },
+    { label: `3 ${t("list.general.durations.hours")}`, value: 3, key: 3 },
+    { label: `4 ${t("list.general.durations.hours")}`, value: 4, key: 4 },
+  ];
+
+  const DURATION_MINUTES = [
+    { value: `0 ${t("list.general.durations.m")}`, key: 0 },
+    { value: `15 ${t("list.general.durations.minutes")}`, key: 15 },
+    { value: `30 ${t("list.general.durations.minutes")}`, key: 30 },
+    { value: `45 ${t("list.general.durations.minutes")}`, key: 45 },
+  ];
+
   const params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -196,26 +210,9 @@ const ScheduleMeetingDetail = ({ t }) => {
     }
   };
 
-  const fetchCommonData = async () => {
-    try {
-      const res = await getRequirePreMeeting();
-      if (res) {
-        updateMeetingStore((draft) => {
-          draft.categories = res?.categories;
-          draft.types = res?.types;
-          draft.statuses = res?.statuses;
-          draft.isForceLoadMeetingHistories = true;
-        });
-      }
-    } catch (error) {
-      console.log("ScheduleMeetingDetail fetchCommonDate", error);
-    }
-  };
-
   const fetchData = async () => {
     try {
       setFetchLoading(true);
-      await fetchCommonData();
       await fetchContact();
       await fetchMeeting();
 
@@ -287,7 +284,7 @@ const ScheduleMeetingDetail = ({ t }) => {
               </GroupLayout>
               <GroupLayout className="flex flex-col space-y-4">
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                  <div>Start Time</div>
+                  <div>{t("meeting.view.start_time")}</div>
                   <div className="flex-1">
                     <DateTimePicker
                       placeholder="Mar 2, 2022 5:02 PM"
@@ -308,7 +305,7 @@ const ScheduleMeetingDetail = ({ t }) => {
               </GroupLayout>
               <GroupLayout className="flex flex-col space-y-4">
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                  <div>Duration</div>
+                  <div>{t("config.ui.duration")}</div>
                   <div className="flex-1">
                     <Select
                       options={DURATION_HOURS}
@@ -339,7 +336,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                   <div className="flex-1">
                     <Input
                       register={register("max_participant_count")}
-                      label="Maximum participant"
+                      label={t("home.maximum_participant")}
                       placeholder={COMMON.MAX_PARTICIPANT}
                       type="number"
                       min="1"
@@ -365,7 +362,7 @@ const ScheduleMeetingDetail = ({ t }) => {
               <GroupLayout className="flex flex-col justify-between">
                 <div className="w-full h-auto">
                   <Select
-                    label="Email invite"
+                    label={t("meeting.config.email_invite")}
                     mode="tags"
                     options={listContacts}
                     placeholder={t("schedule_meeting_new.select_invitees")}
@@ -427,21 +424,6 @@ const ScheduleMeetingDetail = ({ t }) => {
 };
 
 export default withTranslation()(ScheduleMeetingDetail);
-
-const DURATION_HOURS = [
-  { value: "0 hour", key: 0 },
-  { value: "1 hour", key: 1 },
-  { value: "2 hour", key: 2 },
-  { value: "3 hour", key: 3 },
-  { value: "4 hour", key: 4 },
-];
-
-const DURATION_MINUTES = [
-  { value: "0 minute", key: 0 },
-  { value: "15 minutes", key: 15 },
-  { value: "30 minutes", key: 30 },
-  { value: "45 minutes", key: 45 },
-];
 
 const START_TIME = [
   { value: "1:00 am", key: 1 },
