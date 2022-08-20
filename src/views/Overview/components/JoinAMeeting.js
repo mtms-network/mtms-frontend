@@ -5,6 +5,8 @@ import classNames from "classnames";
 import { joinMeetingByCode } from "services";
 import { LIVE_MEETING_URL } from "configs";
 import { withTranslation } from "react-i18next";
+import { handleHttpError } from "helpers";
+import { message } from "antd";
 
 const JoinAMeeting = ({ className, t }) => {
   const [code, setCode] = useState("");
@@ -16,7 +18,13 @@ const JoinAMeeting = ({ className, t }) => {
         setLoading(true);
         const res = await joinMeetingByCode({ code });
         if (res?.data?.uuid) {
-          window.open(`${LIVE_MEETING_URL}/${code}`, "_blank");
+          window.open(
+            `${LIVE_MEETING_URL}/${res?.data?.meeting.identifier}?jwt=${res?.data?.meeting?.tokenJWT}`,
+            "_blank",
+          );
+        } else {
+          const errorData = handleHttpError(res);
+          message.error(errorData.message);
         }
         setLoading(false);
       }

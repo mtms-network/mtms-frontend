@@ -78,6 +78,20 @@ const ScheduleMeetingView = ({ t }) => {
     setTimeout(() => {}, [1000]);
   };
 
+  const handleStart = async () => {
+    try {
+      const { meeting } = meetingStore;
+      if (meeting) {
+        window.open(`${LIVE_MEETING_URL}/${meeting.identifier}?jwt=${meeting.tokenJWT}`, "_blank");
+        updateMeetingStore((draft) => {
+          draft.isForceLoadMeetingHistories = true;
+        });
+      }
+    } catch (error) {
+      console.log("start meeting error");
+    }
+  };
+
   const deleteMeeting = async () => {
     try {
       setLoading(true);
@@ -166,12 +180,17 @@ const ScheduleMeetingView = ({ t }) => {
           </div>
         </div>
         <div className="flex space-x-[24px] mb-[24px]">
-          <Button className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]">{t("general.start")}</Button>
+          <Button
+            className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+            onClick={handleStart}
+          >
+            {t("general.start")}
+          </Button>
           <Button
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
             onClick={handleCopyLink}
           >
-           {t("general.copy_link")}
+            {t("general.copy_link")}
           </Button>
           <Link
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
