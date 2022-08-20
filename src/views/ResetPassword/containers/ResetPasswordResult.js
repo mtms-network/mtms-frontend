@@ -1,9 +1,14 @@
 import React from "react";
 import { Button, GuestFormLayout } from "components";
 import { useNavigate } from "react-router-dom";
+import { routeUrls } from "configs";
 
 export default function ResetPasswordResult() {
   const navigate = useNavigate();
+
+  const onVerifyCode = () => {
+    navigate(`/${routeUrls.resetResult.path}`);
+  };
 
   return (
     <GuestFormLayout>
@@ -25,6 +30,12 @@ export default function ResetPasswordResult() {
           }}
         >
           Return to HomePage
+        </Button>
+        <Button
+          className="btn-primary rounded-full btn-wide btn-ghost text-primary"
+          onClick={onVerifyCode}
+        >
+          Verify code
         </Button>
       </div>
     </GuestFormLayout>

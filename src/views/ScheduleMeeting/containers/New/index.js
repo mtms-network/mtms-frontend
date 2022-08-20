@@ -14,6 +14,7 @@ import {
   TextArea,
   AlertError,
   BrandLogoLoading,
+  TimePicker,
 } from "components";
 import { IoOptions, IoTv } from "react-icons/io5";
 import { useForm } from "react-hook-form";
@@ -71,14 +72,10 @@ const ScheduleMeetingItem = ({ t }) => {
   });
   const [listContacts, setListContacts] = useState([]);
 
-  const schema = yup
-    .object()
-    .shape({
-      title: yup.string(),
-      agenda: yup.string(),
-    })
-    .required();
-
+  const schema = yup.object().shape({
+    title: yup.string().required(),
+    agenda: yup.string(),
+  });
   const {
     register,
     handleSubmit,
@@ -100,7 +97,10 @@ const ScheduleMeetingItem = ({ t }) => {
       data.is_paid = false;
       data.is_pam = false;
       data.uuid = null;
-      data.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
+      startDateTime.set("hour", startTime.hours());
+      startDateTime.set("minute", startTime.minutes());
+      startDateTime.set("second", startTime.seconds());
+      data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
       data.contacts = contacts.map((value) => {
         return { uuid: value };
       });
@@ -140,6 +140,11 @@ const ScheduleMeetingItem = ({ t }) => {
         "YYYY-MM-DD",
       ),
     );
+  };
+
+  const onChangeStartTime = (value) => {
+    const time = moment(value, "hh:mm:ss");
+    setStartTime(time);
   };
 
   const fetchContact = async () => {
@@ -239,11 +244,11 @@ const ScheduleMeetingItem = ({ t }) => {
                     />
                   </div>
                   <div className="flex-1">
-                    <Select
-                      options={START_TIME}
-                      defaultValue="01:00"
-                      onChange={(e) => setStartTime(e)}
+                    <TimePicker
+                      use12Hours
                       value={startTime}
+                      format="hh:mm a"
+                      onChange={onChangeStartTime}
                     />
                   </div>
                 </div>
@@ -266,13 +271,6 @@ const ScheduleMeetingItem = ({ t }) => {
                       value={durationMinute}
                       onChange={(e) => setDurationMinute(e)}
                     />
-                    {/* <Input
-                  register={register("period")}
-                  label="Duration"
-                  placeholder="60"
-                  type="number"
-                  min="1"
-                /> */}
                   </div>
                 </div>
               </GroupLayout>
@@ -368,30 +366,3 @@ const ScheduleMeetingItem = ({ t }) => {
 };
 
 export default withTranslation()(ScheduleMeetingItem);
-
-const START_TIME = [
-  { value: "1:00 am", key: 1 },
-  { value: "2:00 am", key: 2 },
-  { value: "3:00 am", key: 3 },
-  { value: "4:00 am", key: 4 },
-  { value: "5:00 am", key: 5 },
-  { value: "6:00 am", key: 6 },
-  { value: "7:00 am", key: 7 },
-  { value: "8:00 am", key: 8 },
-  { value: "9:00 am", key: 9 },
-  { value: "10:00 am", key: 10 },
-  { value: "11:00 am", key: 11 },
-  { value: "12:00 am", key: 12 },
-  { value: "1:00 pm", key: 13 },
-  { value: "2:00 pm", key: 14 },
-  { value: "3:00 pm", key: 15 },
-  { value: "4:00 pm", key: 16 },
-  { value: "5:00 pm", key: 17 },
-  { value: "6:00 pm", key: 18 },
-  { value: "7:00 pm", key: 19 },
-  { value: "8:00 pm", key: 20 },
-  { value: "9:00 pm", key: 21 },
-  { value: "10:00 pm", key: 22 },
-  { value: "11:00 pm", key: 23 },
-  { value: "12:00 pm", key: 0 },
-];

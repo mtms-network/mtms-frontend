@@ -111,7 +111,7 @@ export default function Login() {
     setUser(null);
   };
 
-  const onForgetPassword = () => {
+  const onForgotPassword = () => {
     navigate(`/${routeUrls.reset.path}`);
   };
 
@@ -186,8 +186,8 @@ export default function Login() {
                   error={errors.password}
                   labelClassName="font-medium"
                   labelRightComponent={
-                    <a className="btn-text-primary text-md" onClick={onForgetPassword}>
-                      Forget Password?
+                    <a className="btn-text-primary text-md" onClick={onForgotPassword}>
+                      Forgot Password?
                     </a>
                   }
                 />
@@ -252,8 +252,8 @@ export default function Login() {
                   error={errorsUnlock.password}
                   labelClassName="font-medium"
                   labelRightComponent={
-                    <a className="btn-text-primary text-md" onClick={onForgetPassword}>
-                      Forget Password?
+                    <a className="btn-text-primary text-md" onClick={onForgotPassword}>
+                      Forgot Password?
                     </a>
                   }
                 />

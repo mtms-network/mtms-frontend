@@ -24,6 +24,7 @@ export const setLanguage = (language = "en") => {
 
 export const resetUserToken = () => {
   localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, "");
+  localStorage.setItem(LOCAL_STORAGE_KEYS.user, "");
 };
 
 export const resetUserInfo = () => {

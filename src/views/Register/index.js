@@ -20,7 +20,7 @@ export default function Register() {
       email: yup.string().email("Invalid email").required("Email is required"),
       username: yup.string().required("Username is required"),
       password: yup.string().required("Password is required"),
-      phone: yup.string().required("Phone number is required"),
+      phone: yup.string(),
       confirmPassword: yup
         .string()
         .oneOf([yup.ref("password"), null], "Passwords must match")

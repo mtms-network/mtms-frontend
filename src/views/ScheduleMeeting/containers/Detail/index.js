@@ -14,6 +14,7 @@ import {
   TextArea,
   AlertError,
   BrandLogoLoading,
+  TimePicker,
 } from "components";
 import { IoTv } from "react-icons/io5";
 import { useForm } from "react-hook-form";
@@ -35,7 +36,6 @@ import {
 } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { message } from "antd";
-import { t } from "i18next";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -76,13 +76,10 @@ const ScheduleMeetingDetail = ({ t }) => {
   });
   const [listContacts, setListContacts] = useState([]);
 
-  const schema = yup
-    .object()
-    .shape({
-      title: yup.string(),
-      agenda: yup.string(),
-    })
-    .required();
+  const schema = yup.object().shape({
+    title: yup.string().required(),
+    agenda: yup.string(),
+  });
 
   const {
     register,
@@ -115,7 +112,10 @@ const ScheduleMeetingDetail = ({ t }) => {
       data.is_paid = false;
       data.is_pam = false;
       data.uuid = params.meetingId;
-      data.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
+      startDateTime.set("hour", startTime.hours());
+      startDateTime.set("minute", startTime.minutes());
+      startDateTime.set("second", startTime.seconds());
+      data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
 
       data.contacts = contacts.map((value) => {
         return { uuid: value };
@@ -159,6 +159,11 @@ const ScheduleMeetingDetail = ({ t }) => {
     );
   };
 
+  const onChangeStartTime = (value) => {
+    const time = moment(value, "hh:mm:ss");
+    setStartTime(time);
+  };
+
   const fetchMeeting = async () => {
     try {
       const res = await getMeetingDetail(params.meetingId);
@@ -172,7 +177,7 @@ const ScheduleMeetingDetail = ({ t }) => {
         setValue("identifier", res.identifier);
         setValue("max_participant_count", res.max_participant_count);
         const startDate = moment(res.start_date_time, "YYYY-MM-DD");
-        const time = parseInt(moment(res.start_date_time).format("HH"), 10);
+        const time = moment(res.start_date_time, "hh:mm a");
         setStartDateTime(startDate);
         setStartTime(time);
         setDurationHour(Math.floor(res.period / 60));
@@ -294,11 +299,11 @@ const ScheduleMeetingDetail = ({ t }) => {
                     />
                   </div>
                   <div className="flex-1">
-                    <Select
-                      options={START_TIME}
-                      defaultValue="01:00"
-                      onChange={(e) => setStartTime(e)}
+                    <TimePicker
+                      use12Hours
                       value={startTime}
+                      format="hh:mm a"
+                      onChange={onChangeStartTime}
                     />
                   </div>
                 </div>
@@ -321,13 +326,6 @@ const ScheduleMeetingDetail = ({ t }) => {
                       value={durationMinute}
                       onChange={(e) => setDurationMinute(e)}
                     />
-                    {/* <Input
-                    register={register("period")}
-                    label="Duration"
-                    placeholder="60"
-                    type="number"
-                    min="1"
-                  /> */}
                   </div>
                 </div>
               </GroupLayout>
@@ -410,9 +408,9 @@ const ScheduleMeetingDetail = ({ t }) => {
                   className="btn btn-primary"
                   isLoading={loading}
                   type="submit"
-                  onClick={() => onSubmit()}
+                  onClick={handleSubmit(onSubmit)}
                 >
-                  {t("general.create")}
+                  {t("general.update")}
                 </Button>
               </div>
             </div>
@@ -424,30 +422,3 @@ const ScheduleMeetingDetail = ({ t }) => {
 };
 
 export default withTranslation()(ScheduleMeetingDetail);
-
-const START_TIME = [
-  { value: "1:00 am", key: 1 },
-  { value: "2:00 am", key: 2 },
-  { value: "3:00 am", key: 3 },
-  { value: "4:00 am", key: 4 },
-  { value: "5:00 am", key: 5 },
-  { value: "6:00 am", key: 6 },
-  { value: "7:00 am", key: 7 },
-  { value: "8:00 am", key: 8 },
-  { value: "9:00 am", key: 9 },
-  { value: "10:00 am", key: 10 },
-  { value: "11:00 am", key: 11 },
-  { value: "12:00 am", key: 12 },
-  { value: "1:00 pm", key: 13 },
-  { value: "2:00 pm", key: 14 },
-  { value: "3:00 pm", key: 15 },
-  { value: "4:00 pm", key: 16 },
-  { value: "5:00 pm", key: 17 },
-  { value: "6:00 pm", key: 18 },
-  { value: "7:00 pm", key: 19 },
-  { value: "8:00 pm", key: 20 },
-  { value: "9:00 pm", key: 21 },
-  { value: "10:00 pm", key: 22 },
-  { value: "11:00 pm", key: 23 },
-  { value: "12:00 pm", key: 0 },
-];

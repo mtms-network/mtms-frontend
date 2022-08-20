@@ -56,10 +56,6 @@ const ChangePassword = ({ t }) => {
     }
   };
 
-  const onForgetPassword = () => {
-    navigate(`/${routeUrls.reset.path}`);
-  };
-
   return (
     <MainLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
