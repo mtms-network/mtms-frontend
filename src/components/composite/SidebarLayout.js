@@ -201,6 +201,11 @@ const SidebarLayout = ({ t }) => {
                 }
               />
               <p className="pl-2">{appStore.language === "en" ? "ENG" : "VIE"}</p>
+              <IconBase
+                className="pl-4"
+                icon="/icons/icons/arrow-right-outline.svg"
+                iconActivated="/icons/icons/arrow-right-outline.svg"
+              />
             </button>
           </div>
         </div>

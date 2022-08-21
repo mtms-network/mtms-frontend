@@ -46,9 +46,9 @@ function ResetPassword({ t }) {
           show: true,
           message: `Request reset password successful`,
         });
-        setTimeout(() => {
-          navigate(`/${routeUrls.resetResult.path}`);
-        }, 3000);
+        // setTimeout(() => {
+        navigate(`/${routeUrls.resetResult.path}`);
+        // }, 3000);
       }
       setLoading(false);
     } catch (error) {

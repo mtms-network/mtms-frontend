@@ -112,7 +112,7 @@ function Login({t}) {
     setUser(null);
   };
 
-  const onForgetPassword = () => {
+  const onForgotPassword = () => {
     navigate(`/${routeUrls.reset.path}`);
   };
 
@@ -187,7 +187,7 @@ function Login({t}) {
                   error={errors.password}
                   labelClassName="font-medium"
                   labelRightComponent={
-                    <a className="btn-text-primary text-md" onClick={onForgetPassword}>
+                    <a className="btn-text-primary text-md" onClick={onForgotPassword}>
                       {t("auth.forget.forget_password")}
                     </a>
                   }
@@ -253,7 +253,7 @@ function Login({t}) {
                   error={errorsUnlock.password}
                   labelClassName="font-medium"
                   labelRightComponent={
-                    <a className="btn-text-primary text-md" onClick={onForgetPassword}>
+                    <a className="btn-text-primary text-md" onClick={onForgotPassword}>
                       {t("auth.forget.forget_password")}
                     </a>
                   }

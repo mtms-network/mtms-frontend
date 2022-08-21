@@ -227,7 +227,7 @@ const Rewards = () => {
                 <div>
                   <p className="text-lg text-gray">
                     {t("rewards.your_wallet")}
-                    <span className="font-bold text-lg text-black-base">{` ${walletStore?.wallet?.user?.oasis?.address}`}</span>
+                    <span className="font-bold text-lg text-black-base">{`${walletStore?.wallet?.user?.oasis?.address}`}</span>
                   </p>
                   <p className="text-base pt-5">
                     {t("rewards.message_receive_token", {

@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import moment from "moment";
 import {
   Button,
@@ -15,7 +15,7 @@ import {
 import { IoTv } from "react-icons/io5";
 import { useMeetingStore } from "stores/meeting.store";
 import { createPrivateInstance } from "services/base";
-import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL } from "configs";
+import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL, COMMON, MEETING_STATUS } from "configs";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { getMeetingDetail } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
@@ -33,6 +33,7 @@ const ScheduleMeetingView = ({ t }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [types, setTypes] = useState([]);
+  const [meeting, setMeeting] = useState();
   const [alert, setAlert] = useState({
     show: false,
     message: "",
@@ -80,8 +81,8 @@ const ScheduleMeetingView = ({ t }) => {
 
   const handleStart = async () => {
     try {
+      // eslint-disable-next-line no-shadow
       const { meeting } = meetingStore;
-
       if (meeting) {
         navigate(`/${routeUrls.meetingRedirect.path}/${meeting.identifier}`);
       }
@@ -115,6 +116,7 @@ const ScheduleMeetingView = ({ t }) => {
         updateMeetingStore((draft) => {
           draft.meeting = res;
         });
+        setMeeting(res);
       }
     } catch (error) {
       console.log("ScheduleMeetingDetail", error);
@@ -125,7 +127,6 @@ const ScheduleMeetingView = ({ t }) => {
     try {
       setFetchLoading(true);
       await fetchMeeting();
-
       await prepareData();
       setFetchLoading(false);
     } catch (error) {
@@ -133,12 +134,24 @@ const ScheduleMeetingView = ({ t }) => {
     }
   };
 
+  const canModify = useMemo(
+    () =>
+      meeting?.status === MEETING_STATUS.scheduled && meeting.can_moderate && !meeting.is_blocked,
+    [meeting],
+  );
+
   useEffect(() => {
     fetchData();
   }, [params.meetingId]);
+
   return (
     <MainLayout>
       <div className="pt-4 w-full">
+        {fetchLoading && (
+          <div className="h-screen">
+            <BrandLogoLoading />
+          </div>
+        )}
         <AlertError
           {...{ ...alert }}
           onClose={() => {
@@ -178,30 +191,36 @@ const ScheduleMeetingView = ({ t }) => {
           </div>
         </div>
         <div className="flex space-x-[24px] mb-[24px]">
-          <Button
-            className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]"
-            onClick={handleStart}
-          >
-            {t("general.start")}
-          </Button>
+          {canModify && (
+            <Button
+              className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+              onClick={handleStart}
+            >
+              {t("general.start")}
+            </Button>
+          )}
           <Button
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
             onClick={handleCopyLink}
           >
             {t("general.copy_link")}
           </Button>
-          <Link
-            className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
-            to={`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`}
-          >
-            {t("general.edit")}
-          </Link>
-          <Button
-            className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
-            onClick={handleDeleteMeeting}
-          >
-            {t("general.delete")}
-          </Button>
+          {canModify && (
+            <Link
+              className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+              to={`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`}
+            >
+              {t("general.edit")}
+            </Link>
+          )}
+          {canModify && (
+            <Button
+              className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+              onClick={handleDeleteMeeting}
+            >
+              {t("general.delete")}
+            </Button>
+          )}
         </div>
         <hr className="mb-[24px]" />
         <div>
