@@ -14,6 +14,7 @@ import {
   TextArea,
   AlertError,
   BrandLogoLoading,
+  TimePicker,
 } from "components";
 import { IoTv } from "react-icons/io5";
 import { useForm } from "react-hook-form";
@@ -24,7 +25,7 @@ import { useMeetingStore } from "stores/meeting.store";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import { convertFromHTML, convertToRaw, EditorState, ContentState } from "draft-js";
-import { ALERT_TYPE, routeUrls, COMMON } from "configs";
+import { ALERT_TYPE, routeUrls, COMMON, MEETING_STATUS } from "configs";
 import { handleHttpError } from "helpers";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -35,7 +36,6 @@ import {
 } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { message } from "antd";
-import { t } from "i18next";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -68,6 +68,7 @@ const ScheduleMeetingDetail = ({ t }) => {
   const [startTime, setStartTime] = useState(0);
   const [durationHour, setDurationHour] = useState(0);
   const [durationMinute, setDurationMinute] = useState(0);
+  const [meeting, setMeeting] = useState(null);
   const [alert, setAlert] = useState({
     show: false,
     message: "",
@@ -76,13 +77,26 @@ const ScheduleMeetingDetail = ({ t }) => {
   });
   const [listContacts, setListContacts] = useState([]);
 
-  const schema = yup
-    .object()
-    .shape({
-      title: yup.string(),
-      agenda: yup.string(),
-    })
-    .required();
+  const schema = yup.object().shape({
+    title: yup.string().required(),
+    agenda: yup.string(),
+    max_participant_count: yup
+      .number()
+      .min(
+        1,
+        t("validation.min.numeric", {
+          attribute: t("home.maximum_participant"),
+          min: 1,
+        }),
+      )
+      .max(
+        COMMON.MAX_PARTICIPANT,
+        t("validation.max.numeric", {
+          attribute: t("home.maximum_participant"),
+          max: COMMON.MAX_PARTICIPANT,
+        }),
+      ),
+  });
 
   const {
     register,
@@ -104,43 +118,61 @@ const ScheduleMeetingDetail = ({ t }) => {
     }
   };
 
+  const validatePreSubmit = (values) => {
+    const valid = true;
+    return valid;
+  };
+
   const onSubmit = async (values) => {
-    const data = { ...values };
-    try {
-      setAlert({ ...alert, show: false, message: "" });
-      setLoading(true);
-      data.description = description
-        ? draftToHtml(convertToRaw(description?.getCurrentContent()))
-        : "";
-      data.is_paid = false;
-      data.is_pam = false;
-      data.uuid = params.meetingId;
-      data.start_date_time = startDateTime.add(startTime, "hours").format("YYYY-MM-DD HH:mm:ss");
+    if (
+      meeting &&
+      meeting.status === MEETING_STATUS.scheduled &&
+      meeting.can_moderate &&
+      !meeting.is_blocked
+    ) {
+      const valid = validatePreSubmit();
+      if (valid) {
+        const data = { ...values };
+        try {
+          setAlert({ ...alert, show: false, message: "" });
+          setLoading(true);
+          data.description = description
+            ? draftToHtml(convertToRaw(description?.getCurrentContent()))
+            : "";
+          data.is_paid = false;
+          data.is_pam = false;
+          data.uuid = params.meetingId;
+          startDateTime.set("hour", startTime.hours());
+          startDateTime.set("minute", startTime.minutes());
+          startDateTime.set("second", startTime.seconds());
+          data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
 
-      data.contacts = contacts.map((value) => {
-        return { uuid: value };
-      });
-      data.type = { uuid: type };
-      data.period = durationHour * 60 + durationMinute;
-      delete data.identifier;
+          data.contacts = contacts.map((value) => {
+            return { uuid: value };
+          });
+          data.type = { uuid: type };
+          data.period = durationHour * 60 + durationMinute;
+          delete data.identifier;
 
-      const res = await updateInstantMeeting(params.meetingId, data);
-      if (res?.data) {
-        message.success(res.data?.message);
-        if (data.contacts?.length > 0) {
-          await sendEmailToMemberInMeeting(params.meetingId);
+          const res = await updateInstantMeeting(params.meetingId, data);
+          if (res?.data) {
+            message.success(res.data?.message);
+            if (data.contacts?.length > 0) {
+              await sendEmailToMemberInMeeting(params.meetingId);
+            }
+          } else if (res?.request) {
+            const errorData = handleHttpError(res);
+            message.error(errorData.messageDetail);
+          }
+          setLoading(false);
+        } catch (error) {
+          if (error) {
+            const errorData = handleHttpError(error);
+            message.error(errorData.message);
+          }
+          setLoading(false);
         }
-      } else if (res?.request) {
-        const errorData = handleHttpError(res);
-        message.error(errorData.messageDetail);
       }
-      setLoading(false);
-    } catch (error) {
-      if (error) {
-        const errorData = handleHttpError(error);
-        message.error(errorData.message);
-      }
-      setLoading(false);
     }
   };
 
@@ -159,6 +191,11 @@ const ScheduleMeetingDetail = ({ t }) => {
     );
   };
 
+  const onChangeStartTime = (value) => {
+    const time = moment(value, "hh:mm:ss");
+    setStartTime(time);
+  };
+
   const fetchMeeting = async () => {
     try {
       const res = await getMeetingDetail(params.meetingId);
@@ -166,13 +203,14 @@ const ScheduleMeetingDetail = ({ t }) => {
         updateMeetingStore((draft) => {
           draft.meeting = res;
         });
+        setMeeting(res);
         setType(res.type.uuid);
         setValue("agenda", res.agenda);
         setValue("title", res.title);
         setValue("identifier", res.identifier);
         setValue("max_participant_count", res.max_participant_count);
         const startDate = moment(res.start_date_time, "YYYY-MM-DD");
-        const time = parseInt(moment(res.start_date_time).format("HH"), 10);
+        const time = moment(res.start_date_time, "hh:mm a");
         setStartDateTime(startDate);
         setStartTime(time);
         setDurationHour(Math.floor(res.period / 60));
@@ -184,7 +222,11 @@ const ScheduleMeetingDetail = ({ t }) => {
         );
         const currentContacts = [];
         res.invitees.map((item, idx) => {
-          currentContacts.push(item.contact.uuid);
+          currentContacts.push({
+            ...item,
+            key: item.contact.uuid,
+            value: item.contact.name || item.contact.email,
+          });
           return 1;
         });
         setContacts(currentContacts);
@@ -215,12 +257,15 @@ const ScheduleMeetingDetail = ({ t }) => {
       setFetchLoading(true);
       await fetchContact();
       await fetchMeeting();
-
       await prepareData();
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
     }
+  };
+
+  const disabledDate = (current) => {
+    return current && current < moment().endOf("day");
   };
 
   useEffect(() => {
@@ -253,17 +298,13 @@ const ScheduleMeetingDetail = ({ t }) => {
               <GroupLayout className="flex flex-col justify-between">
                 <div className="w-full h-auto">
                   <Input
+                    required
                     className="w-full"
                     labelClassName="text-base"
                     register={register("title")}
                     label={t("meeting.props.title")}
                     placeholder={t("schedule_meeting.enter_title_meeting")}
-                    rules={[
-                      {
-                        required: true,
-                        message: "This field is required.",
-                      },
-                    ]}
+                    error={errors.title}
                   />
                 </div>
               </GroupLayout>
@@ -287,6 +328,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                   <div>{t("meeting.view.start_time")}</div>
                   <div className="flex-1">
                     <DateTimePicker
+                      disabledDate={disabledDate}
                       placeholder="Mar 2, 2022 5:02 PM"
                       onChangeDateTime={onChangeDateTime}
                       format={timeFormat}
@@ -294,11 +336,11 @@ const ScheduleMeetingDetail = ({ t }) => {
                     />
                   </div>
                   <div className="flex-1">
-                    <Select
-                      options={START_TIME}
-                      defaultValue="01:00"
-                      onChange={(e) => setStartTime(e)}
+                    <TimePicker
+                      use12Hours
                       value={startTime}
+                      format="hh:mm a"
+                      onChange={onChangeStartTime}
                     />
                   </div>
                 </div>
@@ -321,13 +363,6 @@ const ScheduleMeetingDetail = ({ t }) => {
                       value={durationMinute}
                       onChange={(e) => setDurationMinute(e)}
                     />
-                    {/* <Input
-                    register={register("period")}
-                    label="Duration"
-                    placeholder="60"
-                    type="number"
-                    min="1"
-                  /> */}
                   </div>
                 </div>
               </GroupLayout>
@@ -339,13 +374,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                       label={t("home.maximum_participant")}
                       placeholder={COMMON.MAX_PARTICIPANT}
                       type="number"
-                      min="1"
-                      onChange={(e) => {
-                        const { value } = e.target;
-                        if (value <= 99999 && value >= 0 && value.length <= 5) {
-                          // setParticipant(e.target.value);
-                        }
-                      }}
+                      error={errors.max_participant_count}
                     />
                   </div>
                   <div className="flex-1">
@@ -362,6 +391,7 @@ const ScheduleMeetingDetail = ({ t }) => {
               <GroupLayout className="flex flex-col justify-between">
                 <div className="w-full h-auto">
                   <Select
+                    multiTag
                     label={t("meeting.config.email_invite")}
                     mode="tags"
                     options={listContacts}
@@ -407,12 +437,13 @@ const ScheduleMeetingDetail = ({ t }) => {
                   {t("general.cancel")}
                 </Button>
                 <Button
+                  disabled={meeting?.status !== MEETING_STATUS.scheduled}
                   className="btn btn-primary"
                   isLoading={loading}
                   type="submit"
-                  onClick={() => onSubmit()}
+                  onClick={handleSubmit(onSubmit)}
                 >
-                  {t("general.create")}
+                  {t("general.update")}
                 </Button>
               </div>
             </div>
@@ -424,30 +455,3 @@ const ScheduleMeetingDetail = ({ t }) => {
 };
 
 export default withTranslation()(ScheduleMeetingDetail);
-
-const START_TIME = [
-  { value: "1:00 am", key: 1 },
-  { value: "2:00 am", key: 2 },
-  { value: "3:00 am", key: 3 },
-  { value: "4:00 am", key: 4 },
-  { value: "5:00 am", key: 5 },
-  { value: "6:00 am", key: 6 },
-  { value: "7:00 am", key: 7 },
-  { value: "8:00 am", key: 8 },
-  { value: "9:00 am", key: 9 },
-  { value: "10:00 am", key: 10 },
-  { value: "11:00 am", key: 11 },
-  { value: "12:00 am", key: 12 },
-  { value: "1:00 pm", key: 13 },
-  { value: "2:00 pm", key: 14 },
-  { value: "3:00 pm", key: 15 },
-  { value: "4:00 pm", key: 16 },
-  { value: "5:00 pm", key: 17 },
-  { value: "6:00 pm", key: 18 },
-  { value: "7:00 pm", key: 19 },
-  { value: "8:00 pm", key: 20 },
-  { value: "9:00 pm", key: 21 },
-  { value: "10:00 pm", key: 22 },
-  { value: "11:00 pm", key: 23 },
-  { value: "12:00 pm", key: 0 },
-];

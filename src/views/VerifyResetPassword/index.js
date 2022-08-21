@@ -120,7 +120,7 @@ export default function VerifyResetPassword() {
               <Input
                 type="password"
                 register={register("password")}
-                label="Password"
+                label="New Password"
                 placeholder="***********"
                 error={errors.password}
               />

@@ -8,6 +8,7 @@ import { handleHttpError, resetUserInfo } from "helpers";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signUp } from "services";
 import Wallet from "components/base/Wallet";
+import { message } from "antd";
 
 export default function Register() {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
@@ -20,7 +21,7 @@ export default function Register() {
       email: yup.string().email("Invalid email").required("Email is required"),
       username: yup.string().required("Username is required"),
       password: yup.string().required("Password is required"),
-      phone: yup.string().required("Phone number is required"),
+      phone: yup.string(),
       confirmPassword: yup
         .string()
         .oneOf([yup.ref("password"), null], "Passwords must match")
@@ -59,7 +60,7 @@ export default function Register() {
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
+        message.error(errorData.messageDetail);
       }
       setLoading(false);
     }

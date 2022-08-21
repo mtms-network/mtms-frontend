@@ -13,6 +13,7 @@ const Button = ({ children, className, isLoading, disabled, ...rest }) => {
         "btn rounded-[20px] h-[48px] min-h-[48px] bg-[#DAEFFF] border-0",
         className,
         isLoading && "loading",
+        disabled && "hover:bg-slate-400 hover:cursor-not-allowed",
       )}
     >
       {children}
