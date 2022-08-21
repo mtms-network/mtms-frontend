@@ -61,7 +61,7 @@ const ScheduleMeetingItem = ({ t }) => {
   const [startDateTime, setStartDateTime] = useState(moment());
   const [contacts, setContacts] = useState([]);
   const [type, setType] = useState(null);
-  const [startTime, setStartTime] = useState(1);
+  const [startTime, setStartTime] = useState(moment());
   const [durationHour, setDurationHour] = useState(0);
   const [durationMinute, setDurationMinute] = useState(0);
   const [alert, setAlert] = useState({
@@ -75,7 +75,24 @@ const ScheduleMeetingItem = ({ t }) => {
   const schema = yup.object().shape({
     title: yup.string().required(),
     agenda: yup.string(),
+    max_participant_count: yup
+      .number()
+      .min(
+        1,
+        t("validation.min.numeric", {
+          attribute: t("home.maximum_participant"),
+          min: 1,
+        }),
+      )
+      .max(
+        COMMON.MAX_PARTICIPANT,
+        t("validation.max.numeric", {
+          attribute: t("home.maximum_participant"),
+          max: COMMON.MAX_PARTICIPANT,
+        }),
+      ),
   });
+
   const {
     register,
     handleSubmit,
@@ -86,7 +103,6 @@ const ScheduleMeetingItem = ({ t }) => {
 
   const onSubmit = async (values) => {
     try {
-      console.log("values", values);
       const data = { ...values };
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
@@ -171,6 +187,10 @@ const ScheduleMeetingItem = ({ t }) => {
     }
   };
 
+  const disabledDate = (current) => {
+    return current && current < moment().endOf("day");
+  };
+
   useEffect(() => {
     fetchData();
   }, [params]);
@@ -202,18 +222,13 @@ const ScheduleMeetingItem = ({ t }) => {
               <GroupLayout className="flex flex-col justify-between">
                 <div className="w-full h-auto">
                   <Input
+                    required
                     className="w-full"
                     labelClassName="text-base"
                     register={register("title")}
                     label={t("meeting.props.title")}
                     placeholder={t("schedule_meeting.enter_title_meeting")}
-                    required
-                    rules={[
-                      {
-                        required: true,
-                        message: "This field is required.",
-                      },
-                    ]}
+                    error={errors.title}
                   />
                 </div>
               </GroupLayout>
@@ -237,6 +252,7 @@ const ScheduleMeetingItem = ({ t }) => {
                   <div>{t("meeting.view.start_time")}</div>
                   <div className="flex-1">
                     <DateTimePicker
+                      disabledDate={disabledDate}
                       placeholder="Mar 2, 2022 5:02 PM"
                       onChangeDateTime={onChangeDateTime}
                       format={timeFormat}
@@ -282,13 +298,7 @@ const ScheduleMeetingItem = ({ t }) => {
                       label={t("home.maximum_participant")}
                       placeholder={COMMON.MAX_PARTICIPANT}
                       type="number"
-                      min="1"
-                      onChange={(e) => {
-                        const { value } = e.target;
-                        if (value <= 99999 && value >= 0 && value.length <= 5) {
-                          // setParticipant(e.target.value);
-                        }
-                      }}
+                      error={errors.max_participant_count}
                     />
                   </div>
                   <div className="flex-1">
@@ -303,6 +313,7 @@ const ScheduleMeetingItem = ({ t }) => {
               <GroupLayout className="flex flex-col justify-between">
                 <div className="w-full h-auto">
                   <Select
+                    multiTag
                     label={t("meeting.config.email_invite")}
                     mode="tags"
                     options={listContacts}

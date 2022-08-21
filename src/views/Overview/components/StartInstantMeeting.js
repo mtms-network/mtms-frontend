@@ -100,7 +100,7 @@ const StartInstantMeeting = ({ className, t }) => {
               min="1"
               onChange={(e) => {
                 const { value } = e.target;
-                if (value <= 99999 && value >= 0 && value.length <= 5) {
+                if (value <= COMMON.MAX_PARTICIPANT && value >= 0 && value.length <= 5) {
                   setParticipant(e.target.value);
                 }
               }}

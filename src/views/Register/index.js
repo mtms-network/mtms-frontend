@@ -8,6 +8,7 @@ import { handleHttpError, resetUserInfo } from "helpers";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signUp } from "services";
 import Wallet from "components/base/Wallet";
+import { message } from "antd";
 
 export default function Register() {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
@@ -59,7 +60,7 @@ export default function Register() {
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
+        message.error(errorData.messageDetail);
       }
       setLoading(false);
     }

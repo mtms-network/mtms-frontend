@@ -32,3 +32,8 @@ export const API_RESPONSE_STATUS = {
 export const COMMON = {
   MAX_PARTICIPANT: 50,
 };
+
+export const MEETING_STATUS = {
+  ended: "ended",
+  scheduled: "scheduled",
+};
