@@ -88,7 +88,7 @@ const MeetingHistory = ({ className, t }) => {
               <GroupTitle title={t("meeting.meeting_history")} className="!pb-0" />
             </div>
             <div className="space-x-2 py-2 flex flex-row w-auto items-center justify-end">
-              <div className="tooltip" data-tip="Filter">
+              <div className="tooltip" data-tip={t("general.filter")}>
                 <IconButton
                   onClick={() => {
                     setIsShowFilter(!isShowFilter);
@@ -97,7 +97,7 @@ const MeetingHistory = ({ className, t }) => {
                   alt="Filter"
                 />
               </div>
-              <div className="tooltip" data-tip="Sort">
+              <div className="tooltip" data-tip={t("general.sort")}>
                 <button>
                   <IconButton
                     onClick={() => {
@@ -116,7 +116,7 @@ const MeetingHistory = ({ className, t }) => {
                   ) : null}
                 </button>
               </div>
-              <div className="tooltip" data-tip="Option">
+              <div className="tooltip" data-tip={t("general.option")}>
                 <IconButton onClick={() => {}} src="/icons/icons/more-outline.svg" alt="Option" />
               </div>
             </div>

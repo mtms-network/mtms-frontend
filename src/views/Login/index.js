@@ -10,8 +10,9 @@ import { getUser, handleHttpError, resetUserInfo, setTokenLoginSucceeded } from 
 import { useAuth } from "hooks";
 import { useAppStore } from "stores/app.store";
 import Wallet from "components/base/Wallet";
+import { withTranslation } from "react-i18next";
 
-export default function Login() {
+function Login({t}) {
   const navigate = useNavigate();
   const [, updateAppStore] = useAppStore();
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
@@ -133,27 +134,27 @@ export default function Login() {
       <GuestFormLayout>
         <div>
           <div className="pb-4">
-            <p className="text-black text-3xl font-bold">Login To Your Account</p>
+            <p className="text-black text-3xl font-bold">{t("auth.login.page_title")}</p>
             <div className="flex flex-row w-full pt-1">
-              <p className="pr-2 text-xs">Don’t have an account?</p>
+              <p className="pr-2 text-xs">{t("auth.login.dont_have_account")}</p>
               <a onClick={onRegister} className="btn-text-primary text-xs">
-                Register
+                {t("auth.register.register")}
               </a>
             </div>
           </div>
-          <div className="pt-6">
-            <p className="text-black-base text-lg font-bold pb-3">Log In With Social</p>
+          <div>
+            <p className="text-black-base text-lg font-bold pb-3">{t("auth.login.login_with_social")}</p>
             <GoogleButton showTitle />
           </div>
           <div>
             <div className="divider mt-2 mb-2 text-hint">Or</div>
-            <p className="text-black-base text-lg font-bold pb-3 pt-4">Log In With Crypto Wallet</p>
+            <p className="text-black-base text-lg font-bold pb-3 pt-4">{t("auth.login.login_with_crypto")}</p>
             <div className="flex flex-row space-x-4">
               <Wallet />
             </div>
           </div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
-          <p className="text-black-base text-lg font-bold pb-2 pt-4">Log In With Email</p>
+          <p className="text-black-base text-lg font-bold pb-2 pt-4">{t("auth.login.login_with_email")}</p>
           {alert?.show && (
             <div className="py-4 w-full">
               <Alert
@@ -170,8 +171,8 @@ export default function Login() {
                 <Input
                   className="w-full"
                   register={register("email")}
-                  label="Email"
-                  placeholder="Enter your email"
+                  label={t("auth.login.props.email")}
+                  placeholder={t("auth.login.props.enter_your_email")}
                   error={errors.email}
                   labelClassName="font-medium"
                 />
@@ -181,13 +182,13 @@ export default function Login() {
                   className="w-full"
                   type="password"
                   register={register("password")}
-                  label="Password"
+                  label={t("auth.login.props.password")}
                   placeholder="***********"
                   error={errors.password}
                   labelClassName="font-medium"
                   labelRightComponent={
                     <a className="btn-text-primary text-md" onClick={onForgotPassword}>
-                      Forgot Password?
+                      {t("auth.forget.forget_password")}
                     </a>
                   }
                 />
@@ -195,7 +196,7 @@ export default function Login() {
             </div>
             <div className="w-full pt-5">
               <Button className="btn-primary rounded-full btn-wide" isLoading={loading}>
-                Login
+                {t("auth.login.login")}
               </Button>
             </div>
           </form>
@@ -208,28 +209,28 @@ export default function Login() {
     return (
       <GuestFormLayout>
         <div className="pb-4">
-          <p className="text-black text-3xl font-bold">Login To Your Account</p>
+          <p className="text-black text-3xl font-bold">{t("auth.login.page_title")}</p>
           <div className="flex flex-row w-full pt-1">
-            <p className="pr-2 text-xs">Don’t have an account?</p>
+            <p className="pr-2 text-xs">{t("auth.login.dont_have_account")}</p>
             <a onClick={onRegister} className="btn-text-primary text-xs">
-              Register
+              {t("auth.register.register")}
             </a>
           </div>
         </div>
         <div className="pt-6">
-          <p className="text-black-base text-lg font-bold pb-3">Log In With Social</p>
+          <p className="text-black-base text-lg font-bold pb-3">{t("auth.login.login_with_social")}</p>
           <GoogleButton showTitle />
         </div>
         <div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
-          <p className="text-black-base text-lg font-bold pb-3 pt-4">Log In With Crypto Wallet</p>
+          <p className="text-black-base text-lg font-bold pb-3 pt-4">{t("auth.login.login_with_crypto")}</p>
           <div className="flex flex-row space-x-4">
             <Wallet />
           </div>
         </div>
         <div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
-          <p className="text-black-base text-lg font-bold pb-2 pt-4">Log in with Email</p>
+          <p className="text-black-base text-lg font-bold pb-2 pt-4">{t("auth.login.login_with_email")}</p>
           {alert?.show && (
             <div className="py-4 w-full">
               <Alert
@@ -247,13 +248,13 @@ export default function Login() {
                   className="w-full"
                   type="password"
                   register={registerUnlock("password")}
-                  label="Password"
+                  label={t("auth.login.props.password")}
                   placeholder="***********"
                   error={errorsUnlock.password}
                   labelClassName="font-medium"
                   labelRightComponent={
                     <a className="btn-text-primary text-md" onClick={onForgotPassword}>
-                      Forgot Password?
+                      {t("auth.forget.forget_password")}
                     </a>
                   }
                 />
@@ -266,13 +267,13 @@ export default function Login() {
               isLoading={loading}
               onClick={handleSubmitUnlock(onUnlock)}
             >
-              Login
+              {t("auth.login.login")}
             </Button>
             <Button
               className="btn-primary rounded-full btn-wide btn-ghost text-primary"
               onClick={onClearUserInfo}
             >
-              Logout
+              {t("auth.logout")}
             </Button>
           </div>
         </div>
@@ -282,3 +283,5 @@ export default function Login() {
 
   return user?.username ? renderUnlock() : renderLogin();
 }
+
+export default withTranslation()(Login);

@@ -59,4 +59,7 @@ export const routeUrls = {
   comingSoon: {
     path: "coming-soon",
   },
+  meetingRedirect: {
+    path: "m"
+  }
 };

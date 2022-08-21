@@ -9,8 +9,9 @@ import { resetPassword } from "services";
 import { handleHttpError } from "helpers";
 import { useAppStore } from "stores/app.store";
 import { message } from "antd";
+import { withTranslation } from "react-i18next";
 
-export default function VerifyResetPassword() {
+function VerifyResetPassword({t}) {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const [appStore] = useAppStore();
@@ -74,11 +75,11 @@ export default function VerifyResetPassword() {
         <img src="/images/mtms-logo.png" alt="logo" className="w-32" />
       </div>
       <div className="pb-4">
-        <p className="text-black text-3xl font-bold">Reset Your Account</p>
+        <p className="text-black text-3xl font-bold">{t("auth.verify.page_title")}</p>
         <div className="flex flex-row w-full pt-1">
-          <p className="pr-2 text-xs">Already have an account?</p>
+          <p className="pr-2 text-xs">{t("auth.register.already_have_account")}</p>
           <a className="btn-text-primary text-xs" onClick={onLogin}>
-            Login
+            { t("auth.login.login") }
           </a>
         </div>
       </div>
@@ -98,8 +99,8 @@ export default function VerifyResetPassword() {
             <div className="flex-1">
               <Input
                 register={register("email")}
-                label="Email"
-                placeholder="Enter your email"
+                label={t("auth.login.props.email")}
+                placeholder={t("auth.login.props.enter_your_email")}
                 error={errors.email}
                 labelClassName="font-medium"
               />
@@ -108,7 +109,7 @@ export default function VerifyResetPassword() {
               <Input
                 type="password"
                 register={register("code")}
-                label="Code"
+                label={t("auth.password.props.code")}
                 placeholder="***********"
                 error={errors.code}
                 labelClassName="font-medium"
@@ -120,7 +121,7 @@ export default function VerifyResetPassword() {
               <Input
                 type="password"
                 register={register("password")}
-                label="New Password"
+                label={t("auth.password.props.new_password")}
                 placeholder="***********"
                 error={errors.password}
               />
@@ -129,7 +130,7 @@ export default function VerifyResetPassword() {
               <Input
                 type="password"
                 register={register("confirmPassword")}
-                label="Confirm Password"
+                label={t("auth.password.props.new_password_confirmation")}
                 placeholder="***********"
                 error={errors.confirmPassword}
               />
@@ -143,9 +144,11 @@ export default function VerifyResetPassword() {
           isLoading={loading}
           onClick={handleSubmit(onSubmit)}
         >
-          Validate code
+          {t("auth.reset_result.verify_code")}
         </Button>
       </div>
     </GuestFormLayout>
   );
-}
+};
+
+export default withTranslation()(VerifyResetPassword);

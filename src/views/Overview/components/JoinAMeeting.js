@@ -3,14 +3,16 @@ import { IoCalendarSharp } from "react-icons/io5";
 import { Button, GroupLayout, GroupTitle, Input } from "components";
 import classNames from "classnames";
 import { joinMeetingByCode } from "services";
-import { LIVE_MEETING_URL } from "configs";
+import { LIVE_MEETING_URL, routeUrls } from "configs";
 import { withTranslation } from "react-i18next";
 import { handleHttpError } from "helpers";
 import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const JoinAMeeting = ({ className, t }) => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleJoin = async () => {
     try {
@@ -18,10 +20,7 @@ const JoinAMeeting = ({ className, t }) => {
         setLoading(true);
         const res = await joinMeetingByCode({ code });
         if (res?.data?.uuid) {
-          window.open(
-            `${LIVE_MEETING_URL}/${res?.data?.meeting.identifier}?jwt=${res?.data?.meeting?.tokenJWT}`,
-            "_blank",
-          );
+          navigate(`${routeUrls.meetingRedirect.path}/${res?.data?.identifier}`);
         } else {
           const errorData = handleHttpError(res);
           message.error(errorData.message);

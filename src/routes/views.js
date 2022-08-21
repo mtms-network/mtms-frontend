@@ -20,3 +20,4 @@ export const Rewards = lazy(() => import("views/Rewards"));
 export const ComingSoon = lazy(() => import("views/Common/ComingSoon"));
 export const ProfileChangePassword = lazy(() => import("views/Profile/containers/ChangePassword"));
 export const ProfileUpdate = lazy(() => import("views/Profile/containers/UpdateProfile"));
+export const MeetingRedirect = lazy(() => import("views/MeetingRedirect"));
