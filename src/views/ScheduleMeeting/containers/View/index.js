@@ -138,6 +138,8 @@ const ScheduleMeetingView = ({ t }) => {
   useEffect(() => {
     fetchData();
   }, [params.meetingId]);
+
+  console.log(meetingStore.meeting);
   return (
     <MainLayout>
       <div className="pt-4 w-full">
