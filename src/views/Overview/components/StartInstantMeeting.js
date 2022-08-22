@@ -4,8 +4,9 @@ import classNames from "classnames";
 import { Button, GroupLayout, GroupTitle, Icon, Input } from "components";
 import { useMeetingStore } from "stores/meeting.store";
 import { startMeeting } from "services";
-import { COMMON, LIVE_MEETING_URL } from "configs";
+import { COMMON, LIVE_MEETING_URL, routeUrls } from "configs";
 import { withTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const StartInstantMeeting = ({ className, t }) => {
   const [meetingStore, updateMeetingStore] = useMeetingStore();
@@ -15,7 +16,7 @@ const StartInstantMeeting = ({ className, t }) => {
   const [type, setType] = useState(null);
   const [isKeepAlive, setIsKeepALive] = useState(false);
   const [isOnlyActiveMember, setIsOnlyActiveMember] = useState(true);
-
+  const navigate = useNavigate();
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyCode = () => {
@@ -37,10 +38,8 @@ const StartInstantMeeting = ({ className, t }) => {
         isActiveMember: isOnlyActiveMember,
       });
       if (res?.data?.meeting?.uuid) {
-        window.open(
-          `${LIVE_MEETING_URL}/${res?.data?.meeting.identifier}?jwt=${res?.data?.meeting?.tokenJWT}`,
-          "_blank",
-        );
+
+        navigate(`${routeUrls.meetingRedirect.path}/${res?.data?.meeting.identifier}`);
         updateMeetingStore((draft) => {
           draft.isForceLoadMeetingHistories = true;
         });

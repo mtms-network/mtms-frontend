@@ -8,9 +8,10 @@ import { handleHttpError, resetUserInfo } from "helpers";
 import { ALERT_TYPE, routeUrls } from "configs";
 import { signUp } from "services";
 import Wallet from "components/base/Wallet";
+import { withTranslation } from "react-i18next";
 import { message } from "antd";
 
-export default function Register() {
+function Register({ t }) {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -73,28 +74,28 @@ export default function Register() {
   return (
     <GuestFormLayout>
       <div className="py-4">
-        <p className="text-black text-3xl font-bold">Create An Account</p>
+        <p className="text-black text-3xl font-bold">{t("auth.register.page_title")}</p>
         <div className="flex flex-row w-full pt-1">
-          <p className="pr-2 text-xs">Already have an account?</p>
+          <p className="pr-2 text-xs">{t("auth.register.already_have_account")}</p>
           <a className="btn-text-primary text-xs" onClick={onLogin}>
-            Login
+            { t("auth.login.login") }
           </a>
         </div>
       </div>
       <div className="pt-6">
-        <p className="text-black-base text-lg font-bold pb-3">Sign Up With Social</p>
+        <p className="text-black-base text-lg font-bold pb-3">{t("auth.login.login_with_social")}</p>
         <GoogleButton showTitle />
       </div>
       <div>
         <div className="divider mt-2 mb-2 text-hint">Or</div>
-        <p className="text-black-base text-lg font-bold pb-3 pt-4">Sign Up With Crypto Wallet</p>
+        <p className="text-black-base text-lg font-bold pb-3 pt-4">{t("auth.login.login_with_crypto")}</p>
         <div className="flex flex-row space-x-4">
           <Wallet />
         </div>
       </div>
       <div>
         <div className="divider mt-2 mb-2 text-hint">Or</div>
-        <p className="text-black-base text-lg font-bold pb-2 pt-4">Sign Up With Email</p>
+        <p className="text-black-base text-lg font-bold pb-2 pt-4">{t("auth.login.login_with_email")}</p>
         {alert?.show && (
           <div className="py-4 w-full">
             <Alert
@@ -110,8 +111,8 @@ export default function Register() {
             <div className="flex-1">
               <Input
                 register={register("name")}
-                label="Name"
-                placeholder="Enter your name"
+                label={t("auth.register.props.name")}
+                placeholder={t("auth.register.props.enter_your_name")}
                 error={errors.name}
                 labelClassName="font-medium"
               />
@@ -119,8 +120,8 @@ export default function Register() {
             <div className="flex-1">
               <Input
                 register={register("username")}
-                label="Username"
-                placeholder="Enter your username"
+                label={t("auth.register.props.username")}
+                placeholder={t("auth.register.props.enter_your_username")}
                 error={errors.username}
                 labelClassName="font-medium"
               />
@@ -130,8 +131,8 @@ export default function Register() {
             <div className="flex-1">
               <Input
                 register={register("email")}
-                label="Email"
-                placeholder="Enter your email"
+                label={t("auth.register.props.email")}
+                placeholder={t("auth.register.props.enter_your_email")}
                 error={errors.email}
                 labelClassName="font-medium"
               />
@@ -139,8 +140,8 @@ export default function Register() {
             <div className="flex-1">
               <Input
                 register={register("phone")}
-                label="Phone Number"
-                placeholder="Enter your phone number"
+                label={t("auth.register.props.phone_number")}
+                placeholder={t("auth.register.props.enter_phone_number")}
                 error={errors.phone}
                 labelClassName="font-medium"
               />
@@ -151,7 +152,7 @@ export default function Register() {
               <Input
                 type="password"
                 register={register("password")}
-                label="Password"
+                label={t("auth.register.props.password")}
                 placeholder="***********"
                 error={errors.password}
               />
@@ -160,7 +161,7 @@ export default function Register() {
               <Input
                 type="password"
                 register={register("confirmPassword")}
-                label="Confirm Password"
+                label={t("auth.register.props.confirm_password")}
                 placeholder="***********"
                 error={errors.confirmPassword}
               />
@@ -168,8 +169,8 @@ export default function Register() {
           </div>
           <div className="flex items-start pt-4">
             <p className="text-sm">
-              By clicking on Register, you agree to our
-              <span className="text-primary"> Terms of Service and Privacy Policy.</span>
+              {t("auth.register.registration_terms_label")}
+              <span className="text-primary"> {t("auth.register.registration_terms_policy")}</span>
             </p>
           </div>
         </form>
@@ -179,10 +180,12 @@ export default function Register() {
             isLoading={loading}
             onClick={handleSubmit(onSubmit)}
           >
-            Register
+            { t("auth.register.register") }
           </Button>
         </div>
       </div>
     </GuestFormLayout>
   );
-}
+};
+
+export default withTranslation()(Register)

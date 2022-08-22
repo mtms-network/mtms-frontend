@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
-import { BASE_API, COMMON } from "configs";
+import { BASE_API, COMMON, routeUrls } from "configs";
 import QueryString from "qs";
 import { createPrivateInstance } from "./base";
+import { getAccessToken } from "../helpers";
 
 const client = createPrivateInstance(BASE_API.meeting);
 
@@ -171,6 +172,26 @@ export const getMeetingContact = async () => {
     return res?.data;
   } catch (error) {
     console.error("getMeetingContact", error);
+    return error;
+  }
+};
+
+
+export const checkMeetingExist = async (meetingId) => {
+  try {
+    const token = getAccessToken();
+    const headers = {};
+    if(token){
+      headers["X-authorization"] = `Bearer ${token}`
+    }
+
+    const res = await client.get(`/check-exist/${meetingId}`, {
+      headers,
+    });
+
+    return res?.data;
+  } catch (error) {
+    console.error("getMeetingDetail", error);
     return error;
   }
 };

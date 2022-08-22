@@ -14,6 +14,9 @@ export const routeUrls = {
   verifyForgotPassword: {
     path: "verify",
   },
+  verifyActiveToken: {
+    path: "verify/:token",
+  },
   overview: {
     path: "overview",
   },
@@ -56,4 +59,7 @@ export const routeUrls = {
   comingSoon: {
     path: "coming-soon",
   },
+  meetingRedirect: {
+    path: "m"
+  }
 };

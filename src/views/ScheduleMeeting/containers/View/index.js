@@ -81,11 +81,10 @@ const ScheduleMeetingView = ({ t }) => {
 
   const handleStart = async () => {
     try {
+      // eslint-disable-next-line no-shadow
+      const { meeting } = meetingStore;
       if (meeting) {
-        window.open(`${LIVE_MEETING_URL}/${meeting.identifier}?jwt=${meeting.tokenJWT}`, "_blank");
-        updateMeetingStore((draft) => {
-          draft.isForceLoadMeetingHistories = true;
-        });
+        navigate(`/${routeUrls.meetingRedirect.path}/${meeting.identifier}`);
       }
     } catch (error) {
       console.log("start meeting error");
