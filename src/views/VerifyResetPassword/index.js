@@ -19,7 +19,7 @@ export default function VerifyResetPassword() {
   const schema = yup
     .object()
     .shape({
-      email: yup.string().email("Invalid email").required("Email is required"),
+      email: yup.string().required("Email is required"),
       code: yup.string().required("Code is required"),
       password: yup.string().required("Password is required"),
       confirmPassword: yup
@@ -58,7 +58,7 @@ export default function VerifyResetPassword() {
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
+        message.error(errorData.messageDetail);
       }
       setLoading(false);
     }
