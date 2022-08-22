@@ -152,7 +152,6 @@ const ScheduleMeetingDetail = ({ t }) => {
           });
           data.type = { uuid: type };
           data.period = durationHour * 60 + durationMinute;
-          delete data.identifier;
 
           const res = await updateInstantMeeting(params.meetingId, data);
           if (res?.data) {
@@ -375,6 +374,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                       placeholder={COMMON.MAX_PARTICIPANT}
                       type="number"
                       error={errors.max_participant_count}
+                      min="1"
                     />
                   </div>
                   <div className="flex-1">

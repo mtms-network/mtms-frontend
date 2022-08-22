@@ -125,10 +125,13 @@ const ScheduleMeetingItem = ({ t }) => {
       const res = await createInstantMeeting(data);
 
       if (res?.data) {
-        message.success(res?.data?.message);
         if (data.contacts?.length > 0) {
           await sendEmailToMemberInMeeting(params.meetingId);
+          navigate(`/${routeUrls.scheduleMeeting.path}`);
+        } else {
+          navigate(`/${routeUrls.scheduleMeeting.path}`);
         }
+        message.success(res?.data?.message);
       } else if (res?.request) {
         const errorData = handleHttpError(res);
         message.error(errorData.messageDetail);
@@ -299,6 +302,7 @@ const ScheduleMeetingItem = ({ t }) => {
                       placeholder={COMMON.MAX_PARTICIPANT}
                       type="number"
                       error={errors.max_participant_count}
+                      min={1}
                     />
                   </div>
                   <div className="flex-1">
@@ -330,7 +334,6 @@ const ScheduleMeetingItem = ({ t }) => {
                   register={register("agenda")}
                   label={t("meeting.props.agenda")}
                   placeholder={t("schedule_meeting_new.enter_agenda_meeting")}
-                  required
                 />
               </GroupLayout>
               <GroupLayout className="flex flex-col justify-between">
