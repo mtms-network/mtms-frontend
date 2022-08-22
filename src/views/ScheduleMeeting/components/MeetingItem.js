@@ -45,7 +45,7 @@ const MeetingItem = ({ data, className }) => {
             <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
               <img src="/images/icon/clock.svg" alt="" />
               <p className="label-base p-0 group-hover:text-primary">
-                {calculateDuration(data.start_date_time, data.estimated_end_time)}
+                {`${calculateDuration(data.start_date_time, data.estimated_end_time)} `}
                 {t("list.general.durations.minutes")}
               </p>
             </div>
