@@ -21,7 +21,7 @@ const NavbarLayout = ({ width, onLogout }) => {
         instant: true,
       });
       if (res?.data?.meeting?.uuid) {
-        window.open(`${LIVE_MEETING_URL}/${res?.data?.meeting.identifier}`, "_blank");
+        navigate(`/${routeUrls.meetingRedirect.path}/${res?.data?.meeting?.identifier}`);
       }
     } catch (error) {}
   }, []);
