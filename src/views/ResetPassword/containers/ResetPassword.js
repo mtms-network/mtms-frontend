@@ -91,13 +91,21 @@ function ResetPassword({ t }) {
           </div>
         </div>
       </form>
-      <div className="w-full pt-5 flex justify-between items-center">
+      <div className="w-full pt-5 flex justify-between items-center space-x-4">
         <Button
           className="btn-primary rounded-full btn-wide"
           isLoading={loading}
           onClick={handleSubmit(onSubmit)}
         >
           {t("auth.send_request")}
+        </Button>
+        <Button
+          className="btn-primary rounded-full btn-wide btn-ghost text-primary"
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          {t("auth.reset_result.return")}
         </Button>
       </div>
     </GuestFormLayout>
