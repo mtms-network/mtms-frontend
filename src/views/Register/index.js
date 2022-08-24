@@ -78,24 +78,30 @@ function Register({ t }) {
         <div className="flex flex-row w-full pt-1">
           <p className="pr-2 text-xs">{t("auth.register.already_have_account")}</p>
           <a className="btn-text-primary text-xs" onClick={onLogin}>
-            { t("auth.login.login") }
+            {t("auth.login.login")}
           </a>
         </div>
       </div>
       <div className="pt-6">
-        <p className="text-black-base text-lg font-bold pb-3">{t("auth.login.login_with_social")}</p>
+        <p className="text-black-base text-lg font-bold pb-3">
+          {t("auth.login.login_with_social")}
+        </p>
         <GoogleButton showTitle />
       </div>
       <div>
         <div className="divider mt-2 mb-2 text-hint">Or</div>
-        <p className="text-black-base text-lg font-bold pb-3 pt-4">{t("auth.login.login_with_crypto")}</p>
+        <p className="text-black-base text-lg font-bold pb-3 pt-4">
+          {t("auth.login.login_with_crypto")}
+        </p>
         <div className="flex flex-row space-x-4">
           <Wallet />
         </div>
       </div>
       <div>
         <div className="divider mt-2 mb-2 text-hint">Or</div>
-        <p className="text-black-base text-lg font-bold pb-2 pt-4">{t("auth.login.login_with_email")}</p>
+        <p className="text-black-base text-lg font-bold pb-2 pt-4">
+          {t("auth.login.login_with_email")}
+        </p>
         {alert?.show && (
           <div className="py-4 w-full">
             <Alert
@@ -115,6 +121,7 @@ function Register({ t }) {
                 placeholder={t("auth.register.props.enter_your_name")}
                 error={errors.name}
                 labelClassName="font-medium"
+                required
               />
             </div>
             <div className="flex-1">
@@ -124,6 +131,7 @@ function Register({ t }) {
                 placeholder={t("auth.register.props.enter_your_username")}
                 error={errors.username}
                 labelClassName="font-medium"
+                required
               />
             </div>
           </div>
@@ -135,6 +143,7 @@ function Register({ t }) {
                 placeholder={t("auth.register.props.enter_your_email")}
                 error={errors.email}
                 labelClassName="font-medium"
+                required
               />
             </div>
             <div className="flex-1">
@@ -155,6 +164,8 @@ function Register({ t }) {
                 label={t("auth.register.props.password")}
                 placeholder="***********"
                 error={errors.password}
+                labelClassName="font-medium"
+                required
               />
             </div>
             <div className="flex-1">
@@ -164,13 +175,18 @@ function Register({ t }) {
                 label={t("auth.register.props.confirm_password")}
                 placeholder="***********"
                 error={errors.confirmPassword}
+                labelClassName="font-medium"
+                required
               />
             </div>
           </div>
           <div className="flex items-start pt-4">
             <p className="text-sm">
               {t("auth.register.registration_terms_label")}
-              <span className="text-primary"> {t("auth.register.registration_terms_policy")}</span>
+              <span className="text-primary font-medium">
+                {" "}
+                {t("auth.register.registration_terms_policy")}
+              </span>
             </p>
           </div>
         </form>
@@ -180,12 +196,12 @@ function Register({ t }) {
             isLoading={loading}
             onClick={handleSubmit(onSubmit)}
           >
-            { t("auth.register.register") }
+            {t("auth.register.register")}
           </Button>
         </div>
       </div>
     </GuestFormLayout>
   );
-};
+}
 
-export default withTranslation()(Register)
+export default withTranslation()(Register);
