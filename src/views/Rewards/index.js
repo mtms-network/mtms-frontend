@@ -235,6 +235,7 @@ const Rewards = () => {
                   className="btn-primary"
                   isLoading={loading}
                   onClick={handleClaimTokenToday}
+                  disabled={walletStore?.wallet?.total_token_all_days > 0}
                 >
                   {t("rewards.claim_token")}
                 </Button>
@@ -246,8 +247,8 @@ const Rewards = () => {
               <div className="flex flex-1 flex-row justify-between">
                 <div>
                   <p className="text-lg text-gray">
-                    {t("rewards.your_wallet")}
-                    <span className="font-bold text-lg text-black-base"> {`${walletStore?.wallet?.user?.oasis?.address}`}</span>
+                    {t("rewards.your_wallet")}:
+                    <span className="font-bold text-lg text-black-base"> {`${walletStore?.wallet?.user?.oasis?.address || ''}`}</span>
                   </p>
                   <p className="text-base pt-5">
                     {t("rewards.message_receive_token", {
@@ -266,8 +267,9 @@ const Rewards = () => {
                 }`}</p>
                 <div className="pt-8">
                   <Button
+                    disabled={true}
                     className="btn btn-primary rounded-3xl btn-lg h-[54px] min-h-[54px]"
-                    disabled={!walletStore?.wallet?.user?.total_token}
+                    // disabled={!walletStore?.wallet?.user?.total_token}
                     isLoading={loading}
                   >
                     {t("rewards.withdraw")}
