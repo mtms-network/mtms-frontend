@@ -21,7 +21,7 @@ const NavbarLayout = ({ width, onLogout }) => {
         instant: true,
       });
       if (res?.data?.meeting?.uuid) {
-        window.open(`${LIVE_MEETING_URL}/${res?.data?.meeting.identifier}`, "_blank");
+        navigate(`/${routeUrls.meetingRedirect.path}/${res?.data?.meeting?.identifier}`);
       }
     } catch (error) {}
   }, []);
@@ -71,36 +71,34 @@ const NavbarLayout = ({ width, onLogout }) => {
                   )}
                 </div>
               </label>
-              <ul
+              <div
                 tabIndex="0"
                 className="mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-44 z-50 bg-white space-y-4"
               >
-                <li className="w-full hover:bg-primary">
-                  <Link
-                    to={`/${routeUrls.profileUpdate.path}`}
-                    className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white hover:bg-transparent flex justify-start"
-                  >
-                    {t("profile.edit")}
-                  </Link>
-                </li>
-                <li className="w-full hover:bg-primary text-left">
-                  <Link
-                    to={`/${routeUrls.profileChangePassword.path}`}
-                    className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white hover:bg-transparent flex justify-start"
-                  >
-                    {t("user.change_password")}
-                  </Link>
-                </li>
-                <li className="w-full hover:bg-primary text-left">
-                  <a
-                    className="btn btn-block btn-primary bg-transparent border-0 text-black hover:text-white hover:bg-transparent flex justify-start"
-                    onClick={onLogout}
-                  >
-                    <IconBase icon="/icons/icons/logout-outline.svg" alt="logout-icon" />
-                    {t("auth.logout")}
-                  </a>
-                </li>
-              </ul>
+                <Link
+                  to={`/${routeUrls.profileUpdate.path}`}
+                  className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white hover:bg-primary flex justify-start"
+                >
+                  {t("profile.edit")}
+                </Link>
+                <Link
+                  to={`/${routeUrls.profileChangePassword.path}`}
+                  className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white hover:bg-primary flex justify-start"
+                >
+                  {t("user.change_password")}
+                </Link>
+                <a
+                  className="btn btn-block btn-primary bg-transparent border-0 text-black hover:text-white hover:bg-primary flex justify-start"
+                  onClick={onLogout}
+                >
+                  <IconBase
+                    icon="/icons/icons/logout-outline.svg"
+                    alt="logout-icon"
+                    className="pr-4"
+                  />
+                  {t("auth.logout")}
+                </a>
+              </div>
             </div>
           </div>
         </div>

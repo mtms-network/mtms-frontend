@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";
 import { withTranslation } from "react-i18next";
 
-function ResetPasswordResult({ t }) {
+function RegisterResult({ t }) {
   const navigate = useNavigate();
 
   const onVerifyCode = () => {
@@ -20,7 +20,7 @@ function ResetPasswordResult({ t }) {
         <p className="text-black text-3xl font-bold">{t("auth.reset_result.page_title")}</p>
       </div>
       <p>{t("auth.reset_result.page_description")}</p>
-      <div className="w-full pt-9 flex justify-between items-center space-x-4">
+      <div className="w-full pt-9 flex justify-between items-center">
         <Button
           className="btn-primary rounded-full btn-wide"
           onClick={() => {
@@ -40,4 +40,4 @@ function ResetPasswordResult({ t }) {
   );
 }
 
-export default withTranslation()(ResetPasswordResult);
+export default withTranslation()(RegisterResult);
