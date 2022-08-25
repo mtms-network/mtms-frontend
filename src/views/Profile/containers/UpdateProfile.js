@@ -130,7 +130,7 @@ const UpdateProfile = ({ t }) => {
                 className="w-full"
                 labelClassName="text-base"
                 register={register("name")}
-                label="Name"
+                label={t("profile.name")}
                 error={errors.name}
               />
             </div>
@@ -139,7 +139,7 @@ const UpdateProfile = ({ t }) => {
                 className="w-full !bg-disable"
                 labelClassName="text-base"
                 register={register("username")}
-                label="Username"
+                label={t("profile.username")}
                 disabled
                 error={errors.username}
               />
@@ -159,7 +159,7 @@ const UpdateProfile = ({ t }) => {
                 className="w-full"
                 labelClassName="text-base"
                 register={register("phone")}
-                label="Phone"
+                label={t("profile.phone")}
                 error={errors.phone}
               />
             </div>
