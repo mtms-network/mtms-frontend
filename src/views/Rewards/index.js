@@ -4,7 +4,7 @@ import { Button, MainLayout, AlertError, BrandLogoLoading } from "components";
 
 import { BASE_API, ALERT_TYPE } from "configs";
 import { useWalletStore } from "stores/wallet.store";
-import { handleHttpError } from "helpers";
+import { getUser, handleHttpError } from "helpers";
 import { useTranslation } from "react-i18next";
 import { getRequirePreWallet } from "services/wallet.service";
 import { createPrivateInstance } from "services/base";
@@ -230,9 +230,17 @@ const Rewards = () => {
                     <span className="font-bold text-lg text-black-base">{`${walletStore?.wallet?.user?.oasis?.address}`}</span>
                   </p>
                   <p className="text-base pt-5">
+                    { t("rewards.well_done", {
+                      name: getUser()?.profile?.name,
+                    }) }
+                  </p>
+                  <p className="text-base pt-5">
+                    { t("rewards.slogan") }
+                  </p>
+                  <p className="text-base pt-5">
                     {t("rewards.message_receive_token", {
                       hours: timeWeek.hour,
-                      token: walletStore?.wallet?.total_token_week,
+                      token: walletStore?.wallet?.total_token_week || 0,
                     })}
                   </p>
                 </div>
