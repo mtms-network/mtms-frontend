@@ -6,7 +6,7 @@ import { BASE_API, ALERT_TYPE, API_RESPONSE_STATUS } from "configs";
 import { useWalletStore } from "stores/wallet.store";
 import { handleHttpError } from "helpers";
 import { useTranslation } from "react-i18next";
-import { getRequirePreWallet } from "services/wallet.service";
+import { checkInToday, claimTokenToDay, getRequirePreWallet } from "services/wallet.service";
 import { createPrivateInstance } from "services/base";
 import { message } from "antd";
 
@@ -48,9 +48,7 @@ const Rewards = () => {
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-
-      const client = createPrivateInstance(BASE_API.wallet);
-      const res = await client.post("/claim/meeting/today");
+      const res = await claimTokenToDay()
 
       if (res?.status === 200) {
         message.success(res.data.status);
@@ -118,8 +116,7 @@ const Rewards = () => {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
 
-      const client = createPrivateInstance(BASE_API.wallet);
-      const res = await client.post("/checkin/today");
+      const res = await checkInToday();
 
       if (res?.status === 200) {
         message.success(res.data.status);
@@ -197,9 +194,9 @@ const Rewards = () => {
                 <Button
                   className="btn-primary"
                   isLoading={loading}
-                  onClick={() => {
+                  onClick={ async () => {
                     if(!walletStore?.wallet?.has_checked_today){
-                      handleCheckInToday()
+                      await handleCheckInToday();
                     }
                   }}
                   disabled={walletStore?.wallet?.has_checked_today}

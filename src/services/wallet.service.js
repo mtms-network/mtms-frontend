@@ -12,3 +12,13 @@ export const getRequirePreWallet = async () => {
     return null;
   }
 };
+
+export const claimTokenToDay = async () => {
+  const res = await client.post("/claim/meeting/today");
+  return res?.data;
+};
+
+export const checkInToday = async () => {
+  const res = await client.post("/checkin/today");
+  return res?.data;
+};
