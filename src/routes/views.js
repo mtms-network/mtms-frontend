@@ -3,6 +3,7 @@ import { lazy } from "react";
 export const Login = lazy(() => import("views/Login"));
 export const Overview = lazy(() => import("views/Overview"));
 export const Register = lazy(() => import("views/Register"));
+export const RegisterResult = lazy(() => import("views/Register/RegisterResult"));
 export const ResetPassword = lazy(() => import("views/ResetPassword/containers/ResetPassword"));
 export const ResetPasswordResult = lazy(() =>
   import("views/ResetPassword/containers/ResetPasswordResult"),
@@ -21,3 +22,6 @@ export const ComingSoon = lazy(() => import("views/Common/ComingSoon"));
 export const ProfileChangePassword = lazy(() => import("views/Profile/containers/ChangePassword"));
 export const ProfileUpdate = lazy(() => import("views/Profile/containers/UpdateProfile"));
 export const MeetingRedirect = lazy(() => import("views/MeetingRedirect"));
+export const VerifyActiveTokenResult = lazy(() =>
+  import("views/VerifyActiveToken/VerifyCodeResult"),
+);

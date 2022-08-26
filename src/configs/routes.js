@@ -5,6 +5,9 @@ export const routeUrls = {
   register: {
     path: "register",
   },
+  registerResult: {
+    path: "register-result",
+  },
   reset: {
     path: "reset",
   },
@@ -16,6 +19,9 @@ export const routeUrls = {
   },
   verifyActiveToken: {
     path: "verify/:token",
+  },
+  verifyActiveTokenResult: {
+    path: "verify-code-result",
   },
   overview: {
     path: "overview",
@@ -60,6 +66,6 @@ export const routeUrls = {
     path: "coming-soon",
   },
   meetingRedirect: {
-    path: "m"
-  }
+    path: "m",
+  },
 };
