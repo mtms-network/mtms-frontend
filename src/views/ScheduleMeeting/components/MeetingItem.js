@@ -3,8 +3,9 @@ import classNames from "classnames";
 import { Button, GroupLayout } from "components";
 import { calculateDuration } from "helpers";
 import { Link, useNavigate } from "react-router-dom";
-import { MEETING_STATUS, routeUrls } from "configs";
+import { LIVE_MEETING_URL, MEETING_STATUS, routeUrls } from "configs";
 import { t } from "i18next";
+import { message } from "antd";
 
 const MeetingItem = ({ data, className }) => {
   const navigate = useNavigate();
@@ -21,6 +22,14 @@ const MeetingItem = ({ data, className }) => {
       }
     } catch (error) {
       console.log("start meeting error");
+    }
+  };
+
+  const handleCopyLink = () => {
+    if (data?.identifier) {
+      const meetingUrl = `${LIVE_MEETING_URL}/${data.identifier}`;
+      navigator.clipboard.writeText(meetingUrl);
+      message.success(t("home.copied"));
     }
   };
 
@@ -41,16 +50,27 @@ const MeetingItem = ({ data, className }) => {
             </div>
           </Link>
           <div className="relative">
-            <div className="group">
-              <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
-              <div className="absolute right-0 w-[160px] bg-white rounded-[20px] py-[16px] shadow-[0_1px_12px_rgba(169,169,169,0.2)] hidden group-hover:block">
-                <div className="p-[16px] hover:bg-primary text-black hover:text-white">
-                  {t("meeting.config.duplicate_meeting")}
-                </div>
-                <div className="p-[16px] hover:bg-primary text-black hover:text-white">
-                  {t("meeting.config.delete_meeting")}
-                </div>
-              </div>
+            <div className="dropdown dropdown-end">
+              <label tabIndex="0" className="m-1">
+                <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
+              </label>
+              <ul
+                tabIndex="0"
+                className="dropdown-content menu py-6 shadow-lg bg-white rounded-box w-52"
+              >
+                <li>
+                  <a
+                    onClick={handleCopyLink}
+                    className={classNames(
+                      "bg-white border-0 text-black",
+                      "hover:text-white hover:bg-primary",
+                      "flex justify-start rounded-none",
+                    )}
+                  >
+                    {t("general.share_url")}
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

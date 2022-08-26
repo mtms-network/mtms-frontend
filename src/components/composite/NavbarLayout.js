@@ -8,6 +8,7 @@ import { InputSingle } from "components/base/Input";
 import { Button, IconBase } from "components/base";
 import { startMeeting } from "services";
 import { getAccessToken } from "helpers";
+import classNames from "classnames";
 
 const NavbarLayout = ({ width, onLogout }) => {
   const { t } = useTranslation();
@@ -73,22 +74,37 @@ const NavbarLayout = ({ width, onLogout }) => {
               </label>
               <div
                 tabIndex="0"
-                className="mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-44 z-50 bg-white space-y-4"
+                className="right-8 py-6 shadow menu menu-compact dropdown-content rounded-box w-44 z-50 bg-white space-y-2"
               >
                 <Link
                   to={`/${routeUrls.profileUpdate.path}`}
-                  className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white hover:bg-primary flex justify-start"
+                  className={classNames(
+                    "btn btn-block btn-primary",
+                    "bg-white border-0 text-black",
+                    "hover:text-white hover:bg-primary",
+                    "flex justify-start rounded-none z-10",
+                  )}
                 >
                   {t("profile.edit")}
                 </Link>
                 <Link
                   to={`/${routeUrls.profileChangePassword.path}`}
-                  className="btn btn-block btn-primary bg-white border-0 text-black hover:text-white hover:bg-primary flex justify-start"
+                  className={classNames(
+                    "btn btn-block btn-primary",
+                    "bg-white border-0 text-black",
+                    "hover:text-white hover:bg-primary",
+                    "flex justify-start rounded-none z-10",
+                  )}
                 >
                   {t("user.change_password")}
                 </Link>
                 <a
-                  className="btn btn-block btn-primary bg-transparent border-0 text-black hover:text-white hover:bg-primary flex justify-start"
+                  className={classNames(
+                    "btn btn-block btn-primary",
+                    "bg-white border-0 text-black",
+                    "hover:text-white hover:bg-primary",
+                    "flex justify-start rounded-none z-10",
+                  )}
                   onClick={onLogout}
                 >
                   <IconBase
