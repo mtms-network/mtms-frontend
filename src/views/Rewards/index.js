@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { Button, MainLayout, AlertError, BrandLogoLoading } from "components";
 
-import { BASE_API, ALERT_TYPE } from "configs";
+import { BASE_API, ALERT_TYPE, API_RESPONSE_STATUS } from "configs";
 import { useWalletStore } from "stores/wallet.store";
 import { getUser, handleHttpError } from "helpers";
 import { useTranslation } from "react-i18next";
-import { getRequirePreWallet } from "services/wallet.service";
+import { checkInToday, claimTokenToDay, getRequirePreWallet } from "services/wallet.service";
 import { createPrivateInstance } from "services/base";
+import { message } from "antd";
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
@@ -47,9 +48,12 @@ const Rewards = () => {
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
+      const res = await claimTokenToDay()
 
-      const client = createPrivateInstance(BASE_API.wallet);
-      const res = await client.post("/claim/meeting/today");
+      if (res?.status === 200) {
+        message.success(res.data.status);
+      }
+
       const totalToken = walletStore.wallet.token_per_checkin + res.data.amount;
       const newWallet = {
         ...walletStore.wallet,
@@ -112,8 +116,12 @@ const Rewards = () => {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
 
-      const client = createPrivateInstance(BASE_API.wallet);
-      const res = await client.post("/checkin/today");
+      const res = await checkInToday();
+
+      if (res?.status === 200) {
+        message.success(res.data.status);
+      }
+
       const newWallet = {
         ...walletStore.wallet,
         has_checked_today: true,
@@ -183,7 +191,16 @@ const Rewards = () => {
                 </p>
               </div>
               <div className="flex flex-row items-end space-x-2">
-                <Button className="btn-primary" isLoading={loading} onClick={() => {}}>
+                <Button
+                  className="btn-primary"
+                  isLoading={loading}
+                  onClick={ async () => {
+                    if(!walletStore?.wallet?.has_checked_today){
+                      await handleCheckInToday();
+                    }
+                  }}
+                  disabled={walletStore?.wallet?.has_checked_today}
+                >
                   {t("rewards.check_in")}
                 </Button>
                 <Button className="btn-primary" disabled isLoading={loading} onClick={() => {}}>
@@ -214,7 +231,8 @@ const Rewards = () => {
                 <Button
                   className="btn-primary"
                   isLoading={loading}
-                  onClick={handleClaimCheckInToday}
+                  onClick={handleClaimTokenToday}
+                  disabled={walletStore?.wallet?.total_token_all_days > 0}
                 >
                   {t("rewards.claim_token")}
                 </Button>
@@ -226,8 +244,8 @@ const Rewards = () => {
               <div className="flex flex-1 flex-row justify-between">
                 <div>
                   <p className="text-lg text-gray">
-                    {t("rewards.your_wallet")}
-                    <span className="font-bold text-lg text-black-base">{`${walletStore?.wallet?.user?.oasis?.address}`}</span>
+                    {t("rewards.your_wallet")}:
+                    <span className="font-bold text-lg text-black-base"> {`${walletStore?.wallet?.user?.oasis?.address || ''}`}</span>
                   </p>
                   <p className="text-base pt-5">
                     { t("rewards.well_done", {
@@ -254,8 +272,9 @@ const Rewards = () => {
                 }`}</p>
                 <div className="pt-8">
                   <Button
+                    disabled={true}
                     className="btn btn-primary rounded-3xl btn-lg h-[54px] min-h-[54px]"
-                    disabled={!walletStore?.wallet?.user?.total_token}
+                    // disabled={!walletStore?.wallet?.user?.total_token}
                     isLoading={loading}
                   >
                     {t("rewards.withdraw")}
