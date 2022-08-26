@@ -14,6 +14,7 @@ const AppStore = createStore({
     email: "",
     code: "",
   },
+  registerData: null,
 });
 
 export const useAppStore = AppStore.useStore;

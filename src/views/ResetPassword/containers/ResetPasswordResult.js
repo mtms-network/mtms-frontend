@@ -28,6 +28,14 @@ function ResetPasswordResult({ t }) {
         >
           {t("auth.reset_result.verify_code")}
         </Button>
+        <Button
+          className="btn-primary rounded-full btn-wide btn-ghost text-primary"
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          {t("auth.reset_result.return")}
+        </Button>
       </div>
     </GuestFormLayout>
   );

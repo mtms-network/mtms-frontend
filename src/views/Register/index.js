@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,10 +10,12 @@ import { signUp } from "services";
 import Wallet from "components/base/Wallet";
 import { withTranslation } from "react-i18next";
 import { message } from "antd";
+import { useAppStore } from "stores/app.store";
 
 function Register({ t }) {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
+  const [, updateAppStore] = useAppStore();
   const navigate = useNavigate();
   const schema = yup
     .object()
@@ -43,19 +45,20 @@ function Register({ t }) {
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-      const data = await signUp({
+      const registerData = {
         name: values.name,
         email: values.email,
         username: values.username,
         password: values.password,
         passwordConfirmation: values.confirmPassword,
+      };
+      updateAppStore((draft) => {
+        draft.registerData = registerData;
       });
+      const data = await signUp(registerData);
       if (data) {
         resetUserInfo();
-        setAlert({ type: ALERT_TYPE.SUCCESS, show: true, message: `Register successful` });
-        setTimeout(() => {
-          navigate(`/${routeUrls.login.path}`);
-        }, 3000);
+        navigate(`/${routeUrls.registerResult.path}`);
       }
       setLoading(false);
     } catch (error) {
@@ -70,6 +73,12 @@ function Register({ t }) {
   const onLogin = () => {
     navigate(`/${routeUrls.login}`);
   };
+
+  useEffect(() => {
+    updateAppStore((draft) => {
+      draft.registerData = null;
+    });
+  }, []);
 
   return (
     <GuestFormLayout>

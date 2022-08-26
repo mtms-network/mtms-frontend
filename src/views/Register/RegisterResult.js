@@ -1,14 +1,26 @@
 import React from "react";
 import { Button, GuestFormLayout } from "components";
 import { useNavigate } from "react-router-dom";
-import { routeUrls } from "configs";
 import { withTranslation } from "react-i18next";
+import { signUp } from "services";
+import { useAppStore } from "stores/app.store";
+import { message } from "antd";
+import { routeUrls } from "configs";
 
 function RegisterResult({ t }) {
   const navigate = useNavigate();
+  const [appStore] = useAppStore();
 
-  const onVerifyCode = () => {
-    navigate(`/${routeUrls.resetResult.path}`);
+  const onResendVerify = async () => {
+    try {
+      const data = await signUp(appStore.registerData || {});
+      if (data) {
+        message.success("A new verification link has been sent to your email.");
+      }
+    } catch (error) {
+      navigate(`/${routeUrls.register.path}`);
+      message.error("Opssss, error...!");
+    }
   };
 
   return (
@@ -17,23 +29,20 @@ function RegisterResult({ t }) {
         <img src="/images/mtms-logo.png" alt="logo" className="w-32" />
       </div>
       <div className="pb-4">
-        <p className="text-black text-3xl font-bold">{t("auth.reset_result.page_title")}</p>
+        <p className="text-black text-3xl font-bold">Check Your Mailbox</p>
       </div>
       <p>{t("auth.reset_result.page_description")}</p>
-      <div className="w-full pt-9 flex justify-between items-center">
+      <div className="w-full pt-9 flex justify-between items-center space-x-4">
+        <Button className="btn-primary rounded-full btn-wide" onClick={onResendVerify}>
+          Resend Verification Email
+        </Button>
         <Button
-          className="btn-primary rounded-full btn-wide"
+          className="btn-primary rounded-full btn-wide btn-ghost text-primary"
           onClick={() => {
             navigate("/");
           }}
         >
           {t("auth.reset_result.return")}
-        </Button>
-        <Button
-          className="btn-primary rounded-full btn-wide btn-ghost text-primary"
-          onClick={onVerifyCode}
-        >
-          {t("auth.reset_result.verify_code")}
         </Button>
       </div>
     </GuestFormLayout>

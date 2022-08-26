@@ -19,6 +19,8 @@ import {
   ProfileUpdate,
   MeetingRedirect,
   VerifyActiveToken,
+  RegisterResult,
+  VerifyActiveTokenResult,
 } from "./views";
 
 const Routers = () => {
@@ -33,10 +35,15 @@ const Routers = () => {
       <Routes>
         <Route path={`/${routeUrls.login.path}`} element={<Login />} />
         <Route path={`/${routeUrls.register.path}`} element={<Register />} />
+        <Route path={`/${routeUrls.registerResult.path}`} element={<RegisterResult />} />
         <Route path={`/${routeUrls.reset.path}`} element={<ResetPassword />} />
         <Route path={`/${routeUrls.resetResult.path}`} element={<ResetPasswordResult />} />
         <Route path={`/${routeUrls.verifyForgotPassword.path}`} element={<VerifyResetPassword />} />
         <Route path={`/${routeUrls.verifyActiveToken.path}`} element={<VerifyActiveToken />} />
+        <Route
+          path={`/${routeUrls.verifyActiveTokenResult.path}`}
+          element={<VerifyActiveTokenResult />}
+        />
         <Route path={`/${routeUrls.comingSoon.path}`} element={<ComingSoon />} />
         <Route path={`/${routeUrls.scheduleMeeting.path}`} element={<ScheduleMeetingHistories />} />
         <Route path={`/${routeUrls.scheduleMeeting.path}/new`} element={<ScheduleMeetingItem />} />
@@ -54,7 +61,10 @@ const Routers = () => {
         />
         <Route path={`/${routeUrls.profileUpdate.path}`} element={<ProfileUpdate />} />
         <Route path={`/${routeUrls.rewards.path}`} element={<Rewards />} />
-        <Route path={`/${routeUrls.meetingRedirect.path}/:meetingId`} element={<MeetingRedirect />} />
+        <Route
+          path={`/${routeUrls.meetingRedirect.path}/:meetingId`}
+          element={<MeetingRedirect />}
+        />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
