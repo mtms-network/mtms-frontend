@@ -20,7 +20,7 @@ const JoinAMeeting = ({ className, t }) => {
         setLoading(true);
         const res = await joinMeetingByCode({ code });
         if (res?.data?.uuid) {
-          navigate(`${routeUrls.meetingRedirect.path}/${res?.data?.identifier}`);
+          window.open(`${routeUrls.meetingRedirect.path}/${res?.data?.identifier}`);
         } else {
           const errorData = handleHttpError(res);
           message.error(errorData.message);
