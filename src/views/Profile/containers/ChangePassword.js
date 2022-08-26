@@ -80,7 +80,7 @@ const ChangePassword = ({ t }) => {
                 className="w-full"
                 labelClassName="text-base"
                 register={register("oldPassword")}
-                label="Old password"
+                label={t("auth.password.props.current_password")}
                 placeholder="********"
                 error={errors.oldPassword}
               />
@@ -91,7 +91,7 @@ const ChangePassword = ({ t }) => {
                 className="w-full"
                 labelClassName="text-base"
                 register={register("password")}
-                label="New password"
+                label={t("auth.password.props.new_password")}
                 placeholder="********"
                 error={errors.password}
               />
@@ -102,7 +102,7 @@ const ChangePassword = ({ t }) => {
                 className="w-full"
                 labelClassName="text-base"
                 register={register("confirmPassword")}
-                label="Confirm password"
+                label={t("auth.password.props.new_password_confirmation")}
                 placeholder="********"
                 error={errors.confirmPassword}
               />

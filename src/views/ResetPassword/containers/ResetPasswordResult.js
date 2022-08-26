@@ -20,17 +20,10 @@ function ResetPasswordResult({ t }) {
         <p className="text-black text-3xl font-bold">{t("auth.reset_result.page_title")}</p>
       </div>
       <p>{t("auth.reset_result.page_description")}</p>
+      <p className="pt-4">{t("auth.reset_result.page_content")}</p>
       <div className="w-full pt-9 flex justify-between items-center space-x-4">
         <Button
           className="btn-primary rounded-full btn-wide"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          {t("auth.reset_result.return")}
-        </Button>
-        <Button
-          className="btn-primary rounded-full btn-wide btn-ghost text-primary"
           onClick={onVerifyCode}
         >
           {t("auth.reset_result.verify_code")}
