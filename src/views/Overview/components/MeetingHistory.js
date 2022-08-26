@@ -9,11 +9,16 @@ import {
   Sorting,
   Icon,
   IconButton,
+  Button,
 } from "components";
 import { ScheduleHistoriesFilter } from "views/ScheduleMeeting/components";
 import { getMeetingHistories } from "services";
 import { useMeetingStore } from "stores/meeting.store";
 import { withTranslation } from "react-i18next";
+import { LIVE_MEETING_URL, MEETING_STATUS, routeUrls } from "configs";
+import { useNavigate } from "react-router-dom";
+import classNames from "classnames";
+import { message } from "antd";
 import { ConfigOverview } from "../config";
 
 const MeetingHistory = ({ className, t }) => {
@@ -32,6 +37,7 @@ const MeetingHistory = ({ className, t }) => {
   });
   const [sort, setSort] = useState(false);
   const [meetingStore] = useMeetingStore();
+  const navigate = useNavigate();
 
   const mapHistories = (item) => {
     const newItem = { ...item };
@@ -54,6 +60,18 @@ const MeetingHistory = ({ className, t }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
+    }
+  };
+
+  const handleJoin = (identifier) => {
+    navigate(`${routeUrls.meetingRedirect.path}/${identifier}`);
+  };
+
+  const handleCopyLink = (data) => {
+    if (data?.identifier) {
+      const meetingUrl = `${LIVE_MEETING_URL}/${data.identifier}`;
+      navigator.clipboard.writeText(meetingUrl);
+      message.success(t("home.copied"));
     }
   };
 
@@ -145,11 +163,12 @@ const MeetingHistory = ({ className, t }) => {
                   <tr className="text-cl-base">
                     <th className="bg-white">{t("meeting.host")}</th>
                     <th className="bg-white">{t("meeting.props.type")}</th>
-                    <th className="bg-white">{t("meeting.props.identifier")}</th>
-                    <th className="bg-white" />
                     <th className="bg-white">{t("meeting.started_at")}</th>
                     <th className="bg-white">{t("meeting.ended_at")}</th>
                     <th className="bg-white">{t("meeting.props.status")}</th>
+                    <th className="bg-white">
+                      <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="border-0">
@@ -157,27 +176,61 @@ const MeetingHistory = ({ className, t }) => {
                     <tr className="text-cl-base text-md border-0 table-row" key={item?.uuid}>
                       <td className="bg-white">{item?.user?.profile?.name}</td>
                       <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
-                      <td className="bg-white">{item?.identifier}</td>
-                      <td className="space-x-2 bg-white">
-                        <button>
-                          <Icon src="/icons/icons/paperclip-fill.svg" alt="share" />
-                        </button>
-                      </td>
                       <td className="bg-white">{item?.start_date_time}</td>
                       <td className="flex justify-center align-middle bg-white">
                         {item?.ended_at || "-"}
                       </td>
+                      <td className="bg-white text-center">
+                        {item.status === MEETING_STATUS.ended ? (
+                          <p>{mapHistories(item).statusName}</p>
+                        ) : (
+                          <Button
+                            className={classNames(
+                              "rounded-[20px] px-[12px] py-[6px]",
+                              "!h-[32px] !min-h-[32px]",
+                              "border-1 bg-transparent text-primary border-transparent",
+                              "hover:border-primary hover:bg-transparent hover:border-1",
+                            )}
+                            onClick={() => {
+                              handleJoin(item?.identifier);
+                            }}
+                          >
+                            {t("home.join_meeting_now")}
+                          </Button>
+                        )}
+                      </td>
                       <td className="bg-white">
-                        <p className={item.status === "live" ? "text-primary" : ""}>
-                          {mapHistories(item).statusName}
-                        </p>
+                        <div className="dropdown dropdown-end">
+                          <label tabIndex="0" className="m-1">
+                            <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
+                          </label>
+                          <ul
+                            tabIndex="0"
+                            className="dropdown-content menu py-6 shadow-lg bg-white rounded-box w-52"
+                          >
+                            <li>
+                              <a
+                                onClick={() => {
+                                  handleCopyLink(item);
+                                }}
+                                className={classNames(
+                                  "bg-white border-0 text-black",
+                                  "hover:text-white hover:bg-primary",
+                                  "flex justify-start rounded-none",
+                                )}
+                              >
+                                {t("general.share_url")}
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             )}
-            <div className="p-4">
+            <div className="py-8 flex justify-center">
               <Pagination
                 page={histories.pagination?.current_page}
                 totalPage={histories.pagination?.last_page}
