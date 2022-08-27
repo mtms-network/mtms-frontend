@@ -18,12 +18,12 @@ function VerifyCodeResult({ t }) {
         <img src="/images/mtms-logo.png" alt="logo" className="w-32" />
       </div>
       <div className="pb-4">
-        <p className="text-black text-3xl font-bold">Congratulation</p>
+        <p className="text-black text-3xl font-bold">{t("auth.verify_code_result.congratulation")}</p>
       </div>
-      <p>You have successfully verified your e-mail address</p>
+      <p>{t("auth.verify_code_result.success")}</p>
       <div className="w-full pt-9 flex justify-between items-center space-x-4">
         <Button className="btn-primary rounded-full btn-wide" onClick={onBackLogin}>
-          Go to log in Screen
+          {t("auth.verify_code_result.btn_back")}
         </Button>
       </div>
     </GuestFormLayout>

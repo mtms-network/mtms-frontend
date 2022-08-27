@@ -64,7 +64,7 @@ const MeetingHistory = ({ className, t }) => {
   };
 
   const handleJoin = (identifier) => {
-    navigate(`${routeUrls.meetingRedirect.path}/${identifier}`);
+    window.open(`${routeUrls.meetingRedirect.path}/${identifier}`);
   };
 
   const handleCopyLink = (data) => {

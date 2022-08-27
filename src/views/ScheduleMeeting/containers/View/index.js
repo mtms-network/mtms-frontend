@@ -84,7 +84,7 @@ const ScheduleMeetingView = ({ t }) => {
       // eslint-disable-next-line no-shadow
       const { meeting } = meetingStore;
       if (meeting) {
-        navigate(`/${routeUrls.meetingRedirect.path}/${meeting.identifier}`);
+        window.open(`/${routeUrls.meetingRedirect.path}/${meeting.identifier}`);
       }
     } catch (error) {
       console.log("start meeting error");
