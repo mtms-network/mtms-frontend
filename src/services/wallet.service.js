@@ -22,3 +22,9 @@ export const checkInToday = async () => {
   const res = await client.post("/checkin/today");
   return res?.data;
 };
+
+export const claimCheckIn = async () => {
+  const res = await client.post("/claim/checkin");
+  return res?.data;
+};
+
