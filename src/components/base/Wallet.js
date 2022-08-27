@@ -2,6 +2,11 @@ import React from "react";
 import { WalletButton } from "components";
 import { useWallet } from "react-binance-wallet";
 import { useMetaMask } from "metamask-react";
+import { signInWallet } from "services";
+import { routeUrls, WALLET_PROVIDER } from "configs";
+import { useNavigate } from "react-router-dom";
+import { setTokenLoginSucceeded } from "helpers";
+import { useAppStore } from "stores/app.store";
 
 const Wallet = () => {
   const {
@@ -13,17 +18,38 @@ const Wallet = () => {
     chainId,
   } = useWallet();
   const { connect: connectMetaMask, account: accountMetaMask } = useMetaMask();
+  const navigate = useNavigate();
+  const [, updateAppStore] = useAppStore();
+
+  const handleValidWallet = (data) => {
+    try {
+      setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
+      updateAppStore((draft) => {
+        draft.isAuthenticated = true;
+        draft.user = data?.user;
+      });
+      navigate("/");
+    } catch (error) {}
+  };
 
   const handleConnectBinanceWallet = async () => {
-    await connectBinance("bsc");
-
-    // const client = createPrivateInstance('/meetings');
-    // const res = await client.post("", {accountBinance});
-    // console.log(res);
+    const res = await connectBinance("bsc");
+    console.log("res", res);
   };
 
   const handleConnectMetaMaskWallet = async () => {
-    const res = await connectMetaMask();
+    try {
+      const res = await connectMetaMask();
+      if (res) {
+        const data = await signInWallet({
+          walletAddress: res[0],
+          provider: WALLET_PROVIDER.metamask,
+        });
+        if (data) {
+          handleValidWallet(data);
+        }
+      }
+    } catch (error) {}
   };
 
   return (
@@ -41,12 +67,12 @@ const Wallet = () => {
       <WalletButton
         name="Oasis"
         src="/icons/oasis-logo.png"
-        className="opacity-50 hover:border-slate-200"
+        className="opacity-50 hover:border-slate-200 hover:border-transparent"
       />
       <WalletButton
         name="Avalanche"
         src="/icons/avalanche-logo.png"
-        className="opacity-50 hover:border-slate-200"
+        className="opacity-50 hover:border-slate-200 hover:border-transparent"
       />
     </>
   );

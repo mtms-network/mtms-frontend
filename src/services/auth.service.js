@@ -18,6 +18,19 @@ export const signInSocial = async ({ provider = "google", code, redirectUri }) =
   return res?.data;
 };
 
+export const signInWallet = async ({
+  provider = "wallet",
+  type = "metamask",
+  walletAddress = "",
+}) => {
+  const res = await client.post("/login/wallet", {
+    wallet_type: type,
+    wallet_provider: provider,
+    wallet_address: walletAddress,
+  });
+  return res?.data;
+};
+
 export const signUp = async ({ name, email, username, password, passwordConfirmation }) => {
   const res = await client.post("/register", {
     name,
@@ -48,7 +61,7 @@ export const resetPassword = async ({ email, code, newPassword, newPasswordConfi
 
 export const verifyActiveToken = async ({ token }) => {
   const res = await client.post("/verify", {
-    token
+    token,
   });
   return res?.data;
 };

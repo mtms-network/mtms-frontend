@@ -37,3 +37,10 @@ export const MEETING_STATUS = {
   ended: "ended",
   scheduled: "scheduled",
 };
+
+export const WALLET_PROVIDER = {
+  oasis: "oasis",
+  binance: "binance",
+  metamask: "metamask",
+  avalanche: "avalanche",
+};

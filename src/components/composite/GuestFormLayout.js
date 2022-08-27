@@ -53,44 +53,40 @@ export default function GuestFormLayout({ children }) {
     </div>
   ) : (
     <I18nextProvider i18n={i18next}>
-      <WalletProvider>
-        <MetaMaskProvider>
-          <div className="flex flex-row ">
-            <div className="flex-1 flex flex-col justify-center bg-blue-base pl-20 pr-12 min-h-screen">
-              <div>
-                <button onClick={() => navigate("/")}>
-                  <img className="h-14" src="/images/mtms-logo-white.png" alt="logo" />
-                </button>
-              </div>
-              <div>
-                <p className="text-white font-bold text-4xl pt-16">{`THE FIRST AND ONLY
-                  MEET & EARN PLATFORM`}</p>
-                <p className="text-white text-base pt-4">MTMS: More Time, More Savings</p>
-              </div>
-              <div>
-                <img src="/images/welcome.png" alt="welcome" />
-              </div>
-            </div>
-            <div className="flex-1 flex flex-col justify-center px-20 bg-white min-h-screen">
-              <div className="flex flex-row space-x-2 py-4">
-                <button
-                  className={classNames("flex flex-row text-base justify-start font-medium")}
-                  onClick={() => onChooseLanguage("vn")}
-                >
-                  <IconBase icon="/icons/flag-vn.svg" iconActivated="/icons/flag-vn.svg" />
-                </button>
-                <button
-                  className={classNames("flex flex-row text-base justify-start font-medium")}
-                  onClick={() => onChooseLanguage("en")}
-                >
-                  <IconBase icon="/icons/flag-en.svg" iconActivated="/icons/flag-vn.svg" />
-                </button>
-              </div>
-              <div className="">{children}</div>
-            </div>
+      <div className="flex flex-row ">
+        <div className="flex-1 flex flex-col justify-center bg-blue-base pl-20 pr-12 min-h-screen">
+          <div>
+            <button onClick={() => navigate("/")}>
+              <img className="h-14" src="/images/mtms-logo-white.png" alt="logo" />
+            </button>
           </div>
-        </MetaMaskProvider>
-      </WalletProvider>
+          <div>
+            <p className="text-white font-bold text-4xl pt-16">{`THE FIRST AND ONLY
+                  MEET & EARN PLATFORM`}</p>
+            <p className="text-white text-base pt-4">MTMS: More Time, More Savings</p>
+          </div>
+          <div>
+            <img src="/images/welcome.png" alt="welcome" />
+          </div>
+        </div>
+        <div className="flex-1 flex flex-col justify-center px-20 bg-white min-h-screen">
+          <div className="flex flex-row space-x-2 py-4">
+            <button
+              className={classNames("flex flex-row text-base justify-start font-medium")}
+              onClick={() => onChooseLanguage("vn")}
+            >
+              <IconBase icon="/icons/flag-vn.svg" iconActivated="/icons/flag-vn.svg" />
+            </button>
+            <button
+              className={classNames("flex flex-row text-base justify-start font-medium")}
+              onClick={() => onChooseLanguage("en")}
+            >
+              <IconBase icon="/icons/flag-en.svg" iconActivated="/icons/flag-vn.svg" />
+            </button>
+          </div>
+          <div className="">{children}</div>
+        </div>
+      </div>
     </I18nextProvider>
   );
 }

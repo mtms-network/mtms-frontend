@@ -98,6 +98,17 @@ const NavbarLayout = ({ width, onLogout }) => {
                 >
                   {t("user.change_password")}
                 </Link>
+                <Link
+                  to={`/${routeUrls.connectWallet.path}`}
+                  className={classNames(
+                    "btn btn-block btn-primary",
+                    "bg-white border-0 text-black",
+                    "hover:text-white hover:bg-primary",
+                    "flex justify-start rounded-none z-10",
+                  )}
+                >
+                  Connect Wallet
+                </Link>
                 <a
                   className={classNames(
                     "btn btn-block btn-primary",
