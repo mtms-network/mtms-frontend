@@ -37,3 +37,26 @@ export const MEETING_STATUS = {
   ended: "ended",
   scheduled: "scheduled",
 };
+
+export const WALLET_PROVIDER = {
+  oasis: {
+    type: "oasis",
+    name: "Oasis",
+    image: "/icons/oasis-logo.png",
+  },
+  binance: {
+    type: "binance",
+    name: "Binance",
+    image: "/icons/binance-logo.png",
+  },
+  metamask: {
+    type: "metamask",
+    name: "MetaMask",
+    image: "/icons/metamask-logo.png",
+  },
+  avalanche: {
+    type: "avalanche",
+    name: "Avalanche",
+    image: "/icons/avalanche-logo.png",
+  },
+};

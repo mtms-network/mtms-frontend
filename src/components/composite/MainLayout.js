@@ -86,32 +86,34 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
     </div>
   ) : (
     <I18nextProvider i18n={i18next}>
-      <div className="drawer drawer-mobile">
-        <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content flex flex-col">
-          <NavbarLayout width={width} onLogout={handleLogout} />
-          <div className={classNames("relative min-h-screen")}>
-            <div
-              className={classNames(
-                "flex flex-col pt-20 sm:pt-22 pb-28 overflow-y-auto px-4 relative",
-                "min-h-full bg-gray-base",
-                contentClassName,
-              )}
-            >
-              {children}
-            </div>
-            {bottom && (
-              <div
-                className="navbar bg-white fixed z-10 bottom-0 px-4"
-                style={{ width: width > 768 && `calc(${width}px - 320px)` }}
-              >
-                <div className="flex py-2 w-full">{bottom}</div>
+     
+          <div className="drawer drawer-mobile">
+            <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
+            <div className="drawer-content flex flex-col">
+              <NavbarLayout width={width} onLogout={handleLogout} />
+              <div className={classNames("relative min-h-screen")}>
+                <div
+                  className={classNames(
+                    "flex flex-col pt-20 sm:pt-22 pb-28 overflow-y-auto px-4 relative",
+                    "min-h-full bg-gray-base",
+                    contentClassName,
+                  )}
+                >
+                  {children}
+                </div>
+                {bottom && (
+                  <div
+                    className="navbar bg-white fixed z-10 bottom-0 px-4"
+                    style={{ width: width > 768 && `calc(${width}px - 320px)` }}
+                  >
+                    <div className="flex py-2 w-full">{bottom}</div>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+            {userCenter ? <SidebarUserCenter /> : <SidebarLayout />}
           </div>
-        </div>
-        {userCenter ? <SidebarUserCenter /> : <SidebarLayout />}
-      </div>
+        
     </I18nextProvider>
   );
 };

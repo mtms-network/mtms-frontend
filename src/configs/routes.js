@@ -68,4 +68,7 @@ export const routeUrls = {
   meetingRedirect: {
     path: "m",
   },
+  connectWallet: {
+    path: "wallet/connect",
+  },
 };

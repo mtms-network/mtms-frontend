@@ -9,7 +9,8 @@ export function WalletButton({ name, src, onClick, className = "", nameClass = "
         className={classNames(
           "btn bg-white flex items-center justify-center",
           "border-1 border-wallet-button rounded-2xl h-14 w-14",
-          "hover:border-primary hover:bg-white",
+          "hover:border-primary hover:shadow-xl hover:bg-white",
+          "cursor-pointer",
           className,
         )}
       >

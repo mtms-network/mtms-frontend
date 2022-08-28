@@ -21,6 +21,7 @@ import {
   VerifyActiveToken,
   RegisterResult,
   VerifyActiveTokenResult,
+  ConnectWallet,
 } from "./views";
 
 const Routers = () => {
@@ -65,6 +66,7 @@ const Routers = () => {
           path={`/${routeUrls.meetingRedirect.path}/:meetingId`}
           element={<MeetingRedirect />}
         />
+        <Route path={`/${routeUrls.connectWallet.path}`} element={<ConnectWallet />} />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

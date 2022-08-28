@@ -25,3 +25,4 @@ export const MeetingRedirect = lazy(() => import("views/MeetingRedirect"));
 export const VerifyActiveTokenResult = lazy(() =>
   import("views/VerifyActiveToken/VerifyCodeResult"),
 );
+export const ConnectWallet = lazy(() => import("views/ConnectWallet"));

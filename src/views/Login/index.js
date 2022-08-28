@@ -70,7 +70,7 @@ function Login({t}) {
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
-        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.message });
+        setAlert({ type: ALERT_TYPE.ERROR, show: true, message: errorData.messageDetail });
       }
       updateAppStore((draft) => {
         draft.isAuthenticated = false;

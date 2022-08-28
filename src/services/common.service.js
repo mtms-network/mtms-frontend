@@ -38,3 +38,16 @@ export const updateProfile = async (params) => {
     return null;
   }
 };
+
+export const connectWallet = async ({
+  provider = "wallet",
+  type = "metamask",
+  walletAddress = "",
+}) => {
+  const res = await client.post("/wallet/connect", {
+    wallet_type: type,
+    wallet_provider: provider,
+    wallet_address: walletAddress,
+  });
+  return res?.data;
+};
