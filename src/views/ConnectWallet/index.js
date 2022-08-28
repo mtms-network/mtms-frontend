@@ -54,10 +54,10 @@ const ConnectWallet = ({ t }) => {
   };
   return (
     <MainLayout>
-      <GroupTitle title="Connect Your Wallet" />
+      <GroupTitle title={t("wallet.connect_your_wallet")} />
       <div className="pb-10">
-        <p className="text-md">Select wallet you want to connect below.</p>
-        <p className="text-error text-md">You can not change your wallet after connected.</p>
+        <p className="text-md">{t("wallet.message_connect")}</p>
+        <p className="text-error text-md">{t("wallet.message_connect_error")}</p>
       </div>
       <div className="flex flex-row space-x-5">
         <WalletBlockButton
