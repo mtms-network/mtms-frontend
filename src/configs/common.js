@@ -7,6 +7,8 @@ export const LIVE_API = "https://api.mtms.live/api";
 export const GOOGLE_CLIENT_ID =
   "604052992702-lnrd7mi7iapok8jrhiohvok1s9m11k7l.apps.googleusercontent.com";
 
+export const AVATAR_UPLOAD_URL = "/profile/avatar";
+
 export const BASE_API = {
   api: "/api",
   auth: "/api/auth",
