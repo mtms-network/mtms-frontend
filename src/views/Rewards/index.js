@@ -2,18 +2,27 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Button, MainLayout, AlertError, BrandLogoLoading } from "components";
 
-import { BASE_API, ALERT_TYPE, API_RESPONSE_STATUS } from "configs";
+import { BASE_API, ALERT_TYPE, API_RESPONSE_STATUS, routeUrls, WALLET_PROVIDER } from "configs";
 import { useWalletStore } from "stores/wallet.store";
 import { getUser, handleHttpError } from "helpers";
 import { useTranslation } from "react-i18next";
-import { checkInToday, claimCheckIn, claimTokenToDay, getRequirePreWallet } from "services/wallet.service";
+import {
+  checkInToday,
+  claimCheckIn,
+  claimTokenToDay,
+  getRequirePreWallet,
+} from "services/wallet.service";
 import { createPrivateInstance } from "services/base";
 import { message } from "antd";
+import { useAppStore } from "stores/app.store";
+import { useNavigate } from "react-router-dom";
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
+  const [appStore, updateAppStore] = useAppStore();
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
+  const navigate = useNavigate();
 
   const [alert, setAlert] = useState({
     show: false,
@@ -67,7 +76,6 @@ const Rewards = () => {
       }
       setLoading(false);
     }
-
   };
 
   const handleClaimCheckInToday = async () => {
@@ -120,7 +128,6 @@ const Rewards = () => {
       }
       setLoading(false);
     }
-
   };
 
   useEffect(() => {
@@ -143,13 +150,13 @@ const Rewards = () => {
 
   const convertTime = useCallback(() => {
     const totalMinute = walletStore?.wallet?.total_minute_all_days;
-    const h = Math.floor(totalMinute / 60)
-    const m = totalMinute - (h * 60)
+    const h = Math.floor(totalMinute / 60);
+    const m = totalMinute - h * 60;
     return {
       h: h?.toString().padStart(2, "0"),
       m: m?.toString()?.padStart(2, "0"),
-    }
-  }, [walletStore?.wallet?.total_minute_all_days])
+    };
+  }, [walletStore?.wallet?.total_minute_all_days]);
 
   return (
     <MainLayout>
@@ -180,8 +187,8 @@ const Rewards = () => {
                 <Button
                   className="btn-primary"
                   isLoading={loading}
-                  onClick={ async () => {
-                    if(!walletStore?.wallet?.has_checked_today){
+                  onClick={async () => {
+                    if (!walletStore?.wallet?.has_checked_today) {
                       await handleCheckInToday();
                     }
                   }}
@@ -194,8 +201,8 @@ const Rewards = () => {
                   disabled={walletStore?.wallet?.total_checkin_token <= 0}
                   isLoading={loading}
                   onClick={() => {
-                    if(walletStore?.wallet?.total_checkin_token > 0){
-                      handleClaimCheckInToday()
+                    if (walletStore?.wallet?.total_checkin_token > 0) {
+                      handleClaimCheckInToday();
                     }
                   }}
                 >
@@ -227,10 +234,9 @@ const Rewards = () => {
                   className="btn-primary"
                   isLoading={loading}
                   onClick={() => {
-                    if(walletStore?.wallet?.total_token_all_days > 0) {
+                    if (walletStore?.wallet?.total_token_all_days > 0) {
                       handleClaimTokenToday();
                     }
-
                   }}
                   disabled={walletStore?.wallet?.total_token_all_days <= 0}
                 >
@@ -243,18 +249,48 @@ const Rewards = () => {
             <div className="basis-2/3 bg-white rounded-3xl py-6 px-8 grow">
               <div className="flex flex-1 flex-row justify-between">
                 <div>
-                  <p className="text-lg text-gray">
-                    {t("rewards.your_wallet")}:
-                    <span className="font-bold text-lg text-black-base"> {`${walletStore?.wallet?.user?.oasis?.address || ''}`}</span>
-                  </p>
+                  <div className="flex flex-row">
+                    {appStore?.user?.wallets?.[0]?.wallet_address ? (
+                      <div className="pr-4">
+                        <img
+                          src={WALLET_PROVIDER[appStore.user?.wallets?.[0]?.wallet_type]?.image}
+                          alt="wallet-logo"
+                          className="h-12"
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    <div>
+                      <p className="text-lg text-gray">
+                        {appStore?.user?.wallets?.[0]?.wallet_address
+                          ? `${
+                              WALLET_PROVIDER[appStore.user?.wallets?.[0]?.wallet_type]?.name
+                            } wallet`
+                          : t("rewards.your_wallet")}
+                      </p>
+                      <span className="font-bold text-lg text-black-base">
+                        {`${appStore?.user?.wallets?.[0]?.wallet_address || ""}`}
+                      </span>
+                      {!appStore?.user?.wallets?.[0]?.wallet_address && (
+                        <a
+                          onClick={() => {
+                            navigate(`/${routeUrls.connectWallet.path}`);
+                          }}
+                          className="btn-text-primary text-lg"
+                        >
+                          Connect Wallet
+                        </a>
+                      )}
+                    </div>
+                  </div>
                   <p className="text-base pt-5">
-                    { t("rewards.well_done", {
+                    {t("rewards.well_done", {
                       name: getUser()?.profile?.name,
-                    }) }
+                    })}
                   </p>
-                  <p className="text-base pt-5">
-                    { t("rewards.slogan") }
-                  </p>
+
+                  <p className="text-base pt-5">{t("rewards.slogan")}</p>
                   <p className="text-base pt-5">
                     {t("rewards.message_receive_token", {
                       hours: timeWeek.hour,
@@ -272,7 +308,7 @@ const Rewards = () => {
                 }`}</p>
                 <div className="pt-8">
                   <Button
-                    disabled={true}
+                    disabled
                     className="btn btn-primary rounded-3xl btn-lg h-[54px] min-h-[54px]"
                     // disabled={!walletStore?.wallet?.user?.total_token}
                     isLoading={loading}

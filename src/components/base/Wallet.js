@@ -43,7 +43,7 @@ const Wallet = () => {
       if (res) {
         const data = await signInWallet({
           walletAddress: res[0],
-          provider: WALLET_PROVIDER.metamask,
+          provider: WALLET_PROVIDER.metamask.type,
         });
         if (data) {
           handleValidWallet(data);
@@ -55,24 +55,24 @@ const Wallet = () => {
   return (
     <>
       <WalletButton
-        name="Binance"
-        src="/icons/binance-logo.png"
-        onClick={handleConnectBinanceWallet}
-      />
-      <WalletButton
         name="Metamask"
         src="/icons/metamask-logo.png"
         onClick={handleConnectMetaMaskWallet}
       />
       <WalletButton
+        name="Binance"
+        src="/icons/binance-logo.png"
+        className="opacity-20 hover:border-transparent"
+      />
+      <WalletButton
         name="Oasis"
         src="/icons/oasis-logo.png"
-        className="opacity-50 hover:border-slate-200 hover:border-transparent"
+        className="opacity-20 hover:border-transparent"
       />
       <WalletButton
         name="Avalanche"
         src="/icons/avalanche-logo.png"
-        className="opacity-50 hover:border-slate-200 hover:border-transparent"
+        className="opacity-20 hover:border-transparent"
       />
     </>
   );
