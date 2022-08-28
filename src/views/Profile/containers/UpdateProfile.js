@@ -87,7 +87,7 @@ const UpdateProfile = ({ t }) => {
         };
         setTokenLoginSucceeded({ accessToken: token, user: newUser });
         updateAppStore((draft) => {
-          draft.user = user;
+          draft.user = newUser;
         });
       } else if (info.file.status === "error") {
         setLoading(false);
