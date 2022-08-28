@@ -42,6 +42,12 @@ export const createPublicInstance = (path, options) => {
     },
     ...options,
   });
+
+  instance.interceptors.request.use((request) => {
+    request.headers["x-localization"] = getLanguage();
+    return request;
+  });
+
   instance.interceptors.response.use((data) => {
     return data;
   });
