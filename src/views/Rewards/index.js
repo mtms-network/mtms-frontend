@@ -1,12 +1,12 @@
 /* eslint-disable no-empty */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button, MainLayout, AlertError, BrandLogoLoading } from "components";
 
 import { BASE_API, ALERT_TYPE, API_RESPONSE_STATUS } from "configs";
 import { useWalletStore } from "stores/wallet.store";
 import { getUser, handleHttpError } from "helpers";
 import { useTranslation } from "react-i18next";
-import { checkInToday, claimTokenToDay, getRequirePreWallet } from "services/wallet.service";
+import { checkInToday, claimCheckIn, claimTokenToDay, getRequirePreWallet } from "services/wallet.service";
 import { createPrivateInstance } from "services/base";
 import { message } from "antd";
 
@@ -27,9 +27,9 @@ const Rewards = () => {
   const { t } = useTranslation();
   // const
 
-  const prepareData = async () => {
+  const prepareData = async (isReload = false) => {
     try {
-      if (walletStore.wallet === null) {
+      if (walletStore.wallet === null || isReload) {
         setFetchLoading(true);
         const res = await getRequirePreWallet();
         if (res) {
@@ -48,22 +48,12 @@ const Rewards = () => {
     try {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-      const res = await claimTokenToDay()
-
-      if (res?.status === 200) {
-        message.success(res.data.status);
+      const res = await claimTokenToDay();
+      if (res?.status === API_RESPONSE_STATUS.success) {
+        message.success(res?.message);
       }
 
-      const totalToken = walletStore.wallet.token_per_checkin + res.data.amount;
-      const newWallet = {
-        ...walletStore.wallet,
-        total_token_today: 0,
-        user: { ...walletStore.wallet.user, total_token: totalToken },
-      };
-      updateWalletStore((draft) => {
-        draft.wallet = newWallet;
-      });
-
+      await prepareData(true);
       setLoading(false);
     } catch (error) {
       if (error) {
@@ -77,6 +67,7 @@ const Rewards = () => {
       }
       setLoading(false);
     }
+
   };
 
   const handleClaimCheckInToday = async () => {
@@ -84,19 +75,13 @@ const Rewards = () => {
       setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
 
-      const client = createPrivateInstance(BASE_API.wallet);
-      const res = await client.post("/claim/checkin");
-      const totalToken = walletStore.wallet.user.total_token + res.data.amount;
-      const newWallet = {
-        ...walletStore.wallet,
-        total_checkin_token: 0,
-        user: { ...walletStore.wallet.user, total_token: totalToken },
-      };
-      updateWalletStore((draft) => {
-        draft.wallet = newWallet;
-      });
+      const res = await claimCheckIn();
 
-      setLoading(false);
+      if (res?.status === API_RESPONSE_STATUS.success) {
+        message.success(res?.message);
+      }
+      await prepareData(true);
+      await setLoading(false);
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
@@ -117,22 +102,12 @@ const Rewards = () => {
       setLoading(true);
 
       const res = await checkInToday();
-
-      if (res?.status === 200) {
-        message.success(res.data.status);
+      if (res?.status === API_RESPONSE_STATUS.success) {
+        message.success(res?.message);
       }
 
-      const newWallet = {
-        ...walletStore.wallet,
-        has_checked_today: true,
-        total_checkin_token:
-          walletStore.wallet.total_checkin_token + walletStore.wallet.token_per_checkin,
-      };
-      updateWalletStore((draft) => {
-        draft.wallet = newWallet;
-      });
-
-      setLoading(false);
+      await prepareData(true);
+      await setLoading(false);
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);
@@ -145,6 +120,7 @@ const Rewards = () => {
       }
       setLoading(false);
     }
+
   };
 
   useEffect(() => {
@@ -164,6 +140,16 @@ const Rewards = () => {
     }
     prepareData();
   }, [walletStore]);
+
+  const convertTime = useCallback(() => {
+    const totalMinute = walletStore?.wallet?.total_minute_all_days;
+    const h = Math.floor(totalMinute / 60)
+    const m = totalMinute - (h * 60)
+    return {
+      h: h?.toString().padStart(2, "0"),
+      m: m?.toString()?.padStart(2, "0"),
+    }
+  }, [walletStore?.wallet?.total_minute_all_days])
 
   return (
     <MainLayout>
@@ -203,9 +189,18 @@ const Rewards = () => {
                 >
                   {t("rewards.check_in")}
                 </Button>
-                <Button className="btn-primary" disabled isLoading={loading} onClick={() => {}}>
+                <Button
+                  className="btn-primary"
+                  disabled={walletStore?.wallet?.total_checkin_token <= 0}
+                  isLoading={loading}
+                  onClick={() => {
+                    if(walletStore?.wallet?.total_checkin_token > 0){
+                      handleClaimCheckInToday()
+                    }
+                  }}
+                >
                   {`${t("rewards.claim_value_token", {
-                    token: walletStore?.wallet?.token_per_checkin || 0,
+                    token: walletStore?.wallet?.total_checkin_token || 0,
                   })}`}
                 </Button>
               </div>
@@ -215,15 +210,15 @@ const Rewards = () => {
             <div className="flex flex-1 flex-row justify-between">
               <div className="flex flex-row space-x-20">
                 <div>
-                  <p className="text-base text-gray">{t("rewards.meeting_time")} (hhh/mm/ss)</p>
+                  <p className="text-base text-gray">{t("rewards.meeting_time")} (hh/mm)</p>
                   <p className="text-orange-base font-bold text-xl">
-                    {`${timeToday.hour}:${timeToday.minute}`}
+                    {`${convertTime().h}:${convertTime().m}`}
                   </p>
                 </div>
                 <div>
                   <p className="text-base text-gray">{t("rewards.total_earn")}</p>
                   <p className="text-orange-base font-bold text-xl">
-                    {`${walletStore?.wallet?.total_token_today} MTMS`}
+                    {`${walletStore?.wallet?.total_token_all_days} MTMS`}
                   </p>
                 </div>
               </div>
@@ -231,8 +226,13 @@ const Rewards = () => {
                 <Button
                   className="btn-primary"
                   isLoading={loading}
-                  onClick={handleClaimTokenToday}
-                  disabled={walletStore?.wallet?.total_token_all_days > 0}
+                  onClick={() => {
+                    if(walletStore?.wallet?.total_token_all_days > 0) {
+                      handleClaimTokenToday();
+                    }
+
+                  }}
+                  disabled={walletStore?.wallet?.total_token_all_days <= 0}
                 >
                   {t("rewards.claim_token")}
                 </Button>
