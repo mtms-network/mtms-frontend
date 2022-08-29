@@ -98,7 +98,7 @@ const SidebarLayout = ({ t }) => {
                 <p className="pl-2">{t("sidebar.reward_center")}</p>
               </button>
             </div>
-            <div className="w-full">
+            <div className="w-full opacity-30">
               <button
                 className={classNames(
                   "text-base font-normal",
@@ -116,7 +116,7 @@ const SidebarLayout = ({ t }) => {
                 <p className="pl-2">{t("sidebar.rooms")}</p>
               </button>
             </div>
-            <div className="w-full">
+            <div className="w-full opacity-30">
               <button
                 className={classNames(
                   "text-base font-normal",
@@ -134,7 +134,7 @@ const SidebarLayout = ({ t }) => {
                 <p className="pl-2">{t("sidebar.contact")}</p>
               </button>
             </div>
-            <div className="w-full">
+            <div className="w-full opacity-30">
               <button
                 className={classNames(
                   "text-base font-normal",
@@ -152,7 +152,7 @@ const SidebarLayout = ({ t }) => {
                 <p className="pl-2">{t("sidebar.to_do")}</p>
               </button>
             </div>
-            <div className="w-full">
+            <div className="w-full opacity-30">
               <button
                 className={classNames(
                   "text-base font-normal",
@@ -170,7 +170,7 @@ const SidebarLayout = ({ t }) => {
                 <p className="pl-2">{t("sidebar.analytics")}</p>
               </button>
             </div>
-            <div className="w-full">
+            <div className="w-full opacity-30">
               <button
                 className={classNames(
                   "text-base font-normal",

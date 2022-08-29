@@ -41,8 +41,8 @@ const NavbarLayout = ({ width, onLogout }) => {
         </label>
       </div>
 
-      <div className="flex-none hidden lg:flex w-full">
-        <div className="flex-1 flex justify-start items-start pr-10">
+      <div className="flex justify-between hidden lg:flex w-full">
+        <div className="flex-1 flex justify-start items-start pr-10 max-w-[50%]">
           <InputSingle
             compactInput
             placeholder={t("general.search")}

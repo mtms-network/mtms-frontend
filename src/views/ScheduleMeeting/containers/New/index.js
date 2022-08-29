@@ -38,11 +38,11 @@ const timeFormat = "MMM DD, yyyy";
 
 const ScheduleMeetingItem = ({ t }) => {
   const DURATION_HOURS = [
-    { label: `0 ${t("list.general.durations.h")}`, value: 0, key: 0 },
-    { label: `1 ${t("list.general.durations.h")}`, value: 1, key: 1 },
-    { label: `2 ${t("list.general.durations.hours")}`, value: 2, key: 2 },
-    { label: `3 ${t("list.general.durations.hours")}`, value: 3, key: 3 },
-    { label: `4 ${t("list.general.durations.hours")}`, value: 4, key: 4 },
+    { value: `0 ${t("list.general.durations.h")}`,  key: 0 },
+    { value: `1 ${t("list.general.durations.hours")}`,  key: 1 },
+    { value: `2 ${t("list.general.durations.hours")}`,  key: 2 },
+    { value: `3 ${t("list.general.durations.hours")}`,  key: 3 },
+    { value: `4 ${t("list.general.durations.hours")}`,  key: 4 },
   ];
 
   const DURATION_MINUTES = [
@@ -125,12 +125,13 @@ const ScheduleMeetingItem = ({ t }) => {
       const res = await createInstantMeeting(data);
 
       if (res?.data) {
-        if (data.contacts?.length > 0) {
-          await sendEmailToMemberInMeeting(params.meetingId);
-          navigate(`/${routeUrls.scheduleMeeting.path}`);
-        } else {
-          navigate(`/${routeUrls.scheduleMeeting.path}`);
-        }
+        navigate(`/${routeUrls.scheduleMeeting.path}`);
+        // if (data.contacts?.length > 0) {
+        //   await sendEmailToMemberInMeeting(params.meetingId);
+        //   navigate(`/${routeUrls.scheduleMeeting.path}`);
+        // } else {
+        //   navigate(`/${routeUrls.scheduleMeeting.path}`);
+        // }
         message.success(res?.data?.message);
       } else if (res?.request) {
         const errorData = handleHttpError(res);
@@ -191,12 +192,20 @@ const ScheduleMeetingItem = ({ t }) => {
   };
 
   const disabledDate = (current) => {
-    return current && current < moment().endOf("day");
+    return current && moment(current).add(1, 'd') < moment().endOf('day');
+
   };
 
   useEffect(() => {
     fetchData();
   }, [params]);
+
+  useEffect(() => {
+    if(meetingStore?.types?.length && type === null){
+      setType(meetingStore.types[0].uuid)
+    }
+  }, [meetingStore?.types])
+
 
   return (
     <MainLayout>
@@ -237,9 +246,10 @@ const ScheduleMeetingItem = ({ t }) => {
               </GroupLayout>
               <GroupLayout className="flex flex-wrap gap-[12px]">
                 {meetingStore?.types &&
-                  meetingStore.types.map((item) => {
+                  meetingStore.types.map((item, key) => {
                     return (
                       <span
+                        key={key}
                         className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
                           type === item.uuid ? " bg-secondary text-primary" : ""
                         }`}
@@ -250,10 +260,10 @@ const ScheduleMeetingItem = ({ t }) => {
                     );
                   })}
               </GroupLayout>
-              <GroupLayout className="flex flex-col space-y-4">
+              <GroupLayout className="w-full space-y-4">
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                  <div>{t("meeting.view.start_time")}</div>
-                  <div className="flex-1">
+                  <div className="w-full sm:w-1/5">{t("meeting.view.start_time")}</div>
+                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
                     <DateTimePicker
                       disabledDate={disabledDate}
                       placeholder="Mar 2, 2022 5:02 PM"
@@ -262,7 +272,7 @@ const ScheduleMeetingItem = ({ t }) => {
                       value={startDateTime}
                     />
                   </div>
-                  <div className="flex-1">
+                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
                     <TimePicker
                       use12Hours
                       value={startTime}
@@ -272,10 +282,10 @@ const ScheduleMeetingItem = ({ t }) => {
                   </div>
                 </div>
               </GroupLayout>
-              <GroupLayout className="flex flex-col space-y-4">
+              <GroupLayout className="w-full space-y-4">
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                  <div>{t("config.ui.duration")}</div>
-                  <div className="flex-1">
+                  <div className="w-full sm:w-1/5">{t("config.ui.duration")}</div>
+                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
                     <Select
                       options={DURATION_HOURS}
                       defaultValue={0}
@@ -283,7 +293,7 @@ const ScheduleMeetingItem = ({ t }) => {
                       onChange={(e) => setDurationHour(e)}
                     />
                   </div>
-                  <div className="flex-1">
+                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
                     <Select
                       options={DURATION_MINUTES}
                       defaultValue={0}
@@ -297,6 +307,7 @@ const ScheduleMeetingItem = ({ t }) => {
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                   <div className="flex-1">
                     <Input
+                      value={50}
                       register={register("max_participant_count")}
                       label={t("home.maximum_participant")}
                       placeholder={COMMON.MAX_PARTICIPANT}
