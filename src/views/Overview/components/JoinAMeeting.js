@@ -16,9 +16,15 @@ const JoinAMeeting = ({ className, t }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const handleReplaceLocaleWarning = () => {
+    const { origin } = window.location;
+    const warningLocale = t("meeting.props.warning_meeting_code", {url: origin});
+    return warningLocale.replaceAll("&#x2F;", "/");
+  }
+
   const handleConfirmMeetingCodeNotExist = (meetingCode) => {
     confirm({
-      title: (t("meeting.props.warning_meeting_code", {url: window.location.origin})).replaceAll('&#x2F;', '/'),
+      title: handleReplaceLocaleWarning(),
       icon: <ExclamationCircleOutlined />,
       okText: t("meeting.props.continue"),
       okType: "danger",
