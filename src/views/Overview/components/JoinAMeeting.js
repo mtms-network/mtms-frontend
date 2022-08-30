@@ -18,7 +18,7 @@ const JoinAMeeting = ({ className, t }) => {
 
   const handleConfirmMeetingCodeNotExist = (meetingCode) => {
     confirm({
-      title: t("meeting.props.warning_meeting_code"),
+      title: (t("meeting.props.warning_meeting_code", {url: window.location.origin})).replaceAll('&#x2F;', '/'),
       icon: <ExclamationCircleOutlined />,
       okText: t("meeting.props.continue"),
       okType: "danger",
