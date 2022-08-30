@@ -16,6 +16,7 @@ export const getLanguage = () => {
 export const setTokenLoginSucceeded = ({ accessToken, user }) => {
   localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
   localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, accessToken);
+  document.cookie = `mtms_access_token=${accessToken};domain=.mtms.live`;
 };
 
 export const setLanguage = (language = "en") => {
