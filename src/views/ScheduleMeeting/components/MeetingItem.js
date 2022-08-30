@@ -74,8 +74,20 @@ const MeetingItem = ({ data, className }) => {
             </div>
           </div>
         </div>
-        <div className="text-gray">{data?.type.name}</div>
-        <div className="flex justify-between items-center flex-row">
+        <div
+          className="text-gray cursor-pointer"
+          onClick={() => {
+            navigate(`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`);
+          }}
+        >
+          {data?.type.name}
+        </div>
+        <div
+          className="flex justify-between items-center flex-row cursor-pointer"
+          onClick={() => {
+            navigate(`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`);
+          }}
+        >
           <div>
             <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
               <img src="/images/icon/calender.svg" alt="" />
@@ -84,7 +96,7 @@ const MeetingItem = ({ data, className }) => {
             <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
               <img src="/images/icon/clock.svg" alt="" />
               <p className="label-base p-0 group-hover:text-primary">
-                {`${calculateDuration(data.start_date_time, data.estimated_end_time)} `}
+                {`${data?.period || 0} `}
                 {t("list.general.durations.minutes")}
               </p>
             </div>

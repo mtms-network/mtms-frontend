@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { checkMeetingExist } from "../../services";
+import { checkMeetingExist, joinMeeting } from "../../services";
 import { LIVE_MEETING_URL } from "../../configs";
 import { BrandLogoLoading, MainLayout } from "../../components";
 
 const MeetingRedirect = () => {
   const { meetingId } = useParams();
-  const navigate = useNavigate();
 
   const fetchMeeting = async () => {
     try {
       const res = await checkMeetingExist(meetingId);
       if (res && res?.meeting?.id) {
+        await joinMeeting(meetingId);
         let url = `${LIVE_MEETING_URL}/${res?.meeting.id}`;
 
         if (res?.meeting?.jwt) {
@@ -20,7 +20,7 @@ const MeetingRedirect = () => {
 
         window.location = url;
       } else {
-        navigate("/");
+        window.location =  `${LIVE_MEETING_URL}/${meetingId}`;
       }
     } catch (error) {
       console.log("ScheduleMeetingDetail", error);

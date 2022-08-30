@@ -162,10 +162,11 @@ const MeetingHistory = ({ className, t }) => {
                 <thead className="border-b-1">
                   <tr className="text-cl-base">
                     <th className="bg-white">{t("meeting.host")}</th>
+                    <th className="bg-white">{t("meeting.props.title")}</th>
                     <th className="bg-white">{t("meeting.props.type")}</th>
                     <th className="bg-white">{t("meeting.started_at")}</th>
                     <th className="bg-white">{t("meeting.ended_at")}</th>
-                    <th className="bg-white">{t("meeting.props.status")}</th>
+                    <th className="bg-white text-center">{t("meeting.props.status")}</th>
                     <th className="bg-white">
                       <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
                     </th>
@@ -175,9 +176,10 @@ const MeetingHistory = ({ className, t }) => {
                   {histories.data?.map((item) => (
                     <tr className="text-cl-base text-md border-0 table-row" key={item?.uuid}>
                       <td className="bg-white">{item?.user?.profile?.name}</td>
+                      <td className="bg-white">{item?.title}</td>
                       <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
                       <td className="bg-white">{item?.start_date_time}</td>
-                      <td className="flex justify-center align-middle bg-white">
+                      <td className="flex justify-left align-middle bg-white">
                         {item?.ended_at || "-"}
                       </td>
                       <td className="bg-white text-center">

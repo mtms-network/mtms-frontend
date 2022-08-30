@@ -10,7 +10,7 @@ import {
   GroupTitle,
   MainLayout,
   AlertError,
-  BrandLogoLoading,
+  BrandLogoLoading, IconBase,
 } from "components";
 import { IoTv } from "react-icons/io5";
 import { useMeetingStore } from "stores/meeting.store";
@@ -21,6 +21,7 @@ import { getMeetingDetail } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { message, Modal } from "antd";
+import { calculateDuration } from "../../../../helpers";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -61,11 +62,11 @@ const ScheduleMeetingView = ({ t }) => {
 
   const handleDeleteMeeting = () => {
     confirm({
-      title: "Are you sure delete avatar?",
+      title: t("meeting.props.question_delete"),
       icon: <ExclamationCircleOutlined />,
-      okText: "Yes",
+      okText: t("meeting.props.yes"),
       okType: "danger",
-      cancelText: "No",
+      cancelText: t("meeting.props.no"),
       onOk() {
         deleteMeeting();
       },
@@ -174,7 +175,7 @@ const ScheduleMeetingView = ({ t }) => {
             <img src="/images/icon/clock.svg" alt="" />
             <span>{t("config.ui.duration")}: </span>
             <span className="font-[700] text-[16px]">
-              {meetingStore?.meeting?.period} {t("list.general.durations.minutes")}
+              {`${meetingStore?.meeting?.period} `} {t("list.general.durations.minutes")}
             </span>
           </div>
           <div className="flex space-x-[8px] items-center">
@@ -203,6 +204,10 @@ const ScheduleMeetingView = ({ t }) => {
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
             onClick={handleCopyLink}
           >
+            <IconBase
+              className="mr-2"
+              icon="/icons/icons/copy-primary-outline.svg"
+            />
             {t("general.copy_link")}
           </Button>
           {canModify && (

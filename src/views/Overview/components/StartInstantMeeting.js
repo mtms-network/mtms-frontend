@@ -147,37 +147,37 @@ const StartInstantMeeting = ({ className, t }) => {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row pt-4">
-          <div className="basis-full sm:basis-1/2 flex flex-col justify-start items-start">
-            <div className="form-control">
-              <label className="label cursor-pointer flex justify-center items-center gap-2">
-                <input
-                  type="checkbox"
-                  value={isKeepAlive}
-                  className="checkbox checkbox-primary checkbox-sm bg-secondary border-0 rounded-md"
-                  onChange={() => {
-                    setIsKeepALive(!isKeepAlive);
-                  }}
-                />
-                <span className="label-base pb-0">{t("meeting.keep_meeting_live")}</span>
-              </label>
-            </div>
-            <div className="form-control">
-              <label className="label cursor-pointer flex justify-center items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-primary checkbox-sm bg-secondary border-0 rounded-md"
-                  value={isOnlyActiveMember}
-                  onChange={() => {
-                    setIsOnlyActiveMember(!isOnlyActiveMember);
-                  }}
-                />
-                <span className="label-base pb-0">
-                  {t("meeting.props.only_accessible_to_members")}
-                </span>
-              </label>
-            </div>
-          </div>
-          <div className="basis-full sm:basis-1/2 flex items-center">
+          {/*<div className="basis-full sm:basis-1/2 flex flex-col justify-start items-start">*/}
+          {/*  <div className="form-control">*/}
+          {/*    <label className="label cursor-pointer flex justify-center items-center gap-2">*/}
+          {/*      <input*/}
+          {/*        type="checkbox"*/}
+          {/*        value={isKeepAlive}*/}
+          {/*        className="checkbox checkbox-primary checkbox-sm bg-secondary border-0 rounded-md"*/}
+          {/*        onChange={() => {*/}
+          {/*          setIsKeepALive(!isKeepAlive);*/}
+          {/*        }}*/}
+          {/*      />*/}
+          {/*      <span className="label-base pb-0">{t("meeting.keep_meeting_live")}</span>*/}
+          {/*    </label>*/}
+          {/*  </div>*/}
+          {/*  <div className="form-control">*/}
+          {/*    <label className="label cursor-pointer flex justify-center items-center gap-2">*/}
+          {/*      <input*/}
+          {/*        type="checkbox"*/}
+          {/*        className="checkbox checkbox-primary checkbox-sm bg-secondary border-0 rounded-md"*/}
+          {/*        value={isOnlyActiveMember}*/}
+          {/*        onChange={() => {*/}
+          {/*          setIsOnlyActiveMember(!isOnlyActiveMember);*/}
+          {/*        }}*/}
+          {/*      />*/}
+          {/*      <span className="label-base pb-0">*/}
+          {/*        {t("meeting.props.only_accessible_to_members")}*/}
+          {/*      </span>*/}
+          {/*    </label>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
+          <div className="basis-full flex items-center justify-end">
             <Button className="btn btn-primary btn-wide" isLoading={loading} onClick={handleStart}>
               <img src="/icons/icons/camera-white-fill.svg" alt="buy mtms" className="pr-2" />
               {t("home.start_a_instant_meeting")}

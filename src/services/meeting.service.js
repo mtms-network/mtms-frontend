@@ -195,3 +195,13 @@ export const checkMeetingExist = async (meetingId) => {
     return error;
   }
 };
+
+export const joinMeeting = async (identifer) => {
+  try {
+    const res = await client.get(`/m/${identifer}`);
+    return res?.data;
+  }catch (error){
+    console.error('joinMeeting', error);
+    return error;
+  };
+};
