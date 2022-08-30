@@ -33,11 +33,11 @@ const Overview = ({t}) => {
                 "justify-between min-h-[160px] hover:border-primary hover:bg-light-primary",
               )}>
               <div className="flex flex-col w-full flex-1 h-full">
-                <img src={box?.photo} />
-                <div className="text-gray text-lg uppercase text-center">{ box?.name }</div>
+                <img src={box?.photo} className="rounded-lg	bg-black"/>
+                <div className="text-gray text-lg uppercase text-center mt-4">{ box?.name }</div>
                 <div className="mt-2">
                   <div className="flex justify-between flex-col ">
-                    <div className="px-20 md:px-10 flex justify-between">
+                    <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between">
                       <div>{t("overview.owning")}</div>
                       <div className="text-orange-base font-bold">
                         { box.owning } {t("overview.box")}
@@ -45,7 +45,7 @@ const Overview = ({t}) => {
                     </div>
                   </div>
                   <div className="flex justify-between flex-col">
-                    <div className="px-20 md:px-10 flex justify-between	">
+                    <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between	">
                       <div>{t("overview.available_unbox")}</div>
                       <div className="text-orange-base font-bold">
                         { box.avaliable } {t("overview.box")}
