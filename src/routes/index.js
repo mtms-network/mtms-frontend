@@ -4,7 +4,7 @@ import React, { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import {
   Login,
-  Overview,
+  Meeting,
   Register,
   ResetPassword,
   ScheduleMeetingHistories,
@@ -22,6 +22,7 @@ import {
   RegisterResult,
   VerifyActiveTokenResult,
   ConnectWallet,
+  Overview,
 } from "./views";
 
 const Routers = () => {
@@ -67,6 +68,7 @@ const Routers = () => {
           element={<MeetingRedirect />}
         />
         <Route path={`/${routeUrls.connectWallet.path}`} element={<ConnectWallet />} />
+        <Route path={`/${routeUrls.meeting.path}`}  element={<Meeting />} />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
