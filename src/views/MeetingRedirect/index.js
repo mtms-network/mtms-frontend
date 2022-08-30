@@ -10,18 +10,20 @@ const MeetingRedirect = () => {
   const fetchMeeting = async () => {
     try {
       const res = await checkMeetingExist(meetingId);
+      let url = `${LIVE_MEETING_URL}/`;
       if (res && res?.meeting?.id) {
         await joinMeeting(meetingId);
-        let url = `${LIVE_MEETING_URL}/${res?.meeting.id}`;
+        url += `${res?.meeting.id}`;
 
-        if (res?.meeting?.jwt) {
-          url += `?jwt=${res.meeting.jwt}`;
-        }
-
-        window.location = url;
       } else {
-        window.location =  `${LIVE_MEETING_URL}/${meetingId}`;
+        url +=  `${meetingId}`;
       }
+
+      if (res?.meeting?.jwt) {
+        url += `?jwt=${res.meeting.jwt}`;
+      }
+
+      window.location = url;
     } catch (error) {
       console.log("ScheduleMeetingDetail", error);
     }

@@ -55,11 +55,29 @@ const SidebarLayout = ({ t }) => {
                 onClick={() => navigate("/")}
               >
                 <IconBase
-                  icon="/icons/icons/home-outline.svg"
-                  iconActivated="/icons/icons/home-fill.svg"
+                  icon="/icons/icons/overview.svg"
+                  iconActivated="/icons/icons/overview-active.svg"
                   isActive={location.pathname === "/"}
                 />
-                <p className="pl-2">{t("meeting.meeting")}</p>
+                <p className="pl-2">{t("sidebar.overview")}</p>
+              </button>
+            </div>
+            <div className="w-full">
+              <button
+                className={classNames(
+                  "text-base font-normal",
+                  location.pathname.includes(routeUrls.meeting.path)
+                    ? "btn btn-base justify-start font-medium"
+                    : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
+                )}
+                onClick={() => navigate(`/${routeUrls.meeting.path}`)}
+              >
+                <IconBase
+                  icon="/icons/icons/calendar-outline.svg"
+                  iconActivated="/icons/icons/calendar-fill.svg"
+                  isActive={location.pathname.includes(routeUrls.meeting.path)}
+                />
+                <p className="pl-2">{t("sidebar.meeting")}</p>
               </button>
             </div>
             <div className="w-full">
