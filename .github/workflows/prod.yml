@@ -46,7 +46,7 @@ jobs:
         ref: 'main'
         token: '${{ secrets.ARC_TOKEN }}'
 
-    - name: Update helm values and deploy staging
+    - name: Update helm values and deploy production
       run: |
         sed -i -e "s/tag:.*/tag: sha-$GITHUB_SHA/" ${GITHUB_WORKSPACE}/values/meeting-cms/values.yaml
 
