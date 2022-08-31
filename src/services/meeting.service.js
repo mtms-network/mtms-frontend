@@ -93,8 +93,8 @@ export const joinMeetingByCode = async ({ code }) => {
 export const startMeeting = async ({
   instant = true,
   type = {
-    uuid: "audio_conference",
-    name: "Audio Conference",
+    uuid: "video_conference",
+    name: "Video Conference",
   },
   maxParticipant = COMMON.MAX_PARTICIPANT,
   isActiveMember = false,
