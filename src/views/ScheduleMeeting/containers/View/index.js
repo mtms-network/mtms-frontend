@@ -11,8 +11,10 @@ import {
   MainLayout,
   AlertError,
   BrandLogoLoading,
+  IconBase,
+  Icon,
 } from "components";
-import { IoTv } from "react-icons/io5";
+import { IoCheckmarkCircleOutline, IoTv } from "react-icons/io5";
 import { useMeetingStore } from "stores/meeting.store";
 import { createPrivateInstance } from "services/base";
 import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL, COMMON, MEETING_STATUS } from "configs";
@@ -21,6 +23,7 @@ import { getMeetingDetail } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { message, Modal } from "antd";
+import { calculateDuration } from "../../../../helpers";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -40,6 +43,7 @@ const ScheduleMeetingView = ({ t }) => {
     type: ALERT_TYPE.ERROR,
     error: [],
   });
+  const [isCopied, setIsCopied] = useState(false);
 
   const prepareData = () => {
     if (meetingStore?.types) {
@@ -61,11 +65,11 @@ const ScheduleMeetingView = ({ t }) => {
 
   const handleDeleteMeeting = () => {
     confirm({
-      title: "Are you sure delete avatar?",
+      title: t("meeting.props.question_delete"),
       icon: <ExclamationCircleOutlined />,
-      okText: "Yes",
+      okText: t("meeting.props.yes"),
       okType: "danger",
-      cancelText: "No",
+      cancelText: t("meeting.props.no"),
       onOk() {
         deleteMeeting();
       },
@@ -144,6 +148,14 @@ const ScheduleMeetingView = ({ t }) => {
     fetchData();
   }, [params.meetingId]);
 
+  const handleCopyCode = (code) => {
+    setIsCopied(true);
+    navigator.clipboard.writeText(code);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, [1000]);
+  };
+
   return (
     <MainLayout>
       <div className="pt-4 w-full">
@@ -174,7 +186,7 @@ const ScheduleMeetingView = ({ t }) => {
             <img src="/images/icon/clock.svg" alt="" />
             <span>{t("config.ui.duration")}: </span>
             <span className="font-[700] text-[16px]">
-              {meetingStore?.meeting?.period} {t("list.general.durations.minutes")}
+              {`${meetingStore?.meeting?.period} `} {t("list.general.durations.minutes")}
             </span>
           </div>
           <div className="flex space-x-[8px] items-center">
@@ -188,6 +200,28 @@ const ScheduleMeetingView = ({ t }) => {
             <img src="/images/icon/clock.svg" alt="" />
             <span>{t("meeting.meeting_code")}: </span>
             <span className="font-[700] text-[16px]">{meetingStore?.meeting?.identifier}</span>
+            <div className="dropdown-top relative">
+              <button
+                onClick={() => {
+                  handleCopyCode(meetingStore?.meeting?.identifier);
+                }}
+              >
+                <Icon className="h-6 w-6" src="/icons/icons/copy-light-outline.svg" alt="copy" />
+              </button>
+              {isCopied && (
+                <ul
+                  tabIndex="0"
+                  className="dropdown-content menu p-2 shadow bg-white rounded-box mb-2 absolute -left-8"
+                >
+                  <p className="flex flex-row justify-center items-center space-x-2">
+                    <span className="text-black">{t("home.copied")}</span>
+                    <span className="text-success">
+                      <IoCheckmarkCircleOutline />
+                    </span>
+                  </p>
+                </ul>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex space-x-[24px] mb-[24px]">
@@ -203,6 +237,7 @@ const ScheduleMeetingView = ({ t }) => {
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
             onClick={handleCopyLink}
           >
+            <IconBase className="mr-2" icon="/icons/icons/copy-primary-outline.svg" />
             {t("general.copy_link")}
           </Button>
           {canModify && (

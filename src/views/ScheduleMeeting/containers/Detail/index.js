@@ -41,11 +41,11 @@ const timeFormat = "MMM DD, yyyy";
 
 const ScheduleMeetingDetail = ({ t }) => {
   const DURATION_HOURS = [
-    { label: `0 ${t("list.general.durations.h")}`, value: 0, key: 0 },
-    { label: `1 ${t("list.general.durations.h")}`, value: 1, key: 1 },
-    { label: `2 ${t("list.general.durations.hours")}`, value: 2, key: 2 },
-    { label: `3 ${t("list.general.durations.hours")}`, value: 3, key: 3 },
-    { label: `4 ${t("list.general.durations.hours")}`, value: 4, key: 4 },
+    { value: `0 ${t("list.general.durations.h")}`, key: 0 },
+    { value: `1 ${t("list.general.durations.h")}`, key: 1 },
+    { value: `2 ${t("list.general.durations.hours")}`, key: 2 },
+    { value: `3 ${t("list.general.durations.hours")}`, key: 3 },
+    { value: `4 ${t("list.general.durations.hours")}`, key: 4 },
   ];
 
   const DURATION_MINUTES = [
@@ -148,6 +148,9 @@ const ScheduleMeetingDetail = ({ t }) => {
           data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
 
           data.contacts = contacts.map((value) => {
+            if (typeof value === "object" && value?.uuid) {
+              value = value.uuid;
+            }
             return { uuid: value };
           });
           data.type = { uuid: type };
@@ -156,9 +159,9 @@ const ScheduleMeetingDetail = ({ t }) => {
           const res = await updateInstantMeeting(params.meetingId, data);
           if (res?.data) {
             message.success(res.data?.message);
-            if (data.contacts?.length > 0) {
-              await sendEmailToMemberInMeeting(params.meetingId);
-            }
+            // if (data.contacts?.length > 0) {
+            //   await sendEmailToMemberInMeeting(params.meetingId);
+            // }
           } else if (res?.request) {
             const errorData = handleHttpError(res);
             message.error(errorData.messageDetail);
@@ -264,7 +267,7 @@ const ScheduleMeetingDetail = ({ t }) => {
   };
 
   const disabledDate = (current) => {
-    return current && current < moment().endOf("day");
+    return current && moment(current).add(1, "d") < moment().endOf("day");
   };
 
   useEffect(() => {
@@ -324,8 +327,8 @@ const ScheduleMeetingDetail = ({ t }) => {
               </GroupLayout>
               <GroupLayout className="flex flex-col space-y-4">
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                  <div>{t("meeting.view.start_time")}</div>
-                  <div className="flex-1">
+                  <div className="w-full sm:w-1/5">{t("meeting.view.start_time")}</div>
+                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
                     <DateTimePicker
                       disabledDate={disabledDate}
                       placeholder="Mar 2, 2022 5:02 PM"
@@ -334,7 +337,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                       value={startDateTime}
                     />
                   </div>
-                  <div className="flex-1">
+                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
                     <TimePicker
                       use12Hours
                       value={startTime}
@@ -346,8 +349,8 @@ const ScheduleMeetingDetail = ({ t }) => {
               </GroupLayout>
               <GroupLayout className="flex flex-col space-y-4">
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                  <div>{t("config.ui.duration")}</div>
-                  <div className="flex-1">
+                  <div className="w-full sm:w-1/5">{t("config.ui.duration")}</div>
+                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
                     <Select
                       options={DURATION_HOURS}
                       defaultValue={0}
@@ -355,7 +358,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                       onChange={(e) => setDurationHour(e)}
                     />
                   </div>
-                  <div className="flex-1">
+                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
                     <Select
                       options={DURATION_MINUTES}
                       defaultValue={0}

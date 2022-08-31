@@ -42,9 +42,24 @@ export const signUp = async ({ name, email, username, password, passwordConfirma
   return res?.data;
 };
 
+export const resendRegisterVerification = async ({ email }) => {
+  const res = await client.post("/register/resend", {
+    email,
+  });
+  return res?.data;
+};
+
 export const forgotPassword = async ({ email }) => {
   const res = await client.post("/password", {
     email,
+  });
+  return res?.data;
+};
+
+export const validateResetPassword = async ({ email, code }) => {
+  const res = await client.post("/validate-reset-password", {
+    email,
+    code,
   });
   return res?.data;
 };

@@ -12,7 +12,7 @@ import { useAppStore } from "stores/app.store";
 import Wallet from "components/base/Wallet";
 import { withTranslation } from "react-i18next";
 
-function Login({t}) {
+function Login({ t }) {
   const navigate = useNavigate();
   const [, updateAppStore] = useAppStore();
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
@@ -143,18 +143,24 @@ function Login({t}) {
             </div>
           </div>
           <div>
-            <p className="text-black-base text-lg font-bold pb-3">{t("auth.login.login_with_social")}</p>
+            <p className="text-black-base text-lg font-bold pb-3">
+              {t("auth.login.login_with_social")}
+            </p>
             <GoogleButton showTitle />
           </div>
           <div>
             <div className="divider mt-2 mb-2 text-hint">Or</div>
-            <p className="text-black-base text-lg font-bold pb-3 pt-4">{t("auth.login.login_with_crypto")}</p>
+            <p className="text-black-base text-lg font-bold pb-3 pt-4">
+              {t("auth.login.login_with_crypto")}
+            </p>
             <div className="flex flex-row space-x-4">
               <Wallet />
             </div>
           </div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
-          <p className="text-black-base text-lg font-bold pb-2 pt-4">{t("auth.login.login_with_email")}</p>
+          <p className="text-black-base text-lg font-bold pb-2 pt-4">
+            {t("auth.login.login_with_email")}
+          </p>
           {alert?.show && (
             <div className="py-4 w-full">
               <Alert
@@ -218,19 +224,25 @@ function Login({t}) {
           </div>
         </div>
         <div className="pt-6">
-          <p className="text-black-base text-lg font-bold pb-3">{t("auth.login.login_with_social")}</p>
+          <p className="text-black-base text-lg font-bold pb-3">
+            {t("auth.login.login_with_social")}
+          </p>
           <GoogleButton showTitle />
         </div>
         <div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
-          <p className="text-black-base text-lg font-bold pb-3 pt-4">{t("auth.login.login_with_crypto")}</p>
+          <p className="text-black-base text-lg font-bold pb-3 pt-4">
+            {t("auth.login.login_with_crypto")}
+          </p>
           <div className="flex flex-row space-x-4">
             <Wallet />
           </div>
         </div>
         <div>
           <div className="divider mt-2 mb-2 text-hint">Or</div>
-          <p className="text-black-base text-lg font-bold pb-2 pt-4">{t("auth.login.login_with_email")}</p>
+          <p className="text-black-base text-lg font-bold pb-2 pt-4">
+            {t("auth.login.login_with_email")}
+          </p>
           {alert?.show && (
             <div className="py-4 w-full">
               <Alert

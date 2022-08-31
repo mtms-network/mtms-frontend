@@ -14,7 +14,7 @@ export const getRequirePreWallet = async () => {
 };
 
 export const claimTokenToDay = async () => {
-  const res = await client.post("/claim/meeting/today");
+  const res = await client.post("/claim/meeting");
   return res?.data;
 };
 
@@ -27,4 +27,3 @@ export const claimCheckIn = async () => {
   const res = await client.post("/claim/checkin");
   return res?.data;
 };
-

@@ -34,20 +34,17 @@ const Rewards = () => {
   const [timeToday, setTimeToday] = useState({ hour: 0, minute: 0 });
   const [timeWeek, setTimeWeek] = useState({ hour: 0, minute: 0 });
   const { t } = useTranslation();
-  // const
 
-  const prepareData = async (isReload = false) => {
+  const prepareData = async () => {
     try {
-      if (walletStore.wallet === null || isReload) {
-        setFetchLoading(true);
-        const res = await getRequirePreWallet();
-        if (res) {
-          updateWalletStore((draft) => {
-            draft.wallet = res;
-          });
-        }
-        setFetchLoading(false);
+      setFetchLoading(true);
+      const res = await getRequirePreWallet();
+      if (res) {
+        updateWalletStore((draft) => {
+          draft.wallet = res;
+        });
       }
+      setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
     }
@@ -62,7 +59,7 @@ const Rewards = () => {
         message.success(res?.message);
       }
 
-      await prepareData(true);
+      await prepareData();
       setLoading(false);
     } catch (error) {
       if (error) {
@@ -88,7 +85,7 @@ const Rewards = () => {
       if (res?.status === API_RESPONSE_STATUS.success) {
         message.success(res?.message);
       }
-      await prepareData(true);
+      await prepareData();
       await setLoading(false);
     } catch (error) {
       if (error) {
@@ -114,7 +111,7 @@ const Rewards = () => {
         message.success(res?.message);
       }
 
-      await prepareData(true);
+      await prepareData();
       await setLoading(false);
     } catch (error) {
       if (error) {
@@ -146,7 +143,7 @@ const Rewards = () => {
       setTimeWeek({ hour: hourWeek, minute: minuteWeek });
     }
     prepareData();
-  }, [walletStore]);
+  }, []);
 
   const convertTime = useCallback(() => {
     const totalMinute = walletStore?.wallet?.total_minute_all_days;
@@ -194,7 +191,9 @@ const Rewards = () => {
                   }}
                   disabled={walletStore?.wallet?.has_checked_today}
                 >
-                  {t("rewards.check_in")}
+                  {walletStore?.wallet?.has_checked_today
+                    ? t("rewards.checked_in")
+                    : t("rewards.check_in")}
                 </Button>
                 <Button
                   className="btn-primary"

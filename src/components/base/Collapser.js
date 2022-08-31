@@ -11,7 +11,7 @@ const Collapser = ({
   icon,
   isShowIcon,
 }) => {
-  const [isShow, setIsShow] = useState(false);
+  const [isShow, setIsShow] = useState(true);
 
   useEffect(() => {
     setIsShow(!isShow);
