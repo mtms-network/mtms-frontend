@@ -176,13 +176,12 @@ export const getMeetingContact = async () => {
   }
 };
 
-
 export const checkMeetingExist = async (meetingId) => {
   try {
     const token = getAccessToken();
     const headers = {};
-    if(token){
-      headers["X-authorization"] = `Bearer ${token}`
+    if (token) {
+      headers["X-authorization"] = `Bearer ${token}`;
     }
 
     const res = await client.get(`/check-exist/${meetingId}`, {
@@ -200,8 +199,8 @@ export const joinMeeting = async (identifer) => {
   try {
     const res = await client.get(`/m/${identifer}`);
     return res?.data;
-  }catch (error){
-    console.error('joinMeeting', error);
+  } catch (error) {
+    console.error("joinMeeting", error);
     return error;
-  };
+  }
 };

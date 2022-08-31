@@ -68,7 +68,7 @@ const Routers = () => {
           element={<MeetingRedirect />}
         />
         <Route path={`/${routeUrls.connectWallet.path}`} element={<ConnectWallet />} />
-        <Route path={`/${routeUrls.meeting.path}`}  element={<Meeting />} />
+        <Route path={`/${routeUrls.meeting.path}`} element={<Meeting />} />
         <Route index element={<Overview />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

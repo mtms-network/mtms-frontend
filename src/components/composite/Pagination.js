@@ -49,11 +49,11 @@ const Pagination = ({
   } else {
     html.push(
       <div
-          onClick={() => onPage(1)}
-          className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer bg-primary text-white"
-        >
-          1
-        </div>,
+        onClick={() => onPage(1)}
+        className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer bg-primary text-white"
+      >
+        1
+      </div>,
     );
   }
 

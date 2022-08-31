@@ -10,7 +10,9 @@ import {
   GroupTitle,
   MainLayout,
   AlertError,
-  BrandLogoLoading, IconBase, Icon,
+  BrandLogoLoading,
+  IconBase,
+  Icon,
 } from "components";
 import { IoCheckmarkCircleOutline, IoTv } from "react-icons/io5";
 import { useMeetingStore } from "stores/meeting.store";
@@ -42,7 +44,6 @@ const ScheduleMeetingView = ({ t }) => {
     error: [],
   });
   const [isCopied, setIsCopied] = useState(false);
-
 
   const prepareData = () => {
     if (meetingStore?.types) {
@@ -200,12 +201,12 @@ const ScheduleMeetingView = ({ t }) => {
             <span>{t("meeting.meeting_code")}: </span>
             <span className="font-[700] text-[16px]">{meetingStore?.meeting?.identifier}</span>
             <div className="dropdown-top relative">
-              <button onClick={() => { handleCopyCode(meetingStore?.meeting?.identifier); }}>
-                <Icon
-                  className="h-6 w-6"
-                  src="/icons/icons/copy-light-outline.svg"
-                  alt="copy"
-                />
+              <button
+                onClick={() => {
+                  handleCopyCode(meetingStore?.meeting?.identifier);
+                }}
+              >
+                <Icon className="h-6 w-6" src="/icons/icons/copy-light-outline.svg" alt="copy" />
               </button>
               {isCopied && (
                 <ul
@@ -215,8 +216,8 @@ const ScheduleMeetingView = ({ t }) => {
                   <p className="flex flex-row justify-center items-center space-x-2">
                     <span className="text-black">{t("home.copied")}</span>
                     <span className="text-success">
-                          <IoCheckmarkCircleOutline />
-                        </span>
+                      <IoCheckmarkCircleOutline />
+                    </span>
                   </p>
                 </ul>
               )}
@@ -236,10 +237,7 @@ const ScheduleMeetingView = ({ t }) => {
             className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
             onClick={handleCopyLink}
           >
-            <IconBase
-              className="mr-2"
-              icon="/icons/icons/copy-primary-outline.svg"
-            />
+            <IconBase className="mr-2" icon="/icons/icons/copy-primary-outline.svg" />
             {t("general.copy_link")}
           </Button>
           {canModify && (

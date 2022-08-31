@@ -14,9 +14,8 @@ const MeetingRedirect = () => {
       if (res && res?.meeting?.id) {
         await joinMeeting(meetingId);
         url += `${res?.meeting.id}`;
-
       } else {
-        url +=  `${meetingId}`;
+        url += `${meetingId}`;
       }
 
       if (res?.meeting?.jwt) {

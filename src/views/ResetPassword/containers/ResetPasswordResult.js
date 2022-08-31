@@ -22,10 +22,7 @@ function ResetPasswordResult({ t }) {
       <p>{t("auth.reset_result.page_description")}</p>
       <p className="pt-4">{t("auth.reset_result.page_content")}</p>
       <div className="w-full pt-9 flex justify-between items-center space-x-4">
-        <Button
-          className="btn-primary rounded-full btn-wide"
-          onClick={onVerifyCode}
-        >
+        <Button className="btn-primary rounded-full btn-wide" onClick={onVerifyCode}>
           {t("auth.reset_result.verify_code")}
         </Button>
         <Button

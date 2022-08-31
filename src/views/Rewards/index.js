@@ -191,7 +191,9 @@ const Rewards = () => {
                   }}
                   disabled={walletStore?.wallet?.has_checked_today}
                 >
-                  { walletStore?.wallet?.has_checked_today ? t("rewards.checked_in") : t("rewards.check_in") }
+                  {walletStore?.wallet?.has_checked_today
+                    ? t("rewards.checked_in")
+                    : t("rewards.check_in")}
                 </Button>
                 <Button
                   className="btn-primary"

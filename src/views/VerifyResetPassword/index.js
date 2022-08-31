@@ -11,7 +11,7 @@ import { useAppStore } from "stores/app.store";
 import { message } from "antd";
 import { withTranslation } from "react-i18next";
 
-function VerifyResetPassword({t}) {
+function VerifyResetPassword({ t }) {
   const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const [appStore] = useAppStore();
@@ -79,7 +79,7 @@ function VerifyResetPassword({t}) {
         <div className="flex flex-row w-full pt-1">
           <p className="pr-2 text-xs">{t("auth.register.already_have_account")}</p>
           <a className="btn-text-primary text-xs" onClick={onLogin}>
-            { t("auth.login.login") }
+            {t("auth.login.login")}
           </a>
         </div>
       </div>
@@ -149,6 +149,6 @@ function VerifyResetPassword({t}) {
       </div>
     </GuestFormLayout>
   );
-};
+}
 
 export default withTranslation()(VerifyResetPassword);
