@@ -27,4 +27,3 @@ export const claimCheckIn = async () => {
   const res = await client.post("/claim/checkin");
   return res?.data;
 };
-

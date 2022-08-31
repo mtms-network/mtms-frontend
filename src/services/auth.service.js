@@ -59,7 +59,7 @@ export const forgotPassword = async ({ email }) => {
 export const validateResetPassword = async ({ email, code }) => {
   const res = await client.post("/validate-reset-password", {
     email,
-    code
+    code,
   });
   return res?.data;
 };

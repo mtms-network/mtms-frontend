@@ -42,7 +42,7 @@ const timeFormat = "MMM DD, yyyy";
 const ScheduleMeetingDetail = ({ t }) => {
   const DURATION_HOURS = [
     { value: `0 ${t("list.general.durations.h")}`, key: 0 },
-    { value: `1 ${t("list.general.durations.h")}`,  key: 1 },
+    { value: `1 ${t("list.general.durations.h")}`, key: 1 },
     { value: `2 ${t("list.general.durations.hours")}`, key: 2 },
     { value: `3 ${t("list.general.durations.hours")}`, key: 3 },
     { value: `4 ${t("list.general.durations.hours")}`, key: 4 },
@@ -148,7 +148,7 @@ const ScheduleMeetingDetail = ({ t }) => {
           data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
 
           data.contacts = contacts.map((value) => {
-            if(typeof value === "object" && value?.uuid){
+            if (typeof value === "object" && value?.uuid) {
               value = value.uuid;
             }
             return { uuid: value };
@@ -267,7 +267,7 @@ const ScheduleMeetingDetail = ({ t }) => {
   };
 
   const disabledDate = (current) => {
-    return current && moment(current).add(1, 'd') < moment().endOf("day");
+    return current && moment(current).add(1, "d") < moment().endOf("day");
   };
 
   useEffect(() => {

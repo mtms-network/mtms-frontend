@@ -16,7 +16,6 @@ const DateTimePicker = ({
   onChangeDateTime,
   ...rest
 }) => {
-
   return (
     <FormControl
       required={required}

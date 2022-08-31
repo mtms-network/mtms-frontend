@@ -54,7 +54,7 @@ const Select = ({
           "ml-0 pl-0",
           error && "input-error",
           className,
-          multiTag && 'rounded-2xl'
+          multiTag && "rounded-2xl",
         )}
         defaultValue={defaultValue}
         placeholder={placeholder || `${label}`}

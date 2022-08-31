@@ -38,11 +38,11 @@ const timeFormat = "MMM DD, yyyy";
 
 const ScheduleMeetingItem = ({ t }) => {
   const DURATION_HOURS = [
-    { value: `0 ${t("list.general.durations.h")}`,  key: 0 },
-    { value: `1 ${t("list.general.durations.hours")}`,  key: 1 },
-    { value: `2 ${t("list.general.durations.hours")}`,  key: 2 },
-    { value: `3 ${t("list.general.durations.hours")}`,  key: 3 },
-    { value: `4 ${t("list.general.durations.hours")}`,  key: 4 },
+    { value: `0 ${t("list.general.durations.h")}`, key: 0 },
+    { value: `1 ${t("list.general.durations.hours")}`, key: 1 },
+    { value: `2 ${t("list.general.durations.hours")}`, key: 2 },
+    { value: `3 ${t("list.general.durations.hours")}`, key: 3 },
+    { value: `4 ${t("list.general.durations.hours")}`, key: 4 },
   ];
 
   const DURATION_MINUTES = [
@@ -192,8 +192,7 @@ const ScheduleMeetingItem = ({ t }) => {
   };
 
   const disabledDate = (current) => {
-    return current && moment(current).add(1, 'd') < moment().endOf('day');
-
+    return current && moment(current).add(1, "d") < moment().endOf("day");
   };
 
   useEffect(() => {
@@ -201,11 +200,10 @@ const ScheduleMeetingItem = ({ t }) => {
   }, [params]);
 
   useEffect(() => {
-    if(meetingStore?.types?.length && type === null){
-      setType(meetingStore.types[0].uuid)
+    if (meetingStore?.types?.length && type === null) {
+      setType(meetingStore.types[0].uuid);
     }
-  }, [meetingStore?.types])
-
+  }, [meetingStore?.types]);
 
   return (
     <MainLayout>

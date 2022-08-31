@@ -1,17 +1,17 @@
-import React, {useState} from "react";
-import { Button, GuestFormLayout, Input} from "components";
-import {useForm, setError} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
+import React, { useState } from "react";
+import { Button, GuestFormLayout, Input } from "components";
+import { useForm, setError } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {useNavigate} from "react-router-dom";
-import {ALERT_TYPE, routeUrls} from "configs";
-import {forgotPassword, resetPassword, validateResetPassword} from "services";
-import {handleHttpError} from "helpers";
-import {withTranslation} from "react-i18next";
-import {message} from "antd";
+import { useNavigate } from "react-router-dom";
+import { ALERT_TYPE, routeUrls } from "configs";
+import { forgotPassword, resetPassword, validateResetPassword } from "services";
+import { handleHttpError } from "helpers";
+import { withTranslation } from "react-i18next";
+import { message } from "antd";
 
-function ResetPassword({t}) {
-  const [alert, setAlert] = useState({show: false, message: "", type: ALERT_TYPE.ERROR});
+function ResetPassword({ t }) {
+  const [alert, setAlert] = useState({ show: false, message: "", type: ALERT_TYPE.ERROR });
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
@@ -25,17 +25,16 @@ function ResetPassword({t}) {
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-
   const onSubmit = async (values) => {
     try {
-      setAlert({...alert, show: false, message: ""});
+      setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
-      let data = {message: ''};
+      let data = { message: "" };
       if (step === 1) {
         data = await forgotPassword({
           email: values.email,
@@ -46,10 +45,10 @@ function ResetPassword({t}) {
         data = await validateResetPassword({
           email: values.email,
           code: values.code,
-        })
+        });
         setStep(3);
       } else if (step === 3) {
-        data = await resetPassword(values)
+        data = await resetPassword(values);
         navigate(`/${routeUrls.login.path}`);
         message.success(data?.message);
       }
@@ -66,7 +65,7 @@ function ResetPassword({t}) {
   return (
     <GuestFormLayout>
       <div className="pb-5">
-        <img src="/images/mtms-logo.png" alt="logo" className="w-32"/>
+        <img src="/images/mtms-logo.png" alt="logo" className="w-32" />
       </div>
       <div className="pb-4">
         <p className="text-black text-3xl font-bold">{t("auth.password.reset.page_title")}</p>
@@ -84,36 +83,41 @@ function ResetPassword({t}) {
               labelClassName="font-medium"
             />
           </div>
-          {step === 2 && <div className="pt-4">
-            <Input
-              register={register("code")}
-              label={t("auth.password.props.code")}
-              placeholder={t("auth.password.props.code")}
-              error={errors.code}
-              labelClassName="font-medium"
-            />
-          </div>}
-          {step === 3 && <div className="pt-4">
-            <Input
-              type={'password'}
-              register={register("newPassword")}
-              label={t("auth.password.props.new_password")}
-              placeholder={t("auth.password.props.new_password")}
-              error={errors.new_password}
-              labelClassName="font-medium"
-            />
-          </div>}
-          {step === 3 && <div className="pt-4">
-            <Input
-              type={'password'}
-              register={register("newPasswordConfirmation")}
-              label={t("auth.password.props.new_password_confirmation")}
-              placeholder={t("auth.password.props.new_password_confirmation")}
-              error={errors.new_password_confirmation}
-              labelClassName="font-medium"
-            />
-          </div>
-          }
+          {step === 2 && (
+            <div className="pt-4">
+              <Input
+                register={register("code")}
+                label={t("auth.password.props.code")}
+                placeholder={t("auth.password.props.code")}
+                error={errors.code}
+                labelClassName="font-medium"
+              />
+            </div>
+          )}
+          {step === 3 && (
+            <div className="pt-4">
+              <Input
+                type={"password"}
+                register={register("newPassword")}
+                label={t("auth.password.props.new_password")}
+                placeholder={t("auth.password.props.new_password")}
+                error={errors.new_password}
+                labelClassName="font-medium"
+              />
+            </div>
+          )}
+          {step === 3 && (
+            <div className="pt-4">
+              <Input
+                type={"password"}
+                register={register("newPasswordConfirmation")}
+                label={t("auth.password.props.new_password_confirmation")}
+                placeholder={t("auth.password.props.new_password_confirmation")}
+                error={errors.new_password_confirmation}
+                labelClassName="font-medium"
+              />
+            </div>
+          )}
         </div>
       </form>
       <div className="w-full pt-5 flex justify-between items-center space-x-4">

@@ -18,9 +18,9 @@ const JoinAMeeting = ({ className, t }) => {
 
   const handleReplaceLocaleWarning = () => {
     const { origin } = window.location;
-    const warningLocale = t("meeting.props.warning_meeting_code", {url: origin});
+    const warningLocale = t("meeting.props.warning_meeting_code", { url: origin });
     return warningLocale.replaceAll("&#x2F;", "/");
-  }
+  };
 
   const handleConfirmMeetingCodeNotExist = (meetingCode) => {
     confirm({
@@ -73,7 +73,7 @@ const JoinAMeeting = ({ className, t }) => {
               value={code}
               onChange={(e) => setCode(e.target.value)}
               onKeyPress={(event) => {
-                if(event.charCode === 13){
+                if (event.charCode === 13) {
                   handleJoin();
                 }
               }}
