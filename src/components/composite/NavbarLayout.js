@@ -110,13 +110,14 @@ const NavbarLayout = ({ width, onLogout }) => {
       style={{ width: width > 1023 && `calc(${width}px - 320px)` }}
     >
       <div className="flex justify-between flex-none lg:hidden w-full">
-        <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost bg-gray-300">
-          <IoMenu />
-        </label>
+        <button onClick={() => navigate("/")}>
+          <img src="/images/mtms-logo.png" alt="logo" className="h-10" />
+        </button>
+
         <div className="flex gap-2">
-          <button onClick={() => navigate("/")}>
-            <img src="/images/mtms-logo.png" alt="logo" className="h-10" />
-          </button>
+          <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost bg-gray-300">
+            <IoMenu />
+          </label>
           { renderContentCheckOut() }
         </div>
       </div>
