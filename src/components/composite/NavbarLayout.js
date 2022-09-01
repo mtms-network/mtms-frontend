@@ -36,7 +36,7 @@ const NavbarLayout = ({ width, onLogout }) => {
         <button onClick={() => navigate("/")}>
           <img src="/images/mtms-logo.png" alt="logo" className="h-10" />
         </button>
-        <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
+        <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost bg-gray-300">
           <IoMenu />
         </label>
       </div>
