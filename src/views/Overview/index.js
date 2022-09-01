@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { MainLayout } from "components";
-import { Button, GroupLayout, GroupTitle, Input } from "components";
-import { IoCalendarSharp } from "react-icons/io5";
+import { MainLayout, Button, GroupLayout, GroupTitle, Input } from "components";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import { getBoxs } from "../../services/orverview.service";
+
 const Overview = ({ t }) => {
   const [boxs, setBoxs] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const data = await getBoxs();
+      await setBoxs(data);
+    } catch (error) {}
+  };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    let _boxs = await getBoxs();
-    await setBoxs(_boxs);
-  };
-  console.log(boxs);
   return (
     <MainLayout>
       <div className="flex flex-row w-full items-center pb-5">
@@ -39,7 +40,7 @@ const Overview = ({ t }) => {
                   <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between">
                     <div>{t("overview.owning")}</div>
                     <div className="text-orange-base font-bold">
-                      {box.owning} {t("overview.box")}
+                      {box?.owning} {t("overview.box")}
                     </div>
                   </div>
                 </div>
@@ -47,14 +48,14 @@ const Overview = ({ t }) => {
                   <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between	">
                     <div>{t("overview.available_unbox")}</div>
                     <div className="text-orange-base font-bold">
-                      {box.avaliable} {t("overview.box")}
+                      {box?.avaliable} {t("overview.box")}
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 flex justify-center">
-                <Button disabled={true} className="btn-primary w-40">
+                <Button disabled className="btn-primary w-40">
                   {t("overview.open_box")}
                 </Button>
               </div>
