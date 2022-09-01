@@ -20,7 +20,7 @@ export function GoogleButton({ showTitle = true }) {
           draft.isAuthenticated = true;
           draft.user = data?.user;
         });
-        navigate("/");
+        navigate("/meeting");
       }
     } catch (error) {
       console.log("GoogleButton:: error:", error);
