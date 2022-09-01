@@ -179,7 +179,7 @@ const MeetingHistory = ({ className, t }) => {
                       <td className="bg-white">{item?.title}</td>
                       <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
                       <td className="bg-white">{item?.start_date_time}</td>
-                      <td className="flex justify-left align-middle bg-white">
+                      <td className="bg-white">
                         {item?.ended_at || "-"}
                       </td>
                       <td className="bg-white text-center">
