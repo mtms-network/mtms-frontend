@@ -144,6 +144,11 @@ const ScheduleMeetingView = ({ t }) => {
     [meeting],
   );
 
+  const canStart = useMemo(
+    () => meeting?.status === MEETING_STATUS.scheduled && !meeting.is_blocked,
+    [meeting],
+  );
+
   useEffect(() => {
     fetchData();
   }, [params.meetingId]);
@@ -225,8 +230,11 @@ const ScheduleMeetingView = ({ t }) => {
           </div>
         </div>
         <div className="flex mb-6 flex-wrap items-center">
-          {canModify && (
-            <Button className="btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4" onClick={handleStart}>
+          {canStart && (
+            <Button
+              className="btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
+              onClick={handleStart}
+            >
               {t("general.start")}
             </Button>
           )}
