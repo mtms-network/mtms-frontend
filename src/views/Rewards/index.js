@@ -171,8 +171,8 @@ const Rewards = () => {
         )}
         <div className="space-y-6">
           <div className="flex w-full bg-white rounded-3xl py-6 px-8">
-            <div className="flex flex-1 flex-row justify-between">
-              <div>
+            <div className="flex flex-1 flex-col sm:flex-row justify-between">
+              <div className="flex flex-col">
                 <p className="font-bold text-2xl">{t("rewards.daily_task")}</p>
                 <p className="text-base">
                   {`${t("rewards.receive_token", {
@@ -180,7 +180,7 @@ const Rewards = () => {
                   })}`}
                 </p>
               </div>
-              <div className="flex flex-row items-end space-x-2">
+              <div className="flex flex-row items-end space-x-2 py-4">
                 <Button
                   className="btn-primary"
                   isLoading={loading}
@@ -213,8 +213,8 @@ const Rewards = () => {
             </div>
           </div>
           <div className="flex w-full bg-white rounded-3xl py-6 px-8">
-            <div className="flex flex-1 flex-row justify-between">
-              <div className="flex flex-row space-x-20">
+            <div className="flex flex-1 flex-col sm:flex-row justify-between">
+              <div className="flex flex-col sm:flex-row sm:space-x-20">
                 <div>
                   <p className="text-base text-gray">{t("rewards.meeting_time")} (hh/mm)</p>
                   <p className="text-orange-base font-bold text-xl">
@@ -228,7 +228,7 @@ const Rewards = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-row items-end space-x-2">
+              <div className="flex flex-row items-end justify-center space-x-2">
                 <Button
                   className="btn-primary"
                   isLoading={loading}
@@ -244,7 +244,7 @@ const Rewards = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-row w-full space-x-5">
+          <div className="flex flex-col sm:flex-row w-full sm:space-x-5">
             <div className="basis-2/3 bg-white rounded-3xl py-6 px-8 grow">
               <div className="flex flex-1 flex-row justify-between">
                 <div>
@@ -299,7 +299,7 @@ const Rewards = () => {
                 </div>
               </div>
             </div>
-            <div className="basis-1/3 bg-white rounded-3xl py-6 px-8">
+            <div className="basis-1/3 bg-white rounded-3xl py-6 px-8 mt-10 sm:mt-0">
               <div className="flex flex-col justify-center items-center">
                 <p className="text-base text-gray">{t("rewards.total_token")}</p>
                 <p className="text-orange-base font-bold text-5xl">{`${

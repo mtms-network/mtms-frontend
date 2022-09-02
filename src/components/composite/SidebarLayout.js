@@ -36,7 +36,7 @@ const SidebarLayout = ({ t }) => {
   return (
     <div className="drawer-side">
       <label htmlFor="my-drawer-3" className="drawer-overlay" />
-      <div className="menu py-4 px-8 overflow-y-auto w-80">
+      <div className="menu py-4 px-8 overflow-y-auto w-80 bg-white rounded-tr-lg rounded-br-lg sm:rounded-none">
         <div>
           <button onClick={() => navigate("/")}>
             <img className="h-14" src="/images/mtms-logo.png" alt="logo" />
@@ -66,7 +66,7 @@ const SidebarLayout = ({ t }) => {
               <button
                 className={classNames(
                   "text-base font-normal",
-                  location.pathname.includes(routeUrls.meeting.path)
+                  location.pathname === `/${routeUrls.meeting.path}`
                     ? "btn btn-base justify-start font-medium"
                     : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
                 )}
@@ -75,7 +75,7 @@ const SidebarLayout = ({ t }) => {
                 <IconBase
                   icon="/icons/icons/calendar-outline.svg"
                   iconActivated="/icons/icons/calendar-fill.svg"
-                  isActive={location.pathname.includes(routeUrls.meeting.path)}
+                  isActive={location.pathname === `/${routeUrls.meeting.path}`}
                 />
                 <p className="pl-2">{t("sidebar.meeting")}</p>
               </button>

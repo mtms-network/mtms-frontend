@@ -4,6 +4,10 @@ export const getAccessToken = () => {
   return localStorage.getItem(LOCAL_STORAGE_KEYS.accessToken);
 };
 
+export const setUserInfo = ({ user }) => {
+  localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
+};
+
 export const getUser = () => {
   const user = localStorage.getItem(LOCAL_STORAGE_KEYS.user);
   return user ? JSON.parse(user) : null;

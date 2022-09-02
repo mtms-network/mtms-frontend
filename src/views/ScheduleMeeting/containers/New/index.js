@@ -227,7 +227,7 @@ const ScheduleMeetingItem = ({ t }) => {
               <GroupTitle icon={<IoTv />} title={t("schedule_meeting.scheduled_meetings")} />
             </div>
           </div>
-          <div className="w-[60%] m-auto bg-white rounded-[20px]">
+          <div className="w-[90%] m-auto bg-white rounded-[20px] md:w-[80%] lx:w-[60%]">
             <form onSubmit={handleSubmit(onSubmit)}>
               <GroupLayout className="flex flex-col justify-between">
                 <div className="w-full h-auto">
@@ -360,9 +360,9 @@ const ScheduleMeetingItem = ({ t }) => {
               </GroupLayout>
             </form>
             <div className="w-full sm:flex sm:flex-row justify-between pt-2 pb-8 space-y-2 sm:space-y-0">
-              <div className="space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
+              <div className="w-full flex justify-center items-center">
                 <Button
-                  className="btn btn-primary btn-outline"
+                  className="btn btn-primary btn-outline mr-4"
                   type="submit"
                   onClick={() => {
                     navigate(`/${routeUrls.scheduleMeeting.path}`);
