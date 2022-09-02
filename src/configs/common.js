@@ -62,3 +62,18 @@ export const WALLET_PROVIDER = {
     image: "/icons/avalanche-logo.png",
   },
 };
+
+export const BOXES = [
+  {
+    photo: "/images/common-box.svg",
+    name: "COMMON BOX",
+    owning: 1,
+    avaliable: 1,
+  },
+  {
+    photo: "/images/ipic-box.svg",
+    name: "EPIC BOX",
+    owning: 2,
+    avaliable: 1,
+  },
+];

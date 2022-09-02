@@ -44,7 +44,7 @@ const ScheduleMeetingHistories = ({ t }) => {
 
   return (
     <MainLayout>
-      <div className="py-[75px]">
+      <div className="py-[75px] flex justify-center">
         <div className="text-center">
           <div
             className="inline-block bg-primary border-0 py-[20px] px-[20px] rounded-[20px] cursor-pointer"
@@ -60,8 +60,11 @@ const ScheduleMeetingHistories = ({ t }) => {
         </div>
       </div>
       <div className="flex flex-col gap-4 relative">
-        <div className="flex justify-between items-center">
-          <GroupTitle className="pb-[0px]" title={t("schedule_meeting.meetings_today")} />
+        <div className="flex justify-center sm:justify-between items-center flex-col sm:flex-row">
+          <GroupTitle
+            className="sm:pb-0 pb-4 flex justify-center"
+            title={t("schedule_meeting.meetings_today")}
+          />
           <Pagination
             page={histories.pagination?.current_page}
             totalPage={histories.pagination?.last_page}

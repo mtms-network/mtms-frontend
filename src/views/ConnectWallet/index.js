@@ -8,6 +8,8 @@ import { useWallet } from "react-binance-wallet";
 import { useMetaMask } from "metamask-react";
 import { WALLET_PROVIDER } from "configs";
 import { connectWallet } from "services";
+import { handleHttpError, setUserInfo } from "helpers";
+import { message } from "antd";
 
 const ConnectWallet = ({ t }) => {
   const [appStore, updateAppStore] = useAppStore();
@@ -25,11 +27,14 @@ const ConnectWallet = ({ t }) => {
 
   const handleValidWallet = (data) => {
     try {
-      // setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
-      // updateAppStore((draft) => {
-      //   draft.isAuthenticated = true;
-      //   draft.user = data?.user;
-      // });
+      const newUser = {
+        ...appStore.user,
+        profile: { ...appStore.use.profile, wallets: data },
+      };
+      setUserInfo({ user: newUser });
+      updateAppStore((draft) => {
+        draft.user = newUser;
+      });
     } catch (error) {}
   };
 
@@ -49,8 +54,13 @@ const ConnectWallet = ({ t }) => {
         if (data) {
           handleValidWallet(data);
         }
+      } else {
+        console.log(res);
       }
-    } catch (error) {}
+    } catch (error) {
+      const errorData = handleHttpError(error);
+      message.error(errorData.messageDetail);
+    }
   };
   return (
     <MainLayout>

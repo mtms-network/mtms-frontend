@@ -4,6 +4,7 @@ import { signInSocial } from "services";
 import { setTokenLoginSucceeded } from "helpers";
 import { useAppStore } from "stores/app.store";
 import { useNavigate } from "react-router-dom";
+import { routeUrls } from "configs";
 import { WalletButton } from "../WalletButtons";
 
 export function GoogleButton({ showTitle = true }) {
@@ -20,7 +21,7 @@ export function GoogleButton({ showTitle = true }) {
           draft.isAuthenticated = true;
           draft.user = data?.user;
         });
-        navigate("/meeting");
+        navigate(`/${routeUrls.meeting.path}`);
       }
     } catch (error) {
       console.log("GoogleButton:: error:", error);
