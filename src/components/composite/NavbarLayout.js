@@ -9,6 +9,7 @@ import { InputSingle } from "components/base/Input";
 import { Button, IconBase } from "components/base";
 import { startMeeting } from "services";
 import classNames from "classnames";
+import UserInfo from "./UserInfo";
 
 const NavbarLayout = ({ width, onLogout }) => {
   const { t } = useTranslation();
@@ -54,78 +55,7 @@ const NavbarLayout = ({ width, onLogout }) => {
               <img src="/icons/icons/camera-white-fill.svg" alt="buy mtms" className="pr-2" />
               {t("home.start_a_instant_meeting")}
             </Button>
-            <div className="dropdown dropdown-end">
-              <label
-                tabIndex="0"
-                className="hover:cursor-pointer flex flex-row space-x-2 justify-center items-center"
-              >
-                <div className="avatar">
-                  {user?.profile?.avatar ? (
-                    <div className="!flex w-12 rounded-lg justify-center items-center text-black">
-                      <img src={`${LIVE_URL}${user?.profile?.avatar}`} alt="avatar" />
-                    </div>
-                  ) : (
-                    <div className="!flex w-12 rounded-lg justify-center items-center bg-primary text-black">
-                      <span className="text-xl text-white">{user?.profile?.name[0]}</span>
-                    </div>
-                  )}
-                </div>
-              </label>
-              <div
-                tabIndex="0"
-                className="right-8 py-6 shadow menu menu-compact dropdown-content rounded-box w-44 z-50 bg-white space-y-2"
-              >
-                <Link
-                  to={`/${routeUrls.profileUpdate.path}`}
-                  className={classNames(
-                    "btn btn-block btn-primary",
-                    "bg-white border-0 text-black",
-                    "hover:text-white hover:bg-primary",
-                    "flex justify-start rounded-none z-10",
-                  )}
-                >
-                  {t("profile.edit")}
-                </Link>
-                <Link
-                  to={`/${routeUrls.profileChangePassword.path}`}
-                  className={classNames(
-                    "btn btn-block btn-primary",
-                    "bg-white border-0 text-black",
-                    "hover:text-white hover:bg-primary",
-                    "flex justify-start rounded-none z-10",
-                  )}
-                >
-                  {t("user.change_password")}
-                </Link>
-                <Link
-                  to={`/${routeUrls.connectWallet.path}`}
-                  className={classNames(
-                    "btn btn-block btn-primary",
-                    "bg-white border-0 text-black",
-                    "hover:text-white hover:bg-primary",
-                    "flex justify-start rounded-none z-10",
-                  )}
-                >
-                  Connect Wallet
-                </Link>
-                <a
-                  className={classNames(
-                    "btn btn-block btn-primary",
-                    "bg-white border-0 text-black",
-                    "hover:text-white hover:bg-primary",
-                    "flex justify-start rounded-none z-10",
-                  )}
-                  onClick={onLogout}
-                >
-                  <IconBase
-                    icon="/icons/icons/logout-outline.svg"
-                    alt="logout-icon"
-                    className="pr-4"
-                  />
-                  {t("auth.logout")}
-                </a>
-              </div>
-            </div>
+            <UserInfo onLogout={onLogout} />
           </div>
         </div>
       </div>
