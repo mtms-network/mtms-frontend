@@ -66,7 +66,7 @@ function Login({ t }) {
       });
       setLoading(false);
 
-      navigate("/");
+      navigate(`/${routeUrls.meeting.path}`);
     } catch (error) {
       if (error) {
         const errorData = handleHttpError(error);

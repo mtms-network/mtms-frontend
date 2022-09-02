@@ -172,7 +172,7 @@ const ScheduleMeetingView = ({ t }) => {
         />
       </div>
       <GroupLayout className="flex flex-col justify-between">
-        <h1 className="font-[700] text-[32px]">{meetingStore?.meeting?.title}</h1>
+        <h1 className="font-[700] text-[32px] truncate">{meetingStore?.meeting?.title}</h1>
         <div className="text-[16px] text-gray mb-[24px]">{meetingStore?.meeting?.type.name}</div>
         <div className="flex flex-wrap gap-x-5 gap-y-3 mb-[24px]">
           <div className="flex space-x-[8px] items-center">
@@ -224,44 +224,43 @@ const ScheduleMeetingView = ({ t }) => {
             </div>
           </div>
         </div>
-        <div className="flex space-x-[24px] mb-[24px]">
+        <div className="flex mb-6 flex-wrap items-center">
           {canModify && (
-            <Button
-              className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]"
-              onClick={handleStart}
-            >
+            <Button className="btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4" onClick={handleStart}>
               {t("general.start")}
             </Button>
           )}
           <Button
-            className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+            className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
             onClick={handleCopyLink}
           >
             <IconBase className="mr-2" icon="/icons/icons/copy-primary-outline.svg" />
             {t("general.copy_link")}
           </Button>
           {canModify && (
-            <Link
-              className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
-              to={`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`}
+            <Button
+              className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
+              onClick={() => {
+                navigate(`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`);
+              }}
             >
               {t("general.edit")}
-            </Link>
+            </Button>
           )}
           {canModify && (
             <Button
-              className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+              className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
               onClick={handleDeleteMeeting}
             >
               {t("general.delete")}
             </Button>
           )}
         </div>
-        <hr className="mb-[24px]" />
+        <hr className="mb-6" />
         <div>
           <GroupTitle icon={<IoTv />} title={t("general.agenda")} />
         </div>
-        <p className="mb-[24px]">{meetingStore?.meeting?.agenda}</p>
+        <p className="mb-6 truncate flex-wrap">{meetingStore?.meeting?.agenda}</p>
         <div>
           <GroupTitle icon={<IoTv />} title={t("meeting.props.description")} />
         </div>

@@ -70,7 +70,7 @@ const Routers = () => {
         <Route path={`/${routeUrls.connectWallet.path}`} element={<ConnectWallet />} />
         <Route path={`/${routeUrls.meeting.path}`} element={<Meeting />} />
         <Route index element={<Overview />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/meeting" replace />} />
       </Routes>
     </Suspense>
   );

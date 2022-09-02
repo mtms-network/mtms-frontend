@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import React, { useEffect, useState } from "react";
 import { getLanguage, resetUserToken, setLanguage } from "helpers";
 import { useAuth, useDimensions } from "hooks";
@@ -10,10 +11,9 @@ import i18n from "i18n";
 import { useMeetingStore } from "stores/meeting.store";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
-import SidebarUserCenter from "./SidebarUserCenter";
 import BrandLogoLoading from "./BrandLogoLoading";
 
-const Layout = ({ children, bottom, contentClassName = "", userCenter = false }) => {
+const Layout = ({ children, bottom, contentClassName = "" }) => {
   const [appStore, updateAppStore] = useAppStore();
   const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [loading, setLoading] = useState(false);
@@ -110,7 +110,7 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
             )}
           </div>
         </div>
-        {userCenter ? <SidebarUserCenter /> : <SidebarLayout />}
+        <SidebarLayout />
       </div>
     </I18nextProvider>
   );

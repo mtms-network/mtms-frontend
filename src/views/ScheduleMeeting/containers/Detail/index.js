@@ -428,9 +428,9 @@ const ScheduleMeetingDetail = ({ t }) => {
               </GroupLayout>
             </form>
             <div className="w-full sm:flex sm:flex-row justify-between pt-2 pb-8 space-y-2 sm:space-y-0">
-              <div className="sm:space-x-4 space-y-2 sm:space-y-0 w-full flex justify-center">
+              <div className="w-full flex justify-center items-center">
                 <Button
-                  className="btn btn-primary btn-outline"
+                  className="btn btn-primary btn-outline mr-4"
                   type="submit"
                   onClick={() => {
                     navigate(`/${routeUrls.scheduleMeetingView.path}/${params.meetingId}`);

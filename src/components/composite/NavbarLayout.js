@@ -1,13 +1,13 @@
+/* eslint-disable no-empty */
 import React, { useCallback, useMemo } from "react";
 import { IoMenu } from "react-icons/io5";
 import { useAppStore } from "stores/app.store";
-import { COMMON, LIVE_MEETING_URL, LIVE_URL, routeUrls } from "configs";
+import { LIVE_URL, routeUrls } from "configs";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { InputSingle } from "components/base/Input";
 import { Button, IconBase } from "components/base";
 import { startMeeting } from "services";
-import { getAccessToken } from "helpers";
 import classNames from "classnames";
 
 const NavbarLayout = ({ width, onLogout }) => {
@@ -32,15 +32,14 @@ const NavbarLayout = ({ width, onLogout }) => {
       className="navbar fixed z-30 h-16 w-full bg-white flex-1"
       style={{ width: width > 1023 && `calc(${width}px - 320px)` }}
     >
-      <div className="flex justify-end flex-none lg:hidden w-full">
+      <div className="flex lg:justify-end justify-between lg:hidden sm:w-full w-auto">
+        <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost text-black text-xl">
+          <IoMenu />
+        </label>
         <button onClick={() => navigate("/")}>
           <img src="/images/mtms-logo.png" alt="logo" className="h-10" />
         </button>
-        <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
-          <IoMenu />
-        </label>
       </div>
-
       <div className="justify-between hidden lg:flex w-full">
         <div className="flex-1 flex justify-start items-start pr-10 max-w-[50%]">
           <InputSingle
