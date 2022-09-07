@@ -6,7 +6,7 @@ import { BOXES } from "configs";
 import { getBoxs } from "../../services/orverview.service";
 
 const Overview = ({ t }) => {
-  const [boxes, setBoxes] = useState(BOXES);
+  const [boxes, setBoxes] = useState([]);
   const [isDefaultBoxes, setIsDefaultBoxes] = useState(true);
 
   const fetchData = async () => {
@@ -15,6 +15,8 @@ const Overview = ({ t }) => {
       if (data && data.length) {
         setBoxes(data);
         setIsDefaultBoxes(false);
+      } else {
+        setBoxes(BOXES);
       }
     } catch (error) {}
   };

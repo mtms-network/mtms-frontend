@@ -22,7 +22,7 @@ const useAuth = () => {
       }
 
       if (location.pathname === `/${routeUrls.login.path}`) {
-        navigate("/");
+        navigate(`/${routeUrls.meeting.path}`);
       }
     } else if (location.pathname !== `/${routeUrls.login.path}`) {
       navigate(`/${routeUrls.login.path}`);
