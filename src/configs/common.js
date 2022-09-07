@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 export const LIVE_MEETING_URL = "https://meeting.mtms.live";
 
 export const LIVE_URL = "https://api.mtms.live";
@@ -77,3 +78,7 @@ export const BOXES = [
     avaliable: 1,
   },
 ];
+
+export const CONFIGS = {
+  boxUrl: window?._env_?.REACT_APP_BOX_URL || "https://sandbox-box.mtms.live",
+};
