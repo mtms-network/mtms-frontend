@@ -13,3 +13,4 @@ export { default as IconBase } from "./IconBase";
 export { default as IconButton } from "./IconButton";
 export { default as TimePicker } from "./TimePicker";
 export { default as InputNumber } from "./InputNumber";
+export { default as UserWallet } from "./UserWallet";
