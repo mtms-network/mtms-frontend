@@ -44,8 +44,8 @@ const SidebarLayout = ({ t, onLogout }) => {
           </button>
         </div>
         <div className="flex flex-1 flex-col justify-between">
-          <div className="pt-8 space-y-4">
-            <div className="w-full px-4 pb-8">
+          <div className="pt-8 space-y-4 sm:pt-0">
+            <div className="w-full px-4 pb-8 sm:pb-0">
               <UserInfo onLogout={onLogout} className="flex sm:hidden" />
             </div>
             <div className="w-full">
