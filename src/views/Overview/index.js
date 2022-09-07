@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { MainLayout, Button, GroupLayout, GroupTitle, Input } from "components";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
-import { BOXES } from "configs";
+import { BOXES, CONFIGS } from "configs";
+import { useNavigate } from "react-router-dom";
+import { getAccessToken } from "helpers";
 import { getBoxs } from "../../services/orverview.service";
 
 const Overview = ({ t }) => {
   const [boxes, setBoxes] = useState(BOXES);
   const [isDefaultBoxes, setIsDefaultBoxes] = useState(true);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -19,6 +22,14 @@ const Overview = ({ t }) => {
     } catch (error) {}
   };
 
+  const onBuyBox = () => {
+    const token = getAccessToken();
+    if (token) {
+      window.location = `${CONFIGS.boxUrl}?t=${token}`;
+      // window.location.assign('http://github.com');
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -27,6 +38,10 @@ const Overview = ({ t }) => {
     <MainLayout>
       <div className="flex flex-row w-full items-center pb-5">
         <p className="font-bold sm:w-full text-lg text-dark-base">{t("overview.your_mtms_box")}</p>
+        <Button className="btn btn-primary" onClick={onBuyBox}>
+          <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
+          {t("blindBox.buy_box")}
+        </Button>
       </div>
       <div
         className={classNames(
