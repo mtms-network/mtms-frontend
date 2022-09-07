@@ -54,7 +54,7 @@ export default function GuestFormLayout({ children }) {
   ) : (
     <I18nextProvider i18n={i18next}>
       <div className="flex flex-row ">
-        <div className="flex-1 flex flex-col justify-center bg-blue-base pl-20 pr-12 min-h-screen">
+        <div className="flex-1 hidden sm:flex flex-col justify-center bg-blue-base pl-20 pr-12 min-h-screen">
           <div>
             <button onClick={() => navigate("/")}>
               <img className="h-14" src="/images/mtms-logo-white.png" alt="logo" />
@@ -69,7 +69,7 @@ export default function GuestFormLayout({ children }) {
             <img src="/images/welcome.png" alt="welcome" />
           </div>
         </div>
-        <div className="flex-1 flex flex-col justify-center px-20 bg-white min-h-screen">
+        <div className="flex-1 flex flex-col justify-center px-10 sm:px-20 bg-white min-h-screen">
           <div className="flex flex-row space-x-2 py-4">
             <button
               className={classNames("flex flex-row text-base justify-start font-medium")}

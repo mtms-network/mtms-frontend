@@ -11,7 +11,7 @@ const MeetingItem = ({ data, className }) => {
   const navigate = useNavigate();
 
   const canModify = useMemo(
-    () => data.status === MEETING_STATUS.scheduled && data.can_moderate && !data.is_blocked,
+    () => data.status === MEETING_STATUS.scheduled && !data.is_blocked,
     [data],
   );
 
