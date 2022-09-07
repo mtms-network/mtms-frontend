@@ -44,22 +44,24 @@ const ConnectWallet = ({ t }) => {
   };
 
   const handleConnectMetaMaskWallet = async () => {
+    const connectWalletKey = "connect_wallet_key";
     try {
+      message.loading({ content: `${t("global.loading")} ...`, key: connectWalletKey });
       const res = await connectMetaMask();
-      if (res) {
+      if (res.length) {
         const data = await connectWallet({
           walletAddress: res[0],
           provider: WALLET_PROVIDER.metamask.type,
         });
-        if (data) {
-          handleValidWallet(data);
-        }
+        await handleValidWallet(data);
       } else {
-        console.log(res);
+        throw new Error(t("global.could_not_find", { attribute: "Metamask" }));
       }
     } catch (error) {
-      const errorData = handleHttpError(error);
-      message.error(errorData.messageDetail);
+      message.error({
+        content: handleHttpError(error)?.detail?.wallet_address || error?.message,
+        key: connectWalletKey,
+      });
     }
   };
   return (

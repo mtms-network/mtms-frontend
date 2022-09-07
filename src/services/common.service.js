@@ -28,15 +28,10 @@ export const changePassword = async ({ oldPassword = "", password = "", confirmP
 };
 
 export const updateProfile = async (params) => {
-  try {
-    const res = await client.post(BASE_API.profile, {
-      ...params,
-    });
-    return res?.data;
-  } catch (error) {
-    console.error("updateProfile", error);
-    return null;
-  }
+  const res = await client.post(BASE_API.profile, {
+    ...params,
+  });
+  return res?.data;
 };
 
 export const connectWallet = async ({
