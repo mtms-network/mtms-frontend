@@ -4,7 +4,7 @@ import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import { BOXES, CONFIGS } from "configs";
 import { useNavigate } from "react-router-dom";
-import { getAccessToken } from "helpers";
+import { getAccessToken, getUser } from "helpers";
 import { getBoxs } from "../../services/orverview.service";
 
 const Overview = ({ t }) => {
@@ -26,9 +26,16 @@ const Overview = ({ t }) => {
 
   const onBuyBox = () => {
     const token = getAccessToken();
+    const user = getUser();
+
+    let params = "";
     if (token) {
-      window.location = `${CONFIGS.boxUrl}?t=${token}`;
-      // window.location.assign('http://github.com');
+      params = `?t=${token}`
+      if(user?.wallets?.length){
+        params += `&w=${user.wallets[0]?.wallet_address}`;
+      }
+
+      window.location = `${CONFIGS.boxUrl}${params}`;
     }
   };
 
