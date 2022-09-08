@@ -47,10 +47,6 @@ const Overview = ({ t }) => {
     <MainLayout>
       <div className="flex flex-row w-full items-center pb-5">
         <p className="font-bold sm:w-full text-lg text-dark-base">{t("overview.your_mtms_box")}</p>
-        <Button className="btn btn-primary" onClick={onBuyBox}>
-          <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
-          {t("blindBox.buy_box")}
-        </Button>
       </div>
       <div
         className={classNames(
@@ -97,6 +93,14 @@ const Overview = ({ t }) => {
             </div>
           </div>
         ))}
+
+
+        <div>
+          <Button className="btn btn-primary" onClick={onBuyBox}>
+            <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
+            {t("blindBox.buy_box")}
+          </Button>
+        </div>
       </div>
     </MainLayout>
   );
