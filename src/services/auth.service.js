@@ -1,5 +1,6 @@
-import { BASE_API } from "configs";
+import {BASE_API, LIVE_API} from "configs";
 import { createPublicInstance } from "./base";
+import axios from "axios";
 
 const client = createPublicInstance(BASE_API.auth);
 
@@ -80,3 +81,12 @@ export const verifyActiveToken = async ({ token }) => {
   });
   return res?.data;
 };
+
+export const getUser = async (token) => {
+  const res = await axios.get(`${LIVE_API  }/auth/user`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    },
+  });
+  return res?.data;
+}
