@@ -46,11 +46,11 @@ const Overview = ({ t }) => {
   return (
     <MainLayout>
       <div className="flex flex-row w-full items-center pb-5">
-        <div className="flex flow-row justify-between w-full pr-8">
+        <div className="flex flex-col w-full">
           <p className="font-bold sm:w-full text-lg text-dark-base">
             {t("overview.your_mtms_box")}
           </p>
-          <div className="flex flex-row">
+          <div className="flex flex-row pt-2">
             <Button className="btn btn-primary" onClick={onBuyBox}>
               <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
               {t("blindBox.buy_box")}
