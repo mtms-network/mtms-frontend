@@ -227,6 +227,24 @@ const Rewards = () => {
                     {`${walletStore?.wallet?.total_token_all_days} MTMS`}
                   </p>
                 </div>
+                <div>
+                  <p className="text-base text-gray">{t("rewards.today_earning")}</p>
+                  <p className="text-orange-base font-bold text-xl">
+                    {`${walletStore?.wallet?.total_token_today} MTMS`}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-base text-gray">{t("rewards.earning_rate")} (MTMS/{t('list.general.durations.m')})</p>
+                  <p className="text-orange-base font-bold text-xl">
+                    {`${walletStore?.wallet?.meeting_cost}`}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-base text-gray">{t("rewards.max_daily_earnings")} ({t('list.general.durations.minutes')})</p>
+                  <p className="text-orange-base font-bold text-xl">
+                    {`${walletStore?.wallet?.max_minute_day}`}
+                  </p>
+                </div>
               </div>
               <div className="flex flex-row items-end justify-center space-x-2">
                 <Button

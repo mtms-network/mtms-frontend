@@ -27,7 +27,8 @@ export function WalletButtonGroup() {
     try {
       const newUser = {
         ...appStore.user,
-        profile: { ...appStore.use.profile, wallets: data },
+        wallets: data?.wallets,
+        profile: { ...appStore.user.profile, wallets: data?.wallets},
       };
       setUserInfo({ user: newUser });
       updateAppStore((draft) => {
