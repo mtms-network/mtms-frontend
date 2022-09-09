@@ -30,8 +30,8 @@ const Overview = ({ t }) => {
 
     let params = "";
     if (token) {
-      params = `?t=${token}`
-      if(user?.wallets?.length){
+      params = `?t=${token}`;
+      if (user?.wallets?.length) {
         params += `&w=${user.wallets[0]?.wallet_address}`;
       }
 
@@ -46,7 +46,17 @@ const Overview = ({ t }) => {
   return (
     <MainLayout>
       <div className="flex flex-row w-full items-center pb-5">
-        <p className="font-bold sm:w-full text-lg text-dark-base">{t("overview.your_mtms_box")}</p>
+        <div className="flex flow-row justify-between w-full pr-8">
+          <p className="font-bold sm:w-full text-lg text-dark-base">
+            {t("overview.your_mtms_box")}
+          </p>
+          <div className="flex flex-row">
+            <Button className="btn btn-primary" onClick={onBuyBox}>
+              <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
+              {t("blindBox.buy_box")}
+            </Button>
+          </div>
+        </div>
       </div>
       <div
         className={classNames(
@@ -93,14 +103,6 @@ const Overview = ({ t }) => {
             </div>
           </div>
         ))}
-
-
-        <div>
-          <Button className="btn btn-primary" onClick={onBuyBox}>
-            <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
-            {t("blindBox.buy_box")}
-          </Button>
-        </div>
       </div>
     </MainLayout>
   );
