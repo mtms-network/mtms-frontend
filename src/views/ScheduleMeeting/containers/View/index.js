@@ -19,7 +19,7 @@ import { useMeetingStore } from "stores/meeting.store";
 import { createPrivateInstance } from "services/base";
 import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL, COMMON, MEETING_STATUS } from "configs";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { getMeetingDetail } from "services/meeting.service";
+import { getMeetingContact, getMeetingDetail } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { message, Modal } from "antd";
@@ -53,13 +53,6 @@ const ScheduleMeetingView = ({ t }) => {
         value: item.name,
       }));
       setTypes(list);
-    }
-    if (meetingStore?.categories) {
-      const list = meetingStore.categories.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
     }
   };
 
@@ -127,11 +120,16 @@ const ScheduleMeetingView = ({ t }) => {
     }
   };
 
+  useEffect(() => {
+    if (meeting) {
+      prepareData();
+    }
+  }, [meeting]);
+
   const fetchData = async () => {
     try {
       setFetchLoading(true);
-      await fetchMeeting();
-      await prepareData();
+      await Promise.all([fetchMeeting()]);
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
@@ -265,6 +263,22 @@ const ScheduleMeetingView = ({ t }) => {
           )}
         </div>
         <hr className="mb-6" />
+        <div>
+          <GroupTitle className="!pb-0" icon={<IoTv />} title={t("schedule_meeting.attendees")} />
+          <GroupLayout className="flex flex-wrap gap-[12px] !px-0 !pt-2 !pb-6">
+            {meeting?.invitees &&
+              meeting.invitees?.map((item, key) => {
+                return (
+                  <span
+                    key={key}
+                    className="rounded-[20px] px-[12px] py-[6px] bg-slate-base bg-secondary text-primary"
+                  >
+                    {item?.contact?.email}
+                  </span>
+                );
+              })}
+          </GroupLayout>
+        </div>
         <div>
           <GroupTitle icon={<IoTv />} title={t("general.agenda")} />
         </div>

@@ -24,6 +24,8 @@ export const getMeetingHistories = async ({
   status,
   sort_by,
   order,
+  startDate,
+  endDate,
 }) => {
   try {
     const defaultFilters = {
@@ -31,8 +33,8 @@ export const getMeetingHistories = async ({
       order,
       type,
       status,
-      start_date: "",
-      end_date: "",
+      start_date: startDate || "",
+      end_date: endDate || "",
       name: "",
       current_page: page || 1,
       per_page: limit || 10,
@@ -59,6 +61,8 @@ export const getScheduleMeetings = async ({
   status,
   order,
   sort_by,
+  startDate,
+  endDate,
 }) => {
   try {
     const defaultFilters = {
@@ -66,6 +70,9 @@ export const getScheduleMeetings = async ({
       sort_by,
       current_page: page || 1,
       per_page: limit || 10,
+      status,
+      start_date: startDate || "",
+      end_date: endDate || "",
     };
     if (title) {
       defaultFilters.keyword = title;
