@@ -17,19 +17,19 @@ export default function UserWallet() {
   ) : (
     <div className="flex flex-row border-1 h-auto p-3 rounded-2xl">
       {walletAddress ? (
-        <div className="pr-4">
+        <div className="pr-4 items-center flex">
           <img
             src={WALLET_PROVIDER[appStore.user?.wallets?.[0]?.wallet_type]?.image}
             alt="wallet-logo"
-            className="h-12"
+            className="h-fit w-fit max-h-10 max-w-10"
           />
         </div>
       ) : (
         ""
       )}
-      <div>
+      <div className="truncate">
         <p className="text-lg text-gray">{`${walletType} wallet`}</p>
-        <span className="font-bold text-lg text-black-base">{`${walletAddress || ""}`}</span>
+        <span className="font-bold text-lg text-black-base truncate ">{`${walletAddress || ""}`}</span>
       </div>
     </div>
   );
