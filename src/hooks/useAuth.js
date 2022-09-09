@@ -1,15 +1,16 @@
 import { useEffect } from "react";
-import { getAccessToken, getUser, setLanguage } from "helpers";
+import {getAccessToken, getParamUrl, setLanguage} from "helpers";
 import { useNavigate, useLocation } from "react-router-dom";
-import { routeUrls } from "configs";
+import {LOCAL_STORAGE_KEYS, routeUrls} from "configs";
 import { useAppStore } from "stores/app.store";
+import { getUser } from "../services/auth.service";
 
 const useAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [appStore, updateAppStore] = useAppStore();
 
-  const checkToken = () => {
+  const check = () => {
     const token = getAccessToken();
 
     if (token) {
@@ -26,6 +27,33 @@ const useAuth = () => {
       }
     } else if (location.pathname !== `/${routeUrls.login.path}`) {
       navigate(`/${routeUrls.login.path}`);
+    }
+  }
+
+  const checkToken = () => {
+    const paramToken = getParamUrl('t');
+    const checkAuthByParam = async () => {
+      try {
+        if(paramToken){
+          const user = await getUser(paramToken);
+          if(user){
+
+            localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
+            localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, paramToken);
+            navigate('/');
+          }
+        }
+
+      }
+      catch (err){}
+    }
+
+    if(paramToken){
+      checkAuthByParam().then((res) => {
+        check();
+      });
+    }else{
+      check();
     }
   };
 

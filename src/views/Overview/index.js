@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import { MainLayout, Button, GroupLayout, GroupTitle, Input } from "components";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
-import {BOXES, CONFIGS, LOCAL_STORAGE_KEYS} from "configs";
+import {BOXES, CONFIGS} from "configs";
 import { useNavigate } from "react-router-dom";
-import {getAccessToken, getParamUrl, setTokenLoginSucceeded} from "helpers";
+import {getAccessToken} from "helpers";
 import { getBoxs } from "../../services/orverview.service";
 import { getUser } from "../../services/auth.service";
+import {useAppStore} from "../../stores/app.store";
 
 const Overview = ({ t }) => {
   const [boxes, setBoxes] = useState([]);
   const [isDefaultBoxes, setIsDefaultBoxes] = useState(true);
   const navigate = useNavigate();
+  const [appStore, updateAppStore] = useAppStore();
 
   const fetchData = async () => {
     try {
@@ -40,27 +42,11 @@ const Overview = ({ t }) => {
     }
   };
 
-  const checkAuthByParam = async () => {
-    try {
-      const paramToken = getParamUrl('t');
-      if(paramToken){
-        const user = await getUser(paramToken);
-        if(user){
-          console.log('paramToken', paramToken)
-          localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
-          localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, paramToken);
-          navigate('/');
-        }
-      }
-
-    }catch (err){}
-  }
-
-
-  useEffect(async () => {
-    await checkAuthByParam();
-    await fetchData();
-  }, []);
+  useEffect(() => {
+    if(appStore.isAuthenticated){
+      fetchData();
+    }
+  }, [appStore.isAuthenticated]);
 
   return (
     <MainLayout>
