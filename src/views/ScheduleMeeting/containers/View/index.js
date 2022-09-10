@@ -171,9 +171,13 @@ const ScheduleMeetingView = ({ t }) => {
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/calender.svg" alt="" />
             <span>{t("meeting.view.start_time")}: </span>
-            <span className="font-[700] text-[16px]">
-              {moment(meetingStore?.meeting?.start_date_time).format("MMM DD, yyyy h:mm A")}
-            </span>
+
+            <p className="text-md font-bold">
+              {meetingStore?.meeting?.start_date_time &&
+                `${moment(meetingStore?.meeting?.start_date_time).format("HH:mm DD/MM/YYYY")} ${
+                  meetingStore?.meeting?.user_timezone || ""
+                }`}
+            </p>
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
