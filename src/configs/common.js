@@ -72,7 +72,7 @@ export const BOXES = [
     avaliable: 0,
   },
   {
-    photo: "/images/ipic-box.svg",
+    photo: "/images/box-vip.svg",
     name: "EPIC BOX",
     owning: 0,
     avaliable: 0,
