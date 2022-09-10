@@ -7,8 +7,6 @@ import { t } from "i18next";
 import { message } from "antd";
 import moment from "moment";
 
-// const timeZoneString = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
 const MeetingItem = ({ data, className, onDelete }) => {
   const navigate = useNavigate();
 
@@ -16,10 +14,6 @@ const MeetingItem = ({ data, className, onDelete }) => {
     () => data.status === MEETING_STATUS.scheduled && !data.is_blocked,
     [data],
   );
-
-  const startTime = useMemo(() => {
-    return moment(data?.start_date_time).format("YYYY-MM-DD HH:MM");
-  }, [data]);
 
   const handleStart = async () => {
     try {
@@ -107,9 +101,16 @@ const MeetingItem = ({ data, className, onDelete }) => {
           }}
         >
           <div>
-            <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
+            <div className="flex flex-row space-x-2 items-start pt-2 group-hover:text-primary">
               <img src="/images/icon/calender.svg" alt="" />
-              <p className="label-base p-0 group-hover:text-primary">{startTime}</p>
+              <div className="flex flex-col">
+                <p className="label-base p-0 group-hover:text-primary">
+                  {data?.start_date_time &&
+                    `${moment(data?.start_date_time).format("MMM,DD YYYY HH:mm")} ${
+                      data?.user_timezone || ""
+                    }`}
+                </p>
+              </div>
             </div>
             <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
               <img src="/images/icon/clock.svg" alt="" />

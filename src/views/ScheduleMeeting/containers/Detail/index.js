@@ -37,7 +37,7 @@ import {
 import { withTranslation } from "react-i18next";
 import { message } from "antd";
 
-const timeFormat = "MMM DD, yyyy";
+const timezone = Intl.DateTimeFormat().resolvedOptions();
 
 const ScheduleMeetingDetail = ({ t }) => {
   const DURATION_HOURS = [
@@ -212,7 +212,7 @@ const ScheduleMeetingDetail = ({ t }) => {
         setValue("identifier", res.identifier);
         setValue("max_participant_count", res.max_participant_count);
         const startDate = moment(res.start_date_time, "YYYY-MM-DD");
-        const time = moment(res.start_date_time, "hh:mm a");
+        const time = moment(res.start_date_time);
         setStartDateTime(startDate);
         setStartTime(time);
         setDurationHour(Math.floor(res.period / 60));
@@ -333,7 +333,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                       disabledDate={disabledDate}
                       placeholder="Mar 2, 2022 5:02 PM"
                       onChangeDateTime={onChangeDateTime}
-                      format={timeFormat}
+                      format="MMM DD, yyyy"
                       value={startDateTime}
                     />
                   </div>
