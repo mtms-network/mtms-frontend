@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import moment from "moment";
 import {
   Button,
@@ -17,13 +17,13 @@ import {
 import { IoCheckmarkCircleOutline, IoTv } from "react-icons/io5";
 import { useMeetingStore } from "stores/meeting.store";
 import { createPrivateInstance } from "services/base";
-import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL, COMMON, MEETING_STATUS } from "configs";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL, MEETING_STATUS } from "configs";
+import { useNavigate, useParams } from "react-router-dom";
 import { getMeetingDetail } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { message, Modal } from "antd";
-import { calculateDuration } from "../../../../helpers";
+import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -44,6 +44,7 @@ const ScheduleMeetingView = ({ t }) => {
     error: [],
   });
   const [isCopied, setIsCopied] = useState(false);
+  const deleteMeetingModalRef = useRef(null);
 
   const prepareData = () => {
     if (meetingStore?.types) {
@@ -54,27 +55,9 @@ const ScheduleMeetingView = ({ t }) => {
       }));
       setTypes(list);
     }
-    if (meetingStore?.categories) {
-      const list = meetingStore.categories.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
-    }
   };
-
-  const handleDeleteMeeting = () => {
-    confirm({
-      title: t("meeting.props.question_delete"),
-      icon: <ExclamationCircleOutlined />,
-      okText: t("meeting.props.yes"),
-      okType: "danger",
-      cancelText: t("meeting.props.no"),
-      onOk() {
-        deleteMeeting();
-      },
-      onCancel() {},
-    });
+  const onConfirmDeleteMeeting = (item) => {
+    deleteMeetingModalRef.current?.show(item);
   };
 
   const handleCopyLink = () => {
@@ -127,11 +110,16 @@ const ScheduleMeetingView = ({ t }) => {
     }
   };
 
+  useEffect(() => {
+    if (meeting) {
+      prepareData();
+    }
+  }, [meeting]);
+
   const fetchData = async () => {
     try {
       setFetchLoading(true);
-      await fetchMeeting();
-      await prepareData();
+      await Promise.all([fetchMeeting()]);
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
@@ -141,6 +129,11 @@ const ScheduleMeetingView = ({ t }) => {
   const canModify = useMemo(
     () =>
       meeting?.status === MEETING_STATUS.scheduled && meeting.can_moderate && !meeting.is_blocked,
+    [meeting],
+  );
+
+  const canStart = useMemo(
+    () => meeting?.status === MEETING_STATUS.scheduled && !meeting.is_blocked,
     [meeting],
   );
 
@@ -225,8 +218,11 @@ const ScheduleMeetingView = ({ t }) => {
           </div>
         </div>
         <div className="flex mb-6 flex-wrap items-center">
-          {canModify && (
-            <Button className="btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4" onClick={handleStart}>
+          {canStart && (
+            <Button
+              className="btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
+              onClick={handleStart}
+            >
               {t("general.start")}
             </Button>
           )}
@@ -250,13 +246,31 @@ const ScheduleMeetingView = ({ t }) => {
           {canModify && (
             <Button
               className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
-              onClick={handleDeleteMeeting}
+              onClick={() => {
+                onConfirmDeleteMeeting(meetingStore?.meeting);
+              }}
             >
               {t("general.delete")}
             </Button>
           )}
         </div>
         <hr className="mb-6" />
+        <div>
+          <GroupTitle className="!pb-0" icon={<IoTv />} title={t("schedule_meeting.attendees")} />
+          <GroupLayout className="flex flex-wrap gap-[12px] !px-0 !pt-2 !pb-6">
+            {meeting?.invitees &&
+              meeting.invitees?.map((item, key) => {
+                return (
+                  <span
+                    key={key}
+                    className="rounded-[20px] px-[12px] py-[6px] bg-slate-base bg-secondary text-primary"
+                  >
+                    {item?.contact?.email}
+                  </span>
+                );
+              })}
+          </GroupLayout>
+        </div>
         <div>
           <GroupTitle icon={<IoTv />} title={t("general.agenda")} />
         </div>
@@ -265,6 +279,12 @@ const ScheduleMeetingView = ({ t }) => {
           <GroupTitle icon={<IoTv />} title={t("meeting.props.description")} />
         </div>
         <p dangerouslySetInnerHTML={{ __html: meetingStore?.meeting?.description }} />
+        <DeleteMeetingModal
+          onRefresh={() => {
+            navigate(`/${routeUrls.scheduleMeeting.path}`);
+          }}
+          ref={deleteMeetingModalRef}
+        />
       </GroupLayout>
     </MainLayout>
   );

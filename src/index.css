@@ -36,3 +36,21 @@ td {
   height: 1px !important;
   background-color: #ebebeb;
 }
+
+.ant-picker-ok > .ant-btn {
+  color: #0391fe;
+  font-weight: 700;
+  border-radius: 20px;
+  border: 0;
+  background-color: #dbf0ff;
+  padding-right: 16px;
+  padding-left: 16px;
+}
+.ant-picker-ok > .ant-btn:hover {
+  background-color: #0391fe;
+  color: white;
+}
+
+.ant-modal-content {
+  border-radius: 12px;
+}

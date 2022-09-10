@@ -97,7 +97,7 @@ function ResetPassword({ t }) {
           {step === 3 && (
             <div className="pt-4">
               <Input
-                type={"password"}
+                type="password"
                 register={register("newPassword")}
                 label={t("auth.password.props.new_password")}
                 placeholder={t("auth.password.props.new_password")}
@@ -109,7 +109,7 @@ function ResetPassword({ t }) {
           {step === 3 && (
             <div className="pt-4">
               <Input
-                type={"password"}
+                type="password"
                 register={register("newPasswordConfirmation")}
                 label={t("auth.password.props.new_password_confirmation")}
                 placeholder={t("auth.password.props.new_password_confirmation")}

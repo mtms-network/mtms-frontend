@@ -1,21 +1,21 @@
 /* eslint-disable no-empty */
-import React, { useState, useEffect, useCallback } from "react";
-import { Button, MainLayout, AlertError, BrandLogoLoading } from "components";
+import React, {useState, useEffect, useCallback} from "react";
+import {Button, MainLayout, AlertError, BrandLogoLoading} from "components";
 
-import { BASE_API, ALERT_TYPE, API_RESPONSE_STATUS, routeUrls, WALLET_PROVIDER } from "configs";
-import { useWalletStore } from "stores/wallet.store";
-import { getUser, handleHttpError } from "helpers";
-import { useTranslation } from "react-i18next";
+import {BASE_API, ALERT_TYPE, API_RESPONSE_STATUS, routeUrls, WALLET_PROVIDER} from "configs";
+import {useWalletStore} from "stores/wallet.store";
+import {getUser, handleHttpError} from "helpers";
+import {useTranslation} from "react-i18next";
 import {
   checkInToday,
   claimCheckIn,
   claimTokenToDay,
   getRequirePreWallet,
 } from "services/wallet.service";
-import { createPrivateInstance } from "services/base";
-import { message } from "antd";
-import { useAppStore } from "stores/app.store";
-import { useNavigate } from "react-router-dom";
+import {createPrivateInstance} from "services/base";
+import {message} from "antd";
+import {useAppStore} from "stores/app.store";
+import {useNavigate} from "react-router-dom";
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
@@ -30,10 +30,10 @@ const Rewards = () => {
     type: ALERT_TYPE.ERROR,
     error: [],
   });
-  const [timeMonth, setTimeMonth] = useState({ hour: 0, minute: 0 });
-  const [timeToday, setTimeToday] = useState({ hour: 0, minute: 0 });
-  const [timeWeek, setTimeWeek] = useState({ hour: 0, minute: 0 });
-  const { t } = useTranslation();
+  const [timeMonth, setTimeMonth] = useState({hour: 0, minute: 0});
+  const [timeToday, setTimeToday] = useState({hour: 0, minute: 0});
+  const [timeWeek, setTimeWeek] = useState({hour: 0, minute: 0});
+  const {t} = useTranslation();
 
   const prepareData = async () => {
     try {
@@ -52,7 +52,7 @@ const Rewards = () => {
 
   const handleClaimTokenToday = async () => {
     try {
-      setAlert({ ...alert, show: false, message: "" });
+      setAlert({...alert, show: false, message: ""});
       setLoading(true);
       const res = await claimTokenToDay();
       if (res?.status === API_RESPONSE_STATUS.success) {
@@ -77,7 +77,7 @@ const Rewards = () => {
 
   const handleClaimCheckInToday = async () => {
     try {
-      setAlert({ ...alert, show: false, message: "" });
+      setAlert({...alert, show: false, message: ""});
       setLoading(true);
 
       const res = await claimCheckIn();
@@ -103,7 +103,7 @@ const Rewards = () => {
 
   const handleCheckInToday = async () => {
     try {
-      setAlert({ ...alert, show: false, message: "" });
+      setAlert({...alert, show: false, message: ""});
       setLoading(true);
 
       const res = await checkInToday();
@@ -138,9 +138,9 @@ const Rewards = () => {
       const hourWeek = Math.floor(walletStore.wallet.total_minute_week / 60);
       const minuteWeek = walletStore.wallet.total_minute_week % 60;
 
-      setTimeMonth({ hour: hourMonth, minute: minuteMonth });
-      setTimeToday({ hour: hourToday, minute: minuteToday });
-      setTimeWeek({ hour: hourWeek, minute: minuteWeek });
+      setTimeMonth({hour: hourMonth, minute: minuteMonth});
+      setTimeToday({hour: hourToday, minute: minuteToday});
+      setTimeWeek({hour: hourWeek, minute: minuteWeek});
     }
     prepareData();
   }, []);
@@ -159,14 +159,14 @@ const Rewards = () => {
     <MainLayout>
       <div className="p-2 min-h-full">
         <AlertError
-          {...{ ...alert }}
+          {...{...alert}}
           onClose={() => {
-            setAlert({ ...alert, show: false });
+            setAlert({...alert, show: false});
           }}
         />
         {fetchLoading && (
           <div className="h-screen">
-            <BrandLogoLoading />
+            <BrandLogoLoading/>
           </div>
         )}
         <div className="space-y-6">
@@ -212,23 +212,48 @@ const Rewards = () => {
               </div>
             </div>
           </div>
-          <div className="flex w-full bg-white rounded-3xl py-6 px-8">
+          <div className="w-full bg-white rounded-3xl py-6 px-8">
             <div className="flex flex-1 flex-col sm:flex-row justify-between">
-              <div className="flex flex-col sm:flex-row sm:space-x-20">
-                <div>
+              <div className="">
+                <div className="mb-4">
                   <p className="text-base text-gray">{t("rewards.meeting_time")} (hh/mm)</p>
                   <p className="text-orange-base font-bold text-xl">
                     {`${convertTime().h}:${convertTime().m}`}
                   </p>
                 </div>
-                <div>
-                  <p className="text-base text-gray">{t("rewards.total_earn")}</p>
+                <div className="">
+                  <p
+                    className="text-base text-gray">{t("rewards.today_earning")} ({t('list.general.durations.minutes')})</p>
                   <p className="text-orange-base font-bold text-xl">
-                    {`${walletStore?.wallet?.total_token_all_days} MTMS`}
+                    {`${walletStore?.wallet?.total_minute_earn_today}`}
                   </p>
                 </div>
               </div>
-              <div className="flex flex-row items-end justify-center space-x-2">
+              <div className="">
+                <div className="mb-4">
+                  <p
+                    className="text-base text-gray">{t("rewards.earning_rate")} (MTMS/{t('list.general.durations.m')})</p>
+                  <p className="text-orange-base font-bold text-xl">
+                    {`${walletStore?.wallet?.meeting_cost}`}
+                  </p>
+                </div>
+                <div>
+                  <p
+                    className="text-base text-gray">{t("rewards.max_daily_earnings")} ({t('list.general.durations.minutes')})</p>
+                  <p className="text-orange-base font-bold text-xl">
+                    {`${walletStore?.wallet?.max_minute_day}`}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <div className="mb-4">
+                  <p className="text-base text-gray">{t("rewards.total_earn")}</p>
+                  <p className="text-orange-base font-bold text-xl">
+                    {`${parseFloat(walletStore?.wallet?.total_token_all_days).toFixed(3)} MTMS`}
+                  </p>
+                </div>
+              </div>
+              <div>
                 <Button
                   className="btn-primary"
                   isLoading={loading}
@@ -264,8 +289,8 @@ const Rewards = () => {
                       <p className="text-lg text-gray">
                         {appStore?.user?.wallets?.[0]?.wallet_address
                           ? `${
-                              WALLET_PROVIDER[appStore.user?.wallets?.[0]?.wallet_type]?.name
-                            } wallet`
+                            WALLET_PROVIDER[appStore.user?.wallets?.[0]?.wallet_type]?.name
+                          } wallet`
                           : t("rewards.your_wallet")}
                       </p>
                       <span className="font-bold text-lg text-black-base">
@@ -278,7 +303,7 @@ const Rewards = () => {
                           }}
                           className="btn-text-primary text-lg"
                         >
-                          Connect Wallet
+                          {t('rewards.connect_wallet')}
                         </a>
                       )}
                     </div>

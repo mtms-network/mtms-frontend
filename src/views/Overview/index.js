@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import { MainLayout, Button, GroupLayout, GroupTitle, Input } from "components";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
-import { BOXES } from "configs";
+import {BOXES, CONFIGS} from "configs";
+import { useNavigate } from "react-router-dom";
+import {getAccessToken} from "helpers";
 import { getBoxs } from "../../services/orverview.service";
+import { getUser } from "../../services/auth.service";
+import {useAppStore} from "../../stores/app.store";
 
 const Overview = ({ t }) => {
-  const [boxes, setBoxes] = useState(BOXES);
+  const [boxes, setBoxes] = useState([]);
   const [isDefaultBoxes, setIsDefaultBoxes] = useState(true);
+  const navigate = useNavigate();
+  const [appStore, updateAppStore] = useAppStore();
 
   const fetchData = async () => {
     try {
@@ -15,18 +21,47 @@ const Overview = ({ t }) => {
       if (data && data.length) {
         setBoxes(data);
         setIsDefaultBoxes(false);
+      } else {
+        setBoxes(BOXES);
       }
     } catch (error) {}
   };
 
+  const onBuyBox = () => {
+    const token = getAccessToken();
+    const user = getUser();
+
+    let params = "";
+    if (token) {
+      params = `?t=${token}`;
+      if (user?.wallets?.length) {
+        params += `&w=${user.wallets[0]?.wallet_address}`;
+      }
+
+      window.location = `${CONFIGS.boxUrl}${params}`;
+    }
+  };
+
   useEffect(() => {
-    fetchData();
-  }, []);
+    if(appStore.isAuthenticated){
+      fetchData();
+    }
+  }, [appStore.isAuthenticated]);
 
   return (
     <MainLayout>
       <div className="flex flex-row w-full items-center pb-5">
-        <p className="font-bold sm:w-full text-lg text-dark-base">{t("overview.your_mtms_box")}</p>
+        <div className="flex flex-col w-full">
+          <p className="font-bold sm:w-full text-lg text-dark-base">
+            {t("overview.your_mtms_box")}
+          </p>
+          <div className="flex flex-row pt-2">
+            <Button className="btn btn-primary" onClick={onBuyBox}>
+              <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
+              {t("blindBox.buy_box")}
+            </Button>
+          </div>
+        </div>
       </div>
       <div
         className={classNames(

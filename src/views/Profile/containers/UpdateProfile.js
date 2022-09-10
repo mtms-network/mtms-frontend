@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Button, GroupLayout, GroupTitle, Input, MainLayout } from "components";
+import { Button, GroupLayout, GroupTitle, Input, MainLayout, UserWallet } from "components";
 import { IoTv } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -22,7 +22,10 @@ const UpdateProfile = ({ t }) => {
     .shape({
       name: yup.string(),
       username: yup.string(),
-      email: yup.string(),
+      email: yup
+        .string()
+        .email(t("validation.email", { attribute: "email" }))
+        .required(t("validation.required", { attribute: "email" })),
       phoneNumber: yup.string(),
     })
     .required();
@@ -32,6 +35,7 @@ const UpdateProfile = ({ t }) => {
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -48,24 +52,24 @@ const UpdateProfile = ({ t }) => {
   const onSubmit = async (values) => {
     try {
       setLoading(true);
-      const res = await updateProfile({ name: values.name, phone: values.phone });
-      const newUser = {
-        ...user,
-        profile: { ...user.profile, name: values.name, phone: values.phone },
-      };
+      const res = await updateProfile({
+        name: values.name,
+        phone: values.phone,
+        email: values.email,
+        username: values.username,
+      });
+      const newUser = res.user;
       setTokenLoginSucceeded({ accessToken: token, user: newUser });
       updateAppStore((draft) => {
         draft.user = newUser;
       });
-
       if (res.status === API_RESPONSE_STATUS.success) {
         message.success(res.message);
       }
+      setLoading(false);
     } catch (error) {
-      if (error) {
-        const errorData = handleHttpError(error);
-        message.success(errorData.message);
-      }
+      const errorData = handleHttpError(error);
+      message.error(errorData.messageDetail ?? error.message);
       setLoading(false);
     }
   };
@@ -106,7 +110,7 @@ const UpdateProfile = ({ t }) => {
             <GroupTitle icon={<IoTv />} title={t("profile.edit")} />
           </div>
         </div>
-        <div className="w-[60%] m-auto bg-white rounded-[20px]">
+        <div className="w-11/12 sm:w-[60%] m-auto bg-white rounded-[20px]">
           <GroupLayout className="flex flex-col justify-between">
             <div className="w-full h-auto pt-6 flex flex-col justify-center items-center">
               {user?.profile?.avatar && (
@@ -116,7 +120,7 @@ const UpdateProfile = ({ t }) => {
                   src={`${LIVE_URL}${user?.profile?.avatar}`}
                 />
               )}
-              <p className="pt-3 font-bold">{user?.username}</p>
+              <p className="pt-3 font-bold">@{user?.username}</p>
               <div className="pt-3">
                 <Upload {...propsUpload}>
                   <a className="btn-text-primary text-md" onClick={onChangeProfilePhoto}>
@@ -125,7 +129,10 @@ const UpdateProfile = ({ t }) => {
                 </Upload>
               </div>
             </div>
-            <div className="w-full h-auto pt-10">
+            <div className="w-full mt-10 border-bottom p-2">
+              <UserWallet />
+            </div>
+            <div className="w-full h-auto pt-6">
               <Input
                 className="w-full"
                 labelClassName="text-base"
@@ -146,11 +153,12 @@ const UpdateProfile = ({ t }) => {
             </div>
             <div className="w-full h-auto pt-4">
               <Input
+                type="email"
                 className="w-full !bg-disable"
                 labelClassName="text-base"
                 register={register("email")}
                 label="Email"
-                disabled
+                disabled={!appStore?.user?.can_edit_email}
                 error={errors.email}
               />
             </div>
@@ -163,21 +171,22 @@ const UpdateProfile = ({ t }) => {
                 error={errors.phone}
               />
             </div>
+
+            <div className="w-[60%] m-auto pt-8 rounded-[20px] flex flex-col justify-center items-center">
+              <div>
+                <Button
+                  className="btn btn-primary"
+                  type="primary"
+                  isLoading={loading}
+                  onClick={!loading ? handleSubmit(onSubmit) : undefined}
+                >
+                  {t("profile.save_change")}
+                </Button>
+              </div>
+            </div>
           </GroupLayout>
         </div>
       </form>
-      <div className="w-[60%] m-auto pt-8 rounded-[20px] flex flex-col justify-center items-center">
-        <div>
-          <Button
-            className="btn btn-primary"
-            type="primary"
-            loading={loading}
-            onClick={handleSubmit(onSubmit)}
-          >
-            {t("profile.save_change")}
-          </Button>
-        </div>
-      </div>
     </MainLayout>
   );
 };

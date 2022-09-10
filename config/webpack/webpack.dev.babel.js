@@ -37,7 +37,7 @@ module.exports = {
     hot: true,
     proxy: {
       "/api": {
-        target: env.API_URL,
+        target: env.REACT_APP_API_URL,
         pathRewrite: {
           "^/api": "/", // rewrite path
         },

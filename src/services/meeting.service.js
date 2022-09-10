@@ -24,6 +24,8 @@ export const getMeetingHistories = async ({
   status,
   sort_by,
   order,
+  startDate,
+  endDate,
 }) => {
   try {
     const defaultFilters = {
@@ -31,12 +33,11 @@ export const getMeetingHistories = async ({
       order,
       type,
       status,
-      start_date: "",
-      end_date: "",
+      start_date: startDate || "",
+      end_date: endDate || "",
       name: "",
       current_page: page || 1,
       per_page: limit || 10,
-      instant: 0,
     };
     if (title) {
       defaultFilters.keyword = title;
@@ -59,6 +60,8 @@ export const getScheduleMeetings = async ({
   status,
   order,
   sort_by,
+  startDate,
+  endDate,
 }) => {
   try {
     const defaultFilters = {
@@ -66,6 +69,10 @@ export const getScheduleMeetings = async ({
       sort_by,
       current_page: page || 1,
       per_page: limit || 10,
+      status,
+      start_date: startDate || "",
+      end_date: endDate || "",
+      instant: 0,
     };
     if (title) {
       defaultFilters.keyword = title;
@@ -201,6 +208,16 @@ export const joinMeeting = async (identifer) => {
     return res?.data;
   } catch (error) {
     console.error("joinMeeting", error);
+    return error;
+  }
+};
+
+export const deleteMeetingByUuid = async (uuid) => {
+  try {
+    const res = await client.delete(`/${uuid}`);
+    return res?.data;
+  } catch (error) {
+    console.error("deleteMeetingByUuid", error);
     return error;
   }
 };

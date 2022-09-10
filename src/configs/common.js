@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 export const LIVE_MEETING_URL = "https://meeting.mtms.live";
 
 export const LIVE_URL = "https://api.mtms.live";
@@ -67,13 +68,17 @@ export const BOXES = [
   {
     photo: "/images/common-box.svg",
     name: "COMMON BOX",
-    owning: 1,
-    avaliable: 1,
+    owning: 0,
+    avaliable: 0,
   },
   {
     photo: "/images/ipic-box.svg",
     name: "EPIC BOX",
-    owning: 2,
-    avaliable: 1,
+    owning: 0,
+    avaliable: 0,
   },
 ];
+
+export const CONFIGS = {
+  boxUrl: window?._env_?.REACT_APP_BOX_URL || "https://sandbox-box.mtms.live",
+};

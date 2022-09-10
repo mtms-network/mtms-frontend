@@ -64,7 +64,7 @@ const ChangePassword = ({ t }) => {
             <GroupTitle icon={<IoTv />} title={t("profile.edit")} />
           </div>
         </div>
-        <div className="w-[60%] m-auto bg-white rounded-[20px]">
+        <div className="w-11/12 sm:w-[60%] m-auto bg-white rounded-[20px]">
           <GroupLayout className="flex flex-col justify-between">
             <div className="w-full h-auto pt-6 flex flex-col justify-center items-center">
               <img

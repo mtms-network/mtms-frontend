@@ -8,8 +8,9 @@ import { useAppStore } from "stores/app.store";
 import { setLanguage } from "helpers";
 import { useMeetingStore } from "stores/meeting.store";
 import { getRequirePreMeeting } from "services";
+import UserInfo from "./UserInfo";
 
-const SidebarLayout = ({ t }) => {
+const SidebarLayout = ({ t, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [appStore, updateAppStore] = useAppStore();
@@ -43,7 +44,10 @@ const SidebarLayout = ({ t }) => {
           </button>
         </div>
         <div className="flex flex-1 flex-col justify-between">
-          <div className="pt-8 space-y-4">
+          <div className="pt-8 space-y-4 sm:pt-0">
+            <div className="w-full px-4 pb-8 sm:pb-0">
+              <UserInfo onLogout={onLogout} className="flex sm:hidden" />
+            </div>
             <div className="w-full">
               <button
                 className={classNames(

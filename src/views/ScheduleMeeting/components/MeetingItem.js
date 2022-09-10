@@ -1,19 +1,25 @@
 import React, { useMemo } from "react";
 import classNames from "classnames";
 import { Button, GroupLayout } from "components";
-import { calculateDuration } from "helpers";
 import { Link, useNavigate } from "react-router-dom";
 import { LIVE_MEETING_URL, MEETING_STATUS, routeUrls } from "configs";
 import { t } from "i18next";
 import { message } from "antd";
+import moment from "moment";
 
-const MeetingItem = ({ data, className }) => {
+// const timeZoneString = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+const MeetingItem = ({ data, className, onDelete }) => {
   const navigate = useNavigate();
 
   const canModify = useMemo(
-    () => data.status === MEETING_STATUS.scheduled && data.can_moderate && !data.is_blocked,
+    () => data.status === MEETING_STATUS.scheduled && !data.is_blocked,
     [data],
   );
+
+  const startTime = useMemo(() => {
+    return moment(data?.start_date_time).format("YYYY-MM-DD HH:MM");
+  }, [data]);
 
   const handleStart = async () => {
     try {
@@ -70,6 +76,18 @@ const MeetingItem = ({ data, className }) => {
                     {t("general.share_url")}
                   </a>
                 </li>
+                <li>
+                  <a
+                    onClick={onDelete}
+                    className={classNames(
+                      "bg-white border-0 text-black",
+                      "hover:text-white hover:bg-primary",
+                      "flex justify-start rounded-none",
+                    )}
+                  >
+                    {t("meeting.config.delete_meeting")}
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -91,7 +109,7 @@ const MeetingItem = ({ data, className }) => {
           <div>
             <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
               <img src="/images/icon/calender.svg" alt="" />
-              <p className="label-base p-0 group-hover:text-primary">{data?.start_date_time}</p>
+              <p className="label-base p-0 group-hover:text-primary">{startTime}</p>
             </div>
             <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
               <img src="/images/icon/clock.svg" alt="" />
