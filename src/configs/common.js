@@ -39,6 +39,7 @@ export const COMMON = {
 export const MEETING_STATUS = {
   ended: "ended",
   scheduled: "scheduled",
+  live: "live",
 };
 
 export const WALLET_PROVIDER = {

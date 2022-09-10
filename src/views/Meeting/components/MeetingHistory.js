@@ -11,7 +11,7 @@ import {
   Button,
 } from "components";
 import { ScheduleHistoriesFilter } from "views/ScheduleMeeting/components";
-import { deleteMeetingByUuid, getMeetingHistories } from "services";
+import { getMeetingHistories } from "services";
 import { useMeetingStore } from "stores/meeting.store";
 import { withTranslation } from "react-i18next";
 import { LIVE_MEETING_URL, MEETING_STATUS, routeUrls } from "configs";
@@ -19,9 +19,11 @@ import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { message } from "antd";
 import moment from "moment";
-import { handleHttpError } from "helpers";
 import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
+import { getTimezone } from "helpers/i18nLocal";
 import { ConfigOverview } from "../config";
+
+const timezone = getTimezone();
 
 const MeetingHistory = ({ className, t }) => {
   const [loading, setLoading] = useState(false);
@@ -186,11 +188,20 @@ const MeetingHistory = ({ className, t }) => {
                       <td className="bg-white max-w-[150px] truncate">{item?.title}</td>
                       <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
                       <td className="bg-white">
-                        {moment(item?.start_date_time).format("hh:mm A DD/MM/YYYY")}
+                        {(item?.start_date_time &&
+                          `${moment(item?.start_date_time).format("HH:mm DD/MM/YYYY")} ${
+                            item?.user_timezone || ""
+                          }`) ||
+                          "-"}
                       </td>
                       <td className="bg-white">
-                        {(item?.ended_at && moment(item?.ended_at).format("hh:mm A DD/MM/YYYY")) ||
-                          "-"}
+                        <p>
+                          {(item?.ended_at &&
+                            `${moment(item?.ended_at).format("HH:mm DD/MM/YYYY")} ${
+                              item?.user_timezone || ""
+                            }`) ||
+                            "-"}
+                        </p>
                       </td>
                       <td className="bg-white text-center">
                         {item.status === MEETING_STATUS.ended ? (
@@ -234,7 +245,7 @@ const MeetingHistory = ({ className, t }) => {
                                 {t("general.share_url")}
                               </a>
                             </li>
-                            {item.status === MEETING_STATUS.scheduled && (
+                            {item?.status !== MEETING_STATUS.ended && (
                               <li>
                                 <a
                                   onClick={() => {
