@@ -214,38 +214,23 @@ const Rewards = () => {
           </div>
           <div className="w-full bg-white rounded-3xl py-6 px-8">
             <div className="flex flex-1 flex-col sm:flex-row justify-between">
-              <div className="flex flex-col sm:flex-row sm:space-x-20">
-                <div>
+              <div className="">
+                <div className="mb-4">
                   <p className="text-base text-gray">{t("rewards.meeting_time")} (hh/mm)</p>
                   <p className="text-orange-base font-bold text-xl">
                     {`${convertTime().h}:${convertTime().m}`}
                   </p>
                 </div>
-                <div>
-                  <p className="text-base text-gray">{t("rewards.total_earn")}</p>
+                <div className="">
+                  <p
+                    className="text-base text-gray">{t("rewards.today_earning")} ({t('list.general.durations.minutes')})</p>
                   <p className="text-orange-base font-bold text-xl">
-                    {`${parseFloat(walletStore?.wallet?.total_token_all_days).toFixed(3)} MTMS`}
+                    {`${walletStore?.wallet?.total_minute_earn_today}`}
                   </p>
                 </div>
               </div>
-              <div className="flex flex-row items-end justify-center space-x-2">
-                <Button
-                  className="btn-primary"
-                  isLoading={loading}
-                  onClick={() => {
-                    if (walletStore?.wallet?.total_token_all_days > 0) {
-                      handleClaimTokenToday();
-                    }
-                  }}
-                  disabled={walletStore?.wallet?.total_token_all_days <= 0}
-                >
-                  {t("rewards.claim_token")}
-                </Button>
-              </div>
-            </div>
-            <div className="flex flex-1 flex-col sm:flex-row justify-between my-5">
-              <div className="flex flex-col sm:flex-row sm:space-x-20">
-                <div>
+              <div className="">
+                <div className="mb-4">
                   <p
                     className="text-base text-gray">{t("rewards.earning_rate")} (MTMS/{t('list.general.durations.m')})</p>
                   <p className="text-orange-base font-bold text-xl">
@@ -259,15 +244,29 @@ const Rewards = () => {
                     {`${walletStore?.wallet?.max_minute_day}`}
                   </p>
                 </div>
-                <div>
-                  <p
-                    className="text-base text-gray">{t("rewards.today_earning")} ({t('list.general.durations.minutes')})</p>
+              </div>
+              <div>
+                <div className="mb-4">
+                  <p className="text-base text-gray">{t("rewards.total_earn")}</p>
                   <p className="text-orange-base font-bold text-xl">
-                    {`${walletStore?.wallet?.total_minute_earn_today}`}
+                    {`${parseFloat(walletStore?.wallet?.total_token_all_days).toFixed(3)} MTMS`}
                   </p>
                 </div>
               </div>
-              <div className="flex flex-row items-end justify-center space-x-2"></div>
+              <div>
+                <Button
+                  className="btn-primary"
+                  isLoading={loading}
+                  onClick={() => {
+                    if (walletStore?.wallet?.total_token_all_days > 0) {
+                      handleClaimTokenToday();
+                    }
+                  }}
+                  disabled={walletStore?.wallet?.total_token_all_days <= 0}
+                >
+                  {t("rewards.claim_token")}
+                </Button>
+              </div>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row w-full sm:space-x-5">
