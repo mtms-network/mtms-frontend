@@ -80,6 +80,7 @@ export const BOXES = [
   },
 ];
 
+
 export const CONFIGS = {
   boxUrl: "https://box.mtms.live",
 };
