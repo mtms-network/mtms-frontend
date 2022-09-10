@@ -115,7 +115,7 @@ const StartInstantMeeting = ({ className, t }) => {
           <div className="basis-full sm:basis-1/2">
             <p className="label-base font-bold">{t("meeting.meeting_code")}</p>
             <Input
-              placeholder={t("meeting.enter_meeting_code")}
+              placeholder={t("meeting.create_meeting_code")}
               className="bg-gray-base-100 border-0 placeholder-black"
               value={code}
               onChange={(e) => {

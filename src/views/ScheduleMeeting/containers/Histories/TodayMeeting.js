@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { getScheduleMeetings } from "services";
 import { MEETING_STATUS } from "configs";
 import { BrandLogoLoading, GroupTitle, Pagination } from "components";
 import { t } from "i18next";
 import { MeetingItem } from "views/ScheduleMeeting/components";
+import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
 
 export const TodayMeeting = () => {
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ export const TodayMeeting = () => {
     startDate: moment().format("YYYY-MM-DD"),
     endDate: moment().add(1, "days").format("YYYY-MM-DD"),
   });
+  const deleteMeetingModalRef = useRef(null);
 
   const fetchData = async () => {
     try {
@@ -35,6 +37,10 @@ export const TodayMeeting = () => {
     } catch (error) {
       setLoading(false);
     }
+  };
+
+  const onConfirmDeleteMeeting = (item) => {
+    deleteMeetingModalRef.current?.show(item);
   };
 
   useEffect(() => {
@@ -76,8 +82,18 @@ export const TodayMeeting = () => {
       </div>
       {loading && <BrandLogoLoading />}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-        {!loading && histories.data?.map((item) => <MeetingItem data={item} key={item?.uuid} />)}
+        {!loading &&
+          histories.data?.map((item) => (
+            <MeetingItem
+              onDelete={() => {
+                onConfirmDeleteMeeting(item);
+              }}
+              data={item}
+              key={item?.uuid}
+            />
+          ))}
       </div>
+      <DeleteMeetingModal onRefresh={fetchData} ref={deleteMeetingModalRef} />
     </div>
   );
 };
