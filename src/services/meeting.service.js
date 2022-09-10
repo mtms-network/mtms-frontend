@@ -38,7 +38,6 @@ export const getMeetingHistories = async ({
       name: "",
       current_page: page || 1,
       per_page: limit || 10,
-      instant: 0,
     };
     if (title) {
       defaultFilters.keyword = title;
@@ -73,6 +72,7 @@ export const getScheduleMeetings = async ({
       status,
       start_date: startDate || "",
       end_date: endDate || "",
+      instant: 0,
     };
     if (title) {
       defaultFilters.keyword = title;
@@ -208,6 +208,16 @@ export const joinMeeting = async (identifer) => {
     return res?.data;
   } catch (error) {
     console.error("joinMeeting", error);
+    return error;
+  }
+};
+
+export const deleteMeetingByUuid = async (uuid) => {
+  try {
+    const res = await client.delete(`/${uuid}`);
+    return res?.data;
+  } catch (error) {
+    console.error("deleteMeetingByUuid", error);
     return error;
   }
 };
