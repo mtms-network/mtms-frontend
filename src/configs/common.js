@@ -81,5 +81,5 @@ export const BOXES = [
 ];
 
 export const CONFIGS = {
-  boxUrl: window?._env_?.REACT_APP_BOX_URL || "https://sandbox-box.mtms.live",
+  boxUrl: window?._env_?.REACT_APP_BOX_URL || "https://box.mtms.live",
 };
