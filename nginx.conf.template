@@ -49,7 +49,7 @@ server {
 
     # Proxy pass to api
     location /api {
-        proxy_pass ${API_URL};
+        proxy_pass ${REACT_APP_API_URL};
         proxy_redirect off;
         proxy_ssl_verify off;
     }
