@@ -11,9 +11,10 @@ export default function UserWallet() {
   const [appStore, updateAppStore] = useAppStore();
   const walletAddress = appStore?.user?.wallets?.[0]?.wallet_address;
   const walletType = WALLET_PROVIDER[appStore.user?.wallets?.[0]?.wallet_type]?.name;
-
   return !walletAddress ? (
-    <WalletButtonGroup />
+    <WalletButtonGroup
+      classNameWrapper="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4 px-40 md:px-20 sm:px-10"
+    />
   ) : (
     <div className="flex flex-row border-1 h-auto p-3 rounded-2xl">
       {walletAddress ? (

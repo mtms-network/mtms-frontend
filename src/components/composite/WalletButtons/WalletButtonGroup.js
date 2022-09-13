@@ -4,12 +4,12 @@ import { useMetaMask } from "metamask-react";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import { WalletBlockButton } from "components";
+import { useAppStore } from "stores/app.store";
 import { handleHttpError, setUserInfo } from "../../../helpers";
 import { connectWallet } from "../../../services";
-import { useAppStore } from "stores/app.store";
 import { WALLET_PROVIDER } from "../../../configs";
 
-export function WalletButtonGroup() {
+export function WalletButtonGroup({classNameWrapper}) {
   const [appStore, updateAppStore] = useAppStore();
   const { t } = useTranslation();
 
@@ -63,8 +63,9 @@ export function WalletButtonGroup() {
       });
     }
   };
+
   return (
-    <div className="flex flex-row space-x-5 justify-center">
+    <div className={ classNameWrapper || "grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4"}>
       <WalletBlockButton
         name="Metamask"
         src="/icons/metamask-logo.png"
