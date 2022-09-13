@@ -38,9 +38,8 @@ export const createPrivateInstance = (path, options) => {
 export const createPublicInstance = (path, options) => {
   const timezone = getTimezone();
 
-  const { origin } = window && window.location;
   const instance = axios.create({
-    baseURL: `${origin}${path}`,
+    baseURL: `${LIVE_API}${path}`,
     headers: {
       Accept: "application/json",
       "x-timezone": timezone,

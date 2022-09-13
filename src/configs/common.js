@@ -12,7 +12,7 @@ export const AVATAR_UPLOAD_URL = "/profile/avatar";
 
 export const BASE_API = {
   api: "/api",
-  auth: "/api/auth",
+  auth: "/auth",
   meeting: "/meetings",
   profile: "/profile",
   avatar: "/profile/avatar",
@@ -79,7 +79,6 @@ export const BOXES = [
     avaliable: 0,
   },
 ];
-
 
 export const CONFIGS = {
   boxUrl: "https://box.mtms.live",
