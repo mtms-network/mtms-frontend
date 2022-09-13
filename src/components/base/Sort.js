@@ -37,7 +37,7 @@ const Sort = ({ onSort, sortBy, order, contentField, ...rest }) => {
               onSort("order", item.value);
             }}
           >
-            <div  className="flex items-center">
+            <div className="flex items-center">
               <item.icon className="mr-2 " />
               {item.label}
             </div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 export const LIVE_MEETING_URL = "https://meeting.mtms.live";
 
 export const LIVE_URL = "https://api.mtms.live";
@@ -11,7 +12,7 @@ export const AVATAR_UPLOAD_URL = "/profile/avatar";
 
 export const BASE_API = {
   api: "/api",
-  auth: "/api/auth",
+  auth: "/auth",
   meeting: "/meetings",
   profile: "/profile",
   avatar: "/profile/avatar",
@@ -38,6 +39,7 @@ export const COMMON = {
 export const MEETING_STATUS = {
   ended: "ended",
   scheduled: "scheduled",
+  live: "live",
 };
 
 export const WALLET_PROVIDER = {
@@ -61,4 +63,23 @@ export const WALLET_PROVIDER = {
     name: "Avalanche",
     image: "/icons/avalanche-logo.png",
   },
+};
+
+export const BOXES = [
+  {
+    photo: "/images/common-box.svg",
+    name: "COMMON BOX",
+    owning: 0,
+    avaliable: 0,
+  },
+  {
+    photo: "/images/box-vip.svg",
+    name: "EPIC BOX",
+    owning: 0,
+    avaliable: 0,
+  },
+];
+
+export const CONFIGS = {
+  boxUrl: "https://box.mtms.live",
 };

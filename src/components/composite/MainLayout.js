@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import React, { useEffect, useState } from "react";
 import { getLanguage, resetUserToken, setLanguage } from "helpers";
 import { useAuth, useDimensions } from "hooks";
@@ -10,10 +11,9 @@ import i18n from "i18n";
 import { useMeetingStore } from "stores/meeting.store";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
-import SidebarUserCenter from "./SidebarUserCenter";
 import BrandLogoLoading from "./BrandLogoLoading";
 
-const Layout = ({ children, bottom, contentClassName = "", userCenter = false }) => {
+const Layout = ({ children, bottom, contentClassName = "" }) => {
   const [appStore, updateAppStore] = useAppStore();
   const [meetingStore, updateMeetingStore] = useMeetingStore();
   const [loading, setLoading] = useState(false);
@@ -86,34 +86,32 @@ const Layout = ({ children, bottom, contentClassName = "", userCenter = false })
     </div>
   ) : (
     <I18nextProvider i18n={i18next}>
-     
-          <div className="drawer drawer-mobile">
-            <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content flex flex-col">
-              <NavbarLayout width={width} onLogout={handleLogout} />
-              <div className={classNames("relative min-h-screen")}>
-                <div
-                  className={classNames(
-                    "flex flex-col pt-20 sm:pt-22 pb-28 overflow-y-auto px-4 relative",
-                    "min-h-full bg-gray-base",
-                    contentClassName,
-                  )}
-                >
-                  {children}
-                </div>
-                {bottom && (
-                  <div
-                    className="navbar bg-white fixed z-10 bottom-0 px-4"
-                    style={{ width: width > 768 && `calc(${width}px - 320px)` }}
-                  >
-                    <div className="flex py-2 w-full">{bottom}</div>
-                  </div>
-                )}
-              </div>
+      <div className="drawer drawer-mobile">
+        <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col">
+          <NavbarLayout width={width} onLogout={handleLogout} />
+          <div className={classNames("relative min-h-screen")}>
+            <div
+              className={classNames(
+                "flex flex-col pt-20 sm:pt-22 pb-28 overflow-y-auto px-4 relative",
+                "min-h-full bg-gray-base",
+                contentClassName,
+              )}
+            >
+              {children}
             </div>
-            {userCenter ? <SidebarUserCenter /> : <SidebarLayout />}
+            {bottom && (
+              <div
+                className="navbar bg-white fixed z-10 bottom-0 px-4"
+                style={{ width: width > 768 && `calc(${width}px - 320px)` }}
+              >
+                <div className="flex py-2 w-full">{bottom}</div>
+              </div>
+            )}
           </div>
-        
+        </div>
+        <SidebarLayout onLogout={handleLogout} />
+      </div>
     </I18nextProvider>
   );
 };

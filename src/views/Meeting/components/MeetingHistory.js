@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import classnames from "classnames";
+import React, { useEffect, useRef, useState } from "react";
 import {
   BrandLogoLoading,
   GroupLayout,
@@ -19,7 +18,12 @@ import { LIVE_MEETING_URL, MEETING_STATUS, routeUrls } from "configs";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { message } from "antd";
+import moment from "moment";
+import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
+import { getTimezone } from "helpers/i18nLocal";
 import { ConfigOverview } from "../config";
+
+const timezone = getTimezone();
 
 const MeetingHistory = ({ className, t }) => {
   const [loading, setLoading] = useState(false);
@@ -38,6 +42,7 @@ const MeetingHistory = ({ className, t }) => {
   const [sort, setSort] = useState(false);
   const [meetingStore] = useMeetingStore();
   const navigate = useNavigate();
+  const deleteMeetingModalRef = useRef(null);
 
   const mapHistories = (item) => {
     const newItem = { ...item };
@@ -75,6 +80,10 @@ const MeetingHistory = ({ className, t }) => {
     }
   };
 
+  const onConfirmDeleteMeeting = (item) => {
+    deleteMeetingModalRef.current?.show(item);
+  };
+
   const onChangeFilter = (type, value) => {
     const cloneFilter = { ...filter, page: 1 };
     switch (type) {
@@ -97,7 +106,7 @@ const MeetingHistory = ({ className, t }) => {
   }, [meetingStore.isForceLoadMeetingHistories, filter]);
 
   return (
-    <div className={classnames([className, "flex flex-col pt-8"])}>
+    <div className={classNames([className, "flex flex-col pt-8"])}>
       <GroupLayout
         className="flex flex-col w-full"
         titleComponent={
@@ -176,11 +185,23 @@ const MeetingHistory = ({ className, t }) => {
                   {histories.data?.map((item) => (
                     <tr className="text-cl-base text-md border-0 table-row" key={item?.uuid}>
                       <td className="bg-white">{item?.user?.profile?.name}</td>
-                      <td className="bg-white">{item?.title}</td>
+                      <td className="bg-white max-w-[150px] truncate">{item?.title}</td>
                       <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
-                      <td className="bg-white">{item?.start_date_time}</td>
-                      <td className="flex justify-left align-middle bg-white">
-                        {item?.ended_at || "-"}
+                      <td className="bg-white">
+                        {(item?.start_date_time &&
+                          `${moment(item?.start_date_time).format("HH:mm DD/MM/YYYY")} ${
+                            item?.user_timezone || ""
+                          }`) ||
+                          "-"}
+                      </td>
+                      <td className="bg-white">
+                        <p>
+                          {(item?.ended_at &&
+                            `${moment(item?.ended_at).format("HH:mm DD/MM/YYYY")} ${
+                              item?.user_timezone || ""
+                            }`) ||
+                            "-"}
+                        </p>
                       </td>
                       <td className="bg-white text-center">
                         {item.status === MEETING_STATUS.ended ? (
@@ -224,6 +245,22 @@ const MeetingHistory = ({ className, t }) => {
                                 {t("general.share_url")}
                               </a>
                             </li>
+                            {item?.status !== MEETING_STATUS.ended && (
+                              <li>
+                                <a
+                                  onClick={() => {
+                                    onConfirmDeleteMeeting(item);
+                                  }}
+                                  className={classNames(
+                                    "bg-white border-0 text-black",
+                                    "hover:text-white hover:bg-primary",
+                                    "flex justify-start rounded-none",
+                                  )}
+                                >
+                                  {t("meeting.config.delete_meeting")}
+                                </a>
+                              </li>
+                            )}
                           </ul>
                         </div>
                       </td>
@@ -259,6 +296,7 @@ const MeetingHistory = ({ className, t }) => {
                 }}
               />
             </div>
+            <DeleteMeetingModal onRefresh={fetchData} ref={deleteMeetingModalRef} />
           </div>
         </div>
       </GroupLayout>

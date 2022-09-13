@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import moment from "moment";
 import {
   Button,
@@ -10,18 +10,20 @@ import {
   GroupTitle,
   MainLayout,
   AlertError,
-  BrandLogoLoading, IconBase, Icon,
+  BrandLogoLoading,
+  IconBase,
+  Icon,
 } from "components";
 import { IoCheckmarkCircleOutline, IoTv } from "react-icons/io5";
 import { useMeetingStore } from "stores/meeting.store";
 import { createPrivateInstance } from "services/base";
-import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL, COMMON, MEETING_STATUS } from "configs";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { BASE_API, ALERT_TYPE, routeUrls, LIVE_MEETING_URL, MEETING_STATUS } from "configs";
+import { useNavigate, useParams } from "react-router-dom";
 import { getMeetingDetail } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { message, Modal } from "antd";
-import { calculateDuration } from "../../../../helpers";
+import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -42,7 +44,7 @@ const ScheduleMeetingView = ({ t }) => {
     error: [],
   });
   const [isCopied, setIsCopied] = useState(false);
-
+  const deleteMeetingModalRef = useRef(null);
 
   const prepareData = () => {
     if (meetingStore?.types) {
@@ -53,27 +55,9 @@ const ScheduleMeetingView = ({ t }) => {
       }));
       setTypes(list);
     }
-    if (meetingStore?.categories) {
-      const list = meetingStore.categories.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
-    }
   };
-
-  const handleDeleteMeeting = () => {
-    confirm({
-      title: t("meeting.props.question_delete"),
-      icon: <ExclamationCircleOutlined />,
-      okText: t("meeting.props.yes"),
-      okType: "danger",
-      cancelText: t("meeting.props.no"),
-      onOk() {
-        deleteMeeting();
-      },
-      onCancel() {},
-    });
+  const onConfirmDeleteMeeting = (item) => {
+    deleteMeetingModalRef.current?.show(item);
   };
 
   const handleCopyLink = () => {
@@ -126,11 +110,16 @@ const ScheduleMeetingView = ({ t }) => {
     }
   };
 
+  useEffect(() => {
+    if (meeting) {
+      prepareData();
+    }
+  }, [meeting]);
+
   const fetchData = async () => {
     try {
       setFetchLoading(true);
-      await fetchMeeting();
-      await prepareData();
+      await Promise.all([fetchMeeting()]);
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
@@ -140,6 +129,11 @@ const ScheduleMeetingView = ({ t }) => {
   const canModify = useMemo(
     () =>
       meeting?.status === MEETING_STATUS.scheduled && meeting.can_moderate && !meeting.is_blocked,
+    [meeting],
+  );
+
+  const canStart = useMemo(
+    () => meeting?.status === MEETING_STATUS.scheduled && !meeting.is_blocked,
     [meeting],
   );
 
@@ -171,15 +165,19 @@ const ScheduleMeetingView = ({ t }) => {
         />
       </div>
       <GroupLayout className="flex flex-col justify-between">
-        <h1 className="font-[700] text-[32px]">{meetingStore?.meeting?.title}</h1>
+        <h1 className="font-[700] text-[32px] truncate">{meetingStore?.meeting?.title}</h1>
         <div className="text-[16px] text-gray mb-[24px]">{meetingStore?.meeting?.type.name}</div>
         <div className="flex flex-wrap gap-x-5 gap-y-3 mb-[24px]">
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/calender.svg" alt="" />
             <span>{t("meeting.view.start_time")}: </span>
-            <span className="font-[700] text-[16px]">
-              {moment(meetingStore?.meeting?.start_date_time).format("MMM DD, yyyy h:mm A")}
-            </span>
+
+            <p className="text-md font-bold">
+              {meetingStore?.meeting?.start_date_time &&
+                `${moment(meetingStore?.meeting?.start_date_time).format("HH:mm DD/MM/YYYY")} ${
+                  meetingStore?.meeting?.user_timezone || ""
+                }`}
+            </p>
           </div>
           <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
@@ -200,12 +198,12 @@ const ScheduleMeetingView = ({ t }) => {
             <span>{t("meeting.meeting_code")}: </span>
             <span className="font-[700] text-[16px]">{meetingStore?.meeting?.identifier}</span>
             <div className="dropdown-top relative">
-              <button onClick={() => { handleCopyCode(meetingStore?.meeting?.identifier); }}>
-                <Icon
-                  className="h-6 w-6"
-                  src="/icons/icons/copy-light-outline.svg"
-                  alt="copy"
-                />
+              <button
+                onClick={() => {
+                  handleCopyCode(meetingStore?.meeting?.identifier);
+                }}
+              >
+                <Icon className="h-6 w-6" src="/icons/icons/copy-light-outline.svg" alt="copy" />
               </button>
               {isCopied && (
                 <ul
@@ -215,59 +213,82 @@ const ScheduleMeetingView = ({ t }) => {
                   <p className="flex flex-row justify-center items-center space-x-2">
                     <span className="text-black">{t("home.copied")}</span>
                     <span className="text-success">
-                          <IoCheckmarkCircleOutline />
-                        </span>
+                      <IoCheckmarkCircleOutline />
+                    </span>
                   </p>
                 </ul>
               )}
             </div>
           </div>
         </div>
-        <div className="flex space-x-[24px] mb-[24px]">
-          {canModify && (
+        <div className="flex mb-6 flex-wrap items-center">
+          {canStart && (
             <Button
-              className="btn btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+              className="btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
               onClick={handleStart}
             >
               {t("general.start")}
             </Button>
           )}
           <Button
-            className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
+            className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
             onClick={handleCopyLink}
           >
-            <IconBase
-              className="mr-2"
-              icon="/icons/icons/copy-primary-outline.svg"
-            />
+            <IconBase className="mr-2" icon="/icons/icons/copy-primary-outline.svg" />
             {t("general.copy_link")}
           </Button>
           {canModify && (
-            <Link
-              className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
-              to={`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`}
+            <Button
+              className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
+              onClick={() => {
+                navigate(`/${routeUrls.scheduleMeeting.path}/${meetingStore?.meeting?.uuid}`);
+              }}
             >
               {t("general.edit")}
-            </Link>
+            </Button>
           )}
           {canModify && (
             <Button
-              className="btn btn-outline btn-primary rounded-[20px] h-[40px] min-h-[40px]"
-              onClick={handleDeleteMeeting}
+              className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
+              onClick={() => {
+                onConfirmDeleteMeeting(meetingStore?.meeting);
+              }}
             >
               {t("general.delete")}
             </Button>
           )}
         </div>
-        <hr className="mb-[24px]" />
+        <hr className="mb-6" />
+        <div>
+          <GroupTitle className="!pb-0" icon={<IoTv />} title={t("schedule_meeting.attendees")} />
+          <GroupLayout className="flex flex-wrap gap-[12px] !px-0 !pt-2 !pb-6">
+            {meeting?.invitees &&
+              meeting.invitees?.map((item, key) => {
+                return (
+                  <span
+                    key={key}
+                    className="rounded-[20px] px-[12px] py-[6px] bg-slate-base bg-secondary text-primary"
+                  >
+                    {item?.contact?.email}
+                  </span>
+                );
+              })}
+          </GroupLayout>
+        </div>
         <div>
           <GroupTitle icon={<IoTv />} title={t("general.agenda")} />
         </div>
-        <p className="mb-[24px]">{meetingStore?.meeting?.agenda}</p>
+        <p className="mb-6 truncate flex-wrap">{meetingStore?.meeting?.agenda}</p>
         <div>
           <GroupTitle icon={<IoTv />} title={t("meeting.props.description")} />
         </div>
         <p dangerouslySetInnerHTML={{ __html: meetingStore?.meeting?.description }} />
+        <DeleteMeetingModal
+          onRefresh={() => {
+            navigate(`/${routeUrls.scheduleMeeting.path}`);
+          }}
+          ref={deleteMeetingModalRef}
+        />
       </GroupLayout>
     </MainLayout>
   );

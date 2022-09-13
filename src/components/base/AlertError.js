@@ -66,18 +66,19 @@ const AlertError = ({
   return (
     show &&
     message && (
-      <div {...rest} className={classNames("alert shadow-lg rounded-lg relative", config.className)}>
+      <div
+        {...rest}
+        className={classNames("alert shadow-lg rounded-lg relative", config.className)}
+      >
         <div className="block">
           {showIcon && <config.icon />}
           <span>{message}</span>
 
           {Object.keys(error).length > 0 && (
             <ul className="list-disc ml-[20px]">
-              {
-                Object.keys(error).map((key) => (
-                  <li id={key}>{error[key]}</li>
-                ))
-              } 
+              {Object.keys(error).map((key) => (
+                <li id={key}>{error[key]}</li>
+              ))}
             </ul>
           )}
           <button onClick={onClose} className="absolute right-[10px] top-[15px]">

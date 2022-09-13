@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getAccessToken, getLanguage } from "helpers";
 import { LIVE_API } from "configs";
+import { getTimezone } from "helpers/i18nLocal";
 
 export const handleError = (error) => {
   const { response, message } = error;
@@ -11,9 +12,10 @@ export const handleError = (error) => {
 };
 
 export const createPrivateInstance = (path, options) => {
+  const timezone = getTimezone();
   const instance = axios.create({
     baseURL: `${LIVE_API}${path}`,
-    headers: { Accept: "application/json" },
+    headers: { Accept: "application/json", "x-timezone": timezone },
     ...options,
   });
 
@@ -34,11 +36,13 @@ export const createPrivateInstance = (path, options) => {
 };
 
 export const createPublicInstance = (path, options) => {
-  const { origin } = window && window.location;
+  const timezone = getTimezone();
+
   const instance = axios.create({
-    baseURL: `${origin}${path}`,
+    baseURL: `${LIVE_API}${path}`,
     headers: {
       Accept: "application/json",
+      "x-timezone": timezone,
     },
     ...options,
   });

@@ -1,4 +1,5 @@
-import { BASE_API } from "configs";
+import { BASE_API, LIVE_API } from "configs";
+import axios from "axios";
 import { createPublicInstance } from "./base";
 
 const client = createPublicInstance(BASE_API.auth);
@@ -42,9 +43,24 @@ export const signUp = async ({ name, email, username, password, passwordConfirma
   return res?.data;
 };
 
+export const resendRegisterVerification = async ({ email }) => {
+  const res = await client.post("/register/resend", {
+    email,
+  });
+  return res?.data;
+};
+
 export const forgotPassword = async ({ email }) => {
   const res = await client.post("/password", {
     email,
+  });
+  return res?.data;
+};
+
+export const validateResetPassword = async ({ email, code }) => {
+  const res = await client.post("/validate-reset-password", {
+    email,
+    code,
   });
   return res?.data;
 };
@@ -62,6 +78,15 @@ export const resetPassword = async ({ email, code, newPassword, newPasswordConfi
 export const verifyActiveToken = async ({ token }) => {
   const res = await client.post("/verify", {
     token,
+  });
+  return res?.data;
+};
+
+export const getUser = async (token) => {
+  const res = await axios.get(`${LIVE_API}/auth/user`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
   });
   return res?.data;
 };

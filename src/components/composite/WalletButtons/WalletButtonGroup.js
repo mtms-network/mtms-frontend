@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { WalletButton } from "components";
+import React from "react";
 import { useWallet } from "react-binance-wallet";
 import { useMetaMask } from "metamask-react";
-import { signInWallet } from "services";
-import { routeUrls, WALLET_PROVIDER } from "configs";
-import { useNavigate } from "react-router-dom";
-import { setTokenLoginSucceeded } from "helpers";
-import { useAppStore } from "stores/app.store";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
+import { WalletBlockButton } from "components";
+import { handleHttpError, setUserInfo } from "../../../helpers";
+import { connectWallet } from "../../../services";
+import { useAppStore } from "stores/app.store";
+import { WALLET_PROVIDER } from "../../../configs";
 
-const Wallet = () => {
+export function WalletButtonGroup() {
+  const [appStore, updateAppStore] = useAppStore();
+  const { t } = useTranslation();
+
   const {
     account: accountBinance,
     connect: connectBinance,
@@ -20,20 +22,18 @@ const Wallet = () => {
     chainId,
   } = useWallet();
   const { connect: connectMetaMask, account: accountMetaMask } = useMetaMask();
-  const navigate = useNavigate();
-  const [, updateAppStore] = useAppStore();
-  const { t } = useTranslation();
-
-  const walletMessageKey = "wallet_message_key";
 
   const handleValidWallet = (data) => {
     try {
-      setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
+      const newUser = {
+        ...appStore.user,
+        wallets: data?.wallets,
+        profile: { ...appStore.user.profile, wallets: data?.wallets},
+      };
+      setUserInfo({ user: newUser });
       updateAppStore((draft) => {
-        draft.isAuthenticated = true;
-        draft.user = data?.user;
+        draft.user = newUser;
       });
-      navigate("/");
     } catch (error) {}
   };
 
@@ -43,11 +43,12 @@ const Wallet = () => {
   };
 
   const handleConnectMetaMaskWallet = async () => {
+    const connectWalletKey = "connect_wallet_key";
     try {
-      message.loading({ content: `${t("global.loading")} ...`, key: walletMessageKey });
+      message.loading({ content: `${t("global.loading")} ...`, key: connectWalletKey });
       const res = await connectMetaMask();
       if (res.length) {
-        const data = await signInWallet({
+        const data = await connectWallet({
           walletAddress: res[0],
           provider: WALLET_PROVIDER.metamask.type,
         });
@@ -56,34 +57,34 @@ const Wallet = () => {
         throw new Error(t("global.could_not_find", { attribute: "Metamask" }));
       }
     } catch (error) {
-      message.error({ content: error.message, key: walletMessageKey });
+      message.error({
+        content: handleHttpError(error)?.detail?.wallet_address || error?.message,
+        key: connectWalletKey,
+      });
     }
   };
-
   return (
-    <>
-      <WalletButton
+    <div className="flex flex-row space-x-5 justify-center">
+      <WalletBlockButton
         name="Metamask"
         src="/icons/metamask-logo.png"
         onClick={handleConnectMetaMaskWallet}
       />
-      <WalletButton
+      <WalletBlockButton
         name="Binance"
         src="/icons/binance-logo.png"
-        className="opacity-20 hover:border-transparent"
+        className="opacity-20 hover:border-slate-200 hover:border-transparent"
       />
-      <WalletButton
+      <WalletBlockButton
         name="Oasis"
         src="/icons/oasis-logo.png"
-        className="opacity-20 hover:border-transparent"
+        className="opacity-20 hover:border-slate-200 hover:border-transparent"
       />
-      <WalletButton
+      <WalletBlockButton
         name="Avalanche"
         src="/icons/avalanche-logo.png"
-        className="opacity-20 hover:border-transparent"
+        className="opacity-20 hover:border-slate-200 hover:border-transparent"
       />
-    </>
+    </div>
   );
-};
-
-export default Wallet;
+}

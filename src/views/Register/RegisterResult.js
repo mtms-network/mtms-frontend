@@ -1,25 +1,28 @@
-import React from "react";
-import { Button, GuestFormLayout } from "components";
+import React, { useState } from "react";
+import { Alert, Button, GuestFormLayout } from "components";
 import { useNavigate } from "react-router-dom";
 import { withTranslation } from "react-i18next";
-import { signUp } from "services";
+import { resendRegisterVerification } from "services";
 import { useAppStore } from "stores/app.store";
+import { handleHttpError } from "../../helpers";
 import { message } from "antd";
-import { routeUrls } from "configs";
 
 function RegisterResult({ t }) {
   const navigate = useNavigate();
   const [appStore] = useAppStore();
+  const [loading, setLoading] = useState(false);
 
   const onResendVerify = async () => {
     try {
-      const data = await signUp(appStore.registerData || {});
+      setLoading(true);
+      const data = await resendRegisterVerification(appStore.registerData || {});
       if (data) {
-        message.success("A new verification link has been sent to your email.");
+        message.success(data?.message);
       }
     } catch (error) {
-      navigate(`/${routeUrls.register.path}`);
-      message.error("Opssss, error...!");
+      message.error(error?.response?.data?.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,8 +35,13 @@ function RegisterResult({ t }) {
         <p className="text-black text-3xl font-bold">{t("auth.reset_result.page_title")}</p>
       </div>
       <p>{t("auth.reset_result.page_description")}</p>
+
       <div className="w-full pt-9 flex justify-between items-center space-x-4">
-        <Button className="btn-primary rounded-full btn-wide" onClick={onResendVerify}>
+        <Button
+          className="btn-primary rounded-full btn-wide"
+          isLoading={loading}
+          onClick={onResendVerify}
+        >
           {t("auth.reset_result.verify_code")}
         </Button>
         <Button

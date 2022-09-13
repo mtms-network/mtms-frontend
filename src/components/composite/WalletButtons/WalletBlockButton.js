@@ -5,10 +5,11 @@ export function WalletBlockButton({ name, src, onClick, className = "", nameClas
   return (
     <div className="flex flex-col justify-center items-center">
       <button
+        type="button"
         onClick={onClick}
         className={classNames(
           "btn bg-white flex items-center justify-center",
-          "border-1 hover:shadow-xl border-wallet-button rounded-2xl h-40 w-40",
+          `border-1 hover:shadow-xl border-wallet-button rounded-2xl h-32 w-32`,
           "hover:border-primary hover:bg-white",
           "shadow-lg flex flex-col space-y-4",
           "cursor-pointer",
