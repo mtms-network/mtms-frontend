@@ -3,9 +3,44 @@ import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 
+const fakeData = [
+  {
+    id: 1,
+    name: 'Basic plan',
+    expire_date: null,
+    max_earn_day: 10,
+    e_rate: 1,
+
+  },
+  {
+    id: 1,
+    name: 'Silver Plan',
+    expire_date: '2022-09-04',
+    max_earn_day: 2,
+    e_rate: 1.5,
+
+  },
+  {
+    id: 1,
+    name: 'Gold Plan',
+    expire_date: '2022-09-04',
+    max_earn_day: 2,
+    e_rate: 7,
+
+  },
+  {
+    id: 1,
+    name: 'Platinum Plan',
+    expire_date: '2022-09-04',
+    max_earn_day: 13.2,
+    e_rate: 3,
+
+  }
+];
+
 const YourAccountPlan = ({t}) => {
   return (
-    <div className="container">
+    <div className="">
       <div className="flex flex-row w-full items-center pb-5">
         <div className="flex flex-col w-full">
           <p className="font-bold sm:w-full text-lg text-dark-base">
@@ -21,60 +56,46 @@ const YourAccountPlan = ({t}) => {
                 <tr className="text-cl-base">
                   <th className="bg-white" />
                   <th className="bg-white">NFT</th>
-                  <th className="bg-white">Max Ern/Day (MTMS)</th>
-                  <th className="bg-white">E-rate (MTMS/Min)</th>
+                  <th className="bg-white text-center">
+                    <div>Max Ern/Day</div> (MTMS)
+                  </th>
+                  <th className="bg-white text-center">
+                    <div>E-rate</div> (MTMS/Min)
+                  </th>
                   <th className="bg-white" />
                   <th className="bg-white" />
                 </tr>
                 </thead>
                 <tbody className="border-0">
-                  <tr className="text-cl-base text-md border-0 table-row">
-                  <td className="bg-white">
-                    <div className="flex justify-center mt-2">
-                      <Checkbox label="n" checked="checked" name="radio" />
-                    </div>
-                  </td>
-                  <td className="bg-white">
-                    <div>Basic plan</div>
-                    <span className="text-xs color-danger">Còn 5 ngày</span>
-                  </td>
-                  <td className="bg-white max-w-[150px] truncate">0.02</td>
-                  <td className="bg-white">
-                    0.7
-                  </td>
-                  <td className="bg-white">
-                    <button
-                      className={classNames('btn btn-primary btn-outlined-base')}
-                    >
-                      Buy More
-                    </button>
-                  </td>
-                  <td className="bg-white">
-                    <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
-                  </td>
-                </tr>
-                  <tr className="text-cl-base text-md border-0 table-row">
-                    <td className="bg-white">
-                      <div className="flex justify-center mt-2">
-                        <Checkbox label="n" name="radio" />
-                      </div>
-                    </td>
-                    <td className="bg-white">Basic plan</td>
-                    <td className="bg-white max-w-[150px] truncate">-</td>
-                    <td className="bg-white">
-                      -
-                    </td>
-                    <td className="bg-white">
-                      <button
-                        className={classNames('btn btn-primary btn-outlined-base')}
-                      >
-                        Buy More
-                      </button>
-                    </td>
-                    <td className="bg-white">
-                      <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
-                    </td>
-                  </tr>
+                {
+                  fakeData.map((item, index) => (
+                    <tr className="text-cl-base text-md border-0 table-row" key={index}>
+                      <td className="bg-white">
+                        <div className="flex justify-center mt-2">
+                          <Checkbox label="n" checked="checked" name="radio" />
+                        </div>
+                      </td>
+                      <td className="bg-white">
+                        <div>{ item.name }</div>
+                        <span className="text-xs color-danger">Còn 5 ngày</span>
+                      </td>
+                      <td className="bg-white max-w-[150px] truncate text-center">{ item.max_earn_day }</td>
+                      <td className="bg-white text-center">
+                        { item.e_rate }
+                      </td>
+                      <td className="bg-white">
+                        <button
+                          className={classNames('btn btn-primary btn-outlined-base')}
+                        >
+                          Buy More
+                        </button>
+                      </td>
+                      <td className="bg-white">
+                        <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
+                      </td>
+                    </tr>
+                  ))
+                }
                 </tbody>
               </table>
             </div>
@@ -86,3 +107,4 @@ const YourAccountPlan = ({t}) => {
 };
 
 export default withTranslation()(YourAccountPlan);
+

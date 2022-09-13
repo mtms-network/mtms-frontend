@@ -22,8 +22,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 25px;
-    width: 25px;
+    height: 24px;
+    width: 24px;
     border-radius: 50%;
     background-color: white;
     border: 1px solid #CCCCCC;
@@ -36,7 +36,7 @@
 
 /* When the radio button is checked, add a blue background */
 .container input:checked ~ .checkmark {
-    background-color: #0190fe;
+    border-color: #0190fe;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
@@ -54,10 +54,10 @@
 
 /* Style the indicator (dot/circle) */
 .container .checkmark:after {
-    top: 8px;
-    left: 8px;
-    width: 8px;
-    height: 8px;
+    top: 5.5px;
+    left: 5.5px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: white;
+    background: #0190fe;
 }

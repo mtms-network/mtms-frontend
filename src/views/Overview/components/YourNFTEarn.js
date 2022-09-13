@@ -3,9 +3,36 @@ import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 
+const fakeData = [
+  {
+    id: 1,
+    name: "NFT Gold",
+    image: "/icons/nft-gold.png",
+    power: 0,
+    max_earn_day: 10,
+    e_rate: 1,
+  },
+  {
+    id: 1,
+    name: "NFT Platinum",
+    image: "/icons/nft-platinum.png",
+    power: 0,
+    max_earn_day: 10,
+    e_rate: 1,
+  },
+  {
+    id: 1,
+    name: "NFT Sliver",
+    image: "/icons/nft-sliver.png",
+    power: 0,
+    max_earn_day: 10,
+    e_rate: 1,
+  }
+];
+
 const YourNFTEarn = ({t}) => {
   return (
-    <div className="container">
+    <div className="">
       <div className="flex flex-row w-full items-center pb-5">
         <div className="flex flex-col w-full">
           <p className="font-bold sm:w-full text-lg text-dark-base">
@@ -38,41 +65,45 @@ const YourNFTEarn = ({t}) => {
                 </tr>
                 </thead>
                 <tbody className="border-0">
-                <tr className="text-cl-base text-md border-0 table-row">
-                  <td className="bg-white">
-                    <div className="flex justify-center mt-2">
-                      <Checkbox label="n" checked="checked" name="radio" />
-                    </div>
-                  </td>
-                  <td className="bg-white">
-                    <div className="flex">
-                      <div>
-                        <img src="/icons/nft-gold.png" alt="nft gold"/>
-                      </div>
-                      <div className="flex flex-col justify-center ml-2">
-                        <div className="color-inactive">Inactive</div>
-                        <div>NFT Gold</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="bg-white max-w-[150px] truncate">0.02</td>
-                  <td className="bg-white">
-                    0.7
-                  </td>
-                  <td className="bg-white">
-                    0.7
-                  </td>
-                  <td className="bg-white">
-                    <button
-                      className={classNames('btn btn-primary btn-outlined-base')}
-                    >
-                      Buy More
-                    </button>
-                  </td>
-                  <td className="bg-white">
-                    <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
-                  </td>
-                </tr>
+                {
+                  fakeData.map((item, index) => (
+                    <tr className="text-cl-base text-md border-0 table-row">
+                      <td className="bg-white">
+                        <div className="flex justify-center mt-2">
+                          <Checkbox label="n" checked="checked" name="radio" />
+                        </div>
+                      </td>
+                      <td className="bg-white">
+                        <div className="flex">
+                          <div>
+                            <img src={item.image} alt="nft gold"/>
+                          </div>
+                          <div className="flex flex-col justify-center ml-2">
+                            <div className="color-inactive">Inactive</div>
+                            <div>{ item.name }</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="bg-white max-w-[150px] truncate text-center">{item.power}</td>
+                      <td className="bg-white text-center">
+                        {item.max_earn_day}
+                      </td>
+                      <td className="bg-white text-center">
+                        {item.e_rate}
+                      </td>
+                      <td className="bg-white text-center">
+                        <button
+                          className={classNames('btn btn-primary btn-outlined-base')}
+                        >
+                          Buy More
+                        </button>
+                      </td>
+                      <td className="bg-white">
+                        <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
+                      </td>
+                    </tr>
+                  ))
+                }
                 </tbody>
               </table>
             </div>
