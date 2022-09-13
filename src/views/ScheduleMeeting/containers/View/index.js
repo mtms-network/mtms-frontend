@@ -61,7 +61,7 @@ const ScheduleMeetingView = ({ t }) => {
   };
 
   const handleCopyLink = () => {
-    const meetingUrl = `${LIVE_MEETING_URL}/${meetingStore?.meeting?.identifier}`;
+    const meetingUrl = `${window.location.origin}/m/${meetingStore?.meeting?.identifier}`;
     navigator.clipboard.writeText(meetingUrl);
     message.success(t("home.copied"));
   };
