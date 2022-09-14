@@ -72,3 +72,9 @@ export const routeUrls = {
     path: "wallet/connect",
   },
 };
+
+export const routeParts = {
+  duplicate: {
+    path: "duplicate",
+  },
+};

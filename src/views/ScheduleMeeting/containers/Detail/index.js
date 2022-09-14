@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import moment from "moment";
 import {
   Button,
@@ -25,19 +25,18 @@ import { useMeetingStore } from "stores/meeting.store";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import { convertFromHTML, convertToRaw, EditorState, ContentState } from "draft-js";
-import { ALERT_TYPE, routeUrls, COMMON, MEETING_STATUS } from "configs";
+import { ALERT_TYPE, routeUrls, COMMON, MEETING_STATUS, routeParts } from "configs";
 import { handleHttpError } from "helpers";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   getMeetingDetail,
   getMeetingContact,
   updateInstantMeeting,
   sendEmailToMemberInMeeting,
+  createInstantMeeting,
 } from "services/meeting.service";
 import { withTranslation } from "react-i18next";
 import { message } from "antd";
-
-const timezone = Intl.DateTimeFormat().resolvedOptions();
 
 const ScheduleMeetingDetail = ({ t }) => {
   const DURATION_HOURS = [
@@ -76,6 +75,15 @@ const ScheduleMeetingDetail = ({ t }) => {
     error: [],
   });
   const [listContacts, setListContacts] = useState([]);
+  const location = useLocation();
+
+  const isDuplicate = useMemo(() => {
+    const paths = location.pathname.split("/");
+    if (paths.length > 0 && paths[paths.length - 1] === routeParts.duplicate.path) {
+      return true;
+    }
+    return false;
+  }, [location, meeting]);
 
   const schema = yup.object().shape({
     title: yup.string().required(),
@@ -123,7 +131,7 @@ const ScheduleMeetingDetail = ({ t }) => {
     return valid;
   };
 
-  const onSubmit = async (values) => {
+  const onUpdate = async (values) => {
     if (
       meeting &&
       meeting.status === MEETING_STATUS.scheduled &&
@@ -178,6 +186,53 @@ const ScheduleMeetingDetail = ({ t }) => {
     }
   };
 
+  const onDuplicate = async (values) => {
+    try {
+      const data = { ...values };
+      setLoading(true);
+
+      data.description = description
+        ? draftToHtml(convertToRaw(description?.getCurrentContent()))
+        : "";
+      data.is_paid = false;
+      data.is_pam = false;
+      data.uuid = null;
+      startDateTime.set("hour", startTime.hours());
+      startDateTime.set("minute", startTime.minutes());
+      startDateTime.set("second", startTime.seconds());
+      data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
+      data.contacts = contacts.map((value) => {
+        return { uuid: value };
+      });
+      data.type = { uuid: type };
+      data.period = durationHour * 60 + durationMinute;
+      const res = await createInstantMeeting(data);
+
+      if (res?.data) {
+        navigate(`/${routeUrls.scheduleMeeting.path}`);
+        message.success(res?.data?.message);
+      } else if (res?.request) {
+        const errorData = handleHttpError(res);
+        message.error(errorData.messageDetail);
+      }
+      setLoading(false);
+    } catch (error) {
+      if (error) {
+        const errorData = handleHttpError(error);
+        message.error(errorData?.message);
+      }
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = async (values) => {
+    if (isDuplicate) {
+      onDuplicate(values);
+    } else {
+      onUpdate(values);
+    }
+  };
+
   const onChangeDateTime = (e) => {
     setStartDateTime(
       moment(
@@ -209,12 +264,31 @@ const ScheduleMeetingDetail = ({ t }) => {
         setType(res.type.uuid);
         setValue("agenda", res.agenda);
         setValue("title", res.title);
-        setValue("identifier", res.identifier);
+        if (!isDuplicate) {
+          setValue("identifier", res.identifier);
+        }
         setValue("max_participant_count", res.max_participant_count);
         const startDate = moment(res.start_date_time, "YYYY-MM-DD");
         const time = moment(res.start_date_time);
-        setStartDateTime(startDate);
-        setStartTime(time);
+
+        if (isDuplicate) {
+          const now = moment();
+          const diffDays = startDate.diff(now.startOf("day"), "days");
+          if (diffDays <= 0) {
+            const diffHours = time.diff(now.startOf("hour"), "hours");
+            if (diffHours <= 0) {
+              setStartTime(moment());
+            } else {
+              setStartTime(time);
+            }
+            setStartDateTime(now);
+          } else {
+            setStartDateTime(startDate);
+          }
+        } else {
+          setStartDateTime(startDate);
+          setStartTime(time);
+        }
         setDurationHour(Math.floor(res.period / 60));
         setDurationMinute(res.period % 60);
         setDescription(
@@ -292,7 +366,14 @@ const ScheduleMeetingDetail = ({ t }) => {
         <>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1 text-center">
-              <GroupTitle icon={<IoTv />} title={t("schedule_meeting_new.schedule_new_meeting")} />
+              <GroupTitle
+                icon={<IoTv />}
+                title={
+                  isDuplicate
+                    ? t("schedule_meeting.duplicate_schedule_a_meeting")
+                    : t("schedule_meeting.update_schedule_a_meeting")
+                }
+              />
             </div>
           </div>
           <div className="w-[90%] m-auto bg-white rounded-[20px] md:w-[80%] lx:w-[60%]">
@@ -386,7 +467,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                       label={t("meeting.meeting_code")}
                       placeholder={t("meeting.enter_meeting_code")}
                       className="!bg-disable"
-                      disabled
+                      disabled={!isDuplicate}
                     />
                   </div>
                 </div>
@@ -446,7 +527,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
                 >
-                  {t("general.update")}
+                  {isDuplicate ? t("general.save") : t("general.update")}
                 </Button>
               </div>
             </div>
