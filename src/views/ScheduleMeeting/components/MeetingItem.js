@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import classNames from "classnames";
 import { Button, GroupLayout } from "components";
 import { Link, useNavigate } from "react-router-dom";
-import { LIVE_MEETING_URL, MEETING_STATUS, routeUrls } from "configs";
+import { LIVE_MEETING_URL, MEETING_STATUS, routeParts, routeUrls } from "configs";
 import { t } from "i18next";
 import { message } from "antd";
 import moment from "moment";
@@ -22,6 +22,12 @@ const MeetingItem = ({ data, className, onDelete }) => {
       }
     } catch (error) {
       console.log("start meeting error");
+    }
+  };
+
+  const handleDuplicate = () => {
+    if (data?.uuid) {
+      navigate(`/${routeUrls.scheduleMeeting.path}/${data?.uuid}/${routeParts.duplicate.path}`);
     }
   };
 
@@ -68,6 +74,18 @@ const MeetingItem = ({ data, className, onDelete }) => {
                     )}
                   >
                     {t("general.share_url")}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={handleDuplicate}
+                    className={classNames(
+                      "bg-white border-0 text-black",
+                      "hover:text-white hover:bg-primary",
+                      "flex justify-start rounded-none",
+                    )}
+                  >
+                    {t("meeting.config.duplicate_meeting")}
                   </a>
                 </li>
                 <li>

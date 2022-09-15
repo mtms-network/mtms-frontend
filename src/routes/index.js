@@ -1,5 +1,5 @@
 import { BrandLogoLoading } from "components";
-import { routeUrls } from "configs";
+import { routeParts, routeUrls } from "configs";
 import React, { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import {
@@ -51,6 +51,10 @@ const Routers = () => {
         <Route path={`/${routeUrls.scheduleMeeting.path}/new`} element={<ScheduleMeetingItem />} />
         <Route
           path={`/${routeUrls.scheduleMeeting.path}/:meetingId`}
+          element={<ScheduleMeetingDetail />}
+        />
+        <Route
+          path={`/${routeUrls.scheduleMeeting.path}/:meetingId/${routeParts.duplicate.path}`}
           element={<ScheduleMeetingDetail />}
         />
         <Route
