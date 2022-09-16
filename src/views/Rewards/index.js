@@ -145,8 +145,7 @@ const Rewards = () => {
     prepareData();
   }, []);
 
-  const convertTime = useCallback(() => {
-    const totalMinute = walletStore?.wallet?.total_minute_all_days;
+  const convertTime = useCallback((totalMinute) => {
     const h = Math.floor(totalMinute / 60);
     const m = totalMinute - h * 60;
     return {
@@ -218,14 +217,14 @@ const Rewards = () => {
                 <div className="mb-4">
                   <p className="text-base text-gray">{t("rewards.meeting_time")} (hh/mm)</p>
                   <p className="text-orange-base font-bold text-xl">
-                    {`${convertTime().h}:${convertTime().m}`}
+                    {`${convertTime(walletStore?.wallet?.total_minute_all_days).h}:${convertTime(walletStore?.wallet?.total_minute_all_days).m}`}
                   </p>
                 </div>
                 <div className="">
                   <p
                     className="text-base text-gray">{t("rewards.today_earning")} ({t('list.general.durations.minutes')})</p>
                   <p className="text-orange-base font-bold text-xl">
-                    {`${walletStore?.wallet?.total_minute_earn_today}`}
+                    {`${convertTime(walletStore?.wallet?.total_minute_earn_today).h}:${convertTime(walletStore?.wallet?.total_minute_earn_today).m}`}
                   </p>
                 </div>
               </div>

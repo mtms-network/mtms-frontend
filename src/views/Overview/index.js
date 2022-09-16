@@ -8,6 +8,7 @@ import {getAccessToken} from "helpers";
 import { getBoxs } from "../../services/orverview.service";
 import { getUser } from "../../services/auth.service";
 import {useAppStore} from "../../stores/app.store";
+import { YourAccountPlan, YourNFTEarn } from "./components";
 
 const Overview = ({ t }) => {
   const [boxes, setBoxes] = useState([]);
@@ -108,6 +109,13 @@ const Overview = ({ t }) => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="pt-10">
+        <YourAccountPlan />
+      </div>
+      <div className="pt-10">
+        <YourNFTEarn />
       </div>
     </MainLayout>
   );

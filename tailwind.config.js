@@ -177,6 +177,12 @@ const componentPlugins = {
       paddingTop: 10,
     },
   },
+  ".color-inactive": {
+    color: "#BCBDC6"
+  },
+  ".color-danger": {
+    color: "#EF4444"
+  }
 };
 module.exports = {
   content: ["./src/**/*.{html,js}"],
