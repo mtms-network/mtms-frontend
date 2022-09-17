@@ -88,7 +88,7 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
   ) : (
     <I18nextProvider i18n={i18next}>
       <div className="drawer drawer-mobile relative">
-        { appStore.loadingIcon && <Loading /> }
+        { appStore.loadingIcon && <Loading title={appStore.loadingIconTitle} /> }
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
           <NavbarLayout width={width} onLogout={handleLogout} />

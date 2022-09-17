@@ -13,22 +13,36 @@ import {useAppStore} from "../../stores/app.store";
 import { YourAccountPlan, YourNFTEarn } from "./components";
 import erc20abi from "../../abi/mtms-smartcontract.abi.json";
 import BrandLogoLoading from "../../components/composite/BrandLogoLoading";
+import {Loading} from "../../components/base/Loading";
 
 const Overview = ({ t }) => {
   const [boxes, setBoxes] = useState([]);
+  const [boxesBE, setBoxesBE] = useState([]);
   const navigate = useNavigate();
   const [appStore, updateAppStore] = useAppStore();
-  const [loading, setLoading] = useState(true);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingBox, setLoadingBox] = useState(true);
+
+  const loadBoxBE = async () => {
+    const box = await getBoxs();
+    setBoxes(box);
+    return box;
+  };
+
+  const loadBoxSmartContract = async (box) => {
+    await setLoadingBox(true);
+    const data = await getBoxesContract([...box]);
+    await setBoxes([...data]);
+    await setLoadingBox(false)
+  }
 
   const fetchData = async () => {
     try {
-      await setLoading(true);
-      const boxBE = await getBoxs();
-      const data = await getBoxesContract([...boxBE]);
-      await setBoxes([...data]);
-      await setLoading(false)
+      const box= await loadBoxBE();
+      await loadBoxSmartContract(box)
     } catch (error) {
       console.log('err',error);
+      await setLoadingBox(false)
     }
   };
 
@@ -51,7 +65,9 @@ const Overview = ({ t }) => {
     try {
       await updateAppStore((store) => {
         store.loadingIcon = true;
-      })
+        store.loadingIconTitle = t("overview.title_loading");
+      });
+
       const web3 = new Web3(window.web3.currentProvider);
       const accounts = await web3.eth.getAccounts();
       const walletAddress = accounts[0];
@@ -63,7 +79,7 @@ const Overview = ({ t }) => {
 
       if(!box?.tokenId?.length)
       {
-        message.error("Can not found available box");
+        message.error(t("overview.box_not_found"));
         return null;
       }
       const tId = box.tokenId[0];
@@ -72,13 +88,19 @@ const Overview = ({ t }) => {
       await saveOpenBox({ tokenId: tId, blindboxId: box.id });
       await updateAppStore((store) => {
         store.loadingIcon = false;
-      })
+        store.loadingIconTitle = "";
+      });
+
       await setBoxes([]);
+      message.success(t("overview.unbox_success"));
       await fetchData();
 
-      message.success("Unbox success");
     }catch (err){
-      console.log('err: Can not unbox',);
+      message.error(t("overview.unbox_fail"))
+      console.log('err: Can not unbox');
+      await updateAppStore((store) => {
+        store.loadingIcon = false;
+      })
     }
 
     return true;
@@ -86,13 +108,13 @@ const Overview = ({ t }) => {
 
   useEffect(() => {
     if(appStore.isAuthenticated){
-      fetchData();
+      fetchData().then();
     }
   }, [appStore.isAuthenticated]);
 
   return (
     <MainLayout>
-      { loading ? (
+      { loadingPage ? (
         <div className="overflow-x-auto flex-1 rounded-lg">
           <BrandLogoLoading />
         </div>
@@ -137,7 +159,10 @@ const Overview = ({ t }) => {
                         <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between">
                           <div>{t("overview.owning")}</div>
                           <div className={classNames("text-orange-base font-bold")}>
-                            {box?.owning} {t("overview.box")}
+                            { loadingBox
+                              ? <Loading wrapper={false} />
+                              : <>{box?.owning} {t("overview.box")}</>
+                            }
                           </div>
                         </div>
                       </div>
@@ -145,13 +170,17 @@ const Overview = ({ t }) => {
                         <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between	">
                           <div>{t("overview.available_unbox")}</div>
                           <div className={classNames("text-orange-base  font-bold")}>
-                            {box?.available} {t("overview.box")}
+                            { loadingBox
+                              ? <Loading wrapper={false} />
+                              : <>{box?.available} {t("overview.box")}</>
+                            }
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className={classNames("mt-4 flex justify-center")}>
                       <Button disabled={!isActive} className="btn-primary w-40" onClick={ async () => { await onUnbox(box) }}>
+                        { loadingBox && <Loading wrapper={false} title="" /> }
                         {t("overview.open_box")}
                       </Button>
                     </div>

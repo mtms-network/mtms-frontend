@@ -8,7 +8,19 @@ const client = createPrivateInstance("/your-box");
 export const getBoxs = async () => {
   try {
     const res = await client.get("/box-list");
-    return res?.data?.data || [];
+    const boxes = [...BOXES];
+
+    return boxes.map((item) => {
+      const boxBE = res?.data?.data?.find((b) => b.sku === item.sku);
+      if(boxBE){
+        item.photo = boxBE.photo;
+      }
+      return {
+        ...item,
+        available: 0,
+        owning: 0,
+      }
+    });
   } catch (err) {
     console.error("getPreRequireMeeting", err);
     return [];
