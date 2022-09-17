@@ -12,6 +12,7 @@ import { useMeetingStore } from "stores/meeting.store";
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
 import BrandLogoLoading from "./BrandLogoLoading";
+import {Loading} from "../base/Loading";
 
 const Layout = ({ children, bottom, contentClassName = "" }) => {
   const [appStore, updateAppStore] = useAppStore();
@@ -86,7 +87,8 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
     </div>
   ) : (
     <I18nextProvider i18n={i18next}>
-      <div className="drawer drawer-mobile">
+      <div className="drawer drawer-mobile relative">
+        { appStore.loadingIcon && <Loading /> }
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
           <NavbarLayout width={width} onLogout={handleLogout} />

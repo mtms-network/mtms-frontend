@@ -5,7 +5,7 @@ const Checkbox = ({label, checked, name, ...props}) => {
   return (
       <label className={styles.container}>
         { label }
-        <input type="radio" checked={checked} name={name} {...props}/>
+        <input type="radio" defaultChecked={checked} name={name} {...props}/>
         <span className={styles.checkmark} />
       </label>
   );

@@ -10,6 +10,10 @@ export const GOOGLE_CLIENT_ID =
 
 export const AVATAR_UPLOAD_URL = "/profile/avatar";
 
+export const WALLET_ADDRESS = {
+  RINKEBY_ETH: "0xb637475158e3Dd6985DCc015AA143F1C91098AB5"
+}
+
 export const BASE_API = {
   api: "/api",
   auth: "/auth",
@@ -67,16 +71,24 @@ export const WALLET_PROVIDER = {
 
 export const BOXES = [
   {
+    id: null,
     photo: "/images/common-box.svg",
     name: "COMMON BOX",
+    sku: "box-common",
+    isEpicBox: false,
     owning: 0,
-    avaliable: 0,
+    available: 0,
+    tokenId: []
   },
   {
+    id: null,
     photo: "/images/box-vip.svg",
     name: "EPIC BOX",
     owning: 0,
-    avaliable: 0,
+    available: 0,
+    isEpicBox: true,
+    tokenId: [],
+    sku: "box-epic",
   },
 ];
 

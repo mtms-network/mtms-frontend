@@ -54,3 +54,19 @@ td {
 .ant-modal-content {
   border-radius: 12px;
 }
+
+
+.overlay-loading {
+    pointer-events: all;
+    z-index: 99999;
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: wait;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.6);
+}

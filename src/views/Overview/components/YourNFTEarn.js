@@ -67,7 +67,7 @@ const YourNFTEarn = ({t}) => {
                 <tbody className="border-0">
                 {
                   fakeData.map((item, index) => (
-                    <tr className="text-cl-base text-md border-0 table-row">
+                    <tr className="text-cl-base text-md border-0 table-row" key={index}>
                       <td className="bg-white">
                         <div className="flex justify-center mt-2">
                           <Checkbox label="n" checked="checked" name="radio" />
