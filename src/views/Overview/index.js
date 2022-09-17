@@ -193,12 +193,12 @@ const Overview = ({ t }) => {
       ) }
 
 
-      <div className="pt-10">
-        <YourAccountPlan />
-      </div>
-      <div className="pt-10">
-        <YourNFTEarn />
-      </div>
+      {/*<div className="pt-10">*/}
+      {/*  <YourAccountPlan />*/}
+      {/*</div>*/}
+      {/*<div className="pt-10">*/}
+      {/*  <YourNFTEarn />*/}
+      {/*</div>*/}
     </MainLayout>
   );
 };
