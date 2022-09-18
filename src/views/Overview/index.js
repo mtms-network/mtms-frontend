@@ -97,7 +97,6 @@ const Overview = ({ t }) => {
 
     }catch (err){
       message.error(t("overview.unbox_fail"))
-      console.log('err: Can not unbox');
       await updateAppStore((store) => {
         store.loadingIcon = false;
       })

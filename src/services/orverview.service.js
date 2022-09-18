@@ -48,46 +48,37 @@ export const getBoxesContract = async (boxBE) => {
       WALLET_ADDRESS.RINKEBY_ETH
     );
 
-    // get count số lượng box
-    const balance = await contract.methods.balanceOf(walletAddress).call();
-
     let boxList = [...BOXES];
-    boxList = boxList.map((item) => ({
-      ...item,
-      available: 0,
-      owning: 0,
-    }))
-
-
-    // await contract.methods.mint(true, 9).send({from: accounts[0]});
-    if(balance <= 0) return  [];
-    let i = 0;
-    for(i; i < balance; i++)
-    {
-      const tokenId = await contract.methods.tokenOfOwnerByIndex(walletAddress, i).call();
-      // check box is "COMMON BOX" or "EPIC BOX"
-      const isEpicBox = await contract.methods.isEpicBox(tokenId).call();
-
-      const ownerOf = await contract.methods.ownerOf(tokenId).call();
-
-      // check is unbox
-      const nftsType = await contract.methods.nftsType(tokenId).call();
-
-      const indexBox = boxList.findIndex((item) => item.isEpicBox === !!isEpicBox);
-      const indexBoxBE = boxBE.findIndex((item) => item.sku === boxList[indexBox].sku);
-      if(indexBox !== -1){
-        boxList[indexBox].id = boxBE[indexBoxBE].id;
-        boxList[indexBox].photo = boxBE[indexBoxBE].photo;
+    boxList = boxList.map((item) => {
+      const beBox = boxBE?.find((b) => b.sku === item.sku);
+      if(beBox){
+        item.id = beBox.id;
+        item.photo = beBox.photo;
       }
+      return {
+        ...item,
+        available: 0,
+        owning: 0,
+      }
+    })
 
-      const arrNftType = ["silver","gold","platinum"];
-      if(arrNftType.includes(nftsType)){
+    // await contract.methods.mint(false, 5).send({from: walletAddress});
+
+    const boxesRequest = await contract.methods.getTokenIds(walletAddress).call();
+
+    const arrNftType = ["silver","gold","platinum"];
+    boxesRequest.forEach((item) => {
+      const indexBox = boxList.findIndex((b) => b.isEpicBox === !!item.isEpicBox);
+
+      if(arrNftType.includes(item.nftsType)){
         boxList[indexBox].owning += 1;
       }else{
         boxList[indexBox].available += 1;
-        boxList[indexBox].tokenId.push(tokenId);
+        boxList[indexBox].tokenId.push(item.id);
       }
-    }
+    });
+
+    setTimeout(() => {}, 5000)
     return boxList;
   }catch (err){
     console.log('err', err);
