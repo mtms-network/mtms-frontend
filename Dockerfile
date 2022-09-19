@@ -1,6 +1,6 @@
 # Stage 1, based on Node.js, to build and compile the react app
 FROM node:12-alpine as build
-
+RUN apk add --no-cache libc6-compat --virtual .builds-deps build-base python3
 RUN mkdir -p /app
 WORKDIR /app
 COPY package*.json /app/
