@@ -3,7 +3,8 @@ export const LIVE_MEETING_URL = "https://meeting.mtms.live";
 
 export const LIVE_URL = "https://api.mtms.live";
 
-export const LIVE_API = "https://api.mtms.live/api";
+export const LIVE_API = "https://api-dev.mtms.live/api";
+// export const LIVE_API = "http://mtms.localhost/api";
 
 export const GOOGLE_CLIENT_ID =
   "604052992702-lnrd7mi7iapok8jrhiohvok1s9m11k7l.apps.googleusercontent.com";

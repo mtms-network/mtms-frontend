@@ -23,11 +23,13 @@ export const signInWallet = async ({
   provider = "wallet",
   type = "metamask",
   walletAddress = "",
+  signId = "",
 }) => {
   const res = await client.post("/login/wallet", {
     wallet_type: type,
     wallet_provider: provider,
-    wallet_address: walletAddress,
+    id: walletAddress,
+    signature: signId,
   });
   return res?.data;
 };
@@ -90,3 +92,9 @@ export const getUser = async (token) => {
   });
   return res?.data;
 };
+
+
+export const getMessageKey = async () => {
+  const res = await client.get('/signature');
+  return res?.data;
+}

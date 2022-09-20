@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { WalletButton } from "components";
 import { useWallet } from "react-binance-wallet";
 import { useMetaMask } from "metamask-react";
-import { signInWallet } from "services";
+import {getMessageKey, signInWallet} from "services";
 import { routeUrls, WALLET_PROVIDER } from "configs";
 import { useNavigate } from "react-router-dom";
 import { setTokenLoginSucceeded } from "helpers";
 import { useAppStore } from "stores/app.store";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
+import Web3 from "web3";
 
 const Wallet = () => {
   const {
@@ -44,12 +45,29 @@ const Wallet = () => {
 
   const handleConnectMetaMaskWallet = async () => {
     try {
+      const web3 = new Web3(window.web3.currentProvider);
+
+      let accounts = await web3.eth.getAccounts();
+      if(!accounts || accounts?.length === 0){
+        accounts = await connectMetaMask();
+      }
+
+      const resMessageKey = await getMessageKey();
+
+      if(!resMessageKey?.data_sign){
+        message.error({ content: "Cannot get message key", key: walletMessageKey });
+        return "";
+      }
+
+      const sign = await web3.eth.personal.sign(resMessageKey?.data_sign, accounts[0], resMessageKey?.data_sign);
+
       message.loading({ content: `${t("global.loading")} ...`, key: walletMessageKey });
       const res = await connectMetaMask();
       if (res.length) {
         const data = await signInWallet({
-          walletAddress: res[0],
+          walletAddress: resMessageKey.id,
           provider: WALLET_PROVIDER.metamask.type,
+          signId: sign
         });
         await handleValidWallet(data);
       } else {
