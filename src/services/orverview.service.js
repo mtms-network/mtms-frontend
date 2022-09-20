@@ -14,9 +14,12 @@ export const getBoxs = async () => {
       const boxBE = res?.data?.data?.find((b) => b.sku === item.sku);
       if(boxBE){
         item.photo = boxBE.photo;
+        item.id = boxBE.id
       }
+
       return {
         ...item,
+        id: boxBE.id,
         available: 0,
         owning: 0,
       }
