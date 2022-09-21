@@ -115,7 +115,7 @@ const Overview = ({ t }) => {
       erc20abi,
       WALLET_ADDRESS.RINKEBY_ETH
     );
-    await contract.methods.mint(isEpicBox, 1).send({from: walletAddress});
+    await contract.methods.mint(isEpicBox, 3).send({from: walletAddress});
   }
 
   useEffect(() => {
