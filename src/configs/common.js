@@ -34,6 +34,14 @@ export const ALERT_TYPE = {
   MESSAGE: "MESSAGE",
 };
 
+export const WALLET_NETWORK = {
+  mainnet: 1,
+  kovan: 42,
+  ropsten: 3,
+  renkeby: 4,
+  goerli: 5,
+}
+
 export const API_RESPONSE_STATUS = {
   success: "success",
 };

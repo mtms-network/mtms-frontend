@@ -3,9 +3,9 @@ import { WalletButton } from "components";
 import { useWallet } from "react-binance-wallet";
 import { useMetaMask } from "metamask-react";
 import {getMessageKey, signInWallet} from "services";
-import { routeUrls, WALLET_PROVIDER } from "configs";
+import {routeUrls, WALLET_ADDRESS, WALLET_NETWORK, WALLET_PROVIDER} from "configs";
 import { useNavigate } from "react-router-dom";
-import { setTokenLoginSucceeded } from "helpers";
+import {checkMatchNetwork, setTokenLoginSucceeded} from "helpers";
 import { useAppStore } from "stores/app.store";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
@@ -47,6 +47,11 @@ const Wallet = () => {
     try {
       const web3 = new Web3(window.web3.currentProvider);
 
+      if(!checkMatchNetwork()){
+        message.error("You must connect Renkeby network");
+        return "";
+      }
+
       let accounts = await web3.eth.getAccounts();
       if(!accounts || accounts?.length === 0){
         accounts = await connectMetaMask();
@@ -73,6 +78,8 @@ const Wallet = () => {
       } else {
         throw new Error(t("global.could_not_find", { attribute: "Metamask" }));
       }
+
+      return "";
     } catch (error) {
       message.error({ content: error.message, key: walletMessageKey });
     }
