@@ -87,4 +87,15 @@ export const getBoxesContract = async (boxBE) => {
     console.log('err', err);
     return [];
   }
-}
+};
+
+export const getNFTs = async () => {
+  try {
+    const res = await client.get('/nfts');
+    return res?.data;
+  }catch (err){
+    console.log('err getNFTs');
+  };
+  return null;
+};
+

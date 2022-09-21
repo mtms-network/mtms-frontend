@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import {getAccessToken} from "helpers";
 import Web3 from 'web3';
 import {message} from "antd";
-import {getBoxesContract, getBoxs, saveOpenBox} from "../../services/orverview.service";
+import {getBoxesContract, getBoxs, getNFTs, saveOpenBox} from "../../services/orverview.service";
 import { getUser } from "../../services";
 import {useAppStore} from "../../stores/app.store";
 import { YourAccountPlan, YourNFTEarn } from "./components";
@@ -17,11 +17,10 @@ import {Loading} from "../../components/base/Loading";
 
 const Overview = ({ t }) => {
   const [boxes, setBoxes] = useState([]);
-  const [boxesBE, setBoxesBE] = useState([]);
-  const navigate = useNavigate();
   const [appStore, updateAppStore] = useAppStore();
   const [loadingPage, setLoadingPage] = useState(false);
   const [loadingBox, setLoadingBox] = useState(true);
+  const [NFTs, setNFTs] = useState([]);
 
   const loadBoxBE = async () => {
     const box = await getBoxs();
@@ -39,6 +38,8 @@ const Overview = ({ t }) => {
   const fetchData = async () => {
     try {
       const box= await loadBoxBE();
+      const nftS = await getNFTs();
+      setNFTs(nftS?.data || []);
       await loadBoxSmartContract(box)
     } catch (error) {
       console.log('err',error);
@@ -195,9 +196,9 @@ const Overview = ({ t }) => {
       {/*<div className="pt-10">*/}
       {/*  <YourAccountPlan />*/}
       {/*</div>*/}
-      {/*<div className="pt-10">*/}
-      {/*  <YourNFTEarn />*/}
-      {/*</div>*/}
+      <div className="pt-10">
+        <YourNFTEarn NFTs={NFTs} />
+      </div>
     </MainLayout>
   );
 };

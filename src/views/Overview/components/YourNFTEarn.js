@@ -3,34 +3,8 @@ import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 
-const fakeData = [
-  {
-    id: 1,
-    name: "NFT Gold",
-    image: "/icons/nft-gold.png",
-    power: 0,
-    max_earn_day: 10,
-    e_rate: 1,
-  },
-  {
-    id: 1,
-    name: "NFT Platinum",
-    image: "/icons/nft-platinum.png",
-    power: 0,
-    max_earn_day: 10,
-    e_rate: 1,
-  },
-  {
-    id: 1,
-    name: "NFT Sliver",
-    image: "/icons/nft-sliver.png",
-    power: 0,
-    max_earn_day: 10,
-    e_rate: 1,
-  }
-];
+const YourNFTEarn = ({t, NFTs}) => {
 
-const YourNFTEarn = ({t}) => {
   return (
     <div className="">
       <div className="flex flex-row w-full items-center pb-5">
@@ -66,7 +40,7 @@ const YourNFTEarn = ({t}) => {
                 </thead>
                 <tbody className="border-0">
                 {
-                  fakeData.map((item, index) => (
+                  NFTs.map((item, index) => (
                     <tr className="text-cl-base text-md border-0 table-row" key={index}>
                       <td className="bg-white">
                         <div className="flex justify-center mt-2">
@@ -76,20 +50,20 @@ const YourNFTEarn = ({t}) => {
                       <td className="bg-white">
                         <div className="flex">
                           <div>
-                            <img src={item.image} alt="nft gold"/>
+                            <img className="w-32" src={item?.nft?.photo} alt="nft gold"/>
                           </div>
                           <div className="flex flex-col justify-center ml-2">
                             <div className="color-inactive">Inactive</div>
-                            <div>{ item.name }</div>
+                            <div>{ item?.nft?.name }</div>
                           </div>
                         </div>
                       </td>
                       <td className="bg-white max-w-[150px] truncate text-center">{item.power}</td>
                       <td className="bg-white text-center">
-                        {item.max_earn_day}
+                        {item?.max_e_rate}
                       </td>
                       <td className="bg-white text-center">
-                        {item.e_rate}
+                        {item?.min_e_rate}
                       </td>
                       <td className="bg-white text-center">
                         <button
@@ -111,7 +85,7 @@ const YourNFTEarn = ({t}) => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default withTranslation()(YourNFTEarn);
