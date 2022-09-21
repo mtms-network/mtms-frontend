@@ -106,6 +106,18 @@ const Overview = ({ t }) => {
     return true;
   }
 
+  const mintBox = async (isEpicBox = false) => {
+    const web3 = new Web3(window.web3.currentProvider);
+    const accounts = await web3.eth.getAccounts();
+    const walletAddress = accounts[0];
+
+    const contract = new web3.eth.Contract(
+      erc20abi,
+      WALLET_ADDRESS.RINKEBY_ETH
+    );
+    await contract.methods.mint(isEpicBox, 1).send({from: walletAddress});
+  }
+
   useEffect(() => {
     if(appStore.isAuthenticated){
       fetchData().then();
@@ -129,6 +141,14 @@ const Overview = ({ t }) => {
                 <Button className="btn btn-primary" onClick={onBuyBox}>
                   <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
                   {t("blindBox.buy_box")}
+                </Button>
+
+                <Button className="btn btn-primary ml-2" onClick={() => { mintBox(false) }}>
+                  Mint Common box
+                </Button>
+
+                <Button className="btn btn-primary ml-2" onClick={() => { mintBox(true) }}>
+                  Mint epic box
                 </Button>
               </div>
             </div>
