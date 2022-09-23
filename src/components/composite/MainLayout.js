@@ -13,6 +13,7 @@ import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
 import BrandLogoLoading from "./BrandLogoLoading";
 import {Loading} from "../base/Loading";
+import OpenBox from "../base/OpenBox";
 
 const Layout = ({ children, bottom, contentClassName = "" }) => {
   const [appStore, updateAppStore] = useAppStore();
@@ -81,12 +82,15 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
     });
   }, []);
 
+  const { appendComponentLayout } = appStore;
+
   return loading ? (
     <div className="h-screen">
-      <BrandLogoLoading />
+        <BrandLogoLoading />
     </div>
   ) : (
     <I18nextProvider i18n={i18next}>
+      { appendComponentLayout}
       <div className="drawer drawer-mobile relative">
         { appStore.loadingIcon && <Loading title={appStore.loadingIconTitle} /> }
         <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />

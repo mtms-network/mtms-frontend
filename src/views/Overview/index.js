@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { MainLayout, Button, GroupLayout, GroupTitle, Input } from "components";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import {BOXES, CONFIGS, WALLET_ADDRESS} from "configs";
 import { useNavigate } from "react-router-dom";
-import {getAccessToken} from "helpers";
+import {getAccessToken, getWalletAddress} from "helpers";
 import Web3 from 'web3';
 import {message} from "antd";
 import {getBoxesContract, getBoxs, getNFTs, saveOpenBox} from "../../services/orverview.service";
@@ -14,6 +14,7 @@ import { YourAccountPlan, YourNFTEarn } from "./components";
 import erc20abi from "../../abi/mtms-smartcontract.abi.json";
 import BrandLogoLoading from "../../components/composite/BrandLogoLoading";
 import {Loading} from "../../components/base/Loading";
+import OpenBox from "../../components/base/OpenBox";
 
 const Overview = ({ t }) => {
   const [boxes, setBoxes] = useState([]);
@@ -21,7 +22,6 @@ const Overview = ({ t }) => {
   const [loadingPage, setLoadingPage] = useState(false);
   const [loadingBox, setLoadingBox] = useState(true);
   const [NFTs, setNFTs] = useState([]);
-
   const loadBoxBE = async () => {
     const box = await getBoxs();
     setBoxes(box);
@@ -62,6 +62,15 @@ const Overview = ({ t }) => {
     }
   };
 
+  const reloadData = useCallback(async () => {
+    await updateAppStore((store) => {
+      store.appendComponentLayout = null;
+    });
+    await setBoxes([]);
+    message.success(t("overview.unbox_success"));
+    await fetchData();
+  }, []);
+
   const onUnbox = async (box) => {
     try {
       await updateAppStore((store) => {
@@ -86,20 +95,24 @@ const Overview = ({ t }) => {
       const tId = box.tokenId[0];
 
       await contract.methods.openBox(tId).send({from: walletAddress});
-      await saveOpenBox({ tokenId: tId, blindboxId: box.id });
+
+      const resOpenBox = await saveOpenBox({ tokenId: tId, blindboxId: box.id });
       await updateAppStore((store) => {
         store.loadingIcon = false;
+        store.appendComponentLayout = <OpenBox
+          nft={resOpenBox?.nft?.name}
+          voucher={resOpenBox?.voucher?.name}
+          subscription={resOpenBox?.nft?.subscription?.name}
+          setIsReload={reloadData}
+        />;
         store.loadingIconTitle = "";
       });
-
-      await setBoxes([]);
-      message.success(t("overview.unbox_success"));
-      await fetchData();
 
     }catch (err){
       message.error(t("overview.unbox_fail"))
       await updateAppStore((store) => {
         store.loadingIcon = false;
+        store.appendComponentLayout = null;
       })
     }
 

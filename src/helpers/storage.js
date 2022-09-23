@@ -34,3 +34,9 @@ export const resetUserToken = () => {
 export const resetUserInfo = () => {
   localStorage.setItem(LOCAL_STORAGE_KEYS.user, "");
 };
+
+export const getWalletAddress = () => {
+  const user = getUser();
+
+  console.log('user', user.wallets);
+}

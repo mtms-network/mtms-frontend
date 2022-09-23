@@ -17,6 +17,7 @@ const AppStore = createStore({
   registerData: null,
   loadingIcon: false,
   loadingIconTitle: "",
+  appendComponentLayout: null,
 });
 
 export const useAppStore = AppStore.useStore;

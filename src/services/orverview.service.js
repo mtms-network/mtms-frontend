@@ -32,8 +32,8 @@ export const getBoxs = async () => {
 
 export const saveOpenBox = async (data) => {
   try {
-    await client.post("/open-box", data);
-    return true;
+    const res = await client.post("/open-box", data);
+    return res?.data;
   }catch (err){
     console.log('err saveOpenBox');
   }
