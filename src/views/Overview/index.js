@@ -108,6 +108,9 @@ const Overview = ({ t }) => {
         store.loadingIconTitle = "";
       });
 
+      box.tokenId.shift();
+      box.owning += 1;
+      box.available -= 1;
     }catch (err){
       message.error(t("overview.unbox_fail"))
       await updateAppStore((store) => {
