@@ -92,6 +92,10 @@ const Overview = ({ t }) => {
         store.loadingIconTitle = "";
       });
 
+      box.tokenId.shift();
+      box.owning += 1;
+      box.available -= 1;
+
       await setBoxes([]);
       message.success(t("overview.unbox_success"));
       await fetchData();
