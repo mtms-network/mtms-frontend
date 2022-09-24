@@ -1,9 +1,46 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
+import Pagination from "../../../components/composite/Pagination";
+import {getNFTs} from "../../../services/orverview.service";
 
-const YourNFTEarn = ({t, NFTs}) => {
+const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
+  const [NFTs, setNFTs] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [filter, setFilter] = useState({
+    limit: 5,
+    page: 1,
+    sort_by: "id",
+    order: "desc",
+  });
+
+  const fetchData = async () => {
+    const res = await getNFTs(filter);
+
+    await setPagination(
+      res?.meta || {}
+    );
+
+    await setNFTs(
+      res?.data || []
+    );
+
+    await setIsLoadData(false);
+  };
+  useEffect(() => {
+    if(isLoadData && !isLoadDataSub){
+      console.log('c')
+      fetchData().then();
+    }
+  }, [isLoadData]);
+
+  useEffect(() => {
+    if(!isLoadData){
+      console.log('call')
+      fetchData().then();
+    }
+  }, [filter.page]);
 
   return (
     <div className="">
@@ -16,7 +53,7 @@ const YourNFTEarn = ({t, NFTs}) => {
             You can only active 1 NFT Earn to earn token
           </div>
           <div className="flex w-full flex-1 mt-2">
-            <div className="overflow-x-auto flex-1 rounded-lg">
+            <div className="overflow-x-auto flex-1 rounded-lg bg-white">
               <table className="table w-full">
                 <thead className="border-b-1">
                 <tr className="text-cl-base">
@@ -80,6 +117,34 @@ const YourNFTEarn = ({t, NFTs}) => {
                 }
                 </tbody>
               </table>
+              <div className="py-8 flex justify-end px-6">
+                <Pagination
+                  page={pagination?.current_page}
+                  totalPage={pagination?.last_page}
+                  total={pagination?.total}
+                  limit={pagination?.per_page}
+                  from={pagination?.from}
+                  to={pagination?.to}
+                  onNext={() => {
+                    if (filter.page < pagination?.last_page) {
+                      const nextPage = filter.page + 1;
+                      setFilter({ ...filter, page: nextPage });
+                    }
+                  }}
+                  onBack={() => {
+                    if (filter.page <= pagination?.last_page && filter.page > 1) {
+                      const nextPage = filter.page - 1;
+                      setFilter({ ...filter, page: nextPage });
+                    }
+                  }}
+                  onPage={(page) => {
+                    if (page !== pagination?.current_page) {
+                      setFilter({ ...filter, page });
+                    }
+                  }}
+                />
+              </div>
+
             </div>
           </div>
         </div>

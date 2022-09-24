@@ -1,44 +1,47 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
+import {getNFTs, getSubscription} from "../../../services/orverview.service";
+import Pagination from "../../../components/composite/Pagination";
 
-const fakeData = [
-  {
-    id: 1,
-    name: 'Basic plan',
-    expire_date: null,
-    max_earn_day: 10,
-    e_rate: 1,
+const YourAccountPlan = ({isLoadData, setIsLoadData}) => {
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [filter, setFilter] = useState({
+    limit: 5,
+    page: 1,
+    sort_by: "id",
+    order: "desc",
+  });
 
-  },
-  {
-    id: 1,
-    name: 'Silver Plan',
-    expire_date: '2022-09-04',
-    max_earn_day: 2,
-    e_rate: 1.5,
+  const fetchData = async () => {
+    const res = await getSubscription(filter);
 
-  },
-  {
-    id: 1,
-    name: 'Gold Plan',
-    expire_date: '2022-09-04',
-    max_earn_day: 2,
-    e_rate: 7,
+    await setPagination(
+      res?.meta || {}
+    );
 
-  },
-  {
-    id: 1,
-    name: 'Platinum Plan',
-    expire_date: '2022-09-04',
-    max_earn_day: 13.2,
-    e_rate: 3,
+    await setSubscriptions(
+      res?.data || []
+    );
 
-  }
-];
+    await setIsLoadData(false);
+  };
 
-const YourAccountPlan = ({t}) => {
+  useEffect(() => {
+    if(isLoadData){
+      console.log('load s')
+      fetchData().then();
+    }
+  }, [isLoadData]);
+
+  useEffect(() => {
+    if(!isLoadData){
+      fetchData().then();
+    }
+  }, [filter.page]);
+
   return (
     <div className="">
       <div className="flex flex-row w-full items-center pb-5">
@@ -50,7 +53,7 @@ const YourAccountPlan = ({t}) => {
             You can only active 1 Account Plan to earn token
           </div>
           <div className="flex w-full flex-1 mt-2">
-            <div className="overflow-x-auto flex-1 rounded-lg">
+            <div className="overflow-x-auto flex-1 rounded-lg bg-white">
               <table className="table w-full">
                 <thead className="border-b-1">
                 <tr className="text-cl-base">
@@ -68,7 +71,7 @@ const YourAccountPlan = ({t}) => {
                 </thead>
                 <tbody className="border-0">
                 {
-                  fakeData.map((item, index) => (
+                  subscriptions?.map((item, index) => (
                     <tr className="text-cl-base text-md border-0 table-row" key={index}>
                       <td className="bg-white">
                         <div className="flex justify-center mt-2">
@@ -79,9 +82,9 @@ const YourAccountPlan = ({t}) => {
                         <div>{ item.name }</div>
                         <span className="text-xs color-danger">Còn 5 ngày</span>
                       </td>
-                      <td className="bg-white max-w-[150px] truncate text-center">{ item.max_earn_day }</td>
+                      <td className="bg-white max-w-[150px] truncate text-center">{ item?.subscription?.max_earning_per_day }</td>
                       <td className="bg-white text-center">
-                        { item.e_rate }
+                        { item?.subscription?.earning_rate }
                       </td>
                       <td className="bg-white">
                         <button
@@ -98,6 +101,33 @@ const YourAccountPlan = ({t}) => {
                 }
                 </tbody>
               </table>
+              <div className="py-8 flex justify-end px-6">
+                <Pagination
+                  page={pagination?.current_page}
+                  totalPage={pagination?.last_page}
+                  total={pagination?.total}
+                  limit={pagination?.per_page}
+                  from={pagination?.from}
+                  to={pagination?.to}
+                  onNext={() => {
+                    if (filter.page < pagination?.last_page) {
+                      const nextPage = filter.page + 1;
+                      setFilter({ ...filter, page: nextPage });
+                    }
+                  }}
+                  onBack={() => {
+                    if (filter.page <= pagination?.last_page && filter.page > 1) {
+                      const nextPage = filter.page - 1;
+                      setFilter({ ...filter, page: nextPage });
+                    }
+                  }}
+                  onPage={(page) => {
+                    if (page !== pagination?.current_page) {
+                      setFilter({ ...filter, page });
+                    }
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

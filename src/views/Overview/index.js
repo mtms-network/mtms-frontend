@@ -1,13 +1,12 @@
 import React, {useCallback, useEffect, useState} from "react";
-import { MainLayout, Button, GroupLayout, GroupTitle, Input } from "components";
+import { MainLayout, Button } from "components";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
-import {BOXES, CONFIGS, WALLET_ADDRESS} from "configs";
-import { useNavigate } from "react-router-dom";
+import { CONFIGS, WALLET_ADDRESS } from "configs";
 import {getAccessToken, getWalletAddress} from "helpers";
 import Web3 from 'web3';
 import {message} from "antd";
-import {getBoxesContract, getBoxs, getNFTs, saveOpenBox} from "../../services/orverview.service";
+import {getBoxesContract, getBoxs, getSubscription, saveOpenBox} from "../../services/orverview.service";
 import { getUser } from "../../services";
 import {useAppStore} from "../../stores/app.store";
 import { YourAccountPlan, YourNFTEarn } from "./components";
@@ -21,7 +20,8 @@ const Overview = ({ t }) => {
   const [appStore, updateAppStore] = useAppStore();
   const [loadingPage, setLoadingPage] = useState(false);
   const [loadingBox, setLoadingBox] = useState(true);
-  const [NFTs, setNFTs] = useState([]);
+  const [isReloadNFT, setIsReloadNTF] = useState(true);
+  const [isReloadSubscription, setIsReloadSubscription] = useState(true);
   const loadBoxBE = async () => {
     const box = await getBoxs();
     setBoxes(box);
@@ -38,11 +38,8 @@ const Overview = ({ t }) => {
   const fetchData = async () => {
     try {
       const box= await loadBoxBE();
-      const nftS = await getNFTs();
-      setNFTs(nftS?.data || []);
-      await loadBoxSmartContract(box)
+      await loadBoxSmartContract(box);
     } catch (error) {
-      console.log('err',error);
       await setLoadingBox(false)
     }
   };
@@ -67,6 +64,8 @@ const Overview = ({ t }) => {
       store.appendComponentLayout = null;
     });
     await setBoxes([]);
+    await setIsReloadNTF(true);
+    await setIsReloadSubscription(true);
     message.success(t("overview.unbox_success"));
     await fetchData();
   }, []);
@@ -229,11 +228,11 @@ const Overview = ({ t }) => {
       ) }
 
 
-      {/*<div className="pt-10">*/}
-      {/*  <YourAccountPlan />*/}
-      {/*</div>*/}
       <div className="pt-10">
-        <YourNFTEarn NFTs={NFTs} />
+        <YourAccountPlan isLoadData={isReloadSubscription} setIsLoadData={setIsReloadSubscription} />
+      </div>
+      <div className="pt-10">
+        <YourNFTEarn isLoadData={isReloadNFT} isLoadDataSub={isReloadSubscription} setIsLoadData={setIsReloadNTF} />
       </div>
     </MainLayout>
   );
