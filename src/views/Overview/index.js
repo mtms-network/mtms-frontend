@@ -22,9 +22,10 @@ const Overview = ({ t }) => {
   const [loadingBox, setLoadingBox] = useState(true);
   const [isReloadNFT, setIsReloadNTF] = useState(true);
   const [isReloadSubscription, setIsReloadSubscription] = useState(true);
+
   const loadBoxBE = async () => {
     const box = await getBoxs();
-    setBoxes(box);
+    // await setBoxes(box);
     return box;
   };
 
@@ -37,7 +38,8 @@ const Overview = ({ t }) => {
 
   const fetchData = async () => {
     try {
-      const box= await loadBoxBE();
+      const box = await loadBoxBE();
+      console.log('box', box)
       await loadBoxSmartContract(box);
     } catch (error) {
       await setLoadingBox(false)
@@ -83,7 +85,7 @@ const Overview = ({ t }) => {
 
       const contract = new web3.eth.Contract(
         erc20abi,
-        WALLET_ADDRESS.RINKEBY_ETH
+        WALLET_ADDRESS.MUMBOA
       );
 
       if(!box?.tokenId?.length)
@@ -95,7 +97,7 @@ const Overview = ({ t }) => {
 
       await contract.methods.openBox(tId).send({from: walletAddress});
 
-      const resOpenBox = await saveOpenBox({ tokenId: tId, blindboxId: box.id });
+      const resOpenBox = await saveOpenBox({ tokenId: tId });
       await updateAppStore((store) => {
         store.loadingIcon = false;
         store.appendComponentLayout = <OpenBox
@@ -128,7 +130,7 @@ const Overview = ({ t }) => {
 
     const contract = new web3.eth.Contract(
       erc20abi,
-      WALLET_ADDRESS.RINKEBY_ETH
+      WALLET_ADDRESS.MUMBOA
     );
     await contract.methods.mint(isEpicBox, 3).send({from: walletAddress});
   }

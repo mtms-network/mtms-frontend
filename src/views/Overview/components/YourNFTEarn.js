@@ -30,14 +30,12 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
   };
   useEffect(() => {
     if(isLoadData && !isLoadDataSub){
-      console.log('c')
       fetchData().then();
     }
   }, [isLoadData]);
 
   useEffect(() => {
     if(!isLoadData){
-      console.log('call')
       fetchData().then();
     }
   }, [filter.page]);
@@ -117,7 +115,7 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                 }
                 </tbody>
               </table>
-              <div className="py-8 flex justify-end px-6">
+              <div className="py-4 flex justify-end px-6">
                 <Pagination
                   page={pagination?.current_page}
                   totalPage={pagination?.last_page}

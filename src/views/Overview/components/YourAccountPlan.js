@@ -4,6 +4,7 @@ import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 import {getNFTs, getSubscription} from "../../../services/orverview.service";
 import Pagination from "../../../components/composite/Pagination";
+import moment from "moment";
 
 const YourAccountPlan = ({isLoadData, setIsLoadData}) => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -42,6 +43,16 @@ const YourAccountPlan = ({isLoadData, setIsLoadData}) => {
     }
   }, [filter.page]);
 
+  const renderExpired = (item) => {
+    const days = moment(item?.expired_at).diff(moment(), 'days');
+
+    if(days > 0){
+      return <span className="text-xs">Expire at: {days} days</span>;
+    }
+
+    return <span className="text-xs color-danger">Expired: {moment(item?.expired_at).format("DD-MM-YYYY")}</span>;
+  };
+
   return (
     <div className="">
       <div className="flex flex-row w-full items-center pb-5">
@@ -71,37 +82,39 @@ const YourAccountPlan = ({isLoadData, setIsLoadData}) => {
                 </thead>
                 <tbody className="border-0">
                 {
-                  subscriptions?.map((item, index) => (
-                    <tr className="text-cl-base text-md border-0 table-row" key={index}>
-                      <td className="bg-white">
-                        <div className="flex justify-center mt-2">
-                          <Checkbox label="n" checked="checked" name="radio" />
-                        </div>
-                      </td>
-                      <td className="bg-white">
-                        <div>{ item.name }</div>
-                        <span className="text-xs color-danger">Còn 5 ngày</span>
-                      </td>
-                      <td className="bg-white max-w-[150px] truncate text-center">{ item?.subscription?.max_earning_per_day }</td>
-                      <td className="bg-white text-center">
-                        { item?.subscription?.earning_rate }
-                      </td>
-                      <td className="bg-white">
-                        <button
-                          className={classNames('btn btn-primary btn-outlined-base')}
-                        >
-                          Buy More
-                        </button>
-                      </td>
-                      <td className="bg-white">
-                        <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
-                      </td>
-                    </tr>
-                  ))
+                  subscriptions?.map((item, index) => {
+                    return (
+                      <tr className="text-cl-base text-md border-0 table-row" key={index}>
+                        <td className="bg-white">
+                          <div className="flex justify-center mt-2">
+                            <Checkbox label="n" checked="checked" name="radio" />
+                          </div>
+                        </td>
+                        <td className="bg-white">
+                          <div>{ item?.subscription?.name }</div>
+                          { renderExpired(item) }
+                        </td>
+                        <td className="bg-white max-w-[150px] truncate text-center">{ item?.subscription?.max_earning_per_day }</td>
+                        <td className="bg-white text-center">
+                          { item?.subscription?.earning_rate }
+                        </td>
+                        <td className="bg-white">
+                          <button
+                            className={classNames('btn btn-primary btn-outlined-base')}
+                          >
+                            Buy More
+                          </button>
+                        </td>
+                        <td className="bg-white">
+                          <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
+                        </td>
+                      </tr>
+                    );
+                  })
                 }
                 </tbody>
               </table>
-              <div className="py-8 flex justify-end px-6">
+              <div className="py-4 flex justify-end px-6">
                 <Pagination
                   page={pagination?.current_page}
                   totalPage={pagination?.last_page}

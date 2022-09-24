@@ -25,7 +25,7 @@ const Pagination = ({
       start = page - 1;
       if (page > 3) {
         html.push(
-          <>
+          <div key={-2}>
             <div
               onClick={() => onPage(1)}
               className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer"
@@ -33,7 +33,7 @@ const Pagination = ({
               1
             </div>
             <div>...</div>
-          </>,
+          </div>,
         );
       }
     }
@@ -49,6 +49,7 @@ const Pagination = ({
   } else {
     html.push(
       <div
+        key={-1}
         onClick={() => onPage(1)}
         className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer bg-primary text-white"
       >
@@ -60,7 +61,6 @@ const Pagination = ({
   for (let i = start; i < end; i++) {
     html.push(
       <div
-        abc={i}
         key={i}
         onClick={() => {
           onPage(i);
@@ -76,7 +76,7 @@ const Pagination = ({
 
   if (page < totalPage - 2 && totalPage > 4) {
     html.push(
-      <>
+      <div key={(Date.now())} className="flex items-center">
         <div>...</div>
         <div
           onClick={() => onPage(totalPage)}
@@ -84,7 +84,7 @@ const Pagination = ({
         >
           {totalPage}
         </div>
-      </>,
+      </div>,
     );
   }
   return (

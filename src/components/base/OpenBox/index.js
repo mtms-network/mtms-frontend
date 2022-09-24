@@ -10,13 +10,6 @@ const OpenBox = ({nft = "", voucher = "", subscription = "", setIsReload = null}
   return (
     <div
       className={`${wrapper}`}
-      onClick={() => {
-        if(isOpen && setIsReload){
-          setIsReload(true);
-        }else{
-          setIsOpen(true);
-        }
-      }}
     >
       <div className={`${styles.present} ${isOpen ? open : ""}`}>
         {
@@ -35,7 +28,16 @@ const OpenBox = ({nft = "", voucher = "", subscription = "", setIsReload = null}
           ) : null
         }
 
-        <div className={styles.rotateContainer}>
+        <div
+          className={styles.rotateContainer}
+          onClick={() => {
+            if(isOpen && setIsReload){
+              setIsReload(true);
+            }else{
+              setIsOpen(true);
+            }
+          }}
+        >
           <div className={styles.bottom} />
           <div className={styles.front} />
           <div className={styles.left} />

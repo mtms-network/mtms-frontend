@@ -15,7 +15,8 @@ export const getBoxs = async () => {
       const boxBE = res?.data?.data?.find((b) => b.sku === item.sku);
       if(boxBE){
         item.photo = boxBE.photo;
-        item.id = boxBE.id
+        item.id = boxBE.id;
+        item.boxes_opened = boxBE.boxes_opened;
       }
 
       return {
@@ -23,7 +24,7 @@ export const getBoxs = async () => {
         id: boxBE.id,
         available: 0,
         owning: 0,
-      }
+      };
     });
   } catch (err) {
     console.error("getPreRequireMeeting", err);
@@ -34,6 +35,16 @@ export const getBoxs = async () => {
 export const saveOpenBox = async (data) => {
   try {
     const res = await client.post("/open-box", data);
+    return res?.data;
+  }catch (err){
+    console.log('err saveOpenBox');
+  }
+  return null;
+};
+
+export const saveOpenBoxes = async (arrData) => {
+  try {
+    const res = await client.post("/open-boxes", arrData);
     return res?.data;
   }catch (err){
     console.log('err saveOpenBox');
@@ -49,7 +60,7 @@ export const getBoxesContract = async (boxBE) => {
 
     const contract = new web3.eth.Contract(
       erc20abi,
-      WALLET_ADDRESS.RINKEBY_ETH
+      WALLET_ADDRESS.MUMBOA
     );
 
     let boxList = [...BOXES];
@@ -69,20 +80,30 @@ export const getBoxesContract = async (boxBE) => {
     // await contract.methods.mint(false, 5).send({from: walletAddress});
 
     const boxesRequest = await contract.methods.getTokenIds(walletAddress).call();
-
     const arrNftType = ["silver","gold","platinum"];
     boxesRequest.forEach((item) => {
       const indexBox = boxList.findIndex((b) => b.isEpicBox === !!item.isEpicBox);
 
       if(arrNftType.includes(item.nftsType)){
         boxList[indexBox].owning += 1;
+        boxList[indexBox].boxes_opened_contract.push(Number(item.id));
       }else{
         boxList[indexBox].available += 1;
         boxList[indexBox].tokenId.push(item.id);
       }
     });
 
-    setTimeout(() => {}, 5000)
+    let arrBoxReopen = [];
+    boxList.forEach((item) => {
+      const difference = item.boxes_opened_contract.filter(x => !item.boxes_opened.includes(x));
+      arrBoxReopen = arrBoxReopen.concat(difference);
+    });
+
+    if(arrBoxReopen.length){
+      await saveOpenBoxes({tokenId: arrBoxReopen});
+    }
+
+    console.log('boxList', boxList)
     return boxList;
   }catch (err){
     console.log('err', err);

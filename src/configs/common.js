@@ -14,6 +14,7 @@ export const AVATAR_UPLOAD_URL = "/profile/avatar";
 export const WALLET_ADDRESS = {
   // RINKEBY_ETH: "0xb637475158e3Dd6985DCc015AA143F1C91098AB5",
   RINKEBY_ETH: "0xFeb38aF8D13d1cCd125cAFF6646aA4333B239C3A",
+  MUMBOA: "0xCdF44978B624E9CA4D54e8fb0AB2711B746C9849",
 }
 
 export const BASE_API = {
@@ -40,6 +41,7 @@ export const WALLET_NETWORK = {
   ropsten: 3,
   renkeby: 4,
   goerli: 5,
+  mumbai: 80001,
 }
 
 export const API_RESPONSE_STATUS = {
@@ -88,7 +90,9 @@ export const BOXES = [
     isEpicBox: false,
     owning: 0,
     available: 0,
-    tokenId: []
+    tokenId: [],
+    boxes_opened: [],
+    boxes_opened_contract: [],
   },
   {
     id: null,
@@ -99,6 +103,8 @@ export const BOXES = [
     isEpicBox: true,
     tokenId: [],
     sku: "box-epic",
+    boxes_opened: [],
+    boxes_opened_contract: [],
   },
 ];
 
