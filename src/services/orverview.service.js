@@ -84,7 +84,7 @@ export const getBoxesContract = async (boxBE) => {
     boxesRequest.forEach((item) => {
       const indexBox = boxList.findIndex((b) => b.isEpicBox === !!item.isEpicBox);
 
-      if(arrNftType.includes(item.nftsType)){
+      if(arrNftType.includes(item.nftType)){
         boxList[indexBox].owning += 1;
         boxList[indexBox].boxes_opened_contract.push(Number(item.id));
       }else{
