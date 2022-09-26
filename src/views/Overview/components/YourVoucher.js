@@ -58,10 +58,9 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                   <th className="bg-white" />
                   <th className="bg-white">Voucher</th>
                   <th className="bg-white text-center">
-                    <div>Power</div>
+                    <div>xTime</div>
                     (W)
                   </th>
-                  <th className="bg-white" />
                   <th className="bg-white" />
                 </tr>
                 </thead>
@@ -69,8 +68,8 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                 {
                   vouchers?.map((item, index) => (
                     <tr className="text-cl-base text-md border-0 table-row" key={index}>
-                      <td className="bg-white">
-                        <div className="flex justify-center mt-2">
+                      <td className="bg-white w-[40px]">
+                        <div className="flex justify-center mt-2 w-[40px]">
                           <Checkbox label="n" checked="checked" name="radio" />
                         </div>
                       </td>
@@ -79,15 +78,12 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                       <td className="bg-white text-center">
                         {item?.voucher?.power}
                       </td>
-                      <td className="bg-white text-center">
+                      <td className="bg-white text-right">
                         <button
                           className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
                         >
-                          Buy More
+                          Claim voucher
                         </button>
-                      </td>
-                      <td className="bg-white">
-                        <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
                       </td>
                     </tr>
                   ))

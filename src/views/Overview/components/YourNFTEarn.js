@@ -77,8 +77,8 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                 {
                   NFTs.map((item, index) => (
                     <tr className="text-cl-base text-md border-0 table-row" key={index}>
-                      <td className="bg-white">
-                        <div className="flex justify-center mt-2">
+                      <td className="bg-white w-[40px]">
+                        <div className="flex justify-center mt-2 w-[40px]">
                           <Checkbox label="n" checked="checked" name="radio" />
                         </div>
                       </td>

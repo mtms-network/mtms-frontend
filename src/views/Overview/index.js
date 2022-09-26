@@ -3,10 +3,10 @@ import { MainLayout, Button } from "components";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import { CONFIGS, WALLET_ADDRESS } from "configs";
-import {getAccessToken, getWalletAddress} from "helpers";
+import {getAccessToken} from "helpers";
 import Web3 from 'web3';
 import {message} from "antd";
-import {getBoxesContract, getBoxs, getSubscription, saveOpenBox} from "../../services/orverview.service";
+import {getBoxesContract, getBoxs, saveOpenBox} from "../../services/orverview.service";
 import { getUser } from "../../services";
 import {useAppStore} from "../../stores/app.store";
 import { YourAccountPlan, YourNFTEarn } from "./components";
@@ -27,7 +27,6 @@ const Overview = ({ t }) => {
 
   const loadBoxBE = async () => {
     const box = await getBoxs();
-    // await setBoxes(box);
     return box;
   };
 
@@ -189,8 +188,6 @@ const Overview = ({ t }) => {
                   className={classNames(
                     "p-4 border-group border-white bg-white rounded-2xl flex flex-col flex-1",
                     "justify-between min-h-[160px] hover:border-primary hover:bg-light-primary",
-                    !isActive && "opacity-50",
-                    !isActive && "grayscale hover:border-white",
                   )}
                 >
                   <div className="flex flex-col w-full flex-1 h-full">

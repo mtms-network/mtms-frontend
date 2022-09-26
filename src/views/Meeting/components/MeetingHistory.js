@@ -17,7 +17,7 @@ import { withTranslation } from "react-i18next";
 import { LIVE_MEETING_URL, MEETING_STATUS, routeUrls } from "configs";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
-import { message } from "antd";
+import { message, Popover } from "antd";
 import moment from "moment";
 import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
 import { getTimezone } from "helpers/i18nLocal";
@@ -170,7 +170,7 @@ const MeetingHistory = ({ className, t }) => {
               <table className="table w-full">
                 <thead className="border-b-1">
                   <tr className="text-cl-base">
-                    <th className="bg-white">{t("meeting.host")}</th>
+                    <th className="bg-white truncate w-8" width="100">{t("meeting.host")}</th>
                     <th className="bg-white">{t("meeting.props.title")}</th>
                     <th className="bg-white">{t("meeting.props.type")}</th>
                     <th className="bg-white">{t("meeting.started_at")}</th>
@@ -184,7 +184,11 @@ const MeetingHistory = ({ className, t }) => {
                 <tbody className="border-0">
                   {histories.data?.map((item) => (
                     <tr className="text-cl-base text-md border-0 table-row" key={item?.uuid}>
-                      <td className="bg-white">{item?.user?.profile?.name}</td>
+                      <td className="bg-white">
+                        <Popover content={item?.user?.profile?.name} trigger="hover">
+                          <div className="truncate hover:text-clip w-[50px]">{item?.user?.profile?.name}</div>
+                        </Popover>
+                      </td>
                       <td className="bg-white max-w-[150px] truncate">{item?.title}</td>
                       <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
                       <td className="bg-white">

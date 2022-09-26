@@ -74,8 +74,8 @@ export const getBoxesContract = async (boxBE) => {
         ...item,
         available: 0,
         owning: 0,
-      }
-    })
+      };
+    });
 
     // await contract.methods.mint(false, 5).send({from: walletAddress});
 
@@ -83,9 +83,9 @@ export const getBoxesContract = async (boxBE) => {
     const arrNftType = ["silver","gold","platinum"];
     boxesRequest.forEach((item) => {
       const indexBox = boxList.findIndex((b) => b.isEpicBox === !!item.isEpicBox);
+      boxList[indexBox].owning += 1;
 
       if(arrNftType.includes(item.nftType)){
-        boxList[indexBox].owning += 1;
         boxList[indexBox].boxes_opened_contract.push(Number(item.id));
       }else{
         boxList[indexBox].available += 1;
