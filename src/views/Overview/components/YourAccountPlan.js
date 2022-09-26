@@ -6,7 +6,7 @@ import {getNFTs, getSubscription} from "../../../services/orverview.service";
 import Pagination from "../../../components/composite/Pagination";
 import moment from "moment";
 
-const YourAccountPlan = ({isLoadData, setIsLoadData}) => {
+const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({
@@ -31,11 +31,10 @@ const YourAccountPlan = ({isLoadData, setIsLoadData}) => {
   };
 
   useEffect(() => {
-    if(isLoadData){
-      console.log('load s')
+    if(isLoadData && !loadingPage){
       fetchData().then();
     }
-  }, [isLoadData]);
+  }, [isLoadData, loadingPage]);
 
   useEffect(() => {
     if(!isLoadData){
@@ -69,7 +68,11 @@ const YourAccountPlan = ({isLoadData, setIsLoadData}) => {
                 <thead className="border-b-1">
                 <tr className="text-cl-base">
                   <th className="bg-white" />
-                  <th className="bg-white">NFT</th>
+                  <th className="bg-white">Plan</th>
+                  <th className="bg-white">
+                    <div>Max earnings</div>
+                    (Time/Min)
+                  </th>
                   <th className="bg-white text-center">
                     <div>Max Ern/Day</div> (MTMS)
                   </th>
@@ -94,13 +97,16 @@ const YourAccountPlan = ({isLoadData, setIsLoadData}) => {
                           <div>{ item?.subscription?.name }</div>
                           { renderExpired(item) }
                         </td>
+                        <td className="bg-white">
+                          <div>30 minutes</div>
+                        </td>
                         <td className="bg-white max-w-[150px] truncate text-center">{ item?.subscription?.max_earning_per_day }</td>
                         <td className="bg-white text-center">
                           { item?.subscription?.earning_rate }
                         </td>
                         <td className="bg-white">
                           <button
-                            className={classNames('btn btn-primary btn-outlined-base')}
+                            className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
                           >
                             Buy More
                           </button>

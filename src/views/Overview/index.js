@@ -14,14 +14,16 @@ import erc20abi from "../../abi/mtms-smartcontract.abi.json";
 import BrandLogoLoading from "../../components/composite/BrandLogoLoading";
 import {Loading} from "../../components/base/Loading";
 import OpenBox from "../../components/base/OpenBox";
+import YourVoucher from "./components/YourVoucher";
 
 const Overview = ({ t }) => {
   const [boxes, setBoxes] = useState([]);
   const [appStore, updateAppStore] = useAppStore();
-  const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(true);
   const [loadingBox, setLoadingBox] = useState(true);
   const [isReloadNFT, setIsReloadNTF] = useState(true);
   const [isReloadSubscription, setIsReloadSubscription] = useState(true);
+  const [isReloadVouchers, setIsReloadVouchers] = useState(true);
 
   const loadBoxBE = async () => {
     const box = await getBoxs();
@@ -34,13 +36,15 @@ const Overview = ({ t }) => {
     const data = await getBoxesContract([...box]);
     await setBoxes([...data]);
     await setLoadingBox(false)
-  }
+  };
 
   const fetchData = async () => {
     try {
       const box = await loadBoxBE();
-      console.log('box', box)
       await loadBoxSmartContract(box);
+      setTimeout( async () => {
+        await setLoadingPage(false);
+      }, 400);
     } catch (error) {
       await setLoadingBox(false)
     }
@@ -68,6 +72,7 @@ const Overview = ({ t }) => {
     await setBoxes([]);
     await setIsReloadNTF(true);
     await setIsReloadSubscription(true);
+    await setIsReloadVouchers(true);
     message.success(t("overview.unbox_success"));
     await fetchData();
   }, []);
@@ -133,7 +138,7 @@ const Overview = ({ t }) => {
       WALLET_ADDRESS.MUMBOA
     );
     await contract.methods.mint(isEpicBox, 3).send({from: walletAddress});
-  }
+  };
 
   useEffect(() => {
     if(appStore.isAuthenticated){
@@ -231,10 +236,13 @@ const Overview = ({ t }) => {
 
 
       <div className="pt-10">
-        <YourAccountPlan isLoadData={isReloadSubscription} setIsLoadData={setIsReloadSubscription} />
+        <YourAccountPlan isLoadData={isReloadSubscription} setIsLoadData={setIsReloadSubscription} loadingPage={loadingPage} />
       </div>
       <div className="pt-10">
         <YourNFTEarn isLoadData={isReloadNFT} isLoadDataSub={isReloadSubscription} setIsLoadData={setIsReloadNTF} />
+      </div>
+      <div className="pt-10">
+        <YourVoucher isLoadData={isReloadVouchers} isLoadDataNft={isReloadNFT} setIsLoadData={setIsReloadVouchers} />
       </div>
     </MainLayout>
   );

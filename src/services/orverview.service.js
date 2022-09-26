@@ -1,8 +1,8 @@
 import {BASE_API, BOXES, WALLET_ADDRESS} from "configs";
 import Web3 from "web3";
+import QueryString from "qs";
 import { createPrivateInstance } from "./base";
 import erc20abi from "../abi/mtms-smartcontract.abi.json";
-import QueryString from "qs";
 
 const client = createPrivateInstance("/your-box");
 
@@ -103,7 +103,6 @@ export const getBoxesContract = async (boxBE) => {
       await saveOpenBoxes({tokenId: arrBoxReopen});
     }
 
-    console.log('boxList', boxList)
     return boxList;
   }catch (err){
     console.log('err', err);
@@ -136,12 +135,27 @@ export const getSubscription = async (defaultFilters) => {
       per_page: defaultFilters.limit,
       sort_by: "id",
       order: "desc",
-    }
+    };
     const query = QueryString.stringify({ ...filter });
 
     const res = await client.get(`/subscriptions?${query}`);
     return res?.data;
   }catch (err) {}
 
+  return null;
+};
+
+export const getVouchers = async (defaultFilters) => {
+  try {
+    const filter = {
+      current_page: defaultFilters.page,
+      per_page: defaultFilters.limit,
+      sort_by: "id",
+      order: "desc",
+    };
+    const query = QueryString.stringify({ ...filter });
+    const res = await client.get(`/vouchers?${query}`);
+    return res?.data;
+  }catch (err){}
   return null;
 };

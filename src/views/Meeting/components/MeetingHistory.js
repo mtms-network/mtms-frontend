@@ -189,7 +189,7 @@ const MeetingHistory = ({ className, t }) => {
                       <td className="bg-white">{item?.type?.name?.toUpperCase()}</td>
                       <td className="bg-white">
                         {(item?.start_date_time &&
-                          `${moment(item?.start_date_time).format("HH:mm DD/MM/YYYY")} ${
+                          `${moment(item?.start_date_time).format("DD/MM/YYYY HH:mm")} ${
                             item?.user_timezone || ""
                           }`) ||
                           "-"}
@@ -197,7 +197,7 @@ const MeetingHistory = ({ className, t }) => {
                       <td className="bg-white">
                         <p>
                           {(item?.ended_at &&
-                            `${moment(item?.ended_at).format("HH:mm DD/MM/YYYY")} ${
+                            `${moment(item?.ended_at).format("DD/MM/YYYY HH:mm")} ${
                               item?.user_timezone || ""
                             }`) ||
                             "-"}

@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 import Pagination from "../../../components/composite/Pagination";
-import {getNFTs} from "../../../services/orverview.service";
+import {getVouchers} from "../../../services/orverview.service";
 
-const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
-  const [NFTs, setNFTs] = useState([]);
+const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
+
+  const [vouchers, setVouchers] = useState([]);
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({
     limit: 5,
@@ -16,23 +16,23 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
   });
 
   const fetchData = async () => {
-    const res = await getNFTs(filter);
+    const res = await getVouchers(filter);
 
     await setPagination(
       res?.meta || {}
     );
 
-    await setNFTs(
+    await setVouchers(
       res?.data || []
     );
 
     await setIsLoadData(false);
   };
   useEffect(() => {
-    if(isLoadData && !isLoadDataSub){
+    if(isLoadData && !isLoadDataNft){
       fetchData().then();
     }
-  }, [isLoadData, isLoadDataSub]);
+  }, [isLoadData, isLoadDataNft]);
 
   useEffect(() => {
     if(!isLoadData){
@@ -45,10 +45,10 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
       <div className="flex flex-row w-full items-center pb-5">
         <div className="flex flex-col w-full">
           <p className="font-bold sm:w-full text-lg text-dark-base">
-            Your NFT Earn
+            Your vouchers
           </p>
           <div className="flex flex-row pt-1 text-black-base">
-            You can only active 1 NFT Earn to earn token
+            You can only active 1 Vouchers Earn to earn token
           </div>
           <div className="flex w-full flex-1 mt-2">
             <div className="overflow-x-auto flex-1 rounded-lg bg-white">
@@ -56,18 +56,10 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                 <thead className="border-b-1">
                 <tr className="text-cl-base">
                   <th className="bg-white" />
-                  <th className="bg-white">NFT</th>
+                  <th className="bg-white">Voucher</th>
                   <th className="bg-white text-center">
                     <div>Power</div>
                     (W)
-                  </th>
-                  <th className="bg-white text-center">
-                    <div>Max Ern/Day </div>
-                    (MTMS)
-                  </th>
-                  <th className="bg-white text-center">
-                    <div>E-rate</div>
-                    (MTMS / Min)
                   </th>
                   <th className="bg-white" />
                   <th className="bg-white" />
@@ -75,30 +67,17 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                 </thead>
                 <tbody className="border-0">
                 {
-                  NFTs.map((item, index) => (
+                  vouchers?.map((item, index) => (
                     <tr className="text-cl-base text-md border-0 table-row" key={index}>
                       <td className="bg-white">
                         <div className="flex justify-center mt-2">
                           <Checkbox label="n" checked="checked" name="radio" />
                         </div>
                       </td>
-                      <td className="bg-white">
-                        <div className="flex">
-                          <div>
-                            <img className="w-32" src={item?.nft?.photo} alt="nft gold"/>
-                          </div>
-                          <div className="flex flex-col justify-center ml-2">
-                            <div className="color-inactive">Inactive</div>
-                            <div>{ item?.nft?.name }</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="bg-white max-w-[150px] truncate text-center">{item.final_power}</td>
+
+                      <td className="bg-white max-w-[150px] truncate text-left">{item?.voucher?.name}</td>
                       <td className="bg-white text-center">
-                        {item?.max_e_rate}
-                      </td>
-                      <td className="bg-white text-center">
-                        {item?.min_e_rate}
+                        {item?.voucher?.power}
                       </td>
                       <td className="bg-white text-center">
                         <button
@@ -151,4 +130,4 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
   );
 };
 
-export default withTranslation()(YourNFTEarn);
+export default YourVoucher;

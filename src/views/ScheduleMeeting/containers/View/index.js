@@ -174,7 +174,7 @@ const ScheduleMeetingView = ({ t }) => {
 
             <p className="text-md font-bold">
               {meetingStore?.meeting?.start_date_time &&
-                `${moment(meetingStore?.meeting?.start_date_time).format("HH:mm DD/MM/YYYY")} ${
+                `${moment(meetingStore?.meeting?.start_date_time).format("DD/MM/YYYY HH:mm")} ${
                   meetingStore?.meeting?.user_timezone || ""
                 }`}
             </p>

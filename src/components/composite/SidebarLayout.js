@@ -63,7 +63,7 @@ const SidebarLayout = ({ t, onLogout }) => {
                   iconActivated="/icons/icons/overview-active.svg"
                   isActive={location.pathname === "/"}
                 />
-                <p className="pl-2">{t("sidebar.overview")}</p>
+                <p className="pl-2">{t("sidebar.mtms_accounts")}</p>
               </button>
             </div>
             <div className="w-full">
