@@ -7,8 +7,8 @@ const Loading = ({
   return wrapper ? (
     <div className="overlay-loading">
       <div
-        className="absolute flex h-36 w-36 flex-col items-center text-white"
-        style={{ top: '50%', left: '46%' }}
+        className="absolute flex h-36 w-36 flex-col items-center text-white justify-center"
+        style={{ top: '50%', left: '50%', transform: 'translate3d(-50%,-50%,0)' }}
       >
         <svg
           className="h-10 w-10 animate-spin"
