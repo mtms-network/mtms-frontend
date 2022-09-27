@@ -102,10 +102,11 @@ const Overview = ({ t }) => {
       await contract.methods.openBox(tId).send({from: walletAddress});
 
       const resOpenBox = await saveOpenBox({ tokenId: tId });
+
       await updateAppStore((store) => {
         store.loadingIcon = false;
         store.appendComponentLayout = <OpenBox
-          nft={resOpenBox?.nft?.name}
+          nft={resOpenBox?.nft?.photo}
           voucher={resOpenBox?.voucher?.name}
           subscription={resOpenBox?.nft?.subscription?.name}
           setIsReload={reloadData}

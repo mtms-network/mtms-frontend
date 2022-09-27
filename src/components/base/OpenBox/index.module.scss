@@ -24,10 +24,10 @@ $size: 120px;
 .name {
     color: #FF903F;
     font-size: 1em;
-    font-weight: 100;
+    font-weight: 500;
     position: absolute;
     top: 50%;
-    line-height: 2;
+    line-height: 1.7;
     width: 400px;
 }
 
@@ -63,7 +63,7 @@ $size: 120px;
 .left,
 .back,
 .right {
-    background-color: #E4A493;
+    background-color: #0190fe;
     border: 1px solid rgba(0, 0, 0, .2);
     height: 100%;
     left: 0;
@@ -95,7 +95,7 @@ $size: 120px;
 .lid-back,
 .lid-right{
     &:after {
-        background-color: #B76159;
+        background-color: #01d4fe;
         box-shadow: 0 0 5px rgba(0, 0, 0, .2);
         content: '';
         height: 100%;
@@ -108,7 +108,7 @@ $size: 120px;
 
 .lidTop {
     &:before {
-        background-color: #E4A493;
+        background-color: #0190fe;
         box-shadow: 0 0 5px rgba(0, 0, 0, .2);
         content: '';
         height: 20px;
@@ -148,7 +148,7 @@ $size: 120px;
 .lidBack,
 .lidRight,
 .lidFront {
-    background-color: #E4A493;
+    background-color: #0190fe;
     border: 1px solid rgba(0, 0, 0, .2);
     left: -5px;
     opacity: 1;
