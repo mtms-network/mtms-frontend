@@ -25,7 +25,7 @@ const Pagination = ({
       start = page - 1;
       if (page > 3) {
         html.push(
-          <div key={-2}>
+          <div className="flex items-center" key={-2}>
             <div
               onClick={() => onPage(1)}
               className="rounded-full w-[36px] h-[36px] flex justify-center items-center cursor-pointer"
