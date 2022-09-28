@@ -41,12 +41,14 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
   }, [filter.page]);
 
   const setPrimary = async (userNft) => {
-    setNFTs(NFTs.map(item => {
-      item.is_primary = item.id === userNft.id;
-      return item;
-    }));
+    const res = await setPrimaryNFT(userNft.id);
 
-    await setPrimaryNFT(userNft.id);
+    if (res) {
+      setNFTs(NFTs.map(item => {
+        item.is_primary = item.id === userNft.id;
+        return item;
+      }));
+    }
   }
 
   return (
