@@ -45,7 +45,7 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
       <div className="flex flex-row w-full items-center pb-5">
         <div className="flex flex-col w-full">
           <p className="font-bold sm:w-full text-lg text-dark-base">
-            Your vouchers
+            Your Vouchers
           </p>
           <div className="flex flex-row pt-1 text-black-base">
             You can only active 1 Vouchers Earn to earn token
