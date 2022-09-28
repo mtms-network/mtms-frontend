@@ -146,7 +146,7 @@ const SidebarLayout = ({ t, onLogout }) => {
                     ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
                     : "btn btn-base justify-start font-medium",
                 )}
-                onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}
+                onClick={() => navigate(`/${routeUrls.contact.path}`)}
               >
                 <IconBase
                   icon="/icons/icons/personalcard-outline.svg"

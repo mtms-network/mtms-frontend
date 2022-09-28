@@ -24,6 +24,7 @@ import {
   ConnectWallet,
   Overview,
 } from "./views";
+import Contact from "../views/Contact";
 
 const Routers = () => {
   return (
@@ -73,6 +74,7 @@ const Routers = () => {
         />
         <Route path={`/${routeUrls.connectWallet.path}`} element={<ConnectWallet />} />
         <Route path={`/${routeUrls.meeting.path}`} element={<Meeting />} />
+        <Route path={`/${routeUrls.contact.path}`} element={<Contact />} />
         <Route path="/" element={<Overview />} />
         <Route path="*" element={<Navigate to="/meeting" />} />
       </Routes>
