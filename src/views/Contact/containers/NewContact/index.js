@@ -16,12 +16,12 @@ import {
   GroupLayout,
   GroupTitle,
   Input,
-  MainLayout, TextArea
+  MainLayout
 } from "../../../../components";
 import {postToDo} from "../../../../services";
 import {handleHttpError} from "../../../../helpers";
 
-const NewTodo = ({t}) => {
+const NewContact = ({t}) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ const NewTodo = ({t}) => {
   const schema = yup.object().shape({
     title: yup.string().required(),
     date: yup.date().required(),
-    description: yup.string(),
+
   });
 
   const {
@@ -40,7 +40,7 @@ const NewTodo = ({t}) => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  
+
   const onSubmit = async (values) => {
     await setLoading(true);
     try {
@@ -62,7 +62,7 @@ const NewTodo = ({t}) => {
       }
     }
   };
-  
+
   return (
     <MainLayout>
       {fetchLoading && (
@@ -86,7 +86,7 @@ const NewTodo = ({t}) => {
                     className="w-full"
                     labelClassName="text-base"
                     register={register("title")}
-                    label={t("todo.todo")}
+                    label={t("meeting.props.title")}
                     placeholder={t("todo.enter_to_do")}
                     error={errors.title}
                   />
@@ -96,7 +96,7 @@ const NewTodo = ({t}) => {
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                   <div className="w-full mt-2">
                     <DateTimePicker
-                      label={t("todo.due_date")}
+                      label={t("todo.time")}
                       placeholder={moment().format("DD/MM/YYYY")}
                       onChangeDateTime={(date) => {
                         setValue("date", date)
@@ -107,15 +107,6 @@ const NewTodo = ({t}) => {
                   </div>
                 </div>
               </GroupLayout>
-
-              <GroupLayout className="flex flex-col justify-between">
-                <TextArea
-                  className="w-full"
-                  register={register("description")}
-                  label={t("todo.desc")}
-                  placeholder={t("todo.props.enter_desc")}
-                />
-              </GroupLayout>
             </form>
             <div className="w-full sm:flex sm:flex-row justify-between pt-2 pb-8 space-y-2 sm:space-y-0">
               <div className="w-full flex justify-center items-center">
@@ -124,7 +115,7 @@ const NewTodo = ({t}) => {
                   type="submit"
                   onClick={() => {
                     if(!loading){
-                      navigate(`/${routeUrls.todo.path}`);
+                      navigate(`/${routeUrls.newContact.path}`);
                     }
                   }}
                   disabled={loading}
@@ -148,4 +139,4 @@ const NewTodo = ({t}) => {
   );
 };
 
-export default withTranslation()(NewTodo);
+export default withTranslation()(NewContact);

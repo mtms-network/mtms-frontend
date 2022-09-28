@@ -13,7 +13,7 @@ import {
   Sorting
 } from "components";
 import {useNavigate} from "react-router-dom";
-import {Dropdown, Menu, message} from 'antd';
+import {Dropdown, Menu, message, Popover} from 'antd';
 import {deleteToDo, getListToDo, postStatusTodo} from "../../../../services";
 import Status from "../../components/Status";
 import TodoFilter from "../../components/TodoFilter";
@@ -26,7 +26,7 @@ const initialFilter = {
   limit: 10,
   page: 1,
   status: "",
-  sort_by: "date",
+  sort_by: "updated_at",
   order: "desc",
   keyword: "",
 }
@@ -170,8 +170,12 @@ const ToDoList = ({t}) => {
                     {
                       todoList?.map((todo, index) => {
                         return (
-                          <tr>
-                            <td className="bg-white">{ todo?.title }</td>
+                          <tr key={index}>
+                            <td className="bg-white" title={todo?.description}>
+                              <Popover content={todo?.description} trigger="hover">
+                                { todo?.title }
+                              </Popover>
+                            </td>
                             <td className="bg-white">{ moment(todo?.date).format("DD-MM-YYYY") }</td>
                             <td
                               className="bg-white"

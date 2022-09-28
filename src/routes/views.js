@@ -27,3 +27,9 @@ export const VerifyActiveTokenResult = lazy(() =>
 );
 export const ConnectWallet = lazy(() => import("views/ConnectWallet"));
 export const Overview = lazy(() => import("views/Overview"));
+export const ListContact = lazy(() => import("views/Contact/containers/ListContact"));
+export const NewContact = lazy(() => import("views/Contact/containers/NewContact"));
+export const ToDoList = lazy(() => import("views/ToDo/containers/ListTodo"));
+export const NewTodo = lazy(() => import("views/ToDo/containers/New"));
+
+

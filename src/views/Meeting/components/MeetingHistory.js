@@ -170,7 +170,7 @@ const MeetingHistory = ({ className, t }) => {
               <table className="table w-full">
                 <thead className="border-b-1">
                   <tr className="text-cl-base">
-                    <th className="bg-white truncate w-8" width="100">{t("meeting.host")}</th>
+                    <th className="bg-white truncate w-8" width="150">{t("meeting.host")}</th>
                     <th className="bg-white">{t("meeting.props.title")}</th>
                     <th className="bg-white">{t("meeting.props.type")}</th>
                     <th className="bg-white">{t("meeting.started_at")}</th>
@@ -186,7 +186,7 @@ const MeetingHistory = ({ className, t }) => {
                     <tr className="text-cl-base text-md border-0 table-row" key={item?.uuid}>
                       <td className="bg-white">
                         <Popover content={item?.user?.profile?.name} trigger="hover">
-                          <div className="truncate hover:text-clip w-[50px]">{item?.user?.profile?.name}</div>
+                          <div className="truncate hover:text-clip w-[100px]">{item?.user?.profile?.name}</div>
                         </Popover>
                       </td>
                       <td className="bg-white max-w-[150px] truncate">{item?.title}</td>

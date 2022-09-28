@@ -120,6 +120,24 @@ const SidebarLayout = ({ t, onLogout }) => {
                 <p className="pl-2">{t("sidebar.reward_center")}</p>
               </button>
             </div>
+            <div className="w-full">
+              <button
+                className={classNames(
+                  "text-base font-normal",
+                  location.pathname !== `/${routeUrls.todo.path}`
+                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
+                    : "btn btn-base justify-start font-medium",
+                )}
+                onClick={() => navigate(`/${routeUrls.todo.path}`)}
+              >
+                <IconBase
+                  icon="/icons/icons/task-outline.svg"
+                  iconActivated="/icons/icons/task-fill.svg"
+                  isActive={location.pathname.includes(routeUrls.todo.path)}
+                />
+                <p className="pl-2">{t("sidebar.to_do")}</p>
+              </button>
+            </div>
             <div className="w-full opacity-30">
               <button
                 className={classNames(
@@ -154,24 +172,6 @@ const SidebarLayout = ({ t, onLogout }) => {
                   isActive={location.pathname.includes(routeUrls.contact.path)}
                 />
                 <p className="pl-2">{t("sidebar.contact")}</p>
-              </button>
-            </div>
-            <div className="w-full">
-              <button
-                className={classNames(
-                  "text-base font-normal",
-                  location.pathname !== `/${routeUrls.todo.path}`
-                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
-                    : "btn btn-base justify-start font-medium",
-                )}
-                onClick={() => navigate(`/${routeUrls.todo.path}`)}
-              >
-                <IconBase
-                  icon="/icons/icons/task-outline.svg"
-                  iconActivated="/icons/icons/task-fill.svg"
-                  isActive={location.pathname.includes(routeUrls.todo.path)}
-                />
-                <p className="pl-2">{t("sidebar.to_do")}</p>
               </button>
             </div>
             <div className="w-full opacity-30">

@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { withTranslation } from "react-i18next";
 import { t } from "i18next";
 
-const TodoFilter = ({ onChange, onClear, loading }) => {
+const ContactFilter = ({ onChange, onClear, loading }) => {
 
   const schema = yup.object().shape({keyword: yup.string()}).required();
 
@@ -18,10 +18,6 @@ const TodoFilter = ({ onChange, onClear, loading }) => {
     onChange(values);
   };
 
-  const status = [
-    {value: t("todo.completed"), key: true},
-    {value: t("todo.incomplete"), key: false},
-  ];
 
   return (
     <>
@@ -29,18 +25,15 @@ const TodoFilter = ({ onChange, onClear, loading }) => {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <Input
             className="w-full"
-            register={register("keyword")}
-            label={t("meeting.props.title")}
-            placeholder={t("todo.enter_to_do")}
+            register={register("name")}
+            label={t("contact.props.name")}
+            placeholder={t("contact.props.enter_name")}
           />
-          <Select
-            label={t("meeting.props.status")}
-            options={status}
-            register={register("status.uuid")}
-            onChange={(e) => {
-              setValue('status', e);
-            }}
-            allowClear
+          <Input
+            className="w-full"
+            register={register("email")}
+            label={t("contact.props.email")}
+            placeholder={t("contact.props.enter_email")}
           />
         </div>
       </form>
@@ -64,4 +57,4 @@ const TodoFilter = ({ onChange, onClear, loading }) => {
   );
 };
 
-export default withTranslation()(TodoFilter);
+export default withTranslation()(ContactFilter);

@@ -44,6 +44,9 @@ export const routeUrls = {
   contact: {
     path: "contact",
   },
+  newContact: {
+    path: "contact/new",
+  },
   todo: {
     path: "todo",
   },

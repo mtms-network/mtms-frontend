@@ -23,10 +23,12 @@ import {
   VerifyActiveTokenResult,
   ConnectWallet,
   Overview,
+  // eslint-disable-next-line import/named
+  NewTodo,
+  ToDoList,
+  ListContact,
+  NewContact,
 } from "./views";
-import Contact from "../views/Contact";
-import ToDoList from "../views/ToDo/containers/List";
-import NewTodo from "../views/ToDo/containers/New";
 
 const Routers = () => {
   return (
@@ -76,7 +78,8 @@ const Routers = () => {
         />
         <Route path={`/${routeUrls.connectWallet.path}`} element={<ConnectWallet />} />
         <Route path={`/${routeUrls.meeting.path}`} element={<Meeting />} />
-        <Route path={`/${routeUrls.contact.path}`} element={<Contact />} />
+        <Route path={`/${routeUrls.contact.path}`} element={<ListContact />} />
+        <Route path={`/${routeUrls.newContact.path}`} element={<NewContact />} />
         <Route path={`/${routeUrls.todo.path}`} element={<ToDoList />} />
         <Route path={`/${routeUrls.newTodo.path}`} element={<NewTodo />} />
 
