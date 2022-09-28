@@ -180,6 +180,10 @@ const componentPlugins = {
   ".color-inactive": {
     color: "#BCBDC6"
   },
+  ".color-active": {
+    color: "#0391FE",
+    fontWeight: 500,
+  },
   ".color-danger": {
     color: "#EF4444"
   }

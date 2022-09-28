@@ -3,7 +3,7 @@ import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 import Pagination from "../../../components/composite/Pagination";
-import {getNFTs} from "../../../services/orverview.service";
+import { getNFTs, setPrimaryNFT } from "../../../services/orverview.service";
 
 const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
   const [NFTs, setNFTs] = useState([]);
@@ -39,6 +39,15 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
       fetchData().then();
     }
   }, [filter.page]);
+
+  const setPrimary = async (userNft) => {
+    setNFTs(NFTs.map(item => {
+      item.is_primary = item.id === userNft.id;
+      return item;
+    }));
+
+    await setPrimaryNFT(userNft.id);
+  }
 
   return (
     <div className="">
@@ -76,10 +85,15 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                 <tbody className="border-0">
                 {
                   NFTs.map((item, index) => (
-                    <tr className="text-cl-base text-md border-0 table-row" key={index}>
+                    <tr className="text-cl-base text-md border-0 table-row" key={item.id}>
                       <td className="bg-white w-[40px]">
                         <div className="flex justify-center mt-2 w-[40px]">
-                          <Checkbox label="n" checked="checked" name="radio" />
+                          <Checkbox
+                            label="n"
+                            name="user_nft"
+                            checked={item.is_primary}
+                            onChange={() => setPrimary(item)}
+                          />
                         </div>
                       </td>
                       <td className="bg-white">
@@ -88,8 +102,12 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                             <img className="w-32" src={item?.nft?.photo} alt="nft gold"/>
                           </div>
                           <div className="flex flex-col justify-center ml-2">
-                            <div className="color-inactive">Inactive</div>
-                            <div>{ item?.nft?.name }</div>
+                            {item.is_primary ? (
+                              <div className="color-active">Active</div>
+                            ) : (
+                              <div className="color-inactive">Inactive</div>
+                            )}
+                            <div>{item?.nft?.name}</div>
                           </div>
                         </div>
                       </td>
