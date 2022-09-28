@@ -77,8 +77,8 @@ const SidebarLayout = ({ t, onLogout }) => {
                 onClick={() => navigate(`/${routeUrls.meeting.path}`)}
               >
                 <IconBase
-                  icon="/icons/icons/calendar-outline.svg"
-                  iconActivated="/icons/icons/calendar-fill.svg"
+                  icon="/icons/icons/meeting-outline.svg"
+                  iconActivated="/icons/icons/meeting-fill.svg"
                   isActive={location.pathname === `/${routeUrls.meeting.path}`}
                 />
                 <p className="pl-2">{t("sidebar.meeting")}</p>
@@ -149,8 +149,8 @@ const SidebarLayout = ({ t, onLogout }) => {
                 onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}
               >
                 <IconBase
-                  icon="/icons/icons/menu-outline.svg"
-                  iconActivated="/icons/icons/menu-fill.svg"
+                  icon="/icons/icons/live-room-outline.svg"
+                  iconActivated="/icons/icons/live-room-fill.svg"
                   isActive={location.pathname.includes(routeUrls.room247.path)}
                 />
                 <p className="pl-2">{t("sidebar.rooms")}</p>
