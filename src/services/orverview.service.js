@@ -159,3 +159,12 @@ export const getVouchers = async (defaultFilters) => {
   }catch (err){}
   return null;
 };
+
+export const setPrimaryNFT = async (id) => {
+  try {
+    const res = await client.patch(`nfts/${id}/primary`);
+    return res?.data;
+  } catch (err) {
+    return null;
+  };
+};
