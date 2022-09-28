@@ -156,7 +156,7 @@ const SidebarLayout = ({ t, onLogout }) => {
                 <p className="pl-2">{t("sidebar.contact")}</p>
               </button>
             </div>
-            <div className="w-full opacity-30">
+            <div className="w-full">
               <button
                 className={classNames(
                   "text-base font-normal",
@@ -164,7 +164,7 @@ const SidebarLayout = ({ t, onLogout }) => {
                     ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
                     : "btn btn-base justify-start font-medium",
                 )}
-                onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}
+                onClick={() => navigate(`/${routeUrls.todo.path}`)}
               >
                 <IconBase
                   icon="/icons/icons/task-outline.svg"

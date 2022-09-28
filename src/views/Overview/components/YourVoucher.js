@@ -58,10 +58,18 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                   <th className="bg-white" />
                   <th className="bg-white">Voucher</th>
                   <th className="bg-white text-center">
-                    <div>xTime</div>
-                    (W)
+                    <div>xTime</div> (W)
                   </th>
-                  <th className="bg-white" />
+                  <th className="bg-white text-center">
+                    <div>NFT Earned</div> (MTMS)
+                  </th>
+                  <th className="bg-white text-center">
+                    <div>Power</div> (X Time)
+                  </th>
+                  <th className="bg-white text-center">
+                    <div>Voucher</div> (Estimate total MTMS tokens)
+                  </th>
+                  <th className="bg-white"/>
                 </tr>
                 </thead>
                 <tbody className="border-0">
@@ -78,6 +86,9 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                       <td className="bg-white text-center">
                         {item?.voucher?.power}
                       </td>
+                      <td className="bg-white text-center">_</td>
+                      <td className="bg-white text-center">_</td>
+                      <td className="bg-white text-center">_</td>
                       <td className="bg-white text-right">
                         <button
                           className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}

@@ -25,6 +25,7 @@ export const BASE_API = {
   avatar: "/profile/avatar",
   changePassword: "/auth/change-password",
   wallet: "/wallet",
+  todo: '/utility/todos',
 };
 
 export const ALERT_TYPE = {

@@ -83,13 +83,11 @@ const ListContact = ({className, t}) => {
               <table className="table w-full">
                 <thead className="border-b-1">
                 <tr className="text-cl-base">
-                  <th className="bg-white truncate w-8" width="100">{t("meeting.host")}</th>
-                  <th className="bg-white">{t("meeting.props.title")}</th>
-                  <th className="bg-white">{t("meeting.props.type")}</th>
-                  <th className="bg-white">{t("meeting.started_at")}</th>
-                  <th className="bg-white">{t("meeting.ended_at")}</th>
-                  <th className="bg-white text-center">{t("meeting.props.status")}</th>
-                  <th className="bg-white">
+                  <th className="bg-white truncate w-8" width="100">Information</th>
+                  <th className="bg-white">Company</th>
+                  <th className="bg-white">Position</th>
+                  <th className="bg-white">Phone number</th>
+                  <th className="bg-white flex justify-end">
                     <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
                   </th>
                 </tr>

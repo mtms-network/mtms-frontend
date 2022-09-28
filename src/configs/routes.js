@@ -47,6 +47,9 @@ export const routeUrls = {
   todo: {
     path: "todo",
   },
+  newTodo: {
+    path: "todo/new",
+  },
   analytic: {
     path: "analytic",
   },
