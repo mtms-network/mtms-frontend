@@ -1,7 +1,8 @@
 import classNames from "classnames";
-import React, { useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {withTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
+import {Avatar, Dropdown, Menu, Popover} from 'antd';
 import {
   BrandLogoLoading, Button,
   Collapser,
@@ -13,19 +14,64 @@ import {
 } from "../../../../components";
 import ContactFilter from "../../components/ContactFilter";
 import {routeUrls} from "../../../../configs";
+import {getAllContact} from "../../../../services";
+import DeleteContact from "../../components/DeleteContact";
 
 const ListContact = ({t}) => {
   const navigate = useNavigate();
+  const deleteContactModalRef = useRef(null);
   const [isShowFilter, setIsShowFilter] = useState(false);
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({
     limit: 10,
     page: 1,
-    sort_by: "start_date_time",
+    sort_by: "created_at",
     order: "desc",
+    name: "",
+    email: "",
   });
   const [sort, setSort] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [contacts, setContacts] = useState([]);
+  const [isReload, setIsReload] = useState(true);
+  const fetchData = async () => {
+    const res = await getAllContact(filter);
+    await setContacts(
+      Array.isArray(res?.data) ? res?.data : []
+    );
+    await setPagination(res?.meta);
+    await setIsReload(false);
+  };
+
+  useEffect(() => {
+    if(isReload){
+      fetchData().then();
+    }
+  }, [isReload]);
+
+  const menu = (contact) => (
+    <Menu
+      items={[
+        // { key: '1', label: 'View to do' },
+        {
+          key: '2',
+          label: (
+            <div onClick={() => { navigate(`/${routeUrls.contact.path}/${contact?.uuid}`) }}>
+              Edit to do
+            </div>
+          )
+        },
+        {
+          key: '3',
+          label: (
+            <div onClick={() => { deleteContactModalRef.current?.show(contact); }}>
+              Delete to do
+            </div>
+          )
+        },
+      ]}
+    />
+  );
 
   return (
     <MainLayout>
@@ -67,8 +113,9 @@ const ListContact = ({t}) => {
                 title={t("contact.props.filter")}
                 content={
                   <ContactFilter
-                    onChange={(f) => {
-                      setFilter({ ...filter, ...f });
+                    onChange={ async (f) => {
+                      await setFilter({ ...filter, ...f });
+                      await setIsReload(true);
                     }}
                   />
                 }
@@ -81,15 +128,44 @@ const ListContact = ({t}) => {
                   <table className="table w-full">
                     <thead className="border-b-1">
                     <tr className="text-cl-base">
-                      <th className="bg-white truncate w-8" width="100">Information</th>
+                      <th className="bg-white truncate">Information</th>
                       <th className="bg-white">Company</th>
-                      <th className="bg-white">Position</th>
+                      <th className="bg-white">Job</th>
                       <th className="bg-white">Phone number</th>
                       <th className="bg-white flex justify-end">
                         <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
                       </th>
                     </tr>
                     </thead>
+                    <tbody>
+                      {
+                        contacts?.map((contact, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="bg-white" style={{width: '10%'}}>
+                                <div className="flex">
+                                  <Avatar size={40}>N</Avatar>
+                                  <Popover content={contact?.name} trigger="hover">
+                                    <div className="truncate flex flex-col ml-2" style={{maxWidth: '15rem'}}>
+                                      <div>{contact.name}</div>
+                                      <div>{contact.email}</div>
+                                    </div>
+                                  </Popover>
+                                </div>
+                              </td>
+                              <td className="bg-white">{ contact?.company }</td>
+                              <td className="bg-white">{ contact?.position }</td>
+                              <td className="bg-white">{ contact?.phone_number }</td>
+                              <td className="bg-white flex justify-end">
+                                <Dropdown overlay={menu(contact)} placement="bottomRight" arrow>
+                                  <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
+                                </Dropdown>
+                              </td>
+                            </tr>
+                          )
+                        })
+                      }
+                    </tbody>
                   </table>
                 )}
                 <div className="py-8 flex justify-center">
@@ -124,6 +200,10 @@ const ListContact = ({t}) => {
           </GroupLayout>
         </div>
       </div>
+      <DeleteContact
+        onRefresh={setIsReload}
+        ref={deleteContactModalRef}
+      />
     </MainLayout>
 
   );

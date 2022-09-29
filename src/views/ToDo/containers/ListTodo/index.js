@@ -171,9 +171,11 @@ const ToDoList = ({t}) => {
                       todoList?.map((todo, index) => {
                         return (
                           <tr key={index}>
-                            <td className="bg-white" title={todo?.description}>
+                            <td className="bg-white truncate" title={todo?.description}>
                               <Popover content={todo?.description} trigger="hover">
-                                { todo?.title }
+                                <div className="max-w-[15rem] truncate">
+                                  { todo?.title }
+                                </div>
                               </Popover>
                             </td>
                             <td className="bg-white">{ moment(todo?.date).format("DD-MM-YYYY") }</td>

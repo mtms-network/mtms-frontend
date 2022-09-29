@@ -26,6 +26,7 @@ export const BASE_API = {
   changePassword: "/auth/change-password",
   wallet: "/wallet",
   todo: '/utility/todos',
+  contact: '/contacts',
 };
 
 export const ALERT_TYPE = {

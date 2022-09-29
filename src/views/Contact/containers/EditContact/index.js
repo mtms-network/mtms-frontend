@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {IoTv} from "react-icons/io5";
 import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import {message} from "antd";
 import {routeUrls} from "../../../../configs";
@@ -15,13 +15,16 @@ import {
   Input,
   MainLayout
 } from "../../../../components";
-import {postContact, postToDo} from "../../../../services";
+import {getDetailContact, patchContact, postContact, postToDo} from "../../../../services";
 import {handleHttpError} from "../../../../helpers";
 
-const NewContact = ({t}) => {
+const EditContact = ({t}) => {
+  const { uuid } = useParams();
+
   const [fetchLoading, setFetchLoading] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [contact, setContact] = useState(null);
 
   const schema = yup.object().shape({
     name: yup.string().required().max(40).min(3),
@@ -34,17 +37,34 @@ const NewContact = ({t}) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const fetchData = async () => {
+    const res = await getDetailContact(uuid);
+    setValue('name', res?.name);
+    setValue('email', res?.email);
+    setValue('company', res?.company);
+    setValue('position', res?.position);
+    setValue('phone_number', res?.phone_number);
+  };
+
+
+  useEffect(() => {
+    if(uuid){
+      fetchData().then();
+    }
+  }, [uuid])
 
   const onSubmit = async (values) => {
     await setLoading(true);
     try {
       const data = {...values};
 
-      const res = await postContact(data);
+      const res = await patchContact(uuid, data);
       if (res?.data) {
         navigate(`/${routeUrls.contact.path}`);
         message.success(res?.data?.message);
@@ -167,4 +187,4 @@ const NewContact = ({t}) => {
   );
 };
 
-export default withTranslation()(NewContact);
+export default withTranslation()(EditContact);

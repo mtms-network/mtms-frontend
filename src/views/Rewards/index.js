@@ -12,10 +12,10 @@ import {
   claimTokenToDay,
   getRequirePreWallet,
 } from "services/wallet.service";
-import {createPrivateInstance} from "services/base";
 import {message} from "antd";
 import {useAppStore} from "stores/app.store";
 import {useNavigate} from "react-router-dom";
+import Nfts from "./components/Nfts";
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
@@ -47,31 +47,6 @@ const Rewards = () => {
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
-    }
-  };
-
-  const handleClaimTokenToday = async () => {
-    try {
-      setAlert({...alert, show: false, message: ""});
-      setLoading(true);
-      const res = await claimTokenToDay();
-      if (res?.status === API_RESPONSE_STATUS.success) {
-        message.success(res?.message);
-      }
-
-      await prepareData();
-      setLoading(false);
-    } catch (error) {
-      if (error) {
-        const errorData = handleHttpError(error);
-        setAlert({
-          type: ALERT_TYPE.ERROR,
-          show: true,
-          message: errorData.message,
-          error: errorData.detail,
-        });
-      }
-      setLoading(false);
     }
   };
 
@@ -145,15 +120,6 @@ const Rewards = () => {
     prepareData();
   }, []);
 
-  const convertTime = useCallback((totalMinute) => {
-    const h = Math.floor(totalMinute / 60);
-    const m = totalMinute - h * 60;
-    return {
-      h: h?.toString().padStart(2, "0"),
-      m: m?.toString()?.padStart(2, "0"),
-    };
-  }, [walletStore?.wallet?.total_minute_all_days]);
-
   return (
     <MainLayout>
       <div className="p-2 min-h-full">
@@ -175,7 +141,7 @@ const Rewards = () => {
                 <p className="font-bold text-2xl">{t("rewards.daily_task")}</p>
                 <p className="text-base">
                   {`${t("rewards.receive_token", {
-                    token: walletStore?.wallet?.token_per_checkin || 0,
+                    token: walletStore?.wallet?.user_earning?.checkin_earning || 0,
                   })}`}
                 </p>
               </div>
@@ -211,63 +177,7 @@ const Rewards = () => {
               </div>
             </div>
           </div>
-          <div className="w-full bg-white rounded-3xl py-6 px-8">
-            <div className="flex flex-1 flex-col sm:flex-row justify-between">
-              <div className="">
-                <div className="mb-4">
-                  <p className="text-base text-gray">{t("rewards.meeting_time")} (hh/mm)</p>
-                  <p className="text-orange-base font-bold text-xl">
-                    {`${convertTime(walletStore?.wallet?.total_minute_all_days).h}:${convertTime(walletStore?.wallet?.total_minute_all_days).m}`}
-                  </p>
-                </div>
-                <div className="">
-                  <p
-                    className="text-base text-gray">{t("rewards.today_earning")} ({t('list.general.durations.minutes')})</p>
-                  <p className="text-orange-base font-bold text-xl">
-                    {`${convertTime(walletStore?.wallet?.total_minute_earn_today).h}:${convertTime(walletStore?.wallet?.total_minute_earn_today).m}`}
-                  </p>
-                </div>
-              </div>
-              <div className="">
-                <div className="mb-4">
-                  <p
-                    className="text-base text-gray">{t("rewards.earning_rate")} (MTMS/{t('list.general.durations.m')})</p>
-                  <p className="text-orange-base font-bold text-xl">
-                    {`${walletStore?.wallet?.meeting_cost}`}
-                  </p>
-                </div>
-                <div>
-                  <p
-                    className="text-base text-gray">{t("rewards.max_daily_earnings")} ({t('list.general.durations.minutes')})</p>
-                  <p className="text-orange-base font-bold text-xl">
-                    {`${walletStore?.wallet?.max_minute_day}`}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <div className="mb-4">
-                  <p className="text-base text-gray">{t("rewards.total_earn")}</p>
-                  <p className="text-orange-base font-bold text-xl">
-                    {`${parseFloat(walletStore?.wallet?.total_token_all_days).toFixed(3)} MTMS`}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <Button
-                  className="btn-primary"
-                  isLoading={loading}
-                  onClick={() => {
-                    if (walletStore?.wallet?.total_token_all_days > 0) {
-                      handleClaimTokenToday();
-                    }
-                  }}
-                  disabled={walletStore?.wallet?.total_token_all_days <= 0}
-                >
-                  {t("rewards.claim_token")}
-                </Button>
-              </div>
-            </div>
-          </div>
+          <Nfts />
           <div className="flex flex-col sm:flex-row w-full sm:space-x-5">
             <div className="basis-2/3 bg-white rounded-3xl py-6 px-8 grow">
               <div className="flex flex-1 flex-row justify-between">
