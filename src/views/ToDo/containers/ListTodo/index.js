@@ -83,8 +83,16 @@ const ToDoList = ({t}) => {
   const menu = (todo) => (
     <Menu
       items={[
-        // { key: '1', label: 'View to do' },
-        // { key: '2', label: 'Edit to do' },
+        {
+          key: '2',
+          label: (
+            <div onClick={() => {
+              navigate(`/${ routeUrls.todo.path }/${todo?.uuid}`);
+            }}>
+              Edit to do
+            </div>
+          )
+        },
         {
           key: '3',
           label: (
@@ -171,7 +179,7 @@ const ToDoList = ({t}) => {
                       todoList?.map((todo, index) => {
                         return (
                           <tr key={index}>
-                            <td className="bg-white truncate" title={todo?.description}>
+                            <td className="bg-white truncate">
                               <Popover content={todo?.description} trigger="hover">
                                 <div className="max-w-[15rem] truncate">
                                   { todo?.title }

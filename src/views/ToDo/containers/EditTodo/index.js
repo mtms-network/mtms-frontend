@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import moment from "moment";
 import {IoTv} from "react-icons/io5";
 import * as yup from "yup";
 import {useForm} from "react-hook-form";
@@ -8,51 +9,50 @@ import { withTranslation } from "react-i18next";
 import {message} from "antd";
 import {routeUrls} from "../../../../configs";
 import {
+  AlertError,
   BrandLogoLoading,
   Button,
+  DateTimePicker,
   GroupLayout,
   GroupTitle,
   Input,
-  MainLayout
+  MainLayout, TextArea
 } from "../../../../components";
-import {getDetailContact, patchContact, postContact, postToDo} from "../../../../services";
+import {getDetailTodo, patchTodo, postToDo} from "../../../../services";
 import {handleHttpError} from "../../../../helpers";
 
-const EditContact = ({t}) => {
+const EditTodo = ({t}) => {
   const { uuid } = useParams();
-
   const [fetchLoading, setFetchLoading] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [contact, setContact] = useState(null);
 
   const schema = yup.object().shape({
-    name: yup.string().required().max(40).min(3),
-    email: yup.string().required().email(),
-    company: yup.string().max(100),
-    position: yup.string().max(50),
-    phone_number: yup.string().max(15),
+    title: yup.string().required(),
+    date: yup.date().required(),
+    description: yup.string(),
   });
 
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
+
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const fetchData = async () => {
-    const res = await getDetailContact(uuid);
-    setValue('name', res?.name);
-    setValue('email', res?.email);
-    setValue('company', res?.company);
-    setValue('position', res?.position);
-    setValue('phone_number', res?.phone_number);
+    const res = await getDetailTodo(uuid);
+    setValue("title", res?.title);
+    setValue("description", res?.description);
+    if(res?.date){
+      setValue("date", new Date(res?.date));
+    }
   };
-
-
+  console.log('getValues', getValues().date)
   useEffect(() => {
     if(uuid){
       fetchData().then();
@@ -63,10 +63,11 @@ const EditContact = ({t}) => {
     await setLoading(true);
     try {
       const data = {...values};
+      data.date = moment(data.date).format("YYYY-MM-DD");
 
-      const res = await patchContact(uuid, data);
+      const res = await patchTodo(uuid, data);
       if (res?.data) {
-        navigate(`/${routeUrls.contact.path}`);
+        navigate(`/${routeUrls.todo.path}`);
         message.success(res?.data?.message);
       } else if (res?.request) {
         const errorData = handleHttpError(res);
@@ -91,7 +92,7 @@ const EditContact = ({t}) => {
         <>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1 text-center">
-              <GroupTitle icon={<IoTv />} title="Edit contact" />
+              <GroupTitle icon={<IoTv />} title="Edit to do" />
             </div>
           </div>
           <div className="w-[90%] m-auto bg-white rounded-[20px] md:w-[80%] lx:w-[60%]">
@@ -102,58 +103,37 @@ const EditContact = ({t}) => {
                     required
                     className="w-full"
                     labelClassName="text-base"
-                    register={register("name")}
-                    label="Name"
-                    placeholder="Enter name"
-                    error={errors.name}
+                    register={register("title")}
+                    label={t("todo.todo")}
+                    placeholder={t("todo.enter_to_do")}
+                    error={errors.title}
                   />
                 </div>
               </GroupLayout>
-              <GroupLayout className="flex flex-col justify-between">
-                <div className="w-full h-auto">
-                  <Input
-                    required
-                    className="w-full"
-                    labelClassName="text-base"
-                    register={register("email")}
-                    label="Email"
-                    placeholder="Enter email"
-                    error={errors.email}
-                  />
+              <GroupLayout className="w-full space-y-4">
+                <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
+                  <div className="w-full mt-2">
+                    <DateTimePicker
+                      label={t("todo.due_date")}
+                      placeholder={moment().format("DD/MM/YYYY")}
+                      onChangeDateTime={(date) => {
+                        setValue("date", date)
+                      }}
+                      format="DD/MM/YYYY"
+                      error={errors.date}
+                      defaultValue={ getValues()?.date ? moment(getValues().date) : "" }
+                    />
+                  </div>
                 </div>
               </GroupLayout>
+
               <GroupLayout className="flex flex-col justify-between">
-                <div className="w-full h-auto">
-                  <Input
-                    className="w-full"
-                    labelClassName="text-base"
-                    register={register("company")}
-                    label="Company"
-                    placeholder="Enter comapny"
-                  />
-                </div>
-              </GroupLayout>
-              <GroupLayout className="flex flex-col justify-between">
-                <div className="w-full h-auto">
-                  <Input
-                    className="w-full"
-                    labelClassName="text-base"
-                    register={register("position")}
-                    label="Job"
-                    placeholder="Enter position"
-                  />
-                </div>
-              </GroupLayout>
-              <GroupLayout className="flex flex-col justify-between">
-                <div className="w-full h-auto">
-                  <Input
-                    className="w-full"
-                    labelClassName="text-base"
-                    register={register("phone_number")}
-                    label="Phone number"
-                    placeholder="Enter phone number"
-                  />
-                </div>
+                <TextArea
+                  className="w-full"
+                  register={register("description")}
+                  label={t("todo.desc")}
+                  placeholder={t("todo.props.enter_desc")}
+                />
               </GroupLayout>
             </form>
             <div className="w-full sm:flex sm:flex-row justify-between pt-2 pb-8 space-y-2 sm:space-y-0">
@@ -163,7 +143,7 @@ const EditContact = ({t}) => {
                   type="submit"
                   onClick={() => {
                     if(!loading){
-                      navigate(`/${routeUrls.contact.path}`);
+                      navigate(`/${routeUrls.todo.path}`);
                     }
                   }}
                   disabled={loading}
@@ -176,7 +156,7 @@ const EditContact = ({t}) => {
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
                 >
-                  {t("general.create")}
+                  {t("general.update")}
                 </Button>
               </div>
             </div>
@@ -187,4 +167,4 @@ const EditContact = ({t}) => {
   );
 };
 
-export default withTranslation()(EditContact);
+export default withTranslation()(EditTodo);

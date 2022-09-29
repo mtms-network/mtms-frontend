@@ -56,6 +56,9 @@ export const routeUrls = {
   newTodo: {
     path: "todo/new",
   },
+  editTodo: {
+    path: "todo/:uuid"
+  },
   analytic: {
     path: "analytic",
   },

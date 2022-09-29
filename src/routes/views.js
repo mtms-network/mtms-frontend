@@ -32,5 +32,6 @@ export const NewContact = lazy(() => import("views/Contact/containers/NewContact
 export const EditContact = lazy(() => import("views/Contact/containers/EditContact"));
 export const ToDoList = lazy(() => import("views/ToDo/containers/ListTodo"));
 export const NewTodo = lazy(() => import("views/ToDo/containers/New"));
+export const EditTodo = lazy(() => import("views/ToDo/containers/EditTodo"));
 
 

@@ -29,6 +29,7 @@ import {
   ListContact,
   NewContact,
   EditContact,
+  EditTodo,
 } from "./views";
 
 const Routers = () => {
@@ -84,6 +85,7 @@ const Routers = () => {
         <Route path={`/${routeUrls.editContact.path}`} element={<EditContact />} />
         <Route path={`/${routeUrls.todo.path}`} element={<ToDoList />} />
         <Route path={`/${routeUrls.newTodo.path}`} element={<NewTodo />} />
+        <Route path={`/${routeUrls.editTodo.path}`} element={<EditTodo />} />
 
         <Route path="/" element={<Overview />} />
         <Route path="*" element={<Navigate to="/meeting" />} />

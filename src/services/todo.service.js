@@ -38,4 +38,21 @@ export const postStatusTodo = async (id) => {
     return res;
   }catch (err){}
   return null;
+};
+
+export const getDetailTodo = async (id) => {
+  try {
+    const res = await  client.get(`/${id}`);
+    return res?.data;
+  }catch (err){}
+  return null;
 }
+
+
+export const patchTodo = async (uuid, data) => {
+  try {
+    const res = await  client.patch(`/${uuid}`, data);
+    return res;
+  }catch (err){}
+  return null;
+};
