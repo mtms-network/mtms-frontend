@@ -236,9 +236,11 @@ const Rewards = () => {
             <div className="basis-1/3 bg-white rounded-3xl py-6 px-8 mt-10 sm:mt-0">
               <div className="flex flex-col justify-center items-center">
                 <p className="text-base text-gray">{t("rewards.total_token")}</p>
-                <p className="text-orange-base font-bold text-5xl">{`${
-                  walletStore?.wallet?.user?.total_token || 0
-                }`}</p>
+                <p className="text-orange-base font-bold text-5xl flex">
+                  {`${walletStore?.wallet?.user?.total_token || 0}`}
+                  <img src="/images/logo.png" className="w-[48px]" />
+                </p>
+
                 <div className="pt-8">
                   <Button
                     disabled
