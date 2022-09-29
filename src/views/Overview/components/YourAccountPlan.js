@@ -67,20 +67,19 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
               <table className="table w-full">
                 <thead className="border-b-1">
                 <tr className="text-cl-base">
-                  <th className="bg-white" />
-                  <th className="bg-white">Plan</th>
-                  <th className="bg-white">
+                  <th className="bg-white"  style={{width: '50px'}}/>
+                  <th className="bg-white" style={{width: '25%'}}>Plan</th>
+                  <th className="bg-white text-center" style={{width: '15%'}}>
                     <div>Max earnings</div>
                     (Time/Min)
                   </th>
-                  <th className="bg-white text-center">
+                  <th className="bg-white text-center" style={{width: '20%'}}>
                     <div>Max Ern/Day</div> (MTMS)
                   </th>
-                  <th className="bg-white text-center">
+                  <th className="bg-white text-center" style={{width: '20%'}}>
                     <div>E-rate</div> (MTMS/Min)
                   </th>
-                  <th className="bg-white" />
-                  <th className="bg-white" />
+                  <th className="bg-white" style={{width: '20%'}}/>
                 </tr>
                 </thead>
                 <tbody className="border-0">
@@ -97,22 +96,19 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
                           <div>{ item?.subscription?.name }</div>
                           { renderExpired(item) }
                         </td>
-                        <td className="bg-white">
+                        <td className="bg-white text-center">
                           <div>30 minutes</div>
                         </td>
                         <td className="bg-white max-w-[150px] truncate text-center">{ item?.subscription?.max_earning_per_day }</td>
-                        <td className="bg-white text-center">
+                        <td className="bg-white text-center text-center">
                           { item?.subscription?.earning_rate }
                         </td>
-                        <td className="bg-white">
+                        <td className="bg-white flex justify-end">
                           <button
                             className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
                           >
                             Buy More
                           </button>
-                        </td>
-                        <td className="bg-white">
-                          <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
                         </td>
                       </tr>
                     );

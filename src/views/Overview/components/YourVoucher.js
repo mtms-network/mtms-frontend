@@ -55,18 +55,15 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
               <table className="table w-full">
                 <thead className="border-b-1">
                 <tr className="text-cl-base">
-                  <th className="bg-white" />
-                  <th className="bg-white">Voucher</th>
-                  <th className="bg-white text-center">
-                    <div>xTime</div> (W)
-                  </th>
-                  <th className="bg-white text-center">
+                  <th className="bg-white" style={{width: '50px'}} />
+                  <th className="bg-white" style={{width: '25%'}}>Voucher</th>
+                  <th className="bg-white text-center" style={{width: '15%'}}>
                     <div>NFT Earned</div> (MTMS)
                   </th>
-                  <th className="bg-white text-center">
+                  <th className="bg-white text-center" style={{width: '20%'}}>
                     <div>Power</div> (X Time)
                   </th>
-                  <th className="bg-white text-center">
+                  <th className="bg-white text-center" style={{width: '20%'}}>
                     <div>Voucher</div> (Estimate total MTMS tokens)
                   </th>
                   <th className="bg-white"/>
@@ -86,7 +83,6 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                       <td className="bg-white text-center">
                         {item?.voucher?.power}
                       </td>
-                      <td className="bg-white text-center">_</td>
                       <td className="bg-white text-center">_</td>
                       <td className="bg-white text-center">_</td>
                       <td className="bg-white text-right">

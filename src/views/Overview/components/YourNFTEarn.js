@@ -49,6 +49,10 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
         return item;
       }));
     }
+  };
+
+  const renderCode = (id) => {
+    return `#M${id?.toString()?.padStart(5, '0')}`;
   }
 
   return (
@@ -67,21 +71,21 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                 <thead className="border-b-1">
                 <tr className="text-cl-base">
                   <th className="bg-white" />
-                  <th className="bg-white">NFT</th>
-                  <th className="bg-white text-center">
+                  <th className="bg-white" style={{width: '25%'}}>NFT</th>
+                  <th className="bg-white text-center" style={{width: '15%'}}>
                     <div>Power</div>
                     (W)
                   </th>
-                  <th className="bg-white text-center">
+                  <th className="bg-white text-center" style={{width: '20%'}}>
                     <div>Max Ern/Day </div>
                     (MTMS)
                   </th>
-                  <th className="bg-white text-center">
+                  <th className="bg-white text-center" style={{width: '20%'}}>
                     <div>E-rate</div>
                     (MTMS / Min)
                   </th>
-                  <th className="bg-white" />
-                  <th className="bg-white" />
+                  <th className="bg-white" style={{width: '20%'}}/>
+                  <th className="bg-white" style={{width: '20%'}}/>
                 </tr>
                 </thead>
                 <tbody className="border-0">
@@ -100,8 +104,8 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                       </td>
                       <td className="bg-white">
                         <div className="flex">
-                          <div>
-                            <img className="w-32" src={item?.nft?.photo} alt="nft gold"/>
+                          <div className="flex items-center w-32">
+                            <img src={item?.nft?.photo} alt="nft gold"/>
                           </div>
                           <div className="flex flex-col justify-center ml-2">
                             {item.is_primary ? (
@@ -110,6 +114,7 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                               <div className="color-inactive">Inactive</div>
                             )}
                             <div>{item?.nft?.name}</div>
+                            <div className="text-[#0190fe]">{ renderCode(item?.id) }</div>
                           </div>
                         </div>
                       </td>
@@ -120,15 +125,12 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                       <td className="bg-white text-center">
                         {item?.min_e_rate}
                       </td>
-                      <td className="bg-white text-center">
+                      <td className="bg-white text-center flex justify-end">
                         <button
                           className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
                         >
                           Buy More
                         </button>
-                      </td>
-                      <td className="bg-white">
-                        <img src="/icons/icons/arrow-right-outline.svg" alt="arrow right" />
                       </td>
                     </tr>
                   ))
