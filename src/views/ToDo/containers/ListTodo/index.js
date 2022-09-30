@@ -37,17 +37,18 @@ const ToDoList = ({t}) => {
   const [isShowFilter, setIsShowFilter] = useState(false);
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({...initialFilter});
-  const [sort, setSort] = useState(false);
   const [loading, setLoading] = useState(false);
   const [todoList, setToDoList] = useState([]);
   const [isReload, setIsReload] = useState(false);
 
   const fetchData = async () => {
+    await setLoading(true);
     const res = await getListToDo(filter);
     await setToDoList(
       Array.isArray(res?.data) ? res?.data : []
     );
     await setPagination(res?.meta);
+    await setLoading(false);
     await setIsReload(false);
   };
 
@@ -218,21 +219,24 @@ const ToDoList = ({t}) => {
                     limit={pagination?.per_page}
                     from={pagination?.from}
                     to={pagination?.to}
-                    onNext={() => {
+                    onNext={ async () => {
                       if (filter.page < pagination?.last_page) {
                         const nextPage = filter.page + 1;
-                        setFilter({ ...filter, page: nextPage });
+                        await setFilter({ ...filter, page: nextPage });
+                        await setIsReload(true);
                       }
                     }}
-                    onBack={() => {
+                    onBack={ async () => {
                       if (filter.page <= pagination?.last_page && filter.page > 1) {
                         const nextPage = filter.page - 1;
-                        setFilter({ ...filter, page: nextPage });
+                        await setFilter({ ...filter, page: nextPage });
+                        await setIsReload(true);
                       }
                     }}
-                    onPage={(page) => {
+                    onPage={ async (page) => {
                       if (page !== pagination?.current_page) {
-                        setFilter({ ...filter, page });
+                        await setFilter({ ...filter, page });
+                        await setIsReload(true);
                       }
                     }}
                   />

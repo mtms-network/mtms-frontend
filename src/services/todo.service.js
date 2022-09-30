@@ -4,8 +4,14 @@ import {BASE_API} from "../configs";
 
 const client = createPrivateInstance(BASE_API.todo);
 
-export const getListToDo = async (filter) => {
+export const getListToDo = async (defaultFilters) => {
   try {
+    const filter = {
+      current_page: defaultFilters.page,
+      per_page: defaultFilters.limit,
+      sort_by: "id",
+      order: "desc",
+    };
     const query = QueryString.stringify({ ...filter });
 
     const res = await client.get(`?${query}`);

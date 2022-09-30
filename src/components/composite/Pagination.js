@@ -8,9 +8,6 @@ import { withTranslation } from "react-i18next";
 const Pagination = ({
   page = 1,
   totalPage = 1,
-  total = 1,
-  from = 1,
-  to = 1,
   className,
   onNext = () => {},
   onBack = () => {},
@@ -41,7 +38,6 @@ const Pagination = ({
     if (page > totalPage - 2) {
       start = totalPage - 2;
     }
-
     end = start + 3;
     if (end > totalPage + 1) {
       end = totalPage + 1;
@@ -56,6 +52,10 @@ const Pagination = ({
         1
       </div>,
     );
+  }
+
+  if(start === 0){
+    start +=1;
   }
 
   for (let i = start; i < end; i++) {
@@ -87,6 +87,7 @@ const Pagination = ({
       </div>,
     );
   }
+
   return (
     <div
       className={classNames("flex flex-col sm:flex-row items-center justify-between", className)}

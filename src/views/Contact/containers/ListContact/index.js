@@ -31,7 +31,6 @@ const ListContact = ({t}) => {
     email: "",
   });
   const [sort, setSort] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [contacts, setContacts] = useState([]);
   const [isReload, setIsReload] = useState(true);
   const fetchData = async () => {
@@ -87,7 +86,7 @@ const ListContact = ({t}) => {
                 <div className="space-x-2 py-2 flex flex-row w-auto items-center justify-end">
                   <Button
                     className="btn btn-primary btn-sm mr-2"
-                    isLoading={loading}
+                    isLoading={false}
                     onClick={() => {
                       navigate(`/${routeUrls.newContact.path}`);
                     }}
@@ -123,8 +122,8 @@ const ListContact = ({t}) => {
             </div>
             <div className="flex w-full flex-1">
               <div className="overflow-x-auto flex-1 rounded-lg">
-                {loading && <BrandLogoLoading />}
-                {!loading && (
+                {isReload && <BrandLogoLoading />}
+                {!isReload && (
                   <table className="table w-full">
                     <thead className="border-b-1">
                     <tr className="text-cl-base">
@@ -144,7 +143,7 @@ const ListContact = ({t}) => {
                             <tr key={index}>
                               <td className="bg-white" style={{width: '10%'}}>
                                 <div className="flex">
-                                  <Avatar size={40}>N</Avatar>
+                                  <Avatar size={40}>{ contact?.name?.charAt(0) }</Avatar>
                                   <Popover content={contact?.name} trigger="hover">
                                     <div className="truncate flex flex-col ml-2" style={{maxWidth: '15rem'}}>
                                       <div>{contact.name}</div>
@@ -172,25 +171,25 @@ const ListContact = ({t}) => {
                   <Pagination
                     page={pagination?.current_page}
                     totalPage={pagination?.last_page}
-                    total={pagination?.total}
                     limit={pagination?.per_page}
-                    from={pagination?.from}
-                    to={pagination?.to}
-                    onNext={() => {
+                    onNext={ async () => {
                       if (filter.page < pagination?.last_page) {
                         const nextPage = filter.page + 1;
-                        setFilter({ ...filter, page: nextPage });
+                        await setFilter({ ...filter, page: nextPage });
+                        await setIsReload(true)
                       }
                     }}
-                    onBack={() => {
+                    onBack={ async () => {
                       if (filter.page <= pagination?.last_page && filter.page > 1) {
                         const nextPage = filter.page - 1;
-                        setFilter({ ...filter, page: nextPage });
+                        await setFilter({ ...filter, page: nextPage });
+                        await setIsReload(true)
                       }
                     }}
-                    onPage={(page) => {
+                    onPage={ async (page) => {
                       if (page !== pagination?.current_page) {
-                        setFilter({ ...filter, page });
+                        await setFilter({ ...filter, page });
+                        await setIsReload(true)
                       }
                     }}
                   />
