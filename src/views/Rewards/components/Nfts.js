@@ -6,6 +6,7 @@ import {useWalletStore} from "../../../stores/wallet.store";
 import {claimTokenToDay, getRequirePreWallet} from "../../../services/wallet.service";
 import {ALERT_TYPE, API_RESPONSE_STATUS} from "../../../configs";
 import {handleHttpError} from "../../../helpers";
+import {renderBox} from "../config";
 
 const Nfts = () => {
   const {t} = useTranslation();
@@ -31,17 +32,6 @@ const Nfts = () => {
 
   const meetingTime = convertTime(walletStore?.wallet?.meeting?.minute_all);
   const totalEarning = convertTime(walletStore?.wallet?.total_checkin_token);
-
-  const renderBox = (title, content, margin = "") => {
-    return (
-      <div className={ margin }>
-        <p className="text-base text-gray">{ title }</p>
-        <p className="text-orange-base font-bold text-xl">
-          { content }
-        </p>
-      </div>
-    );
-  };
 
   const prepareData = async () => {
     try {
@@ -88,58 +78,31 @@ const Nfts = () => {
       <div className="flex flex-1 flex-col sm:flex-row justify-between">
         <div className="">
           { renderBox(
-            `${t("rewards.meeting_time")} (hh/mm)`,
-            `${meetingTime.h}:${meetingTime.m}`,
-            'mb-4'
-          ) }
-
-          { renderBox(
             `NFT Earning`,
             walletStore?.wallet?.nft?.earn_all || 0,
             'mb-4'
           ) }
-
           { renderBox(
-            `Subscription Earning`,
-            walletStore?.wallet?.subscription?.earn_all || 0,
+            `Vouchers`,
+            walletStore?.wallet?.user_earning?.primary_nft?.voucher?.name || "",
             ''
           ) }
         </div>
         <div className="">
           { renderBox(
-            `${t("rewards.today_earning")} (${t('list.general.durations.minutes')})`,
-            `${totalEarning.h}:${totalEarning.m}`,
-            'mb-4'
-          ) }
-
-          { renderBox(
             `NFT E-Rate`,
-            walletStore?.wallet?.user_earning?.nft_erate || 0,
-            'mb-4'
+            walletStore?.wallet?.user_earning?.primary_nft?.voucher?.power || 0
           ) }
-
           { renderBox(
-            `Subscription E-Rate`,
-            walletStore?.wallet?.user_earning?.sub_erate || 0,
+            `POWER (X TIME)`,
+            walletStore?.wallet?.user_earning?.nft_erate || 0,
             'mb-4'
           ) }
         </div>
         <div>
           { renderBox(
-            t("rewards.total_earn"),
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            walletStore?.wallet?.total_earning?.earn_all || 0,
-            'mb-4'
-          ) }
-          { renderBox(
             `NFT Max. Daily Earnings`,
             walletStore?.wallet?.user_earning?.primary_nft?.time_earning || 0,
-            'mb-4'
-          ) }
-
-          { renderBox(
-            `Subscription Max. Daily Earnings`,
-            walletStore?.wallet?.user_earning?.primary_subscription?.max_daily_earning || 0,
             'mb-4'
           ) }
         </div>

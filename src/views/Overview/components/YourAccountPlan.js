@@ -76,10 +76,10 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
                   <th className="bg-white text-center" style={{width: '20%'}}>
                     <div>Max Ern/Day</div> (MTMS)
                   </th>
-                  <th className="bg-white text-center" style={{width: '20%'}}>
+                  <th className="bg-white text-center" style={{width: '200px'}}>
                     <div>E-rate</div> (MTMS/Min)
                   </th>
-                  <th className="bg-white" style={{width: '20%'}}/>
+                  <th className="bg-white" style={{width: '200px'}}/>
                 </tr>
                 </thead>
                 <tbody className="border-0">
@@ -103,7 +103,7 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
                         <td className="bg-white text-center text-center">
                           { item?.subscription?.earning_rate }
                         </td>
-                        <td className="bg-white flex justify-end">
+                        <td className="bg-white flex justify-center">
                           <button
                             className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
                           >

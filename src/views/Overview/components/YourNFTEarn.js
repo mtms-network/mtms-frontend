@@ -80,12 +80,11 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                     <div>Max Ern/Day </div>
                     (MTMS)
                   </th>
-                  <th className="bg-white text-center" style={{width: '20%'}}>
+                  <th className="bg-white text-center" style={{width: '200px'}}>
                     <div>E-rate</div>
                     (MTMS / Min)
                   </th>
-                  <th className="bg-white" style={{width: '20%'}}/>
-                  <th className="bg-white" style={{width: '20%'}}/>
+                  <th className="bg-white" style={{width: '200px'}}/>
                 </tr>
                 </thead>
                 <tbody className="border-0">
@@ -125,7 +124,7 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                       <td className="bg-white text-center">
                         {item?.min_e_rate}
                       </td>
-                      <td className="bg-white text-center flex justify-end">
+                      <td className="bg-white text-center flex justify-center">
                         <button
                           className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
                         >

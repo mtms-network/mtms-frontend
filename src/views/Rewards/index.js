@@ -16,6 +16,7 @@ import {message} from "antd";
 import {useAppStore} from "stores/app.store";
 import {useNavigate} from "react-router-dom";
 import Nfts from "./components/Nfts";
+import Plan from "./components/Plan";
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
@@ -177,6 +178,7 @@ const Rewards = () => {
               </div>
             </div>
           </div>
+          <Plan />
           <Nfts />
           <div className="flex flex-col sm:flex-row w-full sm:space-x-5">
             <div className="basis-2/3 bg-white rounded-3xl py-6 px-8 grow">
@@ -238,7 +240,7 @@ const Rewards = () => {
                 <p className="text-base text-gray">{t("rewards.total_token")}</p>
                 <p className="text-orange-base font-bold text-5xl flex">
                   {`${walletStore?.wallet?.user?.total_token || 0}`}
-                  <img src="/images/logo.png" className="w-[48px]" />
+                  <img src="/images/logo.png" className="w-[48px]" alt="logo mtms" />
                 </p>
 
                 <div className="pt-8">
