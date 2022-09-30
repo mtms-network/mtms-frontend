@@ -71,8 +71,11 @@ const EditContact = ({t}) => {
       } else if (res?.request) {
         const errorData = handleHttpError(res);
         message.error(errorData.messageDetail);
+        await setLoading(true);
       }
     }catch (error){
+      await setLoading(true);
+
       if (error) {
         const errorData = handleHttpError(error);
         message.error(errorData?.message);
@@ -176,7 +179,7 @@ const EditContact = ({t}) => {
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
                 >
-                  {t("general.create")}
+                  {t("general.update")}
                 </Button>
               </div>
             </div>

@@ -57,7 +57,7 @@ const ListContact = ({t}) => {
           key: '2',
           label: (
             <div onClick={() => { navigate(`/${routeUrls.contact.path}/${contact?.uuid}`) }}>
-              Edit to do
+              Edit contact
             </div>
           )
         },
@@ -65,7 +65,7 @@ const ListContact = ({t}) => {
           key: '3',
           label: (
             <div onClick={() => { deleteContactModalRef.current?.show(contact); }}>
-              Delete to do
+              Delete contact
             </div>
           )
         },

@@ -51,8 +51,11 @@ const NewContact = ({t}) => {
       } else if (res?.request) {
         const errorData = handleHttpError(res);
         message.error(errorData.messageDetail);
+        await setLoading(false);
       }
     }catch (error){
+      await setLoading(false);
+
       if (error) {
         const errorData = handleHttpError(error);
         message.error(errorData?.message);
