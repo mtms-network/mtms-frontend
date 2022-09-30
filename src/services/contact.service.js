@@ -28,12 +28,8 @@ export const deleteContact = async (id) => {
 };
 
 export const patchContact = async (id, data) => {
-  try {
-    const res = await client.patch(`/${id}`, data);
-    return res;
-  }catch (err){ }
-  return null;
-
+  const res = await client.patch(`/${id}`, data);
+  return res;
 };
 
 export const getDetailContact = async (uuid) => {

@@ -61,26 +61,22 @@ const EditContact = ({t}) => {
 
   const onSubmit = async (values) => {
     await setLoading(true);
-    try {
-      const data = {...values};
 
-      const res = await patchContact(uuid, data);
+    try {
+      const res = await patchContact(uuid, { ...values });
+
       if (res?.data) {
         navigate(`/${routeUrls.contact.path}`);
         message.success(res?.data?.message);
-      } else if (res?.request) {
-        const errorData = handleHttpError(res);
-        message.error(errorData.messageDetail);
-        await setLoading(false);
       }
     }catch (error){
-      await setLoading(false);
-
       if (error) {
         const errorData = handleHttpError(error);
-        message.error(errorData?.message);
+        message.error(errorData?.messageDetail || errorData?.message);
       }
     }
+
+    await setLoading(false);
   };
 
   return (
