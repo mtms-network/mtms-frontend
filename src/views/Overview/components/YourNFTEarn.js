@@ -4,6 +4,7 @@ import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 import Pagination from "../../../components/composite/Pagination";
 import { getNFTs, setPrimaryNFT } from "../../../services/orverview.service";
+import {renderCode} from "../config";
 
 const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
   const [NFTs, setNFTs] = useState([]);
@@ -50,10 +51,6 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
       }));
     }
   };
-
-  const renderCode = (id) => {
-    return `#M${id?.toString()?.padStart(5, '0')}`;
-  }
 
   return (
     <div className="">
@@ -119,7 +116,7 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                       </td>
                       <td className="bg-white max-w-[150px] truncate text-center">{item.final_power}</td>
                       <td className="bg-white text-center">
-                        {item?.max_e_rate}
+                        {item?.max_earn_per_day}
                       </td>
                       <td className="bg-white text-center">
                         {item?.min_e_rate}

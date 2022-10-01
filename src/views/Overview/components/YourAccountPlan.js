@@ -79,7 +79,7 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
                       <tr className="text-cl-base text-md border-0 table-row" key={index}>
                         <td className="bg-white w-[40px]">
                           <div className="flex justify-center mt-2 w-[40px]">
-                            <Checkbox label="n" checked="checked" name="radio" />
+                            <Checkbox label="n" checked={item?.is_primary} name="radio" />
                           </div>
                         </td>
                         <td className="bg-white">

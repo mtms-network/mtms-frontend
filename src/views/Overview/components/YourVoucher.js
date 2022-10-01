@@ -3,6 +3,7 @@ import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 import Pagination from "../../../components/composite/Pagination";
 import {getVouchers} from "../../../services/orverview.service";
+import {renderCode} from "../config";
 
 const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
 
@@ -75,16 +76,17 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                     <tr className="text-cl-base text-md border-0 table-row" key={index}>
                       <td className="bg-white w-[40px]">
                         <div className="flex justify-center mt-2 w-[40px]">
-                          <Checkbox label="n" checked="checked" name="radio" />
+                          <Checkbox label="n" checked={ item?.is_primary } name="radio" />
                         </div>
                       </td>
 
-                      <td className="bg-white max-w-[150px] truncate text-left">{item?.voucher?.name}</td>
-                      <td className="bg-white text-center">
-                        {item?.voucher?.power}
+                      <td className="bg-white max-w-[150px] truncate text-left">
+                        <div>{item?.voucher?.name}</div>
+                        <div className="text-[#0190fe] text-xs">{ renderCode(item?.user_nft?.id) }</div>
                       </td>
-                      <td className="bg-white text-center">_</td>
-                      <td className="bg-white text-center">_</td>
+                      <td className="bg-white text-center">-</td>
+                      <td className="bg-white text-center">{item?.voucher?.power}</td>
+                      <td className="bg-white text-center">{ Number(item?.voucher?.power) * Number(item?.user_nft?.min_e_rate) }</td>
                       <td className="bg-white text-right flex justify-center">
                         <button
                           className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}

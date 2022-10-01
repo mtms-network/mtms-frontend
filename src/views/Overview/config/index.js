@@ -21,3 +21,8 @@ export const renderExpired = (expired_at, size="text-xs") => {
 
   return <span className="text-xs color-danger">Expired: {moment(expired_at).format("DD-MM-YYYY")}</span>;
 };
+
+export const renderCode = (id) => {
+  return `#M${id?.toString()?.padStart(5, '0')}`;
+};
+

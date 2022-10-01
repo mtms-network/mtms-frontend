@@ -240,7 +240,7 @@ const Rewards = () => {
                 <p className="text-base text-gray">{t("rewards.total_token")}</p>
                 <p className="text-orange-base font-bold text-5xl flex">
                   {`${walletStore?.wallet?.user?.total_token || 0}`}
-                  <img src="/images/logo.png" className="w-[48px]" alt="logo mtms" />
+                  <img src="/images/logo.png" className="w-[48px] ml-2" alt="logo mtms" />
                 </p>
 
                 <div className="pt-8">

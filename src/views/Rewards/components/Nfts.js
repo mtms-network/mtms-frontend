@@ -75,72 +75,78 @@ const Nfts = () => {
   };
 
   return (
-    <div className="w-full bg-white rounded-3xl py-6 px-8">
-      <div className="flex flex-1 flex-col md:flex-row justify-between w-full">
-        <div className="w-full md:w-1/4">
-          { renderBox(
-            `NFT Earning`,
-            walletStore?.wallet?.nft?.earn_all || 0,
-            'mb-4'
-          ) }
-          { renderBox(
-            `Vouchers`,
-            walletStore?.wallet?.user_earning?.primary_nft?.voucher?.name || "-",
-            'mb-4'
-          ) }
-        </div>
-        <div className="w-full md:w-1/4">
-          { renderBox(
-            `NFT E-Rate`,
-            walletStore?.wallet?.user_earning?.primary_nft?.voucher?.power || 0
-          ) }
-          { renderBox(
-            `POWER (X TIME)`,
-            walletStore?.wallet?.user_earning?.nft_erate || 0,
-            'mb-4'
-          ) }
-        </div>
-        <div className="w-full md:w-1/4">
-          { renderBox(
-            `NFT Max. Daily Earnings`,
-            walletStore?.wallet?.user_earning?.primary_nft?.time_earning || 0,
-            'mb-4'
-          ) }
+    <div>
+      <div className="flex flex-row w-full items-center pb-3">
+        <p className="font-bold sm:w-full text-lg text-dark-base">NFT: { walletStore?.wallet?.user_earning?.primary_nft?.name || "_" }</p>
+      </div>
+      <div className="w-full bg-white rounded-3xl py-6 px-8">
+        <div className="flex flex-1 flex-col md:flex-row justify-between w-full">
+          <div className="w-full md:w-1/4">
 
-          { renderBox(
-            `EXPIRED`,
-            renderExpired(walletStore?.wallet?.user_earning?.nft_voucher?.end_at, "") || ""
-          ) }
-        </div>
-
-        <div className="w-full md:w-1/4 flex flex-col items-center">
-          <div className="mb-4">
-            <Button
-              className="btn-primary"
-              isLoading={loading}
-              onClick={() => {
-                if (walletStore?.wallet?.total_token_all_days > 0) {
-                  handleClaimTokenToday();
-                }
-              }}
-              disabled={walletStore?.wallet?.total_token_all_days <= 0}
-            >
-              {t("rewards.claim_token")}
-            </Button>
+            { renderBox(
+              `NFT E-Rate`,
+              walletStore?.wallet?.user_earning?.primary_nft?.voucher?.power || 0
+            ) }
+            { renderBox(
+              `Voucher`,
+              walletStore?.wallet?.user_earning?.primary_nft?.voucher?.name || "-",
+              'mb-4'
+            ) }
           </div>
-          <div>
-            <Button
-              className="btn-primary"
-              isLoading={loading}
-              onClick={() => {
-                if (walletStore?.wallet?.total_token_all_days > 0) {
-                  handleClaimTokenToday();
-                }
-              }}
-              disabled={walletStore?.wallet?.total_token_all_days <= 0}
-            >
-              Claim Vouchers
-            </Button>
+          <div className="w-full md:w-1/3">
+            { renderBox(
+              `NFT Max. Daily Earnings`,
+              walletStore?.wallet?.user_earning?.primary_nft?.time_earning || 0,
+              'mb-4'
+            ) }
+            { renderBox(
+              `EXPIRED`,
+              renderExpired(walletStore?.wallet?.user_earning?.nft_voucher?.end_at, "") || ""
+            ) }
+          </div>
+          <div className="w-full md:w-1/4">
+
+            { renderBox(
+              `NFT Earned`,
+              walletStore?.wallet?.nft?.earn_all || 0,
+              'mb-4'
+            ) }
+
+            { renderBox(
+              <div>Estimate Total</div>,
+              "10 MTMS"
+            ) }
+          </div>
+
+          <div className="w-full md:w-1/6 flex flex-col items-center">
+            <div className="mb-4">
+              <Button
+                className="btn-primary"
+                isLoading={loading}
+                onClick={() => {
+                  if (walletStore?.wallet?.total_token_all_days > 0) {
+                    handleClaimTokenToday();
+                  }
+                }}
+                disabled={walletStore?.wallet?.total_token_all_days <= 0}
+              >
+                {t("rewards.claim_token")}
+              </Button>
+            </div>
+            <div>
+              <Button
+                className="btn-primary"
+                isLoading={loading}
+                onClick={() => {
+                  if (walletStore?.wallet?.total_token_all_days > 0) {
+                    handleClaimTokenToday();
+                  }
+                }}
+                disabled={walletStore?.wallet?.total_token_all_days <= 0}
+              >
+                Claim Voucher
+              </Button>
+            </div>
           </div>
         </div>
       </div>
