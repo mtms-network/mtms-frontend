@@ -14,8 +14,8 @@ const Plan = () => {
   const earningRate = convertTime(walletStore?.wallet?.total_earning?.earn_all)
   return (
     <div className="w-full bg-white rounded-3xl py-6 px-8">
-      <div className="flex flex-1 flex-col sm:flex-row justify-between">
-        <div className="">
+      <div className="flex flex-1 flex-col md:flex-row justify-between w-full">
+        <div className="w-full md:w-1/4">
           {
             renderBox(
               `${t("rewards.meeting_time")} (hh/mm)`,
@@ -30,7 +30,7 @@ const Plan = () => {
             )
           }
         </div>
-        <div className="">
+        <div className="w-full md:w-1/4">
           {
             renderBox(
               `${t("rewards.earning_rate")} (MTMS/${t('list.general.durations.m')})`,
@@ -45,7 +45,7 @@ const Plan = () => {
             )
           }
         </div>
-        <div>
+        <div className="w-full md:w-1/4">
           {
             renderBox(
               t("rewards.total_earn"),
@@ -53,7 +53,7 @@ const Plan = () => {
             )
           }
         </div>
-        <div>
+        <div className="w-full md:w-1/4 flex justify-center">
           <Button
             className="btn-primary"
             isLoading={loading}

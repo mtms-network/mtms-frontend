@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 
 export const renderBox = (title, content, margin = "mb-4") => {
   return (
-    <div className={ margin }>
+    <div className='mb-4' >
       <p className="text-base text-gray">{ title }</p>
       <p className="text-orange-base font-bold text-xl">
         { content }
