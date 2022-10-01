@@ -1,3 +1,6 @@
+import moment from "moment";
+import React from "react";
+
 const arrFieldSort = [
   { label: "Type", value: "type" },
   { label: "Code", value: "code" },
@@ -7,4 +10,14 @@ const arrFieldSort = [
 
 export const ConfigOverview = {
   arrFieldSort,
+};
+
+export const renderExpired = (expired_at, size="text-xs") => {
+  const days = moment(expired_at).diff(moment(), 'days');
+
+  if(days > 0){
+    return <span className={size}>Expire at: {days} days</span>;
+  }
+
+  return <span className="text-xs color-danger">Expired: {moment(expired_at).format("DD-MM-YYYY")}</span>;
 };

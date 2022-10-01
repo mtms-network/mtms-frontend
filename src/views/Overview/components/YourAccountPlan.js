@@ -4,7 +4,7 @@ import classNames from "classnames";
 import Checkbox from "../../../components/base/checkbox";
 import {getNFTs, getSubscription} from "../../../services/orverview.service";
 import Pagination from "../../../components/composite/Pagination";
-import moment from "moment";
+import {renderExpired} from "../config";
 
 const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -41,16 +41,6 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
       fetchData().then();
     }
   }, [filter.page]);
-
-  const renderExpired = (item) => {
-    const days = moment(item?.expired_at).diff(moment(), 'days');
-
-    if(days > 0){
-      return <span className="text-xs">Expire at: {days} days</span>;
-    }
-
-    return <span className="text-xs color-danger">Expired: {moment(item?.expired_at).format("DD-MM-YYYY")}</span>;
-  };
 
   return (
     <div className="">
@@ -94,7 +84,7 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
                         </td>
                         <td className="bg-white">
                           <div>{ item?.subscription?.name }</div>
-                          { renderExpired(item) }
+                          { renderExpired(item?.expired_at) }
                         </td>
                         <td className="bg-white text-center">
                           <div>30 minutes</div>

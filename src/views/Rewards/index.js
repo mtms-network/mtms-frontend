@@ -183,7 +183,7 @@ const Rewards = () => {
           <div className="flex flex-col sm:flex-row w-full sm:space-x-5">
             <div className="basis-2/3 bg-white rounded-3xl py-6 px-8 grow">
               <div className="flex flex-1 flex-row justify-between">
-                <div>
+                <div style={{lineBreak: 'anywhere'}}>
                   <div className="flex flex-row">
                     {appStore?.user?.wallets?.[0]?.wallet_address ? (
                       <div className="pr-4">

@@ -7,6 +7,7 @@ import {claimTokenToDay, getRequirePreWallet} from "../../../services/wallet.ser
 import {ALERT_TYPE, API_RESPONSE_STATUS} from "../../../configs";
 import {handleHttpError} from "../../../helpers";
 import {renderBox} from "../config";
+import {renderExpired} from "../../Overview/config";
 
 const Nfts = () => {
   const {t} = useTranslation();
@@ -107,8 +108,8 @@ const Nfts = () => {
           ) }
 
           { renderBox(
-            `Expired`,
-            walletStore?.wallet?.user_earning?.primary_nft?.time_earning || 0
+            `EXPIRED`,
+            renderExpired(walletStore?.wallet?.user_earning?.nft_voucher?.end_at, "") || ""
           ) }
         </div>
 

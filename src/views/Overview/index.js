@@ -6,6 +6,7 @@ import { CONFIGS, WALLET_ADDRESS } from "configs";
 import {getAccessToken} from "helpers";
 import Web3 from 'web3';
 import {message} from "antd";
+import {useMetaMask} from "metamask-react";
 import {getBoxesContract, getBoxs, saveOpenBox} from "../../services/orverview.service";
 import { getUser } from "../../services";
 import {useAppStore} from "../../stores/app.store";
@@ -17,6 +18,7 @@ import OpenBox from "../../components/base/OpenBox";
 import YourVoucher from "./components/YourVoucher";
 
 const Overview = ({ t }) => {
+  const { connect: connectMetaMask, account: accountMetaMask } = useMetaMask();
   const [boxes, setBoxes] = useState([]);
   const [appStore, updateAppStore] = useAppStore();
   const [loadingPage, setLoadingPage] = useState(true);
@@ -24,6 +26,7 @@ const Overview = ({ t }) => {
   const [isReloadNFT, setIsReloadNTF] = useState(true);
   const [isReloadSubscription, setIsReloadSubscription] = useState(true);
   const [isReloadVouchers, setIsReloadVouchers] = useState(true);
+  const [walletConnected, setWalletConnected] = useState(false);
 
   const loadBoxBE = async () => {
     const box = await getBoxs();
@@ -39,6 +42,14 @@ const Overview = ({ t }) => {
 
   const fetchData = async () => {
     try {
+      const web3 = new Web3(window.web3.currentProvider);
+      const accounts = await web3.eth.getAccounts();
+      if(accounts?.length){
+        setWalletConnected(true);
+      }else{
+        setWalletConnected(false);
+      }
+
       const box = await loadBoxBE();
       await loadBoxSmartContract(box);
       setTimeout( async () => {
@@ -146,6 +157,16 @@ const Overview = ({ t }) => {
     }
   }, [appStore.isAuthenticated]);
 
+  const handleConnectWallet = async () => {
+    const web3 = new Web3(window.web3.currentProvider);
+    let accounts = await web3.eth.getAccounts();
+
+    if(!accounts || accounts?.length === 0){
+      accounts = await connectMetaMask();
+      await fetchData();
+    }
+  };
+
   return (
     <MainLayout>
       { loadingPage ? (
@@ -175,60 +196,78 @@ const Overview = ({ t }) => {
               </div>
             </div>
           </div>
-          <div
-            className={classNames(
-              "grid grid-cols-1 gap-4",
-              "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+
+            { walletConnected ? (
+              <div
+                className={classNames(
+                  "grid grid-cols-1 gap-4",
+                  "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                )}
+              >
+                {
+                  boxes.map((box, index) => {
+                    const isActive = box.available > 0;
+                    return (
+                      <div
+                        key={index}
+                        className={classNames(
+                          "p-4 border-group border-white bg-white rounded-2xl flex flex-col flex-1",
+                          "justify-between min-h-[160px] hover:border-primary hover:bg-light-primary",
+                        )}
+                      >
+                        <div className="flex flex-col w-full flex-1 h-full">
+                          <img src={box.photo} className={classNames("rounded-lg bg-black")} alt="box" />
+                          <div className="text-gray text-lg uppercase text-center mt-4">{box?.name}</div>
+                          <div className="mt-2">
+                            <div className="flex justify-between flex-col ">
+                              <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between">
+                                <div>{t("overview.owning")}</div>
+                                <div className={classNames("text-orange-base font-bold")}>
+                                  { loadingBox
+                                    ? <Loading wrapper={false} />
+                                    : <>{box?.owning} {t("overview.box")}</>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex justify-between flex-col">
+                              <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between	">
+                                <div>{t("overview.available_unbox")}</div>
+                                <div className={classNames("text-orange-base  font-bold")}>
+                                  { loadingBox
+                                    ? <Loading wrapper={false} />
+                                    : <>{box?.available} {t("overview.box")}</>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className={classNames("mt-4 flex justify-center")}>
+                            <Button disabled={!isActive} className="btn-primary w-40" onClick={ async () => { await onUnbox(box) }}>
+                              { loadingBox && <Loading wrapper={false} title="" /> }
+                              {t("overview.open_box")}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            ) : (
+              <div
+                className={classNames(
+                  "p-4 border-group border-white bg-white rounded-2xl flex",
+                  "min-h-[48px] hover:border-primary hover:bg-light-primary",
+                )}
+              >
+                <span className="color-danger">
+                  You have not connected to the wallet.
+                  <span className="color-active cursor-pointer" onClick={handleConnectWallet}> Connect wallet now?</span>
+                </span>
+
+              </div>
             )}
-          >
-            {boxes.map((box, index) => {
-              const isActive = box.available > 0;
-              return (
-                <div
-                  key={index}
-                  className={classNames(
-                    "p-4 border-group border-white bg-white rounded-2xl flex flex-col flex-1",
-                    "justify-between min-h-[160px] hover:border-primary hover:bg-light-primary",
-                  )}
-                >
-                  <div className="flex flex-col w-full flex-1 h-full">
-                    <img src={box.photo} className={classNames("rounded-lg bg-black")} alt="box" />
-                    <div className="text-gray text-lg uppercase text-center mt-4">{box?.name}</div>
-                    <div className="mt-2">
-                      <div className="flex justify-between flex-col ">
-                        <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between">
-                          <div>{t("overview.owning")}</div>
-                          <div className={classNames("text-orange-base font-bold")}>
-                            { loadingBox
-                              ? <Loading wrapper={false} />
-                              : <>{box?.owning} {t("overview.box")}</>
-                            }
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-between flex-col">
-                        <div className="px-20 md:px-12 lg:px-8 xl:px-10 flex justify-between	">
-                          <div>{t("overview.available_unbox")}</div>
-                          <div className={classNames("text-orange-base  font-bold")}>
-                            { loadingBox
-                              ? <Loading wrapper={false} />
-                              : <>{box?.available} {t("overview.box")}</>
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className={classNames("mt-4 flex justify-center")}>
-                      <Button disabled={!isActive} className="btn-primary w-40" onClick={ async () => { await onUnbox(box) }}>
-                        { loadingBox && <Loading wrapper={false} title="" /> }
-                        {t("overview.open_box")}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
         </div>
       ) }
 
