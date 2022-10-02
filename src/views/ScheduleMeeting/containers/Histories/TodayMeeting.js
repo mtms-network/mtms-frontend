@@ -48,7 +48,7 @@ export const TodayMeeting = () => {
   useEffect(() => {
     fetchData();
   }, [filter]);
-  console.log('histories', histories)
+
   return (
     <div className="flex flex-col gap-4 relative">
       <div className="flex justify-center sm:justify-between items-center flex-col sm:flex-row">
