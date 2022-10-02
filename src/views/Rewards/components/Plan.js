@@ -9,9 +9,9 @@ const Plan = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
   const [loading, setLoading] = useState(false);
 
-  const meetingTime = convertTime(walletStore?.wallet?.meeting?.minute_all);
-  const totalEarning = convertTime(walletStore?.wallet?.total_earning?.earn_today);
-  const earningRate = convertTime(walletStore?.wallet?.total_earning?.earn_all)
+  const meetingTime = convertTime(walletStore?.wallet?.meeting?.minute_all || 0);
+  const totalEarning = convertTime(walletStore?.wallet?.total_earning?.earn_today || 0);
+  const earningRate = convertTime(walletStore?.wallet?.total_earning?.earn_all || 0);
   return (
     <div>
       <div className="flex flex-row w-full items-center pb-3">
@@ -38,13 +38,13 @@ const Plan = () => {
             {
               renderBox(
                 `${t("rewards.earning_rate")} (MTMS/${t('list.general.durations.m')})`,
-                `${Number(walletStore?.wallet?.user_earning?.nft_erate) + Number(walletStore?.wallet?.user_earning?.sub_erate)}`
+                `${(Number(walletStore?.wallet?.user_earning?.nft_erate) || 0) + (Number(walletStore?.wallet?.user_earning?.sub_erate) || 0)}`
               )
             }
             {
               renderBox(
                 `${t("rewards.earning_rate")} (MTMS/${t('list.general.durations.m')})`,
-                `${Number(walletStore?.wallet?.user_earning?.sub_time_earning)}`,
+                `${Number(walletStore?.wallet?.user_earning?.sub_time_earning) || 0}`,
                 ""
               )
             }

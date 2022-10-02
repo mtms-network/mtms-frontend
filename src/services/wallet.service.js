@@ -27,3 +27,13 @@ export const claimCheckIn = async () => {
   const res = await client.post("/claim/checkin");
   return res?.data;
 };
+
+export const claimNft = async (id) => {
+  const res = await client.post(`claim/meeting/nft/${id}`);
+  return res?.data;
+};
+
+export const claimVoucher = async (id) => {
+  const res = await client.post(`claim/meeting/voucher/${id}`);
+  return res?.data;
+};

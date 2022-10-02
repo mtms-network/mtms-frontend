@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
+import { Button, message, Popconfirm } from 'antd';
 import Checkbox from "../../../components/base/checkbox";
 import Pagination from "../../../components/composite/Pagination";
 import { getNFTs, setPrimaryNFT } from "../../../services/orverview.service";
 import {renderCode} from "../config";
+import {API_RESPONSE_STATUS} from "../../../configs";
 
 const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
   const [NFTs, setNFTs] = useState([]);
@@ -15,6 +17,8 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
     sort_by: "id",
     order: "desc",
   });
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [openPopConfirm, setOpenPopConfirm] = useState(false);
 
   const fetchData = async () => {
     const res = await getNFTs(filter);
@@ -43,12 +47,15 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
 
   const setPrimary = async (userNft) => {
     const res = await setPrimaryNFT(userNft.id);
-
-    if (res) {
-      setNFTs(NFTs.map(item => {
+    if (res?.status === API_RESPONSE_STATUS.success) {
+      await setNFTs(NFTs.map(item => {
         item.is_primary = item.id === userNft.id;
         return item;
       }));
+
+      message.success("Switch nft success");
+    }else{
+      message.error("Switch nft fail");
     }
   };
 
@@ -90,12 +97,39 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                     <tr className="text-cl-base text-md border-0 table-row" key={item.id}>
                       <td className="bg-white w-[40px]">
                         <div className="flex justify-center mt-2 w-[40px]">
-                          <Checkbox
-                            label="n"
-                            name="user_nft"
-                            checked={item.is_primary}
-                            onChange={() => setPrimary(item)}
-                          />
+                          { item.is_primary ? (
+                            <Checkbox
+                              label="n"
+                              name="user_nft"
+                              checked={item.is_primary}
+                              onChange={() => {}}
+                            />
+                          ) : (
+                            <Popconfirm
+                              open={openPopConfirm}
+                              okButtonProps={{ loading: confirmLoading }}
+                              placement="top"
+                              title="Are you sure switch nft?"
+                              onConfirm={ async () => {
+                                await setConfirmLoading(true);
+                                await setPrimary(item);
+                                setTimeout( async () => {
+                                  await setConfirmLoading(false);
+                                  await setOpenPopConfirm(false);
+                                }, 500);
+                              }}
+                              onCancel={() => { setOpenPopConfirm(false); }}
+                              okText="Yes"
+                              cancelText="No"
+                            >
+                              <Checkbox
+                                label="n"
+                                name="user_nft"
+                                checked={item.is_primary}
+                                onChange={() => {}}
+                              />
+                            </Popconfirm>
+                          ) }
                         </div>
                       </td>
                       <td className="bg-white">

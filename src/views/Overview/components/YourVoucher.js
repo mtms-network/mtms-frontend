@@ -84,7 +84,7 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                         <div>{item?.voucher?.name}</div>
                         <div className="text-[#0190fe] text-xs">{ renderCode(item?.user_nft?.id) }</div>
                       </td>
-                      <td className="bg-white text-center">-</td>
+                      <td className="bg-white text-center">{ item?.estimated_token || 0 }</td>
                       <td className="bg-white text-center">{item?.voucher?.power}</td>
                       <td className="bg-white text-center">{ Number(item?.voucher?.power) * Number(item?.user_nft?.min_e_rate) }</td>
                       <td className="bg-white text-right flex justify-center">

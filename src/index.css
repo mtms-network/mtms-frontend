@@ -70,3 +70,7 @@ td {
     position: fixed;
     background-color: rgba(0, 0, 0, 0.6);
 }
+
+.ant-popover .ant-btn-primary{
+    background-color: #0391fe;
+}

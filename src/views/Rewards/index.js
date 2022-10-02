@@ -17,6 +17,7 @@ import {useAppStore} from "stores/app.store";
 import {useNavigate} from "react-router-dom";
 import Nfts from "./components/Nfts";
 import Plan from "./components/Plan";
+import Vouchers from "./components/Vouchers";
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
@@ -121,6 +122,10 @@ const Rewards = () => {
     prepareData();
   }, []);
 
+  const reload = useCallback(async () => {
+    await prepareData();
+  }, [])
+
   return (
     <MainLayout>
       <div className="p-2 min-h-full">
@@ -179,7 +184,8 @@ const Rewards = () => {
             </div>
           </div>
           <Plan />
-          <Nfts />
+          <Nfts NFTs={walletStore?.wallet?.nfts || []} reload={reload}/>
+          <Vouchers vouchers={walletStore?.wallet?.vouchers || []} reload={reload}/>
           <div className="flex flex-col sm:flex-row w-full sm:space-x-5">
             <div className="basis-2/3 bg-white rounded-3xl py-6 px-8 grow">
               <div className="flex flex-1 flex-row justify-between">
