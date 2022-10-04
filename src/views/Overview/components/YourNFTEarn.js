@@ -65,7 +65,7 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub, setIsReloadVouch
             Your NFT Earn
           </p>
           <div className="flex flex-row pt-1 text-black-base">
-            You can only active 1 NFT Earn to earn token
+            You can only activate 1 NFT at a time to earn tokens.
           </div>
           <div className="flex w-full flex-1 mt-2">
             <div className="overflow-x-auto flex-1 rounded-lg bg-white">
@@ -149,7 +149,7 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub, setIsReloadVouch
                       <td className="bg-white text-center">
                         {item?.min_e_rate}
                       </td>
-                      <td className="bg-white text-center flex justify-center">
+                      <td className="bg-white text-center">
                         <button
                           className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
                         >

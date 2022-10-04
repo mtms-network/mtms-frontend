@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import classNames from "classnames";
 import {message} from "antd";
-import Checkbox from "../../../components/base/checkbox";
 import {renderCode, renderExpired} from "../../Overview/config";
 import {claimVoucher} from "../../../services/wallet.service";
 import {ALERT_TYPE, API_RESPONSE_STATUS} from "../../../configs";

@@ -37,3 +37,8 @@ export const claimVoucher = async (id) => {
   const res = await client.post(`claim/meeting/voucher/${id}`);
   return res?.data;
 };
+
+export const claimPlan = async (id) => {
+  const res = await client.post(`claim/meeting/subscription/${id}`);
+  return res?.data;
+};

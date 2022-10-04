@@ -1,14 +1,10 @@
 import { Button, message, Modal } from "antd";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { t } from "i18next";
-import moment from "moment";
-import {deleteMeetingByUuid, deleteToDo} from "services";
+import {deleteToDo} from "services";
 import { handleHttpError } from "helpers";
-import {routeUrls} from "../../../configs";
-import {useNavigate} from "react-router-dom";
 
 const DeleteToDo = ({ onRefresh }, ref) => {
-  const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [todo, setTodo] = useState();
   const [loading, setLoading] = useState(false);

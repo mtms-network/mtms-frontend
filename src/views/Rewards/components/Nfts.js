@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import {message} from "antd";
@@ -70,12 +70,12 @@ const Nfts = ({NFTs, reload}) => {
                     (W)
                   </th>
                   <th className="bg-white text-center" style={{width: '20%'}}>
-                    <div>Earn today </div>
-                    (MTMS)
-                  </th>
-                  <th className="bg-white text-center" style={{width: '15%'}}>
                     <div>E-rate</div>
                     (MTMS / Min)
+                  </th>
+                  <th className="bg-white text-center" style={{width: '15%'}}>
+                    <div>TOTAL EARNINGS</div>
+                    (MTMS)
                   </th>
                   <th className="bg-white" style={{width: '200px'}}/>
                 </tr>
@@ -83,7 +83,7 @@ const Nfts = ({NFTs, reload}) => {
                 <tbody className="border-0">
                 {
                   listNtf?.length ? listNtf.map((item, index) => (
-                    <tr className="text-cl-base text-md border-0 table-row" key={item.id}>
+                    <tr className="text-cl-base text-md border-0 table-row" key={index}>
                       <td className="bg-white">
                         <div className="flex">
                           <div className="flex items-center w-32">
@@ -102,12 +102,12 @@ const Nfts = ({NFTs, reload}) => {
                       </td>
                       <td className="bg-white max-w-[150px] truncate text-center">{item?.user_nft?.final_power}</td>
                       <td className="bg-white text-center">
+                        {item?.user_nft?.min_e_rate}
+                      </td>
+                      <td className="bg-white text-center">
                         {item?.earn_today}
                       </td>
                       <td className="bg-white text-center">
-                        {item?.user_nft?.min_e_rate}
-                      </td>
-                      <td className="bg-white text-center flex justify-center">
                         <button
                           className={classNames('btn btn-primary opacity-50 hover:bg-primary btn-outlined-base')}
                           onClick={() => { handleClaimNft(item?.user_nft?.id).then(); }}

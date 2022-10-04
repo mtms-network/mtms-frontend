@@ -1,15 +1,13 @@
-/* eslint-disable no-empty */
 import React, {useState, useEffect, useCallback} from "react";
 import {Button, MainLayout, AlertError, BrandLogoLoading} from "components";
 
-import {BASE_API, ALERT_TYPE, API_RESPONSE_STATUS, routeUrls, WALLET_PROVIDER} from "configs";
+import {ALERT_TYPE, API_RESPONSE_STATUS, routeUrls, WALLET_PROVIDER} from "configs";
 import {useWalletStore} from "stores/wallet.store";
 import {getUser, handleHttpError} from "helpers";
 import {useTranslation} from "react-i18next";
 import {
   checkInToday,
   claimCheckIn,
-  claimTokenToDay,
   getRequirePreWallet,
 } from "services/wallet.service";
 import {message} from "antd";
@@ -18,6 +16,7 @@ import {useNavigate} from "react-router-dom";
 import Nfts from "./components/Nfts";
 import Plan from "./components/Plan";
 import Vouchers from "./components/Vouchers";
+import Overviews from "./components/Overview";
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
@@ -147,7 +146,7 @@ const Rewards = () => {
                 <p className="font-bold text-2xl">{t("rewards.daily_task")}</p>
                 <p className="text-base">
                   {`${t("rewards.receive_token", {
-                    token: walletStore?.wallet?.user_earning?.checkin_earning || 0,
+                    token: walletStore?.wallet?.token_per_checkin || 0,
                   })}`}
                 </p>
               </div>
@@ -183,7 +182,8 @@ const Rewards = () => {
               </div>
             </div>
           </div>
-          <Plan />
+          <Overviews />
+          <Plan plan={walletStore?.wallet?.subscriptions || []} reload={reload} />
           <Nfts NFTs={walletStore?.wallet?.nfts || []} reload={reload}/>
           <Vouchers vouchers={walletStore?.wallet?.vouchers || []} reload={reload}/>
           <div className="flex flex-col sm:flex-row w-full sm:space-x-5">

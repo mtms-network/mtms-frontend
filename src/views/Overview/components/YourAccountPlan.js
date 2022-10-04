@@ -50,7 +50,7 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
             Your Account Plan
           </p>
           <div className="flex flex-row pt-1 text-black-base">
-            You can only active 1 Account Plan to earn token
+            You can only activate 1 plan at a time to earn tokens.
           </div>
           <div className="flex w-full flex-1 mt-2">
             <div className="overflow-x-auto flex-1 rounded-lg bg-white">

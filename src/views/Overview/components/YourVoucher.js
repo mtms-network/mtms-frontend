@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import classNames from "classnames";
+import {useNavigate} from "react-router-dom";
 import Checkbox from "../../../components/base/checkbox";
 import Pagination from "../../../components/composite/Pagination";
 import {getVouchers} from "../../../services/orverview.service";
 import {renderCode} from "../config";
+import {routeUrls} from "../../../configs";
 
 const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
-
+  const navigate = useNavigate();
   const [vouchers, setVouchers] = useState([]);
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({
@@ -41,7 +43,7 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
       fetchData().then();
     }
   }, [filter.page]);
-  console.log('v', vouchers)
+
   return (
     <div className="">
       <div className="flex flex-row w-full items-center pb-5">
@@ -50,7 +52,7 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
             Your Vouchers
           </p>
           <div className="flex flex-row pt-1 text-black-base">
-            You can only active 1 Vouchers Earn to earn token
+            You can only activate 1 voucher at a time to earn tokens.
           </div>
           <div className="flex w-full flex-1 mt-2">
             <div className="overflow-x-auto flex-1 rounded-lg bg-white">
@@ -74,9 +76,6 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                 <tbody className="border-0">
                 {
                   [...vouchers]?.map((item, index) => {
-                    if(item?.user_nft?.is_primary){
-                      console.log(index, item?.user_nft?.is_primary)
-                    }
                     return (
                       <tr className="text-cl-base text-md border-0 table-row" key={index}>
                         <td className="bg-white w-[40px]">
@@ -94,7 +93,10 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                         <td className="bg-white text-center">{ item?.estimated_token || 0 }</td>
                         <td className="bg-white text-right flex justify-center">
                           <button
-                            className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
+                            onClick={() => {
+                              navigate(routeUrls.rewards.path)
+                            }}
+                            className={classNames('btn btn-primary opacity-50 btn-outlined-base')}
                           >
                             Claim
                           </button>
