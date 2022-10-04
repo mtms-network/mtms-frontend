@@ -128,9 +128,9 @@ const ListContact = ({t}) => {
                     <thead className="border-b-1">
                     <tr className="text-cl-base">
                       <th className="bg-white truncate">Information</th>
-                      <th className="bg-white">Company</th>
-                      <th className="bg-white">Job</th>
-                      <th className="bg-white">Phone number</th>
+                      <th className="bg-white" width={200}>Company</th>
+                      <th className="bg-white" width={200}>Job</th>
+                      <th className="bg-white" width={200}>Phone number</th>
                       <th className="bg-white flex justify-end">
                         <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
                       </th>
@@ -141,7 +141,7 @@ const ListContact = ({t}) => {
                         contacts?.map((contact, index) => {
                           return (
                             <tr key={index}>
-                              <td className="bg-white" style={{width: '10%'}}>
+                              <td className="bg-white">
                                 <div className="flex">
                                   <Avatar size={40}>{ contact?.name?.charAt(0) }</Avatar>
                                   <Popover content={contact?.name} trigger="hover">

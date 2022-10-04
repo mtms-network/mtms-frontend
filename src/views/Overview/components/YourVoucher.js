@@ -18,17 +18,18 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
 
   const fetchData = async () => {
     const res = await getVouchers(filter);
+    const data = res?.data || [];
+    await setVouchers(
+      [...data]
+    );
 
     await setPagination(
       res?.meta || {}
     );
 
-    await setVouchers(
-      res?.data || []
-    );
-
     await setIsLoadData(false);
   };
+
   useEffect(() => {
     if(isLoadData && !isLoadDataNft){
       fetchData().then();
@@ -40,7 +41,7 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
       fetchData().then();
     }
   }, [filter.page]);
-
+  console.log('v', vouchers)
   return (
     <div className="">
       <div className="flex flex-row w-full items-center pb-5">
@@ -72,30 +73,35 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                 </thead>
                 <tbody className="border-0">
                 {
-                  vouchers?.map((item, index) => (
-                    <tr className="text-cl-base text-md border-0 table-row" key={index}>
-                      <td className="bg-white w-[40px]">
-                        <div className="flex justify-center mt-2 w-[40px]">
-                          <Checkbox label="n" checked={ item?.is_primary } name="radio" />
-                        </div>
-                      </td>
+                  [...vouchers]?.map((item, index) => {
+                    if(item?.user_nft?.is_primary){
+                      console.log(index, item?.user_nft?.is_primary)
+                    }
+                    return (
+                      <tr className="text-cl-base text-md border-0 table-row" key={index}>
+                        <td className="bg-white w-[40px]">
+                          <div className="flex justify-center mt-2 w-[40px]">
+                            <Checkbox key={index} label="n" checked={ item?.user_nft?.is_primary } name="radio" />
+                          </div>
+                        </td>
 
-                      <td className="bg-white max-w-[150px] truncate text-left">
-                        <div>{item?.voucher?.name}</div>
-                        <div className="text-[#0190fe] text-xs">{ renderCode(item?.user_nft?.id) }</div>
-                      </td>
-                      <td className="bg-white text-center">{ item?.estimated_token || 0 }</td>
-                      <td className="bg-white text-center">{item?.voucher?.power}</td>
-                      <td className="bg-white text-center">{ Number(item?.voucher?.power) * Number(item?.user_nft?.min_e_rate) }</td>
-                      <td className="bg-white text-right flex justify-center">
-                        <button
-                          className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
-                        >
-                          Claim
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                        <td className="bg-white max-w-[150px] truncate text-left">
+                          <div>{item?.voucher?.name}</div>
+                          <div className="text-[#0190fe] text-xs">{ renderCode(item?.user_nft?.id) }</div>
+                        </td>
+                        <td className="bg-white text-center">{ item?.estimated_token || 0 }</td>
+                        <td className="bg-white text-center">{item?.voucher?.power}</td>
+                        <td className="bg-white text-center">{ item?.estimated_token || 0 }</td>
+                        <td className="bg-white text-right flex justify-center">
+                          <button
+                            className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
+                          >
+                            Claim
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })
                 }
                 </tbody>
               </table>

@@ -101,15 +101,18 @@ export const TodayMeeting = () => {
           </div>
         ): (
           <div className="flex">
-            <span>You have no meetings today. </span>
-            <div
-              className="text-[#0190fe] cursor-pointer"
-              onClick={() => {
-                navigate(`/${routeUrls.scheduleMeeting.path}/new`)
-              }}
-            >
+            <span>
+              {"You have no meetings today. "}
+              <span
+                className="text-[#0190fe] cursor-pointer"
+                onClick={() => {
+                  navigate(`/${routeUrls.scheduleMeeting.path}/new`)
+                }}
+              >
               Schedule your meeting now
-            </div>
+            </span>
+            </span>
+
           </div>
         )
       }

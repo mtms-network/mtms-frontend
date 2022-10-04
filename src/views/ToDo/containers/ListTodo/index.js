@@ -169,9 +169,9 @@ const ToDoList = ({t}) => {
                     <thead className="border-b-1">
                     <tr className="text-cl-base">
                       <th className="bg-white truncate">{t('todo.task')}</th>
-                      <th className="bg-white">{t("todo.due_date")}</th>
-                      <th className="bg-white">{t("todo.status")}</th>
-                      <th className="bg-white">{t("todo.completed_date")}</th>
+                      <th className="bg-white" width={200}>{t("todo.due_date")}</th>
+                      <th className="bg-white" width={200}>{t("todo.status")}</th>
+                      <th className="bg-white" width={200}>{t("todo.completed_date")}</th>
                       <th className="bg-white flex justify-end" />
                     </tr>
                     </thead>

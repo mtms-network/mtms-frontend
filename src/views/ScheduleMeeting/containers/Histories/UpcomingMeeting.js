@@ -102,15 +102,18 @@ export const UpcomingMeeting = () => {
           </div>
         ): (
           <div className="flex">
-            <span>You have no upcoming meetings. </span>
-            <span
-              className="text-[#0190fe] cursor-pointer"
-              onClick={() => {
-                navigate(`/${routeUrls.scheduleMeeting.path}/new`)
-              }}
-            >
+            <span>
+              {"You have no upcoming meetings. "}
+              <span
+                className="text-[#0190fe] cursor-pointer"
+                onClick={() => {
+                  navigate(`/${routeUrls.scheduleMeeting.path}/new`)
+                }}
+              >
               Plan and schedule that next meeting.
             </span>
+            </span>
+
           </div>
         )
       }

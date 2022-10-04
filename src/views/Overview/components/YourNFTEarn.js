@@ -8,7 +8,7 @@ import { getNFTs, setPrimaryNFT } from "../../../services/orverview.service";
 import {renderCode} from "../config";
 import {API_RESPONSE_STATUS} from "../../../configs";
 
-const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
+const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub, setIsReloadVouchers}) => {
   const [NFTs, setNFTs] = useState([]);
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({
@@ -17,8 +17,6 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
     sort_by: "id",
     order: "desc",
   });
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [openPopConfirm, setOpenPopConfirm] = useState(false);
 
   const fetchData = async () => {
     const res = await getNFTs(filter);
@@ -52,7 +50,7 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
         item.is_primary = item.id === userNft.id;
         return item;
       }));
-
+      await setIsReloadVouchers(true);
       message.success("Switch nft success");
     }else{
       message.error("Switch nft fail");
@@ -102,35 +100,27 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                               label="n"
                               name="user_nft"
                               checked={item.is_primary}
-                              onChange={() => {
-                                console.log('change pk');
-                              }}
+                              onChange={() => {}}
                             />
                           ) : (
                             <Popconfirm
-                              open={openPopConfirm}
-                              okButtonProps={{ loading: confirmLoading }}
-                              placement="top"
                               title="Are you sure switch nft?"
                               onConfirm={ async () => {
-                                await setConfirmLoading(true);
-                                await setPrimary(item);
-                                setTimeout( async () => {
-                                  await setConfirmLoading(false);
-                                  await setOpenPopConfirm(false);
-                                }, 500);
+                                return new Promise(resolve => {
+                                  setTimeout(() => {
+                                    setPrimary(item);
+                                  }, 2000);
+                                });
                               }}
-                              onCancel={() => { setOpenPopConfirm(false); }}
                               okText="Yes"
                               cancelText="No"
+                              onOpenChange={() => {}}
                             >
                               <Checkbox
                                 label="n"
                                 name="user_nft"
                                 checked={item.is_primary}
-                                onChange={() => {
-                                  console.log('change pk false');
-                                }}
+                                onChange={() => {}}
                               />
                             </Popconfirm>
                           ) }

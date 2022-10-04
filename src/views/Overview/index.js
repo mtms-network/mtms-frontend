@@ -276,7 +276,7 @@ const Overview = ({ t }) => {
         <YourAccountPlan isLoadData={isReloadSubscription} setIsLoadData={setIsReloadSubscription} loadingPage={loadingPage} />
       </div>
       <div className="pt-10">
-        <YourNFTEarn isLoadData={isReloadNFT} isLoadDataSub={isReloadSubscription} setIsLoadData={setIsReloadNTF} />
+        <YourNFTEarn isLoadData={isReloadNFT} isLoadDataSub={isReloadSubscription} setIsLoadData={setIsReloadNTF} setIsReloadVouchers={setIsReloadVouchers} />
       </div>
       <div className="pt-10">
         <YourVoucher isLoadData={isReloadVouchers} isLoadDataNft={isReloadNFT} setIsLoadData={setIsReloadVouchers} />
