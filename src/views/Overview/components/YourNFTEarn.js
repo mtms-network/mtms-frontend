@@ -97,12 +97,14 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                     <tr className="text-cl-base text-md border-0 table-row" key={item.id}>
                       <td className="bg-white w-[40px]">
                         <div className="flex justify-center mt-2 w-[40px]">
-                          { item.is_primary ? (
+                          { item.is_primary === true ? (
                             <Checkbox
                               label="n"
                               name="user_nft"
                               checked={item.is_primary}
-                              onChange={() => {}}
+                              onChange={() => {
+                                console.log('change pk');
+                              }}
                             />
                           ) : (
                             <Popconfirm
@@ -126,7 +128,9 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub}) => {
                                 label="n"
                                 name="user_nft"
                                 checked={item.is_primary}
-                                onChange={() => {}}
+                                onChange={() => {
+                                  console.log('change pk false');
+                                }}
                               />
                             </Popconfirm>
                           ) }
