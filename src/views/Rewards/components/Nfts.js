@@ -90,7 +90,7 @@ const Nfts = ({NFTs, reload}) => {
                             <img src={item?.user_nft?.nft?.photo} alt="nft gold"/>
                           </div>
                           <div className="flex flex-col justify-center ml-2">
-                            {item?.user_nft.is_primary ? (
+                            {item?.user_nft?.is_primary ? (
                               <div className="color-active">Active</div>
                             ) : (
                               <div className="color-inactive">Inactive</div>
@@ -100,7 +100,7 @@ const Nfts = ({NFTs, reload}) => {
                           </div>
                         </div>
                       </td>
-                      <td className="bg-white max-w-[150px] truncate text-center">{item?.user_nft.final_power}</td>
+                      <td className="bg-white max-w-[150px] truncate text-center">{item?.user_nft?.final_power}</td>
                       <td className="bg-white text-center">
                         {item?.earn_today}
                       </td>

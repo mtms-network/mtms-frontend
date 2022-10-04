@@ -14,9 +14,6 @@ const Plan = () => {
   const earningRate = convertTime(walletStore?.wallet?.total_earning?.earn_all || 0);
   return (
     <div>
-      <div className="flex flex-row w-full items-center pb-3">
-        <p className="font-bold sm:w-full text-lg text-dark-base">Plan: { walletStore?.wallet?.user_earning?.primary_subscription?.name || "_" }</p>
-      </div>
       <div className="w-full bg-white rounded-3xl py-6 px-8">
         <div className="flex flex-1 flex-col md:flex-row justify-between w-full">
           <div className="w-full md:w-1/4">
