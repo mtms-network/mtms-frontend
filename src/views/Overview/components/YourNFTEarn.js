@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
-import { Button, message, Popconfirm } from 'antd';
+import { Button, message, Popconfirm, Popover  } from 'antd';
 import Checkbox from "../../../components/base/checkbox";
 import Pagination from "../../../components/composite/Pagination";
 import { getNFTs, setPrimaryNFT } from "../../../services/orverview.service";
 import {renderCode} from "../config";
 import {API_RESPONSE_STATUS} from "../../../configs";
 
-const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub, setIsReloadVouchers}) => {
+const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub, setIsReloadVouchers, planActive}) => {
   const [NFTs, setNFTs] = useState([]);
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({
@@ -91,73 +91,87 @@ const YourNFTEarn = ({isLoadData, setIsLoadData, isLoadDataSub, setIsReloadVouch
                 </thead>
                 <tbody className="border-0">
                 {
-                  NFTs.map((item, index) => (
-                    <tr className="text-cl-base text-md border-0 table-row" key={item.id}>
-                      <td className="bg-white w-[40px]">
-                        <div className="flex justify-center mt-2 w-[40px]">
-                          { item.is_primary === true ? (
-                            <Checkbox
-                              label="n"
-                              name="user_nft"
-                              checked={item.is_primary}
-                              onChange={() => {}}
-                            />
-                          ) : (
-                            <Popconfirm
-                              title="Are you sure switch nft?"
-                              onConfirm={ async () => {
-                                return new Promise(resolve => {
-                                  setTimeout(() => {
-                                    setPrimary(item);
-                                  }, 2000);
-                                });
-                              }}
-                              okText="Yes"
-                              cancelText="No"
-                              onOpenChange={() => {}}
-                            >
+                  NFTs.map((item, index) => {
+                    return (
+                      <tr className="text-cl-base text-md border-0 table-row" key={index}>
+                        <td className="bg-white w-[40px]">
+                          <div className="flex justify-center mt-2 w-[40px]">
+                            { item?.is_primary === true ? (
                               <Checkbox
                                 label="n"
                                 name="user_nft"
                                 checked={item.is_primary}
                                 onChange={() => {}}
                               />
-                            </Popconfirm>
-                          ) }
-                        </div>
-                      </td>
-                      <td className="bg-white">
-                        <div className="flex">
-                          <div className="flex items-center w-32">
-                            <img src={item?.nft?.photo} alt="nft gold"/>
-                          </div>
-                          <div className="flex flex-col justify-center ml-2">
-                            {item.is_primary ? (
-                              <div className="color-active">Active</div>
                             ) : (
-                              <div className="color-inactive">Inactive</div>
-                            )}
-                            <div>{item?.nft?.name}</div>
-                            <div className="text-[#0190fe]">{ renderCode(item?.id) }</div>
+                              item?.nft?.subscription_id === planActive ? (
+                                <Popconfirm
+                                  title="Are you sure switch nft?"
+                                  onConfirm={ async () => {
+                                    return new Promise(resolve => {
+                                      setTimeout(() => {
+                                        setPrimary(item);
+                                      }, 2000);
+                                    });
+                                  }}
+                                  // okText="Yes"
+                                  // cancelText="No"
+                                  onOpenChange={() => {}}
+                                >
+                                  <Checkbox
+                                    label="n"
+                                    name="user_nft"
+                                    checked={item.is_primary}
+                                    onChange={() => {}}
+                                  />
+                                </Popconfirm>
+                              ) : (
+                                <Popover trigger="click" placement="top" content="Please select the nft corresponding to the selected plan">
+                                  <Checkbox
+                                    label="n"
+                                    name="user_nft"
+                                    checked={item.is_primary}
+                                    onChange={() => {}}
+                                  />
+                                </Popover>
+                              )
+
+                            ) }
                           </div>
-                        </div>
-                      </td>
-                      <td className="bg-white max-w-[150px] truncate text-center">{item.final_power}</td>
-                      <td className="bg-white text-center">
-                        {item?.max_earn_per_day}
-                      </td>
-                      <td className="bg-white text-center">
-                        {item?.min_e_rate}
-                      </td>
-                      <td className="bg-white text-center">
-                        <button
-                          className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
-                        >
-                          Buy More
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                        </td>
+                        <td className="bg-white">
+                          <div className="flex">
+                            <div className="flex items-center w-32">
+                              <img src={item?.nft?.photo} alt="nft gold"/>
+                            </div>
+                            <div className="flex flex-col justify-center ml-2">
+                              {item.is_primary ? (
+                                <div className="color-active">Active</div>
+                              ) : (
+                                <div className="color-inactive">Inactive</div>
+                              )}
+                              <div>{item?.nft?.name}</div>
+                              <div className="text-[#0190fe]">{ renderCode(item?.id) }</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="bg-white max-w-[150px] truncate text-center">{item.final_power}</td>
+                        <td className="bg-white text-center">
+                          {item?.max_earn_per_day}
+                        </td>
+                        <td className="bg-white text-center">
+                          {item?.min_e_rate}
+                        </td>
+                        <td className="bg-white text-center">
+                          <button
+                            className={classNames('btn btn-primary opacity-50 hover:bg-slate-400 btn-outlined-base hover:cursor-not-allowed')}
+                          >
+                            Buy More
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })
                 }
                 </tbody>
               </table>

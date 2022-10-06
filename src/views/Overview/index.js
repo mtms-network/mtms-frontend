@@ -3,7 +3,7 @@ import { MainLayout, Button } from "components";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
 import { CONFIGS, WALLET_ADDRESS } from "configs";
-import {getAccessToken} from "helpers";
+import {getAccessToken, getWalletAddress} from "helpers";
 import Web3 from 'web3';
 import {message} from "antd";
 import {useMetaMask} from "metamask-react";
@@ -26,7 +26,8 @@ const Overview = ({ t }) => {
   const [isReloadNFT, setIsReloadNTF] = useState(true);
   const [isReloadSubscription, setIsReloadSubscription] = useState(true);
   const [isReloadVouchers, setIsReloadVouchers] = useState(true);
-  const [walletConnected, setWalletConnected] = useState(false);
+  const [walletConnected, setWalletConnected] = useState(-1);
+  const [planActive, setPlanActive] = useState(0);
 
   const loadBoxBE = async () => {
     const box = await getBoxs();
@@ -37,7 +38,7 @@ const Overview = ({ t }) => {
     await setLoadingBox(true);
     const data = await getBoxesContract([...box]);
     await setBoxes([...data]);
-    await setLoadingBox(false)
+    await setLoadingBox(false);
   };
 
   const fetchData = async () => {
@@ -45,19 +46,21 @@ const Overview = ({ t }) => {
       const web3 = new Web3(window.web3.currentProvider);
       const accounts = await web3.eth.getAccounts();
       if(accounts?.length){
-        setWalletConnected(true);
-      }else{
-        setWalletConnected(false);
-      }
+        if(accounts[0] === getWalletAddress()){
+          await setWalletConnected(1);
 
-      const box = await loadBoxBE();
-      await loadBoxSmartContract(box);
-      setTimeout( async () => {
-        await setLoadingPage(false);
-      }, 400);
-    } catch (error) {
-      await setLoadingBox(false)
-    }
+          const box = await loadBoxBE();
+          await loadBoxSmartContract(box);
+        }else{
+          await setWalletConnected(-1);
+        }
+
+      }else{
+        setWalletConnected(0);
+      }
+    } catch (error) {}
+    await setLoadingBox(false);
+    await setLoadingPage(false);
   };
 
   const onBuyBox = () => {
@@ -129,15 +132,15 @@ const Overview = ({ t }) => {
       box.owning += 1;
       box.available -= 1;
     }catch (err){
-      message.error(t("overview.unbox_fail"))
+      message.error(t("overview.unbox_fail"));
       await updateAppStore((store) => {
         store.loadingIcon = false;
         store.appendComponentLayout = null;
-      })
+      });
     }
 
     return true;
-  }
+  };
 
   const mintBox = async (isEpicBox = false) => {
     const web3 = new Web3(window.web3.currentProvider);
@@ -159,10 +162,10 @@ const Overview = ({ t }) => {
 
   const handleConnectWallet = async () => {
     const web3 = new Web3(window.web3.currentProvider);
-    let accounts = await web3.eth.getAccounts();
+    const accounts = await web3.eth.getAccounts();
 
     if(!accounts || accounts?.length === 0){
-      accounts = await connectMetaMask();
+      await connectMetaMask();
       await fetchData();
     }
   };
@@ -197,7 +200,7 @@ const Overview = ({ t }) => {
             </div>
           </div>
 
-            { walletConnected ? (
+            { walletConnected === 1 ? (
               <div
                 className={classNames(
                   "grid grid-cols-1 gap-4",
@@ -243,7 +246,11 @@ const Overview = ({ t }) => {
                             </div>
                           </div>
                           <div className={classNames("mt-4 flex justify-center")}>
-                            <Button disabled={!isActive} className="btn-primary w-40" onClick={ async () => { await onUnbox(box) }}>
+                            <Button disabled={!isActive} className="btn-primary w-40" onClick={ async () => {
+                              if(box?.available > 0){
+                                await onUnbox(box);
+                              }
+                            }}>
                               { loadingBox && <Loading wrapper={false} title="" /> }
                               {t("overview.open_box")}
                             </Button>
@@ -261,10 +268,18 @@ const Overview = ({ t }) => {
                   "min-h-[48px] hover:border-primary hover:bg-light-primary",
                 )}
               >
-                <span className="color-danger">
-                  You have not connected to the wallet.
-                  <span className="color-active cursor-pointer" onClick={handleConnectWallet}> Connect wallet now?</span>
-                </span>
+                {
+                  walletConnected === 0 ? (
+                    <span className="color-danger">
+                      You have not connected to the wallet.
+                      <span className="color-active cursor-pointer" onClick={handleConnectWallet}> Connect wallet now?</span>
+                    </span>
+                  ) : (
+                    <span className="color-danger">
+                      Your address connected not match address connect to mtms.
+                    </span>
+                  )
+                }
 
               </div>
             )}
@@ -273,10 +288,22 @@ const Overview = ({ t }) => {
 
 
       <div className="pt-10">
-        <YourAccountPlan isLoadData={isReloadSubscription} setIsLoadData={setIsReloadSubscription} loadingPage={loadingPage} />
+        <YourAccountPlan
+          isLoadData={isReloadSubscription}
+          setIsLoadData={setIsReloadSubscription}
+          loadingPage={loadingPage}
+          setIsLoadNft={setIsReloadNTF}
+          setPlanActive={setPlanActive}
+        />
       </div>
       <div className="pt-10">
-        <YourNFTEarn isLoadData={isReloadNFT} isLoadDataSub={isReloadSubscription} setIsLoadData={setIsReloadNTF} setIsReloadVouchers={setIsReloadVouchers} />
+        <YourNFTEarn
+          isLoadData={isReloadNFT}
+          isLoadDataSub={isReloadSubscription}
+          setIsLoadData={setIsReloadNTF}
+          setIsReloadVouchers={setIsReloadVouchers}
+          planActive={planActive}
+        />
       </div>
       <div className="pt-10">
         <YourVoucher isLoadData={isReloadVouchers} isLoadDataNft={isReloadNFT} setIsLoadData={setIsReloadVouchers} />

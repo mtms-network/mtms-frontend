@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import { withTranslation } from "react-i18next";
 import classNames from "classnames";
+import { Button, message, Popconfirm } from 'antd';
 import Checkbox from "../../../components/base/checkbox";
-import {getNFTs, getSubscription} from "../../../services/orverview.service";
+import {getNFTs, getSubscription, setPrimaryNFT, setPrimaryPlan} from "../../../services/orverview.service";
 import Pagination from "../../../components/composite/Pagination";
 import {renderExpired} from "../config";
+import {API_RESPONSE_STATUS} from "../../../configs";
 
-const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
+const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage, setIsLoadNft, setPlanActive}) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({
@@ -22,6 +24,12 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
     await setPagination(
       res?.meta || {}
     );
+
+    res?.data?.forEach((item) => {
+      if(item.is_primary === true){
+        setPlanActive(item?.subscription?.id);
+      }
+    });
 
     await setSubscriptions(
       res?.data || []
@@ -41,6 +49,21 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
       fetchData().then();
     }
   }, [filter.page]);
+
+  const setPrimary = async (id) => {
+    const res = await setPrimaryPlan(id);
+    if (res?.status === API_RESPONSE_STATUS.success) {
+      await setSubscriptions(subscriptions.map(item => {
+        item.is_primary = item.id === id;
+        return item;
+      }));
+      await setIsLoadNft(true);
+      await setPlanActive(id);
+      message.success("Switch plan success");
+    }else{
+      message.error("Switch plan fail");
+    }
+  };
 
   return (
     <div className="">
@@ -79,12 +102,41 @@ const YourAccountPlan = ({isLoadData, setIsLoadData, loadingPage}) => {
                       <tr className="text-cl-base text-md border-0 table-row" key={index}>
                         <td className="bg-white w-[40px]">
                           <div className="flex justify-center mt-2 w-[40px]">
-                            <Checkbox label="n" checked={item?.is_primary} name="radio" />
+                            {
+                              item?.is_primary ? <Checkbox label="n" checked={item?.is_primary} name="user_plan" /> : (
+                                <Popconfirm
+                                  title={
+                                    <div>
+                                      <div>You need to update your nft.</div>
+                                      <div>Are you sure switch plan ?</div>
+                                    </div>
+                                  }
+                                  onConfirm={ async () => {
+                                    return new Promise(resolve => {
+                                      setTimeout(() => {
+                                        setPrimary(item.id);
+                                      }, 2000);
+                                    });
+                                  }}
+                                  okText="Yes"
+                                  cancelText="No"
+                                  onOpenChange={() => {}}
+                                >
+                                  <Checkbox
+                                    label="n"
+                                    name="user_plan"
+                                    checked={item.is_primary}
+                                    onChange={() => {}}
+                                  />
+                                </Popconfirm>
+                              )
+                            }
+
                           </div>
                         </td>
                         <td className="bg-white">
                           <div>{ item?.subscription?.name }</div>
-                          { renderExpired(item?.expired_at) }
+                          { renderExpired(item?.end_at) }
                         </td>
                         <td className="bg-white text-center">
                           <div>30 minutes</div>

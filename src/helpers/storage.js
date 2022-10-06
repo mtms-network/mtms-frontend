@@ -37,6 +37,9 @@ export const resetUserInfo = () => {
 
 export const getWalletAddress = () => {
   const user = getUser();
+  if(Array.isArray(user.wallets) && user.wallets?.length){
+    return user?.wallets[0]?.wallet_address;
+  }
 
-  console.log('user', user.wallets);
-}
+  return null;
+};

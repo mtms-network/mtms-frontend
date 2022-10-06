@@ -3,6 +3,7 @@ import Web3 from "web3";
 import QueryString from "qs";
 import { createPrivateInstance } from "./base";
 import erc20abi from "../abi/mtms-smartcontract.abi.json";
+import {getWalletAddress} from "../helpers";
 
 const client = createPrivateInstance("/your-box");
 
@@ -56,7 +57,7 @@ export const getBoxesContract = async (boxBE) => {
   try {
     const web3 = new Web3(window.web3.currentProvider);
     const accounts = await web3.eth.getAccounts();
-    const walletAddress = accounts[0];
+    const walletAddress = getWalletAddress();
 
     const contract = new web3.eth.Contract(
       erc20abi,
@@ -167,4 +168,13 @@ export const setPrimaryNFT = async (id) => {
   } catch (err) {
     return null;
   };
+};
+
+
+export const setPrimaryPlan = async (id) => {
+  try {
+    const res = await client.patch(`subscriptions/${id}/primary`);
+    return res?.data;
+  }catch (err){ }
+  return null;
 };
