@@ -45,8 +45,9 @@ const Overview = ({ t }) => {
     try {
       const web3 = new Web3(window.web3.currentProvider);
       const accounts = await web3.eth.getAccounts();
+
       if(accounts?.length){
-        if(accounts[0] === getWalletAddress()){
+        if(accounts[0].toLowerCase() === getWalletAddress()){
           await setWalletConnected(1);
 
           const box = await loadBoxBE();
