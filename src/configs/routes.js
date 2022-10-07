@@ -83,6 +83,9 @@ export const routeUrls = {
   connectWallet: {
     path: "wallet/connect",
   },
+  calendar: {
+    path: "calendar",
+  },
 };
 
 export const routeParts = {

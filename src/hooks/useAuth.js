@@ -3,7 +3,7 @@ import {getAccessToken, getParamUrl, setLanguage, getUser} from "helpers";
 import { useNavigate, useLocation } from "react-router-dom";
 import {LOCAL_STORAGE_KEYS, routeUrls} from "configs";
 import { useAppStore } from "stores/app.store";
-import { getUser as getUserApi} from "../services/auth.service";
+import {checkIsConnectGoogleCalendar, getUser as getUserApi} from "../services/auth.service";
 
 const useAuth = () => {
   const navigate = useNavigate();
@@ -30,14 +30,13 @@ const useAuth = () => {
     }
   }
 
-  const checkToken = () => {
+  const checkToken = async () => {
     const paramToken = getParamUrl('t');
     const checkAuthByParam = async () => {
       try {
         if(paramToken){
           const user = await getUserApi(paramToken);
           if(user){
-
             localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
             localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, paramToken);
             navigate('/');
@@ -57,8 +56,22 @@ const useAuth = () => {
     }
   };
 
+  const isConnectGoogleCalendar = async () => {
+    const token = getAccessToken();
+    const res = await checkIsConnectGoogleCalendar(token);
+    if(res?.integrated){
+      updateAppStore((draft) => {
+        draft.isLoginGoogleCalendar = true;
+      });
+    }
+  };
+
   return useEffect(() => {
-    checkToken();
+    checkToken().then(() => {
+      if(appStore.isAuthenticated && !appStore.isLoginGoogleCalendar){
+        isConnectGoogleCalendar().then();
+      }
+    });
   }, [appStore.isAuthenticated]);
 };
 

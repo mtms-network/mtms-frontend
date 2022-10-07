@@ -97,4 +97,29 @@ export const getUser = async (token) => {
 export const getMessageKey = async () => {
   const res = await client.get('/signature');
   return res?.data;
+};
+
+export const connectGoogleCalendar = async (code, redirectUri, token) => {
+  try {
+    const response = await client.post(`/google-calendar/oauth2callback?code=${code}&redirect_uri=${redirectUri}`, null,{
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    return response?.data;
+  } catch (err){ }
+  return null;
+};
+
+export const checkIsConnectGoogleCalendar = async (token) => {
+  try {
+    const response = await client.get('/google-calendar/check-integrated', {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    return response?.data;
+  }catch (err){
+    return null;
+  }
 }

@@ -7,28 +7,38 @@ import { useNavigate } from "react-router-dom";
 import { routeUrls } from "configs";
 import { WalletButton } from "../WalletButtons";
 
-export function GoogleButton({ showTitle = true }) {
+export function GoogleButton({
+  showTitle = true,
+  className = "",
+  name = "Google",
+  customHandleResponse = null,
+}) {
   const [, updateAppStore] = useAppStore();
   const navigate = useNavigate();
 
   const handleResponse = async (result) => {
-    try {
-      if (result?.code) {
-        const redirectUri = `${window.location.origin}`;
-        const data = await signInSocial({ code: result.code, redirectUri });
-        setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
-        updateAppStore((draft) => {
-          draft.isAuthenticated = true;
-          draft.user = data?.user;
-        });
-        navigate(`/${routeUrls.meeting.path}`);
+    if (customHandleResponse){
+      customHandleResponse(result);
+    }else {
+      try {
+        if (result?.code) {
+          const redirectUri = `${window.location.origin}`;
+          const data = await signInSocial({ code: result.code, redirectUri });
+          setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
+          updateAppStore((draft) => {
+            draft.isAuthenticated = true;
+            draft.user = data?.user;
+          });
+          navigate(`/${routeUrls.meeting.path}`);
+        }
+      } catch (error) {
+        console.log("GoogleButton:: error:", error);
       }
-    } catch (error) {
-      console.log("GoogleButton:: error:", error);
     }
   };
 
   const login = useGoogleLogin({
+    scope: "https://www.googleapis.com/auth/calendar",
     onSuccess: handleResponse,
     redirect_uri: "http://localhost:3000/",
     flow: "auth-code",
@@ -36,7 +46,7 @@ export function GoogleButton({ showTitle = true }) {
 
   return (
     <div className="flex">
-      <WalletButton name="Google" src="/icons/google-logo.png" onClick={login} />
+      <WalletButton name={name} className={className} src="/icons/google-logo.png" onClick={login} />
     </div>
   );
 }

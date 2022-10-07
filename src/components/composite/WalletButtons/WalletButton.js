@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 
-export function WalletButton({ name, src, onClick, className = "", nameClass = "" }) {
+export function WalletButton({ name, src, onClick, className = "", nameClass = ""}) {
   return (
     <div className="flex flex-col justify-center items-center">
       <button
