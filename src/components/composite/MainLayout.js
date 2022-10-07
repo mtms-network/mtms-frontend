@@ -40,14 +40,16 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
         !meetingStore.types ||
         !meetingStore.types?.length === 0
       ) {
-        const res = await getRequirePreMeeting();
-        if (res) {
-          updateMeetingStore((draft) => {
-            draft.categories = res?.categories;
-            draft.types = res?.types;
-            draft.statuses = res?.statuses;
-            draft.isForceLoadMeetingHistories = true;
-          });
+        if(appStore.isAuthenticated){
+          const res = await getRequirePreMeeting();
+          if (res) {
+            updateMeetingStore((draft) => {
+              draft.categories = res?.categories;
+              draft.types = res?.types;
+              draft.statuses = res?.statuses;
+              draft.isForceLoadMeetingHistories = true;
+            });
+          }
         }
       }
     } catch (error) {}
