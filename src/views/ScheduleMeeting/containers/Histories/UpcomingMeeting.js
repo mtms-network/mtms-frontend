@@ -57,7 +57,7 @@ export const UpcomingMeeting = () => {
           title={t("schedule_meeting.upcoming_meetings")}
         />
         {
-          histories?.length > 0 && <Pagination
+          histories.data?.length > 0 && <Pagination
             page={histories.pagination?.current_page}
             totalPage={histories.pagination?.last_page}
             total={histories.pagination?.total}
@@ -87,7 +87,7 @@ export const UpcomingMeeting = () => {
       </div>
       {loading && <BrandLogoLoading />}
       {
-        histories?.length ? (
+        histories.data?.length ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {!loading &&
               histories.data?.map((item) => (

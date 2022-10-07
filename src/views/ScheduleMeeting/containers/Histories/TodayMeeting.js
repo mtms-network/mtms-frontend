@@ -24,7 +24,7 @@ export const TodayMeeting = () => {
     title: "",
     status: MEETING_STATUS.scheduled,
     startDate: moment().format("YYYY-MM-DD"),
-    endDate: moment().add(1, "days").format("YYYY-MM-DD"),
+    endDate: moment().format("YYYY-MM-DD"),
   });
   const deleteMeetingModalRef = useRef(null);
 
