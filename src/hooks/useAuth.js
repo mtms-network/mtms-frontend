@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import {getAccessToken, getParamUrl, setLanguage, getUser} from "helpers";
 import { useNavigate, useLocation } from "react-router-dom";
-import {LOCAL_STORAGE_KEYS, routeUrls} from "configs";
+import {API_RESPONSE_STATUS, LOCAL_STORAGE_KEYS, routeUrls} from "configs";
 import { useAppStore } from "stores/app.store";
 import {checkIsConnectGoogleCalendar, getUser as getUserApi} from "../services/auth.service";
 
@@ -59,16 +59,21 @@ const useAuth = () => {
   const isConnectGoogleCalendar = async () => {
     const token = getAccessToken();
     const res = await checkIsConnectGoogleCalendar(token);
-    if(res?.integrated){
+
+    if(res?.status === API_RESPONSE_STATUS.success){
       updateAppStore((draft) => {
-        draft.isLoginGoogleCalendar = true;
+        draft.googleCalendar = {
+          integrated: res?.data?.integrated,
+          email: res?.data?.email,
+          name: res?.data?.name,
+        };
       });
     }
   };
 
   return useEffect(() => {
     checkToken().then(() => {
-      if(appStore.isAuthenticated && !appStore.isLoginGoogleCalendar){
+      if(appStore.isAuthenticated && !appStore.googleCalendar.integrated){
         isConnectGoogleCalendar().then();
       }
     });

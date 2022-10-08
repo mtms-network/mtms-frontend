@@ -18,7 +18,13 @@ const AppStore = createStore({
   loadingIcon: false,
   loadingIconTitle: "",
   appendComponentLayout: null,
-  isLoginGoogleCalendar: false,
+  googleCalendar: {
+    integrated: false,
+    email: "",
+    name: "",
+    // isLoginGoogleCalendar
+  },
+
 });
 
 export const useAppStore = AppStore.useStore;

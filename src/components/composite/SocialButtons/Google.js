@@ -28,6 +28,11 @@ export function GoogleButton({
           updateAppStore((draft) => {
             draft.isAuthenticated = true;
             draft.user = data?.user;
+            draft.googleCalendar = {
+              integrated: data?.google_calendar_info?.integrated,
+              email: data?.google_calendar_info?.email,
+              name: data?.google_calendar_info?.name,
+            };
           });
           navigate(`/${routeUrls.meeting.path}`);
         }
