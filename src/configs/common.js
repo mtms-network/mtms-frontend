@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-export const LIVE_MEETING_URL = "https://meeting.mtms.live";
+export const LIVE_MEETING_URL = "https://meetingapp.mtms.live";
 
 export const LIVE_URL = "https://api.mtms.live";
 
