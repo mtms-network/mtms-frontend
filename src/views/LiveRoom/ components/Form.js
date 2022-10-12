@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
-import moment from "moment";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   DateTimePicker,
@@ -13,7 +12,7 @@ import {
   BrandLogoLoading,
   TimePicker,
 } from "components";
-import { IoTv } from "react-icons/io5";
+import { IoOptions, IoTv } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -21,65 +20,49 @@ import { useMeetingStore } from "stores/meeting.store";
 
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
-import { convertFromHTML, convertToRaw, EditorState, ContentState } from "draft-js";
-import { ALERT_TYPE, routeUrls, COMMON, MEETING_STATUS, routeParts } from "configs";
+import {ContentState, convertFromHTML, convertToRaw, EditorState} from "draft-js";
+import {ALERT_TYPE, routeUrls, COMMON, MEETING_STATUS} from "configs";
 import { handleHttpError } from "helpers";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  getMeetingDetail,
-  getMeetingContact,
-  updateInstantMeeting,
   createInstantMeeting,
-} from "services/meeting.service";
-import { withTranslation } from "react-i18next";
+  getMeetingContact,
+  getMeetingDetail,
+  getRequirePreMeeting,
+  sendEmailToMemberInMeeting, updateInstantMeeting
+} from "services";
+import {useTranslation, withTranslation} from "react-i18next";
+import moment from "moment";
 import { message } from "antd";
 
-const ScheduleMeetingDetail = ({ t }) => {
-  const DURATION_HOURS = [
-    { value: `0 ${t("list.general.durations.h")}`, key: 0 },
-    { value: `1 ${t("list.general.durations.h")}`, key: 1 },
-    { value: `2 ${t("list.general.durations.hours")}`, key: 2 },
-    { value: `3 ${t("list.general.durations.hours")}`, key: 3 },
-    { value: `4 ${t("list.general.durations.hours")}`, key: 4 },
-  ];
+const timeFormat = "MMM DD, yyyy";
 
-  const DURATION_MINUTES = [
-    { value: `0 ${t("list.general.durations.m")}`, key: 0 },
-    { value: `15 ${t("list.general.durations.minutes")}`, key: 15 },
-    { value: `30 ${t("list.general.durations.minutes")}`, key: 30 },
-    { value: `45 ${t("list.general.durations.minutes")}`, key: 45 },
-  ];
+/**
+ * action = 1 // create
+ * action = 2 // update
+ * action = 3 // duplicate
+ */
 
-  const params = useParams();
+const Form = ({ action , id }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
-  const [meetingStore, updateMeetingStore] = useMeetingStore();
-  const [types, setTypes] = useState([]);
-  const [description, setDescription] = useState("");
-  const [startDateTime, setStartDateTime] = useState(null);
+  const [meetingStore] = useMeetingStore();
+  const [description, setDescription] = useState(null);
+  const [startDateTime, setStartDateTime] = useState(moment());
   const [contacts, setContacts] = useState([]);
   const [type, setType] = useState(null);
-  const [startTime, setStartTime] = useState(0);
-  const [durationHour, setDurationHour] = useState(0);
-  const [durationMinute, setDurationMinute] = useState(0);
-  const [meeting, setMeeting] = useState(null);
+  const [startTime, setStartTime] = useState(moment());
+  const [types, setTypes] = useState([]);
   const [alert, setAlert] = useState({
     show: false,
     message: "",
     type: ALERT_TYPE.ERROR,
     error: [],
   });
-  const [listContacts, setListContacts] = useState([]);
-  const location = useLocation();
 
-  const isDuplicate = useMemo(() => {
-    const paths = location.pathname.split("/");
-    if (paths.length > 0 && paths[paths.length - 1] === routeParts.duplicate.path) {
-      return true;
-    }
-    return false;
-  }, [location, meeting]);
+  const [listContacts, setListContacts] = useState([]);
 
   const schema = yup.object().shape({
     title: yup.string().required(),
@@ -105,86 +88,16 @@ const ScheduleMeetingDetail = ({ t }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     setValue,
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const prepareData = () => {
-    if (meetingStore?.types) {
-      const list = meetingStore.types.map((item) => ({
-        ...item,
-        key: item.uuid,
-        value: item.name,
-      }));
-      setTypes(list);
-    }
-  };
-
-  const validatePreSubmit = (values) => {
-    const valid = true;
-    return valid;
-  };
-
-  const onUpdate = async (values) => {
-    if (
-      meeting &&
-      meeting.status === MEETING_STATUS.scheduled &&
-      meeting.can_moderate &&
-      !meeting.is_blocked
-    ) {
-      const valid = validatePreSubmit();
-      if (valid) {
-        const data = { ...values };
-        try {
-          setAlert({ ...alert, show: false, message: "" });
-          setLoading(true);
-          data.description = description
-            ? draftToHtml(convertToRaw(description?.getCurrentContent()))
-            : "";
-          data.is_paid = false;
-          data.is_pam = false;
-          data.uuid = params.meetingId;
-          startDateTime.set("hour", startTime.hours());
-          startDateTime.set("minute", startTime.minutes());
-          startDateTime.set("second", startTime.seconds());
-          data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
-
-          data.contacts = contacts.map((value) => {
-            if (typeof value === "object" && value?.uuid) {
-              value = value.uuid;
-            }
-            return { uuid: value };
-          });
-          data.type = { uuid: type };
-          data.period = durationHour * 60 + durationMinute;
-
-          const res = await updateInstantMeeting(params.meetingId, data);
-          if (res?.data) {
-            message.success(res.data?.message);
-            // if (data.contacts?.length > 0) {
-            //   await sendEmailToMemberInMeeting(params.meetingId);
-            // }
-          } else if (res?.request) {
-            const errorData = handleHttpError(res);
-            message.error(errorData.messageDetail);
-          }
-          setLoading(false);
-        } catch (error) {
-          if (error) {
-            const errorData = handleHttpError(error);
-            message.error(errorData.message);
-          }
-          setLoading(false);
-        }
-      }
-    }
-  };
-
-  const onDuplicate = async (values) => {
+  const onCreate = async (values) => {
     try {
       const data = { ...values };
+      setAlert({ ...alert, show: false, message: "" });
       setLoading(true);
 
       data.description = description
@@ -200,12 +113,100 @@ const ScheduleMeetingDetail = ({ t }) => {
       data.contacts = contacts.map((value) => {
         return { uuid: value };
       });
+      data.room = true;
       data.type = { uuid: type };
-      data.period = durationHour * 60 + durationMinute;
+
       const res = await createInstantMeeting(data);
 
       if (res?.data) {
-        navigate(`/${routeUrls.scheduleMeeting.path}`);
+        navigate(`/${routeUrls.liveRoom.path}`);
+        message.success(res?.data?.message);
+      } else if (res?.request) {
+        const errorData = handleHttpError(res);
+        message.error(errorData.messageDetail);
+      }
+      setLoading(false);
+    } catch (error) {
+      if (error) {
+        const errorData = handleHttpError(error);
+        message.error(errorData?.message);
+      }
+      setLoading(false);
+    }
+  }
+
+  const onUpdate = async (values) => {
+    const data = { ...values };
+    try {
+      setAlert({ ...alert, show: false, message: "" });
+      setLoading(true);
+      data.description = description
+        ? draftToHtml(convertToRaw(description?.getCurrentContent()))
+        : "";
+      data.is_paid = false;
+      data.is_pam = false;
+      data.uuid = id;
+      data.room = true;
+
+      startDateTime.set("hour", startTime.hours());
+      startDateTime.set("minute", startTime.minutes());
+      startDateTime.set("second", startTime.seconds());
+      data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
+
+      data.contacts = contacts.map((value) => {
+        if (typeof value === "object" && value?.uuid) {
+          value = value.uuid;
+        }
+        return { uuid: value };
+      });
+      data.type = { uuid: type };
+
+      const res = await updateInstantMeeting(id, data);
+      if (res?.data) {
+        navigate(`/${routeUrls.liveRoom.path}`);
+        message.success(res?.data?.message);
+      } else if (res?.request) {
+        const errorData = handleHttpError(res);
+        message.error(errorData.messageDetail);
+      }
+      setLoading(false);
+    } catch (error) {
+      if (error) {
+        const errorData = handleHttpError(error);
+        message.error(errorData.message);
+      }
+      setLoading(false);
+    }
+  };
+
+  const onDuplicate = async (values) => {
+    try {
+      const data = { ...values };
+      setLoading(true);
+
+      data.description = description
+        ? draftToHtml(convertToRaw(description?.getCurrentContent()))
+        : "";
+      data.is_paid = false;
+      data.is_pam = false;
+      data.uuid = null;
+      data.room = true;
+      startDateTime.set("hour", startTime.hours());
+      startDateTime.set("minute", startTime.minutes());
+      startDateTime.set("second", startTime.seconds());
+      data.start_date_time = startDateTime.format("YYYY-MM-DD HH:mm:ss");
+      data.contacts = contacts.map((value) => {
+        if (typeof value === "object" && value?.uuid) {
+          value = value.uuid;
+        }
+        return { uuid: value };
+      });
+      data.type = { uuid: type };
+
+      const res = await createInstantMeeting(data);
+
+      if (res?.data) {
+        navigate(`/${routeUrls.liveRoom.path}`);
         message.success(res?.data?.message);
       } else if (res?.request) {
         const errorData = handleHttpError(res);
@@ -222,23 +223,27 @@ const ScheduleMeetingDetail = ({ t }) => {
   };
 
   const onSubmit = async (values) => {
-    if (isDuplicate) {
-      onDuplicate(values);
-    } else {
-      onUpdate(values);
+    if(action === 1){
+      await onCreate(values);
+    }else if(action === 2){
+      await onUpdate(values);
+    }else if(action === 3){
+      await onDuplicate(values);
     }
   };
 
   const onChangeDateTime = (e) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const ed = e?._d;
     setStartDateTime(
       moment(
-        `${e._d.getFullYear()}-${(e._d.getMonth() + 1).toString().padStart(2, "0")}-${e._d
+        `${ed.getFullYear()}-${(ed.getMonth() + 1).toString().padStart(2, "0")}-${ed
           .getDate()
           .toString()
-          .padStart(2, "0")} ${e._d.getHours().toString().padStart(2, "0")}:${e._d
+          .padStart(2, "0")} ${ed.getHours().toString().padStart(2, "0")}:${ed
           .getMinutes()
           .toString()
-          .padStart(2, "0")}:${e._d.getSeconds().toString().padStart(2, "0")}`,
+          .padStart(2, "0")}:${ed.getSeconds().toString().padStart(2, "0")}`,
         "YYYY-MM-DD",
       ),
     );
@@ -247,65 +252,6 @@ const ScheduleMeetingDetail = ({ t }) => {
   const onChangeStartTime = (value) => {
     const time = moment(value, "hh:mm:ss");
     setStartTime(time);
-  };
-
-  const fetchMeeting = async () => {
-    try {
-      const res = await getMeetingDetail(params.meetingId);
-      if (res) {
-        updateMeetingStore((draft) => {
-          draft.meeting = res;
-        });
-        setMeeting(res);
-        setType(res.type.uuid);
-        setValue("agenda", res.agenda);
-        setValue("title", res.title);
-        if (!isDuplicate) {
-          setValue("identifier", res.identifier);
-        }
-        setValue("max_participant_count", res.max_participant_count);
-        const startDate = moment(res.start_date_time, "YYYY-MM-DD");
-        const time = moment(res.start_date_time);
-
-        if (isDuplicate) {
-          const now = moment();
-          const diffDays = startDate.diff(now.startOf("day"), "days");
-          if (diffDays <= 0) {
-            const diffHours = time.diff(now.startOf("hour"), "hours");
-            if (diffHours <= 0) {
-              setStartTime(moment());
-            } else {
-              setStartTime(time);
-            }
-            setStartDateTime(now);
-          } else {
-            setStartDateTime(startDate);
-          }
-        } else {
-          setStartDateTime(startDate);
-          setStartTime(time);
-        }
-        setDurationHour(Math.floor(res.period / 60));
-        setDurationMinute(res.period % 60);
-        setDescription(
-          EditorState.createWithContent(
-            ContentState.createFromBlockArray(convertFromHTML(res?.description || "")),
-          ),
-        );
-        const currentContacts = [];
-        res.invitees.map((item, idx) => {
-          currentContacts.push({
-            ...item,
-            key: item.contact.uuid,
-            value: item.contact.name || item.contact.email,
-          });
-          return 1;
-        });
-        setContacts(currentContacts);
-      }
-    } catch (error) {
-      console.log("ScheduleMeetingDetail", error);
-    }
   };
 
   const fetchContact = async () => {
@@ -319,8 +265,17 @@ const ScheduleMeetingDetail = ({ t }) => {
         }));
         setListContacts(list);
       }
-    } catch (error) {
-      console.log("ScheduleMeetingDetail fetchContact", error);
+    } catch (err) {
+      console.log('fetch fetchContact fail');
+    }
+  };
+
+  const fetchType = async () => {
+    try {
+      const res = await getRequirePreMeeting();
+      setTypes(res?.types || []);
+    }catch (err){
+      console.log('fetch fetchType fail');
     }
   };
 
@@ -328,8 +283,61 @@ const ScheduleMeetingDetail = ({ t }) => {
     try {
       setFetchLoading(true);
       await fetchContact();
-      await fetchMeeting();
-      await prepareData();
+      await fetchType();
+
+      if(action > 1)
+      {
+        const res = await getMeetingDetail(id);
+        if(res)
+        {
+          setType(res.type.uuid);
+          setValue("agenda", res.agenda);
+          setValue("title", res.title);
+          if (action !== 3) {
+            setValue("identifier", res.identifier);
+          }
+          setValue("max_participant_count", res.max_participant_count);
+          const startDate = moment(res.start_date_time, "YYYY-MM-DD");
+          const time = moment(res.start_date_time);
+
+          if (action === 3) {
+            const now = moment();
+            const diffDays = startDate.diff(now.startOf("day"), "days");
+            if (diffDays <= 0) {
+              const diffHours = time.diff(now.startOf("hour"), "hours");
+              if (diffHours <= 0) {
+                setStartTime(moment());
+              } else {
+                setStartTime(time);
+              }
+              setStartDateTime(now);
+            } else {
+              setStartDateTime(startDate);
+            }
+          } else {
+            setStartDateTime(startDate);
+            setStartTime(time);
+          }
+
+          setDescription(
+            EditorState.createWithContent(
+              ContentState.createFromBlockArray(convertFromHTML(res?.description || "")),
+            ),
+          );
+
+          const currentContacts = [];
+          res.invitees.map((item) => {
+            currentContacts.push({
+              ...item,
+              key: item.contact.uuid,
+              value: item.contact.name || item.contact.email,
+            });
+            return 1;
+          });
+          setContacts(currentContacts);
+        }
+      }
+
       setFetchLoading(false);
     } catch (error) {
       setFetchLoading(false);
@@ -341,8 +349,14 @@ const ScheduleMeetingDetail = ({ t }) => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [params.meetingId]);
+    fetchData().then();
+  }, [id]);
+
+  useEffect(() => {
+    if (types?.length && type === null) {
+      setType(types[0].uuid);
+    }
+  }, [types]);
 
   return (
     <MainLayout>
@@ -355,7 +369,7 @@ const ScheduleMeetingDetail = ({ t }) => {
         />
       </div>
       {fetchLoading && (
-        <div className="h-screen">
+        <div className="h-96">
           <BrandLogoLoading />
         </div>
       )}
@@ -363,14 +377,7 @@ const ScheduleMeetingDetail = ({ t }) => {
         <>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1 text-center">
-              <GroupTitle
-                icon={<IoTv />}
-                title={
-                  isDuplicate
-                    ? t("schedule_meeting.duplicate_schedule_a_meeting")
-                    : t("schedule_meeting.update_schedule_a_meeting")
-                }
-              />
+              <GroupTitle icon={<IoTv />} title="Duplicate Live Room" />
             </div>
           </div>
           <div className="w-[90%] m-auto bg-white rounded-[20px] md:w-[80%] lx:w-[60%]">
@@ -389,10 +396,11 @@ const ScheduleMeetingDetail = ({ t }) => {
                 </div>
               </GroupLayout>
               <GroupLayout className="flex flex-wrap gap-[12px]">
-                {meetingStore?.types &&
-                  meetingStore.types.map((item) => {
+                {types &&
+                  types.map((item, key) => {
                     return (
                       <span
+                        key={key}
                         className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
                           type === item.uuid ? " bg-secondary text-primary" : ""
                         }`}
@@ -403,7 +411,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                     );
                   })}
               </GroupLayout>
-              <GroupLayout className="flex flex-col space-y-4">
+              <GroupLayout className="w-full space-y-4">
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                   <div className="w-full sm:w-1/5">{t("meeting.view.start_time")}</div>
                   <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
@@ -411,7 +419,7 @@ const ScheduleMeetingDetail = ({ t }) => {
                       disabledDate={disabledDate}
                       placeholder="Mar 2, 2022 5:02 PM"
                       onChangeDateTime={onChangeDateTime}
-                      format="MMM DD, yyyy"
+                      format={timeFormat}
                       value={startDateTime}
                     />
                   </div>
@@ -425,46 +433,24 @@ const ScheduleMeetingDetail = ({ t }) => {
                   </div>
                 </div>
               </GroupLayout>
-              <GroupLayout className="flex flex-col space-y-4">
-                <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
-                  <div className="w-full sm:w-1/5">{t("config.ui.duration")}</div>
-                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
-                    <Select
-                      options={DURATION_HOURS}
-                      defaultValue={0}
-                      value={durationHour}
-                      onChange={(e) => setDurationHour(e)}
-                    />
-                  </div>
-                  <div className="w-full sm:w-2/5 mt-2 sm:mt-0">
-                    <Select
-                      options={DURATION_MINUTES}
-                      defaultValue={0}
-                      value={durationMinute}
-                      onChange={(e) => setDurationMinute(e)}
-                    />
-                  </div>
-                </div>
-              </GroupLayout>
               <GroupLayout className="flex flex-col justify-between">
                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
                   <div className="flex-1">
                     <Input
+                      value={50}
                       register={register("max_participant_count")}
                       label={t("home.maximum_participant")}
                       placeholder={COMMON.MAX_PARTICIPANT}
                       type="number"
                       error={errors.max_participant_count}
-                      min="1"
+                      min={1}
                     />
                   </div>
                   <div className="flex-1">
                     <Input
-                      register={register("identifier")}
                       label={t("meeting.meeting_code")}
                       placeholder={t("meeting.enter_meeting_code")}
-                      className="!bg-disable"
-                      disabled={!isDuplicate}
+                      register={register("identifier")}
                     />
                   </div>
                 </div>
@@ -511,20 +497,19 @@ const ScheduleMeetingDetail = ({ t }) => {
                   className="btn btn-primary btn-outline mr-4"
                   type="submit"
                   onClick={() => {
-                    navigate(`/${routeUrls.scheduleMeetingView.path}/${params.meetingId}`);
+                    navigate(`/${routeUrls.scheduleMeeting.path}`);
                   }}
                   disabled={loading}
                 >
                   {t("general.cancel")}
                 </Button>
                 <Button
-                  disabled={meeting?.status !== MEETING_STATUS.scheduled}
                   className="btn btn-primary"
                   isLoading={loading}
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
                 >
-                  {isDuplicate ? t("general.save") : t("general.update")}
+                  {t("general.create")}
                 </Button>
               </div>
             </div>
@@ -535,4 +520,4 @@ const ScheduleMeetingDetail = ({ t }) => {
   );
 };
 
-export default withTranslation()(ScheduleMeetingDetail);
+export default Form;

@@ -34,5 +34,7 @@ export const ToDoList = lazy(() => import("views/ToDo/containers/ListTodo"));
 export const NewTodo = lazy(() => import("views/ToDo/containers/New"));
 export const EditTodo = lazy(() => import("views/ToDo/containers/EditTodo"));
 export const Calendar = lazy(() => import("views/Calendar"));
-
+export const ListLiveRoom = lazy(() => import("views/LiveRoom/containers/ListLiveRoom"));
+export const NewLiveRoom = lazy(() => import("views/LiveRoom/containers/NewLiveRoom"));
+export const DuplicateLiveRoom = lazy(() => import("views/LiveRoom/containers/DuplicateLiveRoom"));
 

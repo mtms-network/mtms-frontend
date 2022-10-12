@@ -3,4 +3,6 @@ export * from "./common.service";
 export * from "./meeting.service";
 export * from "./todo.service";
 export * from "./contact.service";
+export * from "./liveRoom.service";
+
 

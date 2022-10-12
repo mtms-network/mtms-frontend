@@ -156,20 +156,20 @@ const SidebarLayout = ({ t, onLogout }) => {
                 <p className="pl-2">{t("sidebar.to_do")}</p>
               </button>
             </div>
-            <div className="w-full opacity-30">
+            <div className="w-full">
               <button
                 className={classNames(
                   "text-base font-normal",
-                  location.pathname !== `/${routeUrls.room247.path}`
+                  location.pathname !== `/${routeUrls.liveRoom.path}`
                     ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
                     : "btn btn-base justify-start font-medium",
                 )}
-                onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}
+                onClick={() => navigate(`/${routeUrls.liveRoom.path}`)}
               >
                 <IconBase
                   icon="/icons/icons/live-room-outline.svg"
                   iconActivated="/icons/icons/live-room-fill.svg"
-                  isActive={location.pathname.includes(routeUrls.room247.path)}
+                  isActive={location.pathname.includes(routeUrls.liveRoom.path)}
                 />
                 <p className="pl-2">{t("sidebar.rooms")}</p>
               </button>

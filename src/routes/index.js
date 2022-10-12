@@ -31,6 +31,9 @@ import {
   EditContact,
   EditTodo,
   Calendar,
+  ListLiveRoom,
+  NewLiveRoom,
+  DuplicateLiveRoom,
 } from "./views";
 
 const Routers = () => {
@@ -88,6 +91,9 @@ const Routers = () => {
         <Route path={`/${routeUrls.newTodo.path}`} element={<NewTodo />} />
         <Route path={`/${routeUrls.editTodo.path}`} element={<EditTodo />} />
         <Route path={`/${routeUrls.calendar.path}`} element={<Calendar />} />
+        <Route path={`/${routeUrls.liveRoom.path}`} element={<ListLiveRoom />} />
+        <Route path={`/${routeUrls.newLiveRoom.path}`} element={<NewLiveRoom />} />
+        <Route path={`/${routeUrls.liveRoom.path}/:id/duplicate`} element={<DuplicateLiveRoom />} />
 
         <Route path="/" element={<Overview />} />
         <Route path="*" element={<Navigate to="/meeting" />} />

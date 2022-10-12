@@ -86,6 +86,12 @@ export const routeUrls = {
   calendar: {
     path: "calendar",
   },
+  liveRoom: {
+    path: "live-room",
+  },
+  newLiveRoom: {
+    path: "live-room/new",
+  }
 };
 
 export const routeParts = {

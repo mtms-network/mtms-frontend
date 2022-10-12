@@ -52,7 +52,7 @@ const EditTodo = ({t}) => {
       setValue("date", new Date(res?.date));
     }
   };
-  console.log('getValues', getValues().date)
+
   useEffect(() => {
     if(uuid){
       fetchData().then();
