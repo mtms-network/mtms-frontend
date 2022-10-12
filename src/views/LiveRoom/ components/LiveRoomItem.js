@@ -61,7 +61,7 @@ const LiveRoomItem = ({ data, className, setIsReload }) => {
           key: '3',
           label: (
             <div onClick={() => { deleteModalRef.current?.show(item); }}>
-              Delete to do
+              Delete room
             </div>
           )
         },
