@@ -358,6 +358,18 @@ const Form = ({ action , id }) => {
     }
   }, [types]);
 
+  const renderTitle = () => {
+    switch (action)
+    {
+      case 1: return "Create Live Room";
+      case 2: return "Edit Live Room";
+      case 3: return "Duplicate Live Room";
+      default: return "";
+    }
+
+    return "";
+  }
+
   return (
     <MainLayout>
       <div className="pt-4 w-full">
@@ -377,7 +389,7 @@ const Form = ({ action , id }) => {
         <>
           <div className="flex flex-row justify-between w-full py-2">
             <div className="flex-1 text-center">
-              <GroupTitle icon={<IoTv />} title="Duplicate Live Room" />
+              <GroupTitle icon={<IoTv />} title={renderTitle()} />
             </div>
           </div>
           <div className="w-[90%] m-auto bg-white rounded-[20px] md:w-[80%] lx:w-[60%]">
@@ -497,7 +509,7 @@ const Form = ({ action , id }) => {
                   className="btn btn-primary btn-outline mr-4"
                   type="submit"
                   onClick={() => {
-                    navigate(`/${routeUrls.scheduleMeeting.path}`);
+                    navigate(`/${routeUrls.liveRoom.path}`);
                   }}
                   disabled={loading}
                 >
@@ -509,7 +521,7 @@ const Form = ({ action , id }) => {
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
                 >
-                  {t("general.create")}
+                  {action !== 2 ? t("general.create") : "Update"}
                 </Button>
               </div>
             </div>

@@ -80,7 +80,7 @@ const LiveRoomItem = ({ data, className, setIsReload }) => {
     >
       <div className="flex flex-col w-full flex-1 h-full">
         <div className="flex justify-between items-center">
-          <Link to={`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`} key={data?.uuid}>
+          <Link to={`/${routeUrls.liveRoom.path}/view/${data?.uuid}`} key={data?.uuid}>
             <div className="text-lg font-semibold group-hover:text-primary overflow-hidden">
               {data?.title}
             </div>
@@ -112,7 +112,7 @@ const LiveRoomItem = ({ data, className, setIsReload }) => {
         <div
           className="text-gray cursor-pointer flex items-center"
           onClick={() => {
-            navigate(`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`);
+            navigate(`/${routeUrls.liveRoom.path}/view/${data?.uuid}`);
           }}
         >
           <img src="/icons/icons/meeting-outline.svg" alt="meeting" className="mr-1"/>
