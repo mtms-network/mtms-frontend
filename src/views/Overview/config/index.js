@@ -13,6 +13,10 @@ export const ConfigOverview = {
 };
 
 export const renderExpired = (expired_at, size="text-xs") => {
+  if (!expired_at) {
+    return '';
+  }
+
   const days = moment(expired_at).diff(moment(), 'days');
 
   if(days > 0){
