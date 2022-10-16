@@ -17,6 +17,9 @@ import Nfts from "./components/Nfts";
 import Plan from "./components/Plan";
 import Vouchers from "./components/Vouchers";
 import Overviews from "./components/Overview";
+import Web3 from 'web3';
+import AIRDROP_ABI from "../../abi/mtms_airdrop.json";
+
 
 const Rewards = () => {
   const [walletStore, updateWalletStore] = useWalletStore();
@@ -35,6 +38,7 @@ const Rewards = () => {
   const [timeToday, setTimeToday] = useState({hour: 0, minute: 0});
   const [timeWeek, setTimeWeek] = useState({hour: 0, minute: 0});
   const {t} = useTranslation();
+  const [withdrawAmount, setWithdrawAmount] = useState(0);
 
   const prepareData = async () => {
     try {
@@ -44,6 +48,8 @@ const Rewards = () => {
         updateWalletStore((draft) => {
           draft.wallet = res;
         });
+
+        checkWithdraw(res);
       }
       setFetchLoading(false);
     } catch (error) {
@@ -124,6 +130,64 @@ const Rewards = () => {
   const reload = useCallback(async () => {
     await prepareData();
   }, [])
+
+  const withdraw = async () => {
+    const withdrawData = walletStore?.wallet?.user?.withdraw_available;
+
+    if (withdrawAmount == 0 || !withdrawData) {
+      return;
+    }
+
+    await setLoading(true);
+
+    try {
+      const web3 = new Web3(window.web3.currentProvider);
+      const accounts = await web3.eth.getAccounts();
+      const walletAddress = accounts[0];
+    
+      const contract = new web3.eth.Contract(
+        AIRDROP_ABI,
+        withdrawData.contract_address
+      );
+
+      await contract.methods.claimWeek(
+        withdrawData.amountInWei,
+        withdrawData.proof
+      ).send({ from: walletAddress });
+  
+      setWithdrawAmount(0);
+
+      await setLoading(false);
+    } catch (error) {
+      await setLoading(false);
+    }
+  }
+
+  const checkWithdraw = async (data) => {
+    const withdrawData = data?.user?.withdraw_available;
+
+    if (!withdrawData) {
+      setWithdrawAmount(0);
+      return;
+    }
+
+    try {
+      const web3 = new Web3(window.web3.currentProvider);
+      const accounts = await web3.eth.getAccounts();
+      const walletAddress = accounts[0];
+    
+      const contract = new web3.eth.Contract(
+        AIRDROP_ABI,
+        withdrawData.contract_address
+      );
+  
+      const claimed = await contract.methods
+        .claimed(withdrawData.trancheId, walletAddress)
+        .call({ from: walletAddress });
+  
+      setWithdrawAmount(claimed ? 0 : withdrawData.amount);
+    } catch (error) {}
+  }
 
   return (
     <MainLayout>
@@ -245,16 +309,26 @@ const Rewards = () => {
               <div className="flex flex-col justify-center items-center">
                 <p className="text-base text-gray">{t("rewards.total_token")}</p>
                 <p className="text-orange-base font-bold text-5xl flex">
-                  {`${walletStore?.wallet?.user?.total_token || 0}`}
+                  {(walletStore?.wallet?.user?.total_token || 0) + withdrawAmount}
                   <img src="/images/logo.png" className="w-[48px] ml-2" alt="logo mtms" />
                 </p>
 
-                <div className="pt-8">
+                { withdrawAmount != 0 && (
+                  <>
+                    <p className="text-base text-gray pt-4">{t("rewards.withdraw_available")}</p>
+                    <p className="text-orange-base font-bold text-5xl flex">
+                      {withdrawAmount}
+                      <img src="/images/logo.png" className="w-[48px] ml-2" alt="logo mtms" />
+                    </p>
+                  </>
+                )}
+
+                <div className="pt-6">
                   <Button
-                    disabled
                     className="btn btn-primary rounded-3xl btn-lg h-[54px] min-h-[54px]"
-                    // disabled={!walletStore?.wallet?.user?.total_token}
+                    disabled={withdrawAmount == 0}
                     isLoading={loading}
+                    onClick={() => withdraw()}
                   >
                     {t("rewards.withdraw")}
                   </Button>
