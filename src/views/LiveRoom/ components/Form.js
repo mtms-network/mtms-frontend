@@ -521,7 +521,7 @@ const Form = ({ action , id }) => {
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
                 >
-                  {action !== 2 ? t("general.create") : "Update"}
+                  {action !== 2 ? "Public" : "Update"}
                 </Button>
               </div>
             </div>

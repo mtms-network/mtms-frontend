@@ -5,7 +5,8 @@ import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {GroupTitle, MainLayout} from "../../../../components";
 import {routeUrls} from "../../../../configs";
-import Table from "../../ components/Table";
+import LiveRoomToDay from "./LiveRoomToDay";
+import LiveRoomUpComing from "./LiveRoomUpComing";
 
 const ListLiveRoom = () => {
   const navigate = useNavigate();
@@ -28,7 +29,10 @@ const ListLiveRoom = () => {
           </div>
         </div>
       </div>
-      <Table />
+      <LiveRoomToDay />
+      <div className="mt-6">
+        <LiveRoomUpComing />
+      </div>
     </MainLayout>
   );
 };

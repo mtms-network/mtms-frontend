@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {t} from "i18next";
 import {useNavigate} from "react-router-dom";
 import {BrandLogoLoading, GroupTitle, Pagination} from "../../../components";
-import {routeUrls} from "../../../configs";
 import {getListLiveRoom} from "../../../services";
 import LiveRoomItem from "./LiveRoomItem";
 
-const Table = () => {
-  const navigate = useNavigate();
-
+const Table = ({title= "", filterDefault = {}, isLiveRoom = false}) => {
   const [pagination, setPagination] = useState({});
   const [filter, setFilter] = useState({
+    ...filterDefault,
     page: 1,
     limit: 10,
   });
@@ -22,20 +19,20 @@ const Table = () => {
     await setLiveRooms(res?.data || []);
     await setPagination(res?.meta || {});
     await setLoading(false);
-  }
+  };
 
   useEffect(() => {
     if(loading){
       fetchData().then();
     }
-  }, [loading])
+  }, [loading]);
 
   return (
     <div className="flex flex-col gap-4 relative">
       <div className="flex justify-center sm:justify-between items-center flex-col sm:flex-row">
         <GroupTitle
           className="sm:pb-0 pb-4 flex justify-center"
-          title="Live Room"
+          title={title}
         />
         {
           liveRooms?.length > 0 && <Pagination
@@ -73,6 +70,7 @@ const Table = () => {
         {!loading &&
           liveRooms?.map((item) => (
             <LiveRoomItem
+              isLiveRoom={isLiveRoom}
               setIsReload={setLoading}
               data={item}
               key={item?.uuid}
@@ -80,7 +78,7 @@ const Table = () => {
           ))}
       </div>
     </div>
-  )
+  );
 };
 
 export default Table;

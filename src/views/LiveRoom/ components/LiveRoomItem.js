@@ -9,7 +9,7 @@ import moment from "moment";
 import {generateRandomColor} from "../../../helpers";
 import DeleteLiveRoomModal from "./DeleteLiveRoomModal";
 
-const LiveRoomItem = ({ data, className, setIsReload }) => {
+const LiveRoomItem = ({ data, className, setIsReload, isLiveRoom }) => {
   const deleteModalRef = useRef(null);
   const navigate = useNavigate();
 
@@ -20,12 +20,6 @@ const LiveRoomItem = ({ data, className, setIsReload }) => {
       }
     } catch (error) {
       console.log("start meeting error");
-    }
-  };
-
-  const handleDuplicate = () => {
-    if (data?.uuid) {
-      navigate(`/${routeUrls.liveRoom.path}/${data?.uuid}/${routeParts.duplicate.path}`);
     }
   };
 
@@ -93,21 +87,39 @@ const LiveRoomItem = ({ data, className, setIsReload }) => {
             </div>
           </div>
         </div>
-        <div>
-          <Avatar.Group
-            maxCount={5}
-            maxPopoverTrigger="click"
-            size="large"
-            maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf', cursor: 'pointer' }}
-          >
-            {
-              data?.invitees?.map((invite, index) => {
-                return (
-                  <Avatar key={index} style={{ backgroundColor: `${generateRandomColor(invite?.contact?.email)}` }}>{ invite?.contact?.email?.charAt(0)?.toUpperCase() }</Avatar>
-                )
-              })
-            }
-          </Avatar.Group>
+        <div className="flex justify-between">
+          <div>
+            <Avatar.Group
+              maxCount={3}
+              maxPopoverTrigger="click"
+              size="large"
+              maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf', cursor: 'pointer' }}
+            >
+              <Avatar key={0} style={{ backgroundColor: `${generateRandomColor(data?.user?.email)}` }}>
+                <Tooltip placement="top" title={data?.user?.email}>
+                  { data?.user?.email?.charAt(0)?.toUpperCase() }
+                </Tooltip>
+              </Avatar>
+            </Avatar.Group>
+          </div>
+          <div>
+            <Avatar.Group
+              maxCount={3}
+              maxPopoverTrigger="click"
+              size="large"
+              maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf', cursor: 'pointer' }}
+            >
+              {
+                data?.invitees?.map((invite, index) => {
+                  return (
+                    <Avatar key={index} style={{ backgroundColor: `${generateRandomColor(invite?.contact?.email)}` }}>
+                      { invite?.contact?.email?.charAt(0)?.toUpperCase() }
+                    </Avatar>
+                  );
+                })
+              }
+            </Avatar.Group>
+          </div>
         </div>
         <div
           className="text-gray cursor-pointer flex items-center"
@@ -126,15 +138,26 @@ const LiveRoomItem = ({ data, className, setIsReload }) => {
         >
           <div>
             <div className="flex flex-row space-x-2 items-start pt-2 group-hover:text-primary">
-              <img src="/images/icon/calender.svg" alt="" />
-              <div className="flex flex-col">
-                <p className="label-base p-0 group-hover:text-primary">
-                  {data?.start_date_time &&
-                    `${moment(data?.start_date_time).format("MMM,DD YYYY HH:mm")} ${
-                      data?.user_timezone || ""
-                    }`}
-                </p>
-              </div>
+              {
+                isLiveRoom ? (
+                  <div className="flex gap-1 items-center">
+                    <div className="w-4 h-4 bg-green-500 rounded-box" /> Live
+                  </div>
+
+                ) : (
+                  <>
+                    <img src="/images/icon/calender.svg" alt="" />
+                    <div className="flex flex-col">
+                      <p className="label-base p-0 group-hover:text-primary">
+                        {data?.start_date_time &&
+                          `${moment(data?.start_date_time).format("MMM,DD YYYY HH:mm")} ${
+                            data?.user_timezone || ""
+                          }`}
+                      </p>
+                    </div>
+                  </>
+                )
+              }
             </div>
           </div>
           <div>
