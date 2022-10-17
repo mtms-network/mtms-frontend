@@ -89,18 +89,20 @@ const LiveRoomItem = ({ data, className, setIsReload, isLiveRoom }) => {
         </div>
         <div className="flex justify-between">
           <div>
+
             <Avatar.Group
               maxCount={3}
               maxPopoverTrigger="click"
               size="large"
               maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf', cursor: 'pointer' }}
             >
-              <Avatar key={0} style={{ backgroundColor: `${generateRandomColor(data?.user?.email)}` }}>
-                <Tooltip placement="top" title={data?.user?.email}>
+              <Tooltip placement="top" title={data?.user?.email}>
+                <Avatar key={0} style={{ backgroundColor: `${generateRandomColor(data?.user?.email)}` }}>
                   { data?.user?.email?.charAt(0)?.toUpperCase() }
-                </Tooltip>
-              </Avatar>
-            </Avatar.Group>
+                </Avatar>
+              </Tooltip>
+
+          </Avatar.Group>
           </div>
           <div>
             <Avatar.Group
