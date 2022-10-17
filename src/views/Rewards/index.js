@@ -19,6 +19,7 @@ import Vouchers from "./components/Vouchers";
 import Overviews from "./components/Overview";
 import Web3 from 'web3';
 import AIRDROP_ABI from "../../abi/mtms_airdrop.json";
+import { renderCountdown } from "./config"
 
 
 const Rewards = () => {
@@ -39,6 +40,7 @@ const Rewards = () => {
   const [timeWeek, setTimeWeek] = useState({hour: 0, minute: 0});
   const {t} = useTranslation();
   const [withdrawAmount, setWithdrawAmount] = useState(0);
+  const [countdown, setCountdown] = useState(null);
 
   const prepareData = async () => {
     try {
@@ -127,6 +129,28 @@ const Rewards = () => {
     prepareData();
   }, []);
 
+  useEffect(() => {
+    const withdrawData = walletStore?.wallet?.user?.withdraw_available;
+
+    if (!withdrawData) {
+      return;
+    }
+
+    const countdownInterval = setInterval(() => {
+      const countdownStr = renderCountdown(withdrawData.nextWithdrawAt);
+
+      setCountdown(countdownStr);
+
+      if (!countdownStr) {
+        clearInterval(countdownInterval);
+      }
+    }, 1000);
+
+    return ()=> {
+      clearInterval(countdownInterval);
+    };
+  }, [walletStore?.wallet?.user?.withdraw_available]);
+
   const reload = useCallback(async () => {
     await prepareData();
   }, [])
@@ -186,6 +210,9 @@ const Rewards = () => {
         .call({ from: walletAddress });
   
       setWithdrawAmount(claimed ? 0 : withdrawData.amount);
+
+      if (claimed) {
+      }
     } catch (error) {}
   }
 
@@ -330,7 +357,8 @@ const Rewards = () => {
                     isLoading={loading}
                     onClick={() => withdraw()}
                   >
-                    {t("rewards.withdraw")}
+                    { withdrawAmount == 0 && countdown ? countdown : t("rewards.withdraw")}
+                    {/* {t("rewards.withdraw")} {countdown} */}
                   </Button>
                 </div>
               </div>
