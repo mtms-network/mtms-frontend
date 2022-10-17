@@ -130,14 +130,14 @@ const Rewards = () => {
   }, []);
 
   useEffect(() => {
-    const withdrawData = walletStore?.wallet?.user?.withdraw_available;
+    const userData = walletStore?.wallet?.user;
 
-    if (!withdrawData) {
+    if (!userData || withdrawAmount) {
       return;
     }
 
     const countdownInterval = setInterval(() => {
-      const countdownStr = renderCountdown(withdrawData.nextWithdrawAt);
+      const countdownStr = renderCountdown(userData.next_withdraw_at);
 
       setCountdown(countdownStr);
 
@@ -149,7 +149,7 @@ const Rewards = () => {
     return ()=> {
       clearInterval(countdownInterval);
     };
-  }, [walletStore?.wallet?.user?.withdraw_available]);
+  }, [walletStore?.wallet?.user, withdrawAmount]);
 
   const reload = useCallback(async () => {
     await prepareData();
