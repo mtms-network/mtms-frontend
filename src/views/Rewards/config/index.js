@@ -26,10 +26,16 @@ export const renderCountdown = (date) => {
     return null;
   }
 
-  const diffSeconds = moment(date).diff(moment(), 'seconds');
+  let diffSeconds = moment(date).diff(moment(), 'seconds');
 
   if (diffSeconds <= 0) {
     return null;
+  }
+
+  const diffMilliseconds = moment(date).diff(moment(), 'milliseconds');
+
+  if (diffMilliseconds % 1000 !== 0) {
+    diffSeconds += 1;
   }
 
   const diffValue = {

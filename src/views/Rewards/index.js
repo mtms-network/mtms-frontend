@@ -20,6 +20,7 @@ import Overviews from "./components/Overview";
 import Web3 from 'web3';
 import AIRDROP_ABI from "../../abi/mtms_airdrop.json";
 import { renderCountdown } from "./config"
+import moment from "moment";
 
 
 const Rewards = () => {
@@ -136,6 +137,8 @@ const Rewards = () => {
       return;
     }
 
+    const needRefresh = moment(userData.next_withdraw_at).isAfter(moment());
+
     const countdownInterval = setInterval(() => {
       const countdownStr = renderCountdown(userData.next_withdraw_at);
 
@@ -143,6 +146,10 @@ const Rewards = () => {
 
       if (!countdownStr) {
         clearInterval(countdownInterval);
+
+        if (needRefresh && walletStore?.wallet?.user.total_token) {
+          prepareData();
+        }
       }
     }, 1000);
 
