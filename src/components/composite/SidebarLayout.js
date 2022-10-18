@@ -174,42 +174,42 @@ const SidebarLayout = ({ t, onLogout }) => {
                 <p className="pl-2">{t("sidebar.rooms")}</p>
               </button>
             </div>
-            <div className="w-full opacity-30">
-              <button
-                className={classNames(
-                  "text-base font-normal",
-                  location.pathname !== `/${routeUrls.analytic.path}`
-                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
-                    : "btn btn-base justify-start font-medium",
-                )}
-                onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}
-              >
-                <IconBase
-                  icon="/icons/icons/chart-outline.svg"
-                  iconActivated="/icons/icons/chart-fill.svg"
-                  isActive={location.pathname.includes(routeUrls.analytic.path)}
-                />
-                <p className="pl-2">{t("sidebar.analytics")}</p>
-              </button>
-            </div>
-            <div className="w-full opacity-30">
-              <button
-                className={classNames(
-                  "text-base font-normal",
-                  location.pathname !== `/${routeUrls.nftMarketplace.path}`
-                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
-                    : "btn btn-base justify-start font-medium",
-                )}
-                onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}
-              >
-                <IconBase
-                  icon="/icons/icons/buy-crypto-outline.svg"
-                  iconActivated="/icons/icons/buy-crypto-fill.svg"
-                  isActive={location.pathname.includes(routeUrls.nftMarketplace.path)}
-                />
-                <p className="pl-2">{t("sidebar.nft_marketplace")}</p>
-              </button>
-            </div>
+            {/*<div className="w-full opacity-30">*/}
+            {/*  <button*/}
+            {/*    className={classNames(*/}
+            {/*      "text-base font-normal",*/}
+            {/*      location.pathname !== `/${routeUrls.analytic.path}`*/}
+            {/*        ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"*/}
+            {/*        : "btn btn-base justify-start font-medium",*/}
+            {/*    )}*/}
+            {/*    onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}*/}
+            {/*  >*/}
+            {/*    <IconBase*/}
+            {/*      icon="/icons/icons/chart-outline.svg"*/}
+            {/*      iconActivated="/icons/icons/chart-fill.svg"*/}
+            {/*      isActive={location.pathname.includes(routeUrls.analytic.path)}*/}
+            {/*    />*/}
+            {/*    <p className="pl-2">{t("sidebar.analytics")}</p>*/}
+            {/*  </button>*/}
+            {/*</div>*/}
+            {/*<div className="w-full opacity-30">*/}
+            {/*  <button*/}
+            {/*    className={classNames(*/}
+            {/*      "text-base font-normal",*/}
+            {/*      location.pathname !== `/${routeUrls.nftMarketplace.path}`*/}
+            {/*        ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"*/}
+            {/*        : "btn btn-base justify-start font-medium",*/}
+            {/*    )}*/}
+            {/*    onClick={() => navigate(`/${routeUrls.comingSoon.path}`)}*/}
+            {/*  >*/}
+            {/*    <IconBase*/}
+            {/*      icon="/icons/icons/buy-crypto-outline.svg"*/}
+            {/*      iconActivated="/icons/icons/buy-crypto-fill.svg"*/}
+            {/*      isActive={location.pathname.includes(routeUrls.nftMarketplace.path)}*/}
+            {/*    />*/}
+            {/*    <p className="pl-2">{t("sidebar.nft_marketplace")}</p>*/}
+            {/*  </button>*/}
+            {/*</div>*/}
           </div>
           <div>
             <button

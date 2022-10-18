@@ -14,6 +14,7 @@ export const getListLiveRoom = async (filter) => {
     per_page: filter.limit || 10,
     start_date: filter.start_date,
     end_date: filter.end_date,
+    roomType: filter?.roomType || null,
   };
 
   const query = QueryString.stringify({ ...defaultFilters });
