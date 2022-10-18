@@ -210,9 +210,6 @@ const Rewards = () => {
         .call({ from: walletAddress });
   
       setWithdrawAmount(claimed ? 0 : withdrawData.amount);
-
-      if (claimed) {
-      }
     } catch (error) {}
   }
 
@@ -352,13 +349,12 @@ const Rewards = () => {
 
                 <div className="pt-6">
                   <Button
-                    className="btn btn-primary rounded-3xl btn-lg h-[54px] min-h-[54px]"
+                    className="btn btn-primary rounded-3xl btn-lg h-[54px] min-h-[54px] min-w-[124px]"
                     disabled={withdrawAmount == 0}
                     isLoading={loading}
                     onClick={() => withdraw()}
                   >
-                    { withdrawAmount == 0 && countdown ? countdown : t("rewards.withdraw")}
-                    {/* {t("rewards.withdraw")} {countdown} */}
+                    { withdrawAmount == 0 && countdown && walletStore?.wallet?.user?.total_token ? countdown : t("rewards.withdraw")}
                   </Button>
                 </div>
               </div>
