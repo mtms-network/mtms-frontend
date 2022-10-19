@@ -216,7 +216,7 @@ const Rewards = () => {
         .claimed(withdrawData.trancheId, walletAddress)
         .call({ from: walletAddress });
   
-    //   setWithdrawAmount(claimed ? 0 : withdrawData.amount);
+      setWithdrawAmount(claimed ? 0 : withdrawData.amount);
     } catch (error) {}
   }
 
