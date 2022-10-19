@@ -147,7 +147,7 @@ const Rewards = () => {
       if (!countdownStr) {
         clearInterval(countdownInterval);
 
-        if (needRefresh && walletStore?.wallet?.user.total_token) {
+        if (needRefresh && userData.total_token) {
           prepareData();
         }
       }
@@ -216,7 +216,7 @@ const Rewards = () => {
         .claimed(withdrawData.trancheId, walletAddress)
         .call({ from: walletAddress });
   
-      setWithdrawAmount(claimed ? 0 : withdrawData.amount);
+    //   setWithdrawAmount(claimed ? 0 : withdrawData.amount);
     } catch (error) {}
   }
 
