@@ -133,7 +133,7 @@ const Rewards = () => {
   useEffect(() => {
     const userData = walletStore?.wallet?.user;
 
-    if (!userData || withdrawAmount) {
+    if (!userData) {
       return;
     }
 
@@ -156,7 +156,7 @@ const Rewards = () => {
     return ()=> {
       clearInterval(countdownInterval);
     };
-  }, [walletStore?.wallet?.user, withdrawAmount]);
+  }, [walletStore?.wallet?.user]);
 
   const reload = useCallback(async () => {
     await prepareData();

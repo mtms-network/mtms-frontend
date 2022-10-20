@@ -26,16 +26,10 @@ export const renderCountdown = (date) => {
     return null;
   }
 
-  let diffSeconds = moment(date).diff(moment(), 'seconds');
+  const diffSeconds = moment(date).diff(moment().milliseconds(0), 'seconds');
 
-  if (diffSeconds <= 0) {
+  if (diffSeconds < 0) {
     return null;
-  }
-
-  const diffMilliseconds = moment(date).diff(moment(), 'milliseconds');
-
-  if (diffMilliseconds % 1000 !== 0) {
-    diffSeconds += 1;
   }
 
   const diffValue = {
@@ -50,7 +44,7 @@ export const renderCountdown = (date) => {
       return `${prev}:${diffValue[key]}${key}`;
     }
 
-    if (diffValue[key] > 0) {
+    if (diffValue[key] > 0 || key === 's') {
       return `${diffValue[key]}${key}`;
     }
 
