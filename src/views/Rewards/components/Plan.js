@@ -99,7 +99,7 @@ const Plan = ({plan, reload}) => {
                           </td>
                           <td className="bg-white flex justify-center">
                             <button
-                              className={classNames('btn btn-primary opacity-50 btn-outlined-base')}
+                              className={classNames('btn btn-primary btn-outlined-base')}
                               onClick={() => {
                                 handleClaimPlan(item?.user_subscription?.id).then();
                               }}

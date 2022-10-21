@@ -105,11 +105,11 @@ const Nfts = ({NFTs, reload}) => {
                         {item?.user_nft?.min_e_rate}
                       </td>
                       <td className="bg-white text-center">
-                        {item?.earn_today}
+                        {item?.earn_all}
                       </td>
                       <td className="bg-white text-center">
                         <button
-                          className={classNames('btn btn-primary opacity-50 hover:bg-primary btn-outlined-base')}
+                          className={classNames('btn btn-primary hover:bg-primary btn-outlined-base')}
                           onClick={() => { handleClaimNft(item?.user_nft?.id).then(); }}
                         >
                           Claim

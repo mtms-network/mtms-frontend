@@ -85,14 +85,14 @@ const Vouchers = ({vouchers, reload}) => {
                         <div>{item?.user_voucher?.name}</div>
                         <div className="text-[#0190fe] text-xs">{ renderCode(item?.user_voucher?.user_nft_id) }</div>
                       </td>
-                      <td className="bg-white text-center">{ item?.earn_today || 0 }</td>
-                      <td className="bg-white text-center">{ Number(item?.earn_today) }</td>
+                      <td className="bg-white text-center">{ item?.earn_all || 0 }</td>
+                      <td className="bg-white text-center">{ Number(item?.earn_all) }</td>
                       <td className="bg-white text-center">
                         { renderExpired(item?.user_voucher?.end_at, "") }
                       </td>
                       <td className="bg-white text-right flex justify-center">
                         <button
-                          className={classNames('btn btn-primary opacity-50 hover:bg-primary btn-outlined-base')}
+                          className={classNames('btn btn-primary hover:bg-primary btn-outlined-base')}
                           onClick={() => { handleClaimVoucher(item?.user_voucher?.id).then(); }}
                         >
                           Claim
