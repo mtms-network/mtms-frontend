@@ -1,0 +1,36 @@
+.wrapperBorder {
+    border-radius: 20px;
+}
+
+.wrapperBorderButton {
+    border-radius: 17px;
+    background-color: #09264E;
+    color: white;
+    font-size: 12px;
+    padding: 0 16px;
+}
+
+.avatar {
+    margin-top: -25px;
+    width: 45px;
+    height: 45px;
+    background: gray;
+    /*position: absolute;*/
+    top: -20%;
+    left: 60%;
+    border-radius: 50%;
+    box-shadow: 2px -1px 10px rgba(0, 0, 0, 0.5);
+}
+
+.buttonTitle {
+    height: 24px;
+    line-height: 24px;
+}
+
+.follower {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.description {
+    color: rgba(255, 255, 255, 0.4);
+}

@@ -39,5 +39,5 @@ export const NewLiveRoom = lazy(() => import("views/LiveRoom/containers/NewLiveR
 export const DuplicateLiveRoom = lazy(() => import("views/LiveRoom/containers/DuplicateLiveRoom"));
 export const ViewLiveRoom = lazy(() => import("views/LiveRoom/containers/ViewLiveRoom"));
 export const EditLiveRoom = lazy(() => import("views/LiveRoom/containers/EditLiveRoom"));
-
+export const ExploreRoom = lazy(() => import("views/LiveRoom/containers/ExploreRoom"));
 
