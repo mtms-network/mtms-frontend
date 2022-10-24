@@ -338,32 +338,38 @@ const Rewards = () => {
             </div>
             <div className="basis-1/3 bg-white rounded-3xl py-6 px-8 mt-10 sm:mt-0">
               <div className="flex flex-col justify-center items-center">
-                <p className="text-base text-gray">{t("rewards.total_token")}</p>
-                <p className="text-orange-base font-bold text-5xl flex">
-                  {(walletStore?.wallet?.user?.total_token || 0) + withdrawAmount}
-                  <img src="/images/logo.png" className="w-[48px] ml-2" alt="logo mtms" />
-                </p>
-
-                { withdrawAmount != 0 && (
-                  <>
-                    <p className="text-base text-gray pt-4">{t("rewards.withdraw_available")}</p>
-                    <p className="text-orange-base font-bold text-5xl flex">
-                      {withdrawAmount}
-                      <img src="/images/logo.png" className="w-[48px] ml-2" alt="logo mtms" />
-                    </p>
-                  </>
-                )}
-
-                <div className="pt-6">
-                  <Button
-                    className="btn btn-primary rounded-3xl btn-lg h-[54px] min-h-[54px] min-w-[124px]"
-                    disabled={withdrawAmount == 0}
-                    isLoading={loading}
-                    onClick={() => withdraw()}
-                  >
-                    { withdrawAmount == 0 && countdown && walletStore?.wallet?.user?.total_token ? countdown : t("rewards.withdraw")}
-                  </Button>
+                <div className="bg-slate-base flex justify-center items-center px-3 py-4 rounded-xl w-[100%]">
+                  <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
+                  <span className="text-base text-gray ml-2 font-medium">{ t("rewards.total_credit")}</span>
+                  <span className="font-bold text-xl ml-2">
+                    {(walletStore?.wallet?.user?.total_token || 0) + withdrawAmount} MTMS
+                  </span>
                 </div>
+
+                <div className="bg-slate-base flex flex-col justify-center items-center px-3 py-4 rounded-xl w-[100%] mt-2">
+                  <span className="text-gray font-medium">{t("rewards.withdraw_available")}</span>
+                  <div className="flex items-center">
+                    <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
+                    <span className="font-bold text-2xl ml-2">
+                        {withdrawAmount || 0} MTMS
+                    </span>
+                  </div>
+                </div>
+
+                <Button
+                  className="btn btn-primary rounded-xl btn-lg w-[100%] mt-2"
+                  disabled={withdrawAmount == 0}
+                  isLoading={loading}
+                  onClick={() => withdraw()}
+                >
+                  { t("rewards.withdraw")}
+                </Button>
+
+                { walletStore?.wallet?.user?.total_token > 0 && countdown && (
+                  <Button className="btn btn-primary rounded-xl btn-lg w-[100%] mt-2" disabled={true}>
+                    { t("rewards.next_withdraw")}: { countdown }
+                  </Button>
+                )}
               </div>
             </div>
           </div>
