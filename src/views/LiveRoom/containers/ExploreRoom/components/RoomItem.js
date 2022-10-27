@@ -10,7 +10,7 @@ const RoomItem = () => {
                     <div className={`${styles.roomItemTitleItem} rounded`}>Video Conference</div>
                     <div className={`${styles.roomItemTitleItem} rounded-2xl`}>Crypto</div>
                 </div>
-                <button className="rounded-full w-8 h-8 bg-red-900 text-white font-bold">Join</button>
+                <button className="rounded-full w-8 h-8 bg-red-600 text-white font-bold">Join</button>
             </div>
             <div className={`h-full flex flex-col justify-between rounded w-full my-3 p-4`} style={{ backgroundImage: `url("../../images/bg-crypto.png")`, height: '68%' }}>
                 <div className={` h-1/3 flex justify-center gap-1 w-full items-center p-1.5 w-auto ${styles.roomItemBodyLive}`}>

@@ -25,6 +25,7 @@ import Attendees from "./components/Attendees";
 import Discussion from "./components/Discussion";
 import BtnBlockRoom from "./components/Button/BtnBlockRoom";
 import BtnMyGift from "./components/Button/BtnMyGift";
+import LiveTopic from "./components/LiveTopic";
 
 const ViewLiveRoom = ({ t }) => {
     const params = useParams();
@@ -93,7 +94,7 @@ const ViewLiveRoom = ({ t }) => {
 
     return (
         <MainLayout>
-            <div className="pt-4 w-full">
+            <div className="w-full">
                 {fetchLoading && (
                     <div className="h-screen">
                         <BrandLogoLoading />
@@ -135,6 +136,7 @@ const ViewLiveRoom = ({ t }) => {
                     <BtnMyGift />
                 </div>
                 <hr className="mb-6" />
+                <LiveTopic />
                 <Attendees t={t} meeting={meeting} />
 
                 <div>

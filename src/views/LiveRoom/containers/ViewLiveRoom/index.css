@@ -9,4 +9,6 @@
     padding-left: 0;
 }
 
-
+.mtms-comment-discussion .ant-comment-inner{
+    padding: 0 !important;
+}

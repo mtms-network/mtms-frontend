@@ -34,17 +34,19 @@ const CommentEditor = ({}) => {
     };
 
     return (
-        <Comment
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-            content={
-                <Editor
-                    onChange={handleChange}
-                    onSubmit={handleSubmit}
-                    submitting={submitting}
-                    value={value}
-                />
-            }
-        />
+        <div className="mtms-comment-discussion">
+            <Comment
+                avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+                content={
+                    <Editor
+                        onChange={handleChange}
+                        onSubmit={handleSubmit}
+                        submitting={submitting}
+                        value={value}
+                    />
+                }
+            />
+        </div>
     )
 }
 

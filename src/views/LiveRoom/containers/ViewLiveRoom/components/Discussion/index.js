@@ -8,8 +8,8 @@ const Discussion = ({}) => {
     return (
         <GroupLayout className="flex flex-col justify-between mt-4">
             <UpdateComing />
-            <Comments />
             <CommentEditor />
+            <Comments />
         </GroupLayout>
     )
 }

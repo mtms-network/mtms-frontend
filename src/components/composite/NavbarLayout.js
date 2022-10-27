@@ -105,7 +105,7 @@ const NavbarLayout = ({ width, onLogout }) => {
                     <div className="flex flex-row justify-center items-center space-x-2">
                         <Button className="btn btn-primary" onClick={onStartAnInstant}>
                             <img src="/icons/icons/camera-white-fill.svg" alt="buy mtms" className="pr-2" />
-                            {t("home.start_a_instant_meeting")}
+                            Start meeting
                         </Button>
                         <UserInfo onLogout={onLogout} />
                     </div>

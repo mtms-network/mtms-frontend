@@ -5,7 +5,7 @@ const UpdateComing = ({}) => {
 
     return (
         <div className="p-2">
-            <div className="rounded-2xl bg-red-500 inline p-4 mr-3">
+            <div className="rounded-2xl bg-red-500 inline p-4 mr-3 text-white">
                 Upcoming Live Meeting: Feb 28, 2022. 8:24 AM Melbourne/Australia
             </div>
 

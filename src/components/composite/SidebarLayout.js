@@ -3,13 +3,13 @@ import { routeUrls } from "configs";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { withTranslation } from "react-i18next";
-import { IconBase } from "components/base";
+import {Button, IconBase} from "components/base";
 import { useAppStore } from "stores/app.store";
 import { setLanguage } from "helpers";
 import { useMeetingStore } from "stores/meeting.store";
 import { getRequirePreMeeting } from "services";
 import UserInfo from "./UserInfo";
-
+import { PlusOutlined } from "@ant-design/icons";
 const SidebarLayout = ({ t, onLogout }) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -55,6 +55,7 @@ const SidebarLayout = ({ t, onLogout }) => {
                                                 isActive={location.pathname === item.path && isActive}
                                             />
                                             <p className="pl-2">{item.label}</p>
+                                            { item?.rightIcon }
                                         </button>
                                     </div>
                                 )
@@ -107,7 +108,7 @@ const arrSidebar = [
         iconActive: '/icons/icons/task-fill.svg',
     },
     {
-        label: 'Live Room',
+        label: 'My Room',
         path: `/${routeUrls.liveRoom.path}`,
         icon: '/icons/icons/live-room-outline.svg',
         iconActive: '/icons/icons/live-room-fill.svg',
@@ -117,5 +118,12 @@ const arrSidebar = [
         path: `/${routeUrls.exploreRoom.path}`,
         icon: '/icons/icons/live-room-outline.svg',
         iconActive: '/icons/icons/live-room-fill.svg',
+        rightIcon: <button
+            className="bg-primary w-8 h-8 flex items-center justify-center rounded ml-2"
+        >
+            <div className={"flex items-center justify-center bg-white rounded-full p-1"}>
+                <PlusOutlined style={{fontSize: 12}} className={"text-primary"} />
+            </div>
+        </button>
     },
 ]
