@@ -24,6 +24,7 @@
   },
   "homepage": "https://gitlab.com/b5061/mtms-cms#readme",
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@babel/preset-env": "^7.16.11",
     "@hookform/resolvers": "^2.8.8",
     "@react-oauth/google": "^0.2.6",
@@ -36,6 +37,7 @@
     "daisyui": "^2.13.6",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
+    "formik": "^2.2.9",
     "html-to-draftjs": "^1.5.0",
     "http-status": "^1.5.0",
     "i18next": "^21.8.14",
