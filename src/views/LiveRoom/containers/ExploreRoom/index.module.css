@@ -1,6 +1,6 @@
 .roomItemTitle {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .roomItemTitleItem {
@@ -19,7 +19,14 @@
 
 .hexagon {
     /*clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25% round 10xp);*/
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
     border-radius: 50%;
+}
+
+.description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

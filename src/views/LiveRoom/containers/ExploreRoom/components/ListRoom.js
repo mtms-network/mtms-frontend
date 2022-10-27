@@ -11,23 +11,19 @@ const ListRoom = ({id = 'listLiveRoom'}) => {
             let width = elList.offsetWidth
             // 1508
             let cls = '';
-            if(width < 1508){
+            if(width > 1053){
+                cls = 'grid grid-cols-4';
+            }
+
+            if(width < 1053){
                 cls = 'grid grid-cols-3';
             }
 
-            if(width < 1230){
+            if(width < 784){
                 cls = 'grid grid-cols-2';
             }
 
-            if(width < 1023){
-                cls = 'grid grid-cols-3';
-            }
-
-            if(width < 910){
-                cls = 'grid grid-cols-2';
-            }
-
-            if(width < 632){
+            if(width < 544){
                 cls = 'grid grid-cols-1';
             }
             if(cls){
@@ -55,6 +51,16 @@ const ListRoom = ({id = 'listLiveRoom'}) => {
                 <div className="border-t w-4/12"></div>
             </div>
             <div id={id} className={`${gridClass} gap-4 px-4 pb-4`}>
+                <RoomItem />
+                <RoomItem />
+                <RoomItem />
+                <RoomItem />
+                <RoomItem />
+                <RoomItem />
+                <RoomItem />
+                <RoomItem />
+                <RoomItem />
+                <RoomItem />
                 <RoomItem />
                 <RoomItem />
                 <RoomItem />
