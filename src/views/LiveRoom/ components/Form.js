@@ -34,6 +34,12 @@ import {
 import {useTranslation, withTranslation} from "react-i18next";
 import moment from "moment";
 import { message } from "antd";
+import { useFormik } from "formik";
+
+import FormInput from "../../../components/Forms/Input";
+import FormSelect from "../../../components/Forms/SelectMultiTag";
+import FormTextarea from "../../../components/Forms/Textarea";
+import FormBase from "../../../components/Forms/Base";
 
 const timeFormat = "MMM DD, yyyy";
 
@@ -57,6 +63,7 @@ const Form = ({ action , id }) => {
     const [types, setTypes] = useState([]);
     const [roomTypes, setRoomTypes] = useState([]);
     const [roomType, setRoomType] = useState(null);
+    const [initialValues, setInitialValues] = useState({});
     const [alert, setAlert] = useState({
         show: false,
         message: "",
@@ -95,6 +102,17 @@ const Form = ({ action , id }) => {
     } = useForm({
         resolver: yupResolver(schema),
     });
+
+    const formik = useFormik({
+        initialValues: initialValues,
+        validationSchema: yup.object().shape({
+            title: yup.string().required(),
+        }),
+        enableReinitialize: true,
+        onSubmit: async () => {
+
+        }
+    })
 
     const onCreate = async (values) => {
         try {
@@ -293,6 +311,8 @@ const Form = ({ action , id }) => {
             if(action > 1)
             {
                 const res = await getMeetingDetail(id);
+
+                setInitialValues(res);
                 if(res)
                 {
                     setType(res.type.uuid);
@@ -404,60 +424,57 @@ const Form = ({ action , id }) => {
                     </div>
                     <div className="w-[90%] m-auto bg-white rounded-[20px] md:w-[80%] lx:w-[60%]">
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <GroupLayout className="flex flex-col justify-between">
-                                <div className="w-full h-auto">
-                                    <Input
-                                        required
-                                        className="w-full"
-                                        labelClassName="text-base"
-                                        register={register("title")}
-                                        label={t("meeting.props.title")}
-                                        placeholder={t("schedule_meeting.enter_title_meeting")}
-                                        error={errors.title}
-                                    />
-                                </div>
-                            </GroupLayout>
-                            <GroupLayout className="flex flex-wrap gap-[12px]">
-                                {types &&
-                                    types.map((item, key) => {
-                                        return (
-                                            <span
-                                                key={key}
-                                                className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
-                                                    type === item.uuid ? " bg-secondary text-primary" : ""
-                                                }`}
-                                                onClick={() => setType(item.uuid)}
-                                            >
-                                                {item.name}
-                                            </span>
-                                        );
-                                    })}
-                            </GroupLayout>
-
-                            <GroupLayout className="flex flex-wrap flex-col gap-[12px]">
-                                <div className="pb-1 flex items-center justify-between">
-                                    <p className="label-text text-black text-base">
-                                        Type
-                                        <span className="inline-block ml-1 text-error">*</span>
-                                    </p>
-                                </div>
-                                <div className="flex gap-4">
-                                    {roomTypes &&
-                                        roomTypes.map((item, key) => {
+                            <FormInput
+                                isRequired={true}
+                                label={"Title"}
+                                name={"title"}
+                                value={formik.values?.title}
+                                onChange={formik.handleChange}
+                                placeholder={t("schedule_meeting.enter_title_meeting")}
+                            />
+                            <FormBase
+                                className={''}
+                                label={"Room type"}
+                            >
+                                <div>
+                                    {types &&
+                                        types.map((item, key) => {
                                             return (
                                                 <span
                                                     key={key}
                                                     className={`rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
-                                                        roomType === item.uuid ? " bg-secondary text-primary" : ""
+                                                        type === item.uuid ? " bg-secondary text-primary" : ""
                                                     }`}
-                                                    onClick={() => setRoomType(item.uuid)}
+                                                    onClick={() => setType(item.uuid)}
                                                 >
+                                                    {item.name}
+                                                </span>
+                                            );
+                                        })
+                                    }
+                                </div>
+                            </FormBase>
+
+                            <FormBase
+                                className={''}
+                                label={"Room type"}
+                            >
+                                {roomTypes &&
+                                    roomTypes.map((item, key) => {
+                                        return (
+                                            <span
+                                                key={key}
+                                                className={`mr-2 rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
+                                                    roomType === item.uuid ? " bg-secondary text-primary" : ""
+                                                }`}
+                                                onClick={() => setRoomType(item.uuid)}
+                                            >
                                                 {item.name}
                                             </span>
-                                            );
-                                        })}
-                                </div>
-                            </GroupLayout>
+                                        );
+                                    })
+                                }
+                            </FormBase>
 
                             <GroupLayout className="w-full space-y-4">
                                 <div className="w-full sm:flex sm:flex-row sm:justify-between sm:space-x-4">
@@ -503,20 +520,16 @@ const Form = ({ action , id }) => {
                                     </div>
                                 </div>
                             </GroupLayout>
-                            <GroupLayout className="flex flex-col justify-between">
-                                <div className="w-full h-auto">
-                                    <Select
-                                        multiTag
-                                        label={t("meeting.config.email_invite")}
-                                        mode="tags"
-                                        options={listContacts}
-                                        placeholder={t("schedule_meeting_new.select_invitees")}
-                                        onChange={(e) => setContacts(e)}
-                                        register={register("contacts")}
-                                        value={contacts}
-                                    />
-                                </div>
-                            </GroupLayout>
+
+                            <FormSelect
+                                isMulti={true}
+                                label={t("meeting.config.email_invite")}
+                                mode="tags"
+                                placeholder={t("schedule_meeting_new.select_invitees")}
+                                value={contacts}
+                                onChange={(e) => setContacts(e)}
+                                options={listContacts}
+                            />
                             <GroupLayout className="flex flex-col justify-between">
                                 <TextArea
                                     className="w-full"

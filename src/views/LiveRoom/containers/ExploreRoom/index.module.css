@@ -1,36 +1,25 @@
-.wrapperBorder {
-    border-radius: 20px;
+.roomItemTitle {
+    display: flex;
+    justify-content: center;
 }
 
-.wrapperBorderButton {
-    border-radius: 17px;
-    background-color: #09264E;
-    color: white;
-    font-size: 12px;
-    padding: 0 16px;
+.roomItemTitleItem {
+    padding: 4px;
+    border: 1px solid var(--color-primary);
 }
 
-.avatar {
-    margin-top: -25px;
-    width: 45px;
-    height: 45px;
-    background: gray;
-    /*position: absolute;*/
-    top: -20%;
-    left: 60%;
+.roomItemBody{
+    border-radius: 4px;
+}
+
+.roomItemBodyLive {
+    border-radius: 4px;
+    border: 1px solid red;
+}
+
+.hexagon {
+    /*clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25% round 10xp);*/
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    box-shadow: 2px -1px 10px rgba(0, 0, 0, 0.5);
-}
-
-.buttonTitle {
-    height: 24px;
-    line-height: 24px;
-}
-
-.follower {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.description {
-    color: rgba(255, 255, 255, 0.4);
 }

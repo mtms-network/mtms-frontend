@@ -7,18 +7,25 @@ import { useTranslation } from "react-i18next";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import { InputSingle } from "components/base/Input";
 import { Button, IconBase } from "components/base";
-import { startMeeting } from "services";
+import {getRequirePreMeeting, startMeeting} from "services";
 import classNames from "classnames";
 import UserInfo from "./UserInfo";
 import {IconChat} from "../Icons/IconChat";
 import {IconLiveRoom} from "../Icons/IconLiveRoom";
+import {setLanguage} from "../../helpers";
+import {useMeetingStore} from "../../stores/meeting.store";
+import {IconNotification} from "../Icons/IconNotification";
 
 const NavbarLayout = ({ width, onLogout }) => {
     const location = useLocation();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [appStore] = useAppStore();
+
+    const [appStore, updateAppStore] = useAppStore();
+    const [, updateMeetingStore] = useMeetingStore();
+
     const user = useMemo(() => appStore.user, [appStore.user]);
+
 
     const onStartAnInstant = useCallback(async () => {
         try {
@@ -31,9 +38,27 @@ const NavbarLayout = ({ width, onLogout }) => {
         } catch (error) {}
     }, []);
 
+    const onToggleLanguage = async () => {
+        const newLanguage = appStore.language === "en" ? "vn" : "en";
+        setLanguage(newLanguage);
+        updateAppStore((draft) => {
+            draft.language = newLanguage;
+        });
+
+        const res = await getRequirePreMeeting();
+        if (res) {
+            updateMeetingStore((draft) => {
+                draft.categories = res?.categories;
+                draft.types = res?.types;
+                draft.statuses = res?.statuses;
+                draft.isForceLoadMeetingHistories = true;
+            });
+        }
+    };
+
     return (
         <div
-            className="navbar fixed z-30 h-16 w-full bg-white flex-1"
+            className="navbar fixed z-30 h-16 w-full bg-white flex-1 border-b"
             style={{ width: width > 1023 && `calc(${width}px - 320px)` }}
         >
             <div className="flex lg:justify-end justify-between  lg:hidden sm:w-full  w-full">
@@ -41,46 +66,40 @@ const NavbarLayout = ({ width, onLogout }) => {
                     <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost text-black text-xl">
                         <IoMenu />
                     </label>
-                    <div className="flex">
-                        <label
-                            className="btn btn-square btn-ghost text-black text-xl"
-                            onClick={() => {
-                                navigate(`/${routeUrls.exploreRoom.path}`)
-                            }}
-                        >
-                            <IconLiveRoom color={`${location.pathname.includes(routeUrls.exploreRoom.path) ? '#0391FE' : '#333449'}`}/>
-                        </label>
-                        <label className="btn btn-square btn-ghost text-black text-xl">
-                            <IconChat />
-                        </label>
-                    </div>
                 </div>
                 <button onClick={() => navigate("/")}>
                     <img src="/images/mtms-logo.png" alt="logo" className="h-10" />
                 </button>
             </div>
-            <div className="justify-between hidden lg:flex w-full">
-                <div className="flex items-center gap-2 text-black">
-                    <label
-                        className={`flex flex-col items-center cursor-pointer ${location.pathname.includes(routeUrls.exploreRoom.path) ? 'text-primary' : ''}`}
-                        onClick={() => {
-                            navigate(`/${routeUrls.exploreRoom.path}`)
-                        }}
+            <div className="justify-end hidden lg:flex w-full gap-1">
+                {/* <div className="flex-1 flex justify-start items-start pr-10 max-w-[50%]"> */}
+                {/*     <InputSingle */}
+                {/*         compactInput */}
+                {/*         placeholder={t("general.search")} */}
+                {/*         leftIcon={<img src="/icons/icons/search-normal-outline.svg" alt="search" />} */}
+                {/*     /> */}
+                {/* </div> */}
+                {/* <label className="btn btn-square btn-ghost text-black text-xl"> */}
+                {/*     <IconNotification /> */}
+                {/* </label> */}
+                <div className="pr-2">
+                    <button
+                        className={classNames("flex flex-row text-base justify-start font-medium")}
+                        onClick={onToggleLanguage}
                     >
-                        <IconLiveRoom color={`${location.pathname.includes(routeUrls.exploreRoom.path) ? '#0391FE' : '#333449'}`} /> Explore Room
-                    </label>
-
-                    <label className="flex flex-col items-center cursor-pointer">
-                        <IconChat color='#333449' /> Chat
-                    </label>
-                </div>
-
-                <div className="flex-1 flex justify-start items-start pr-10 max-w-[50%]">
-                    <InputSingle
-                        compactInput
-                        placeholder={t("general.search")}
-                        leftIcon={<img src="/icons/icons/search-normal-outline.svg" alt="search" />}
-                    />
+                        <IconBase
+                            icon={appStore.language === "en" ? "/icons/flag-en.svg" : "/icons/flag-vn.svg"}
+                            iconActivated={
+                                appStore.language === "en" ? "/icons/flag-en.svg" : "/icons/flag-vn.svg"
+                            }
+                        />
+                        <p className="pl-2">{appStore.language === "en" ? "ENG" : "VIE"}</p>
+                        <IconBase
+                            className="rotate-90"
+                            icon="/icons/icons/arrow-right-outline.svg"
+                            iconActivated="/icons/icons/arrow-right-outline.svg"
+                        />
+                    </button>
                 </div>
                 <div className="menu menu-horizontal space-x-3 py-4">
                     <div className="flex flex-row justify-center items-center space-x-2">

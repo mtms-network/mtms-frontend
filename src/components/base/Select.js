@@ -41,6 +41,7 @@ const Select = ({
   ...rest
 }) => {
   const { Option } = SelectBase;
+
   return (
     <FormControl required={required} label={label} error={error}>
       <SelectBase

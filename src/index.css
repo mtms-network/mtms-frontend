@@ -7,6 +7,7 @@
 :root {
     --border-radius-buttom: 12px;
     --white: #ffffff;
+    --color-primary: #0391FE;
 }
 
 * {
@@ -78,4 +79,16 @@ td {
 
 .ant-popover .ant-btn-primary{
     background-color: #0391fe;
+}
+
+.font-size-small {
+    font-size: 12px;
+}
+
+.font-size-medium {
+    font-size: 16px;
+}
+
+.font-size-lager {
+    font-size: 24px;
 }
