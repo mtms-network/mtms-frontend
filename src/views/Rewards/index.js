@@ -226,7 +226,9 @@ const Rewards = () => {
     } catch (error) {}
   }
 
-  const totalCredit = () => ((walletStore?.wallet?.user?.total_token || 0) + withdrawAmount).toFixed(3);
+  const totalCredit = () => Number(
+    ((walletStore?.wallet?.user?.total_token || 0) + withdrawAmount).toFixed(3)
+  );
 
   return (
     <MainLayout>
