@@ -23,6 +23,8 @@ import BtnCopy from "./components/Button/BtnCopy";
 import BtnEdit from "./components/Button/BtnEdit";
 import Attendees from "./components/Attendees";
 import Discussion from "./components/Discussion";
+import BtnBlockRoom from "./components/Button/BtnBlockRoom";
+import BtnMyGift from "./components/Button/BtnMyGift";
 
 const ViewLiveRoom = ({ t }) => {
     const params = useParams();
@@ -129,6 +131,8 @@ const ViewLiveRoom = ({ t }) => {
                     >
                         {t("general.delete")}
                     </Button>
+                    <BtnBlockRoom />
+                    <BtnMyGift />
                 </div>
                 <hr className="mb-6" />
                 <Attendees t={t} meeting={meeting} />
