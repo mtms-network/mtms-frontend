@@ -226,6 +226,8 @@ const Rewards = () => {
     } catch (error) {}
   }
 
+  const totalCredit = () => ((walletStore?.wallet?.user?.total_token || 0) + withdrawAmount).toFixed(3);
+
   return (
     <MainLayout>
       <div className="p-2 min-h-full">
@@ -348,7 +350,7 @@ const Rewards = () => {
                   <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
                   <span className="text-base text-gray ml-2 font-medium">{ t("rewards.total_credit")}</span>
                   <span className="font-bold text-xl ml-2">
-                    {(walletStore?.wallet?.user?.total_token || 0) + withdrawAmount} MTMS
+                    {totalCredit()} MTMS
                   </span>
                 </div>
 
