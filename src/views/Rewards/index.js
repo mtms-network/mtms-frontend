@@ -9,6 +9,7 @@ import {
   checkInToday,
   claimCheckIn,
   getRequirePreWallet,
+  confirmWithdraw,
 } from "services/wallet.service";
 import {message} from "antd";
 import {useAppStore} from "stores/app.store";
@@ -181,12 +182,17 @@ const Rewards = () => {
         withdrawData.contract_address
       );
 
-      await contract.methods.claimWeek(
+      const txt = await contract.methods.claimWeek(
         withdrawData.amountInWei,
         withdrawData.proof
       ).send({ from: walletAddress });
   
-      setWithdrawAmount(0);
+      await confirmWithdraw({
+        allocation_id: withdrawData.uuid,
+        transaction_hash: txt.transactionHash
+      });
+
+      await prepareData();
 
       await setLoading(false);
     } catch (error) {
@@ -365,7 +371,7 @@ const Rewards = () => {
                   { t("rewards.withdraw")}
                 </Button>
 
-                { walletStore?.wallet?.user?.total_token > 0 && countdown && (
+                { withdrawAmount == 0 && walletStore?.wallet?.user?.total_token > 0 && countdown && (
                   <Button className="btn btn-primary rounded-xl btn-lg w-[100%] mt-2" disabled={true}>
                     { t("rewards.next_withdraw")}: { countdown }
                   </Button>

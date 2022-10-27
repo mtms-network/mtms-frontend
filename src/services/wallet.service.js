@@ -42,3 +42,8 @@ export const claimPlan = async (id) => {
   const res = await client.post(`claim/meeting/subscription/${id}`);
   return res?.data;
 };
+
+export const confirmWithdraw = async (data) => {
+  const res = await client.post("/withdraw", data);
+  return res?.data;
+};
