@@ -1,51 +1,126 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "../index.module.css";
 import {IconChat} from "../../../../../components/Icons/IconChat";
+import moment from "moment";
+import {likeRoom} from "../../../../../services";
+import {API_RESPONSE_STATUS, routeUrls} from "../../../../../configs";
+import {message} from "antd";
+import {useNavigate} from "react-router-dom";
 
-const RoomItem = () => {
+const RoomItem = ({item}) => {
+    const navigate = useNavigate();
+    const [isReload, setIsReload] = useState(false);
+    const renderLiveTime = () => {
+        const time = moment(item?.live_time?.time).format("LT")
+        const date = moment(item?.live_time?.date).format("DD-MM-YYYY")
+        return `${item?.live_time?.time}, ${date}, ${item?.user_timezone}`;
+    }
+
+    const onLike = async () => {
+        const res = await likeRoom(item?.uuid);
+        if(res?.status === API_RESPONSE_STATUS.success){
+            message.success("Liked success");
+            item.total_likes += 1;
+            item.liked = true;
+            setIsReload(!isReload);
+        }else{
+            message.error("Liked fail");
+        }
+    }
+
+    const onDisLike = async () => {
+        const res = await likeRoom(item?.uuid);
+        if(res?.status === API_RESPONSE_STATUS.success){
+            message.success("Dislike success");
+            item.total_likes -= 1;
+            item.liked = false;
+            setIsReload(!isReload);
+        }else{
+            message.error("Dislike fail");
+        }
+    }
+
+    const onJoin = async () => {
+        try {
+            if (item?.identifier) {
+                window.open(`/${routeUrls.meetingRedirect.path}/${item?.identifier}`);
+            }
+        } catch (error) {
+            console.log("start meeting error");
+        }
+    };
+
     return (
         <div className="w-full h-80 border-1 shadow-lg rounded-2xl p-3">
             <div className={`${ styles.roomItemTitle } font-size-small gap-6`}>
                 <div className="flex gap-2 items-center">
-                    <div className={`${styles.roomItemTitleItem} rounded`}>Video Conference</div>
-                    <div className={`${styles.roomItemTitleItem} rounded-2xl`}>Crypto</div>
+                    <div className={`${styles.roomItemTitleItem} rounded`}>{ item?.type?.name }</div>
+                    { item?.roomType?.name ? (
+                        <div className={`${styles.roomItemTitleItem} rounded-2xl`}>{ item?.roomType?.name }</div>
+                    ) : null }
+
                 </div>
-                <button className="rounded-full w-8 h-8 bg-red-600 text-white font-bold">Join</button>
+                <button
+                    className="rounded-full w-8 h-8 bg-red-600 text-white font-bold"
+                    onClick={onJoin}
+                >
+                    Join
+                </button>
             </div>
-            <div className={`h-full flex flex-col justify-between rounded w-full my-3 p-4`} style={{ backgroundImage: `url("../../images/bg-crypto.png")`, height: '68%' }}>
+            <div
+                className={`h-full flex flex-col justify-between rounded w-full my-2 p-4 cursor-pointer`}
+                style={{ backgroundImage: `url(${item?.cover})`, height: '68%' }}
+                onClick={() => {
+                    navigate(`/${routeUrls.liveRoom.path}/view/${item.uuid}`)
+                }}
+            >
                 <div className={` h-1/3 flex justify-center gap-1 w-full items-center p-1.5 w-auto ${styles.roomItemBodyLive}`}>
                     <span className="w-20 font-bold">Live on</span>
                     <span className="font-size-small text-red-500">
-                        8:24 PM, 28/04/2022 Melbourne/Aus
+                       { renderLiveTime() }
                     </span>
                 </div>
 
                 <div className="h-1/3">
                     <div className={`pt-2 ${styles.description}`}>
                         <span className="font-bold font-size-small">Live Topic: </span>
-                        <span className={`font-size-small`}>I want to talk with everyone about everything. Just some time feel boring while i work from home</span>
+                        <span className={`font-size-small`}>
+                            <p dangerouslySetInnerHTML={{ __html: item?.description }} />
+
+                        </span>
                     </div>
                 </div>
 
-                <div className="h-1/3 flex items-center justify-between">
-                    <div className="px-1 font-bold">
-                        JOIN WITH: Quách hoài nam
+                <div className="h-1/3 flex items-center justify-end gap-2">
+                    <div className={`font-bold ${styles.profileName}`}>
+                        JOIN WITH: { item?.user?.profile?.name }
                     </div>
-                    <div className={styles.hexagon}>
-                        <img src="http://gravatar.com/avatar/e20a1eb8fedf2831348ab4adfbe2989d?s=512" alt="" className="rounded-full"/>
+                    <div>
+                        <img src={ item?.user?.profile?.avatar || "../../../../images/logo.png" } alt="" className={`${styles.hexagon} rounded-full`}/>
                     </div>
                 </div>
             </div>
             <div className="title font-bold">
-                Room: Down Trend Market
+                Room: { item.live_topic }
             </div>
             <div className="flex items-center justify-between">
                 <div className="flex items-center font-size-small gap-1">
-                    <IconChat size={16} />7.589 DISCUSSION
+                    <IconChat size={16} />{ item?.total_comments } DISCUSSION
                 </div>
                 <div className="flex items-center font-size-small gap-1">
-                    <div className="rounded px-1 py-0.5 border-1">Liked</div>
-                    <div className="rounded px-1 py-0.5 border-1">100k</div>
+                    <div
+                        className={`rounded px-1 py-0.5 border-1 cursor-pointer ${ item?.liked ? "border-primary" : "" }`}
+                        onClick={ async () => {
+                            if(item?.liked){
+                                await onDisLike()
+                            }else{
+                                await onLike()
+                            }
+                        }}
+                    >
+                        { item?.liked ? "Liked" : "Like" }
+                    </div>
+                    <div className="rounded px-1 py-0.5 border-1">{ item?.total_likes }</div>
                 </div>
             </div>
         </div>

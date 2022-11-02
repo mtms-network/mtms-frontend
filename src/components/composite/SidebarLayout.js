@@ -4,15 +4,73 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import {Button, IconBase} from "components/base";
-import { useAppStore } from "stores/app.store";
-import { setLanguage } from "helpers";
-import { useMeetingStore } from "stores/meeting.store";
-import { getRequirePreMeeting } from "services";
 import UserInfo from "./UserInfo";
 import { PlusOutlined } from "@ant-design/icons";
 const SidebarLayout = ({ t, onLogout }) => {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const arrSidebar = [
+        {
+            label: 'MTMS Accounts',
+            path: '/',
+            icon: '/icons/icons/overview.svg',
+            iconActive: '/icons/icons/overview-active.svg',
+        },
+        {
+            label: 'Meeting',
+            path: `/${routeUrls.meeting.path}`,
+            icon: '/icons/icons/meeting-outline.svg',
+            iconActive: '/icons/icons/meeting-fill.svg',
+        },
+        {
+            label: 'Schedule a Meeting',
+            path: `/${routeUrls.scheduleMeeting.path}`,
+            icon: '/icons/icons/calendar-outline.svg',
+            iconActive: '/icons/icons/calendar-fill.svg',
+        },
+        {
+            label: 'Reward Center',
+            path: `/${routeUrls.rewards.path}`,
+            icon: '/icons/icons/gift-outline.svg',
+            iconActive: '/icons/icons/gift-fill.svg',
+        },
+        {
+            label: 'Contact',
+            path: `/${routeUrls.contact.path}`,
+            icon: '/icons/icons/personalcard-outline.svg',
+            iconActive: '/icons/icons/personalcard-fill.svg',
+        },
+        {
+            label: 'To Do',
+            path: `/${routeUrls.todo.path}`,
+            icon: '/icons/icons/task-outline.svg',
+            iconActive: '/icons/icons/task-fill.svg',
+        },
+        {
+            label: 'My Room',
+            path: `/${routeUrls.liveRoom.path}`,
+            icon: '/icons/icons/live-room-outline.svg',
+            iconActive: '/icons/icons/live-room-fill.svg',
+        },
+        {
+            label: 'Explore Live Room',
+            path: `/${routeUrls.exploreRoom.path}`,
+            icon: '/icons/icons/live-room-outline.svg',
+            iconActive: '/icons/icons/live-room-fill.svg',
+            rightIcon: <button
+                className="bg-primary w-8 h-8 flex items-center justify-center rounded ml-2"
+                onClick={() => {
+                    navigate(`/${routeUrls.newLiveRoom.path}`)
+                }}
+            >
+                <div className={"flex items-center justify-center bg-white rounded-full p-1"}>
+                    <PlusOutlined style={{fontSize: 12}} className={"text-primary"} />
+                </div>
+            </button>
+        },
+    ]
+
 
     return (
         <div className="drawer-side">
@@ -47,14 +105,20 @@ const SidebarLayout = ({ t, onLogout }) => {
                                                     ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
                                                     : "btn btn-base justify-start font-medium",
                                             )}
-                                            onClick={() => navigate(item.path)}
+                                            onClick={() => {
+                                                if(!item.rightIcon){
+                                                    navigate(item.path)
+                                                }
+                                            }}
                                         >
-                                            <IconBase
-                                                icon={item.icon}
-                                                iconActivated={item.iconActive}
-                                                isActive={location.pathname === item.path && isActive}
-                                            />
-                                            <p className="pl-2">{item.label}</p>
+                                            <div className="flex items-center" onClick={() => navigate(item.path)}>
+                                                <IconBase
+                                                    icon={item.icon}
+                                                    iconActivated={item.iconActive}
+                                                    isActive={location.pathname === item.path && isActive}
+                                                />
+                                                <p className="pl-2">{item.label}</p>
+                                            </div>
                                             { item?.rightIcon }
                                         </button>
                                     </div>
@@ -70,60 +134,3 @@ const SidebarLayout = ({ t, onLogout }) => {
 
 export default withTranslation()(SidebarLayout);
 
-const arrSidebar = [
-    {
-        label: 'MTMS Accounts',
-        path: '/',
-        icon: '/icons/icons/overview.svg',
-        iconActive: '/icons/icons/overview-active.svg',
-    },
-    {
-        label: 'Meeting',
-        path: `/${routeUrls.meeting.path}`,
-        icon: '/icons/icons/meeting-outline.svg',
-        iconActive: '/icons/icons/meeting-fill.svg',
-    },
-    {
-        label: 'Schedule a Meeting',
-        path: `/${routeUrls.scheduleMeeting.path}`,
-        icon: '/icons/icons/calendar-outline.svg',
-        iconActive: '/icons/icons/calendar-fill.svg',
-    },
-    {
-        label: 'Reward Center',
-        path: `/${routeUrls.rewards.path}`,
-        icon: '/icons/icons/gift-outline.svg',
-        iconActive: '/icons/icons/gift-fill.svg',
-    },
-    {
-        label: 'Contact',
-        path: `/${routeUrls.contact.path}`,
-        icon: '/icons/icons/personalcard-outline.svg',
-        iconActive: '/icons/icons/personalcard-fill.svg',
-    },
-    {
-        label: 'To Do',
-        path: `/${routeUrls.todo.path}`,
-        icon: '/icons/icons/task-outline.svg',
-        iconActive: '/icons/icons/task-fill.svg',
-    },
-    {
-        label: 'My Room',
-        path: `/${routeUrls.liveRoom.path}`,
-        icon: '/icons/icons/live-room-outline.svg',
-        iconActive: '/icons/icons/live-room-fill.svg',
-    },
-    {
-        label: 'Explore Live Room',
-        path: `/${routeUrls.exploreRoom.path}`,
-        icon: '/icons/icons/live-room-outline.svg',
-        iconActive: '/icons/icons/live-room-fill.svg',
-        rightIcon: <button
-            className="bg-primary w-8 h-8 flex items-center justify-center rounded ml-2"
-        >
-            <div className={"flex items-center justify-center bg-white rounded-full p-1"}>
-                <PlusOutlined style={{fontSize: 12}} className={"text-primary"} />
-            </div>
-        </button>
-    },
-]

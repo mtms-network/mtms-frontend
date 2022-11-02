@@ -1,17 +1,21 @@
 import React from "react";
 
-const TopicType = () => {
+const TopicType = ({ liveTypes, activeType = '', handleSetRoomType }) => {
     return (
-        <div className="px-24 text-center">
-            <div className="px-3 py-2 bg-primary inline-flex m-1 rounded-3xl text-white cursor-pointer font-bold">Explore</div>
-            <div className="px-3 py-2 border-1 inline-flex m-1 rounded-3xl cursor-pointer font-bold">Free talk</div>
-            <div className="px-3 py-2 border-1 inline-flex m-1 rounded-3xl cursor-pointer font-bold">Crypto</div>
-            <div className="px-3 py-2 border-1 inline-flex m-1 rounded-3xl cursor-pointer font-bold">Education</div>
-            <div className="px-3 py-2 border-1 inline-flex m-1 rounded-3xl cursor-pointer font-bold">Career</div>
-            <div className="px-3 py-2 border-1 inline-flex m-1 rounded-3xl cursor-pointer font-bold">Economic</div>
-            <div className="px-3 py-2 border-1 inline-flex m-1 rounded-3xl cursor-pointer font-bold">Tech</div>
-            <div className="px-3 py-2 border-1 inline-flex m-1 rounded-3xl cursor-pointer font-bold">Gaming</div>
-            <div className="px-3 py-2 border-1 inline-flex m-1 rounded-3xl cursor-pointer font-bold">Music</div>
+        <div className="px-2 lg:px-36 text-center">
+            {
+                liveTypes?.map((item, index) => {
+                    return (
+                        <div
+                            key={index}
+                            className={`px-3 py-2 ${ activeType === item?.uuid ? 'bg-primary text-white' : 'border-1' } inline-flex m-1 rounded-3xl cursor-pointer font-bold`}
+                            onClick={() => { handleSetRoomType(item.uuid) }}
+                        >
+                            { item.name }
+                        </div>
+                    )
+                })
+            }
         </div>
     )
 }

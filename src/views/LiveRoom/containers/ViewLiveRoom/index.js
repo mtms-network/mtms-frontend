@@ -109,7 +109,7 @@ const ViewLiveRoom = ({ t }) => {
             </div>
             <GroupLayout className="flex flex-col justify-between">
                 <h1 className="font-[700] text-[32px] truncate">{meetingStore?.meeting?.title}</h1>
-                <div className="text-[16px] text-gray mb-[24px]">{meetingStore?.meeting?.type.name}</div>
+                <div className="text-[16px] text-gray mb-[24px]">{meetingStore?.meeting?.type?.name}</div>
 
                 <div className="flex flex-wrap gap-x-5 gap-y-3 mb-[24px]">
                     <LiveTime
@@ -155,7 +155,7 @@ const ViewLiveRoom = ({ t }) => {
                 />
             </GroupLayout>
 
-            <Discussion />
+            <Discussion uuid={params.meetingId} />
         </MainLayout>
     );
 };

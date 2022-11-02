@@ -35,8 +35,8 @@ const Input = ({
                             className={`input input-bordered w-full text-black bg-slate-base border-0 rounded-full w-full ${mgsError?.length ? "input-error" : ""}`}
                             name={name}
                             placeholder={placeholder}
-                            onChange={() => {
-                                onChange && onChange();
+                            onChange={(event) => {
+                                onChange && onChange(event);
                             }}
                         />
                         <div className="absolute right-4"></div>

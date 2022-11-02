@@ -2,6 +2,8 @@ import classNames from "classnames";
 import React from "react";
 
 export function WalletButton({ name, src, onClick, className = "", nameClass = ""}) {
+    console.log('src', src);
+    console.log('name', name, nameClass);
   return (
     <div className="flex flex-col justify-center items-center">
       <button
@@ -14,7 +16,7 @@ export function WalletButton({ name, src, onClick, className = "", nameClass = "
           className,
         )}
       >
-        <img src={src} alt={name || "wallet-logo"} className="h-6" />
+        <img src={src} alt={name || "wallet-logo"} className="" />
       </button>
       {name && <span className={classNames("text-gray text-xs", nameClass)}>{name}</span>}
     </div>

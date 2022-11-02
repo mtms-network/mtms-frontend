@@ -52,7 +52,7 @@ const ScheduleMeetingHistories = ({ t }) => {
               <GoogleButton customHandleResponse={handleCustomResponse} showTitle name="" className="w-[80px] h-[80px]" />
             </div>
             <div className="mt-[5px]">
-              <GroupTitle icon={<IoTv />} title="Google" />
+              <GroupTitle icon={<IoTv />} title="Calendar" />
             </div>
           </div>
 

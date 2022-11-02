@@ -81,8 +81,6 @@ const SelectMultiTag = ({
                                     {item?.name}
                                 </Option>
                             ))}
-                            <Option value="lucy">lucy</Option>
-
                         </Select>
                         <div className="absolute right-4"></div>
                     </div>

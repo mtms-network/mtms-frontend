@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import RoomItem from "./RoomItem";
+import {getPublicLiveRoom} from "../../../../../services";
 
-const ListRoom = ({id = 'listLiveRoom'}) => {
+const ListRoom = ({id = 'listLiveRoom', listRooms = []}) => {
 
     const [gridClass, setGridClass] = useState('grid grid-cols-4');
 
@@ -42,30 +43,19 @@ const ListRoom = ({id = 'listLiveRoom'}) => {
         }
     }, [])
 
-
     return (
         <>
-            <div className="flex items-center justify-center my-4">
-                <div className="border-t w-4/12"></div>
-                <div className="w-4/12 text-center text-xl uppercase">Live Room</div>
-                <div className="border-t w-4/12"></div>
-            </div>
+            {/* <div className="flex items-center justify-center my-4"> */}
+            {/*     <div className="border-t w-4/12"></div> */}
+            {/*     <div className="w-4/12 text-center text-xl uppercase">Live Room</div> */}
+            {/*     <div className="border-t w-4/12"></div> */}
+            {/* </div> */}
             <div id={id} className={`${gridClass} gap-4 px-4 pb-4`}>
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
-                <RoomItem />
+                {
+                    listRooms?.map((item, index) => {
+                        return <RoomItem key={index} item={item} />
+                    })
+                }
             </div>
         </>
     )

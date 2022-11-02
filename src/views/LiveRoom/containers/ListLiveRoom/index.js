@@ -33,18 +33,6 @@ const ListLiveRoom = () => {
                 </div>
             </div>
             <LiveRoomToDay />
-            <div className="mt-6">
-                <LiveRoomUpComing />
-            </div>
-            <div className="mt-6">
-                <GatherToLearn />
-            </div>
-            <div className="mt-6">
-                <GatherToWork />
-            </div>
-            <div className="mt-6">
-                <GatherToPlay />
-            </div>
         </MainLayout>
     );
 };

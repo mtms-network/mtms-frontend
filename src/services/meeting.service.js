@@ -178,9 +178,8 @@ export const getMeetingContact = async () => {
     const res = await Axios.get(`/contacts?per_page=-1`);
     return res?.data;
   } catch (error) {
-    console.error("getMeetingContact", error);
-    return error;
   }
+  return null;
 };
 
 export const checkMeetingExist = async (meetingId) => {

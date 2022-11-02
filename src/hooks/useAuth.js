@@ -3,81 +3,62 @@ import {getAccessToken, getParamUrl, setLanguage, getUser} from "helpers";
 import { useNavigate, useLocation } from "react-router-dom";
 import {API_RESPONSE_STATUS, LOCAL_STORAGE_KEYS, routeUrls} from "configs";
 import { useAppStore } from "stores/app.store";
-import {checkIsConnectGoogleCalendar, getUser as getUserApi} from "../services/auth.service";
+import {getUser as getUserApi} from "../services/auth.service";
 
 const useAuth = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [appStore, updateAppStore] = useAppStore();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [appStore, updateAppStore] = useAppStore();
 
-  const check = () => {
-    const token = getAccessToken();
+    const check = () => {
+        const token = getAccessToken();
 
-    if (token) {
-      if (!appStore.isAuthenticated) {
-        const me = getUser();
-        updateAppStore((draft) => {
-          draft.isAuthenticated = true;
-          draft.user = me;
-        });
-      }
+        if (token) {
+            if (!appStore.isAuthenticated) {
+                const me = getUser();
+                updateAppStore((draft) => {
+                    draft.isAuthenticated = true;
+                    draft.user = me;
+                });
+            }
 
-      if (location.pathname === `/${routeUrls.login.path}`) {
-        navigate(`/${routeUrls.meeting.path}`);
-      }
-    } else if (location.pathname !== `/${routeUrls.login.path}`) {
-      navigate(`/${routeUrls.login.path}`);
+            if (location.pathname === `/${routeUrls.login.path}`) {
+                navigate(`/${routeUrls.meeting.path}`);
+            }
+        } else if (location.pathname !== `/${routeUrls.login.path}`) {
+            navigate(`/${routeUrls.login.path}`);
+        }
     }
-  }
 
-  const checkToken = async () => {
-    const paramToken = getParamUrl('t');
-    const checkAuthByParam = async () => {
-      try {
-        if(paramToken){
-          const user = await getUserApi(paramToken);
-          if(user){
-            localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
-            localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, paramToken);
-            navigate('/');
-          }
+    const checkToken = async () => {
+        const paramToken = getParamUrl('t');
+        const checkAuthByParam = async () => {
+            try {
+                if(paramToken){
+                    const user = await getUserApi(paramToken);
+                    if(user){
+                        localStorage.setItem(LOCAL_STORAGE_KEYS.user, JSON.stringify(user));
+                        localStorage.setItem(LOCAL_STORAGE_KEYS.accessToken, paramToken);
+                        navigate('/');
+                    }
+                }
+
+            }
+            catch (err){}
         }
 
-      }
-      catch (err){}
-    }
+        if(paramToken){
+            checkAuthByParam().then((res) => {
+                check();
+            });
+        }else{
+            check();
+        }
+    };
 
-    if(paramToken){
-      checkAuthByParam().then((res) => {
-        check();
-      });
-    }else{
-      check();
-    }
-  };
-
-  const isConnectGoogleCalendar = async () => {
-    const token = getAccessToken();
-    const res = await checkIsConnectGoogleCalendar(token);
-
-    if(res?.status === API_RESPONSE_STATUS.success){
-      updateAppStore((draft) => {
-        draft.googleCalendar = {
-          integrated: res?.data?.integrated,
-          email: res?.data?.email,
-          name: res?.data?.name,
-        };
-      });
-    }
-  };
-
-  return useEffect(() => {
-    checkToken().then(() => {
-      if(appStore.isAuthenticated && !appStore.googleCalendar.integrated){
-        isConnectGoogleCalendar().then();
-      }
-    });
-  }, [appStore.isAuthenticated]);
+    return useEffect(() => {
+        checkToken().then();
+    }, [appStore.isAuthenticated]);
 };
 
 export default useAuth;

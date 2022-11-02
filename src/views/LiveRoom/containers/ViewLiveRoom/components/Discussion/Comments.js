@@ -1,19 +1,19 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import CommentItem from "./CommentItem";
+import {getComments} from "../../../../../../services";
 
-const Comments = ({children}) => {
+const Comments = ({comments, ...children}) => {
+
     return (
         <div>
-            <CommentItem />
-            <CommentItem>
-                <CommentItem />
-                <CommentItem>
-                    <CommentItem />
-                </CommentItem>
-            </CommentItem>
-            <CommentItem />
-            <CommentItem />
-            <CommentItem />
+            {
+                comments?.map((comment, index) => {
+
+                    return (
+                        <CommentItem key={index} />
+                    )
+                })
+            }
         </div>
     )
 }

@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {BrandLogoLoading, GroupTitle, Pagination} from "../../../components";
-import {getListLiveRoom} from "../../../services";
+import {getListLiveRoom, getMyRoom} from "../../../services";
 import LiveRoomItem from "./LiveRoomItem";
+import ListRoom from "../containers/ExploreRoom/components/ListRoom";
 
 const Table = ({title= "", filterDefault = {}, isLiveRoom = false}) => {
     const [pagination, setPagination] = useState({});
@@ -15,7 +16,7 @@ const Table = ({title= "", filterDefault = {}, isLiveRoom = false}) => {
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
-        const res = await getListLiveRoom(filter);
+        const res = await getMyRoom(filter);
         await setLiveRooms(res?.data || []);
         await setPagination(res?.meta || {});
         await setLoading(false);
@@ -70,16 +71,8 @@ const Table = ({title= "", filterDefault = {}, isLiveRoom = false}) => {
                                 }
                             </div>
                             {loading && <BrandLogoLoading />}
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-                                {!loading &&
-                                    liveRooms?.map((item) => (
-                                        <LiveRoomItem
-                                            isLiveRoom={isLiveRoom}
-                                            setIsReload={setLoading}
-                                            data={item}
-                                            key={item?.uuid}
-                                        />
-                                    ))}
+                            <div className="bg-white py-4 rounded-2xl">
+                                {!loading && <ListRoom listRooms={liveRooms} id={'tableMyLiveRoom'} />}
                             </div>
                         </div>
                     </>
