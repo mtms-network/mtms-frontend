@@ -85,8 +85,8 @@ const RoomItem = ({item}) => {
                     <div className={`pt-2 ${styles.description}`}>
                         <span className="font-bold font-size-small">Live Topic: </span>
                         <span className={`font-size-small`}>
-                            <p dangerouslySetInnerHTML={{ __html: item?.description }} />
-
+                            {/* <p dangerouslySetInnerHTML={{ __html: item?.description }} /> */}
+                            { item?.live_topic }
                         </span>
                     </div>
                 </div>
@@ -95,13 +95,13 @@ const RoomItem = ({item}) => {
                     <div className={`font-bold ${styles.profileName}`}>
                         JOIN WITH: { item?.user?.profile?.name }
                     </div>
-                    <div>
+                    <div style={{width: '50px'}}>
                         <img src={ item?.user?.profile?.avatar || "../../../../images/logo.png" } alt="" className={`${styles.hexagon} rounded-full`}/>
                     </div>
                 </div>
             </div>
-            <div className="title font-bold">
-                Room: { item.live_topic }
+            <div className={`title font-bold mb-1 ${styles.threeDot}`}>
+                Room: { item.title }
             </div>
             <div className="flex items-center justify-between">
                 <div className="flex items-center font-size-small gap-1">

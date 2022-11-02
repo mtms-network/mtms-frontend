@@ -39,3 +39,10 @@
     overflow: hidden !important;
     text-overflow: ellipsis;
 }
+
+
+.threeDot {
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
