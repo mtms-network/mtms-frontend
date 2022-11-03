@@ -17,7 +17,7 @@ const ExploreRoom = () => {
     const handleSetKeyword = useCallback((key) => {
         setKeyword(key)
     }, [])
-    console.log('keyword', keyword);
+
     return (
         <MainLayout>
             <HeaderRoom

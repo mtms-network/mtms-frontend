@@ -2,7 +2,7 @@ import React from "react";
 
 const TopicType = ({ liveTypes, activeType = '', handleSetRoomType }) => {
     return (
-        <div className="px-2 lg:px-36 text-center">
+        <div className="px-2 lg:px-24 w-full lg:w-2/3 text-center m-auto">
             {
                 liveTypes?.map((item, index) => {
                     return (

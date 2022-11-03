@@ -25,8 +25,8 @@ const AdditionalTime = ({ formik }) => {
                 <FormBase
                     label={(
                         <div className="flex items-center gap-2">
-                            <div>
-                                Additional Time
+                            <div className="text-red-500">
+                                Time slot
                             </div>
                             <div
                                 className={"flex items-center justify-center bg-white cursor-pointer rounded p-1 bg-primary"}

@@ -6,9 +6,12 @@ import { withTranslation } from "react-i18next";
 import {Button, IconBase} from "components/base";
 import UserInfo from "./UserInfo";
 import { PlusOutlined } from "@ant-design/icons";
+import {resetUserToken} from "../../helpers";
+import {useAppStore} from "../../stores/app.store";
 const SidebarLayout = ({ t, onLogout }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [appStore, updateAppStore] = useAppStore();
 
     const arrSidebar = [
         {
@@ -71,6 +74,12 @@ const SidebarLayout = ({ t, onLogout }) => {
         },
     ]
 
+    const handleLogout = () => {
+        resetUserToken();
+        updateAppStore((draft) => {
+            draft.isAuthenticated = false;
+        });
+    };
 
     return (
         <div className="drawer-side">
@@ -126,6 +135,18 @@ const SidebarLayout = ({ t, onLogout }) => {
                             })
                         }
                     </div>
+                    <a
+                        className={classNames(
+                            "btn btn-block btn-primary",
+                            "bg-white border-0 text-black",
+                            "hover:text-white hover:bg-primary",
+                            "flex justify-start rounded-none z-10",
+                        )}
+                        onClick={onLogout}
+                    >
+                        <IconBase icon="/icons/icons/logout-outline.svg" alt="logout-icon" className="" />
+                        {t("auth.logout")}
+                    </a>
                 </div>
             </div>
         </div>

@@ -346,7 +346,7 @@ const Form = ({ action , id }) => {
 
                                             <FormInput
                                                 isRequired={true}
-                                                label={"Live topic"}
+                                                label={<div className="text-red-500">Live topic</div>}
                                                 name={"live_topic"}
                                                 mgsError={formik.errors?.live_topic}
                                                 value={formik.values?.live_topic}

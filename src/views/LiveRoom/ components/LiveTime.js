@@ -19,7 +19,7 @@ const LiveTime = ({ formik }) => {
     return (
         <>
             <FormBase
-                label={"Live time"}
+                label={<div className="text-red-500">Live time</div>}
             >
                 <div className="grid grid-cols-3 gap-2">
                     <DateTimePicker

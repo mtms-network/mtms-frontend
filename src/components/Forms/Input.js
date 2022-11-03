@@ -19,7 +19,7 @@ const Input = ({
                         label && (
                             <div>
                                 <div className="pb-1 flex items-center justify-between">
-                                    <p className="label-text text-black text-base">
+                                    <p className="label-text text-black text-base flex">
                                         { label }
                                         { isRequired && <span className="inline-block ml-1 text-error">*</span> }
                                     </p>
