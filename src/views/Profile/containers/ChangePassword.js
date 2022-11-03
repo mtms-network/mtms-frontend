@@ -70,7 +70,7 @@ const ChangePassword = ({ t }) => {
               <img
                 className="w-[100px] h-[100px] rounded-full object-cover"
                 alt="avatar"
-                src={`${LIVE_URL}${user?.profile?.avatar}`}
+                src={user?.profile?.avatar}
               />
               <p className="pt-3 font-bold">{user?.username}</p>
             </div>
