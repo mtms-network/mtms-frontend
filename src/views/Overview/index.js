@@ -204,8 +204,7 @@ const Overview = ({ t }) => {
             { walletConnected === 1 ? (
               <div
                 className={classNames(
-                  "grid grid-cols-1 gap-4",
-                  "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                  "flex justify-center flex-wrap sm:flex-nowrap",
                 )}
               >
                 {
@@ -215,7 +214,7 @@ const Overview = ({ t }) => {
                       <div
                         key={index}
                         className={classNames(
-                          "p-4 border-group border-white bg-white rounded-2xl flex flex-col flex-1",
+                          "p-4 m-3 border-group border-white bg-white rounded-2xl flex flex-col sm:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5",
                           "justify-between min-h-[160px] hover:border-primary hover:bg-light-primary",
                         )}
                       >
