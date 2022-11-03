@@ -3,8 +3,9 @@ import TopicType from "./TopicType";
 import {InputSingle} from "../../../../../components/base/Input";
 import {getRequirePreMeeting} from "../../../../../services";
 
-const HeaderRoom = ({ roomType, handleSetRoomType }) => {
+const HeaderRoom = ({ roomType, handleSetRoomType, handleSetKeyword, keyword }) => {
     const [liveTypes, setLiveTypes] = useState([]);
+    const [search, setSearch] = useState(keyword);
 
     const fetchData = async () => {
         const res = await getRequirePreMeeting();
@@ -32,6 +33,13 @@ const HeaderRoom = ({ roomType, handleSetRoomType }) => {
             <div className="flex justify-center py-3">
                 <div className="flex-1 flex justify-start items-start pr-10 max-w-[50%]">
                     <InputSingle
+                        value={search}
+                        onChange={(event) => { setSearch(event.target.value) }}
+                        onKeyPress={(event) => {
+                            if(event?.code === "Enter"){
+                                handleSetKeyword(event.target.value)
+                            }
+                        }}
                         compactInput
                         placeholder={"Search for rooms..."}
                         leftIcon={<img src="/icons/icons/search-normal-outline.svg" alt="search" />}

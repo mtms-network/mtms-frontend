@@ -32,9 +32,7 @@
 }
 
 .profileName{
-    text-align: right;
     display: inline-block;
-    max-width: 140px;
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis;
@@ -45,4 +43,19 @@
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis;
+}
+
+.wrapper {
+    position: relative;
+}
+
+
+.wrapperBackground {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    opacity: 0.3;
+    height: 100%;
 }

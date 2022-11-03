@@ -3,11 +3,13 @@ import ListRoom from "./ListRoom";
 import {getPublicLiveRoom} from "../../../../../services";
 import {BrandLogoLoading, GroupTitle, Pagination} from "../../../../../components";
 
-const BodyRoom = () => {
+const BodyRoom = ({ roomType, keyword }) => {
     const [filter, setFilter] = useState({
         page: 1,
-        limit: 4,
-        status: 'live'
+        limit: 12,
+        status: 'live',
+        roomType: roomType,
+        keyword: '',
     })
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,13 +24,24 @@ const BodyRoom = () => {
     }
 
     useEffect(() => {
+        setFilter({
+            ...filter,
+            roomType: roomType,
+            keyword: keyword,
+            page: 1,
+        })
+        setLoading(true)
+    }, [roomType, keyword])
+
+
+    useEffect(() => {
         if(loading){
             fetchData().then();
         }
     }, [loading])
 
     return (
-       <div className="mt-6">
+       <div className="">
            <div className="flex justify-between">
                <GroupTitle
                    className="sm:pb-0 pb-4 flex justify-center"

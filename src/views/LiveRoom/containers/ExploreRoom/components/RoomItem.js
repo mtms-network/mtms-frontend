@@ -68,12 +68,13 @@ const RoomItem = ({item}) => {
                 </button>
             </div>
             <div
-                className={`h-full flex flex-col justify-between rounded w-full my-2 p-4 cursor-pointer`}
-                style={{ backgroundImage: `url(${item?.cover})`, height: '68%' }}
+                className={`h-full flex flex-col justify-between rounded w-full my-2 p-4 cursor-pointer ${styles.wrapper}`}
+                style={{ height: '68%'}}
                 onClick={() => {
                     navigate(`/${routeUrls.liveRoom.path}/view/${item.uuid}`)
                 }}
             >
+                <img src={item?.cover || '../../images/bg-crypto.png'} alt="icon" className={ styles.wrapperBackground } />
                 <div className={` h-1/3 flex justify-center gap-1 w-full items-center p-1.5 w-auto ${styles.roomItemBodyLive}`}>
                     <span className="w-20 font-bold">Live on</span>
                     <span className="font-size-small text-red-500">
@@ -91,9 +92,9 @@ const RoomItem = ({item}) => {
                     </div>
                 </div>
 
-                <div className="h-1/3 flex items-center justify-end gap-2">
+                <div className="h-1/3 flex items-center justify-between gap-2">
                     <div className={`font-bold ${styles.profileName}`}>
-                        JOIN WITH: { item?.user?.profile?.name }
+                        Join with: { item?.user?.profile?.name }
                     </div>
                     <div style={{width: '50px'}}>
                         <img src={ item?.user?.profile?.avatar || "../../../../images/logo.png" } alt="" className={`${styles.hexagon} rounded-full`}/>

@@ -21,7 +21,7 @@ const UserInfo = ({ onLogout, className }) => {
         <div className="avatar">
           {user?.profile?.avatar ? (
             <div className="!flex w-12 rounded-lg justify-center items-center text-black">
-              <img src={`${LIVE_URL}${user?.profile?.avatar}`} alt="avatar" />
+              <img src={`${user?.profile?.avatar}`} alt="avatar" />
             </div>
           ) : (
             <div className="!flex w-12 rounded-lg justify-center items-center bg-primary text-black">

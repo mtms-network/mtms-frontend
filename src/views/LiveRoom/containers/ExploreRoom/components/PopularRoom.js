@@ -3,12 +3,13 @@ import ListRoom from "./ListRoom";
 import {getPublicLiveRoom} from "../../../../../services";
 import {BrandLogoLoading, GroupTitle, Pagination} from "../../../../../components";
 
-const PopuplarRoom = ({ roomType }) => {
+const PopuplarRoom = ({ roomType, keyword }) => {
     const [filter, setFilter] = useState({
         page: 1,
         limit: 12,
         status: 'schedule',
         roomType: roomType,
+        keyword: '',
     })
     const [pagination, setPagination] = useState({})
     const [rooms, setRooms] = useState([]);
@@ -32,12 +33,14 @@ const PopuplarRoom = ({ roomType }) => {
         setFilter({
             ...filter,
             roomType: roomType,
+            keyword: keyword,
+            page: 1,
         })
         setLoading(true)
-    }, [roomType])
+    }, [roomType, keyword])
 
     return (
-        <div className="mt-6">
+        <div className="">
             <div className="flex justify-between">
                 <GroupTitle
                     className="sm:pb-0 pb-4 flex justify-center"
@@ -80,7 +83,7 @@ const PopuplarRoom = ({ roomType }) => {
                 {
                     loading ? <BrandLogoLoading /> :
                         <>
-                            <ListRoom listRooms={rooms} id={'listRooms'} />
+                            <ListRoom listRooms={rooms} id={Date.now()} />
                         </>
                 }
 

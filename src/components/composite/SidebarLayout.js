@@ -47,12 +47,12 @@ const SidebarLayout = ({ t, onLogout }) => {
             icon: '/icons/icons/task-outline.svg',
             iconActive: '/icons/icons/task-fill.svg',
         },
-        {
-            label: 'My Room',
-            path: `/${routeUrls.liveRoom.path}`,
-            icon: '/icons/icons/live-room-outline.svg',
-            iconActive: '/icons/icons/live-room-fill.svg',
-        },
+        // {
+        //     label: 'My Room',
+        //     path: `/${routeUrls.liveRoom.path}`,
+        //     icon: '/icons/icons/live-room-outline.svg',
+        //     iconActive: '/icons/icons/live-room-fill.svg',
+        // },
         {
             label: 'Explore Live Room',
             path: `/${routeUrls.exploreRoom.path}`,

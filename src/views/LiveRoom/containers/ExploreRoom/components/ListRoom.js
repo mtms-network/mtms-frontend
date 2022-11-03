@@ -34,7 +34,6 @@ const ListRoom = ({id = 'listLiveRoom', listRooms = []}) => {
     }
 
     useEffect(() => {
-
         let elList = document.getElementById(id);
         handleResize();
         if(elList)

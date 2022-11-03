@@ -8,7 +8,7 @@ const LiveRoomToDay = () => {
 
     return (
         <Table
-            title="My Room"
+            title="My Rooms"
             isLiveRoom
             filterDefault={{
                 start_date: today,
