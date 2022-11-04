@@ -84,7 +84,13 @@ const BodyRoom = ({ roomType, keyword }) => {
                {
                    loading ? <BrandLogoLoading /> :
                        <>
-                           <ListRoom listRooms={rooms} id={'listRooms'} />
+                           {
+                               rooms?.length ?  <ListRoom listRooms={rooms} id={'listRooms'} /> : (
+                                   <div className="pb-6 pt-4 text-center">
+                                       No data
+                                   </div>
+                               )
+                           }
                        </>
                }
 

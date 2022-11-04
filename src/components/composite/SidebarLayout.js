@@ -2,13 +2,15 @@ import classNames from "classnames";
 import { routeUrls } from "configs";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { withTranslation } from "react-i18next";
+import {useTranslation, withTranslation} from "react-i18next";
 import {Button, IconBase} from "components/base";
 import UserInfo from "./UserInfo";
 import { PlusOutlined } from "@ant-design/icons";
 import {resetUserToken} from "../../helpers";
 import {useAppStore} from "../../stores/app.store";
-const SidebarLayout = ({ t, onLogout }) => {
+const SidebarLayout = ({ onLogout }) => {
+    const {t} = useTranslation();
+
     const navigate = useNavigate();
     const location = useLocation();
     const [appStore, updateAppStore] = useAppStore();
@@ -97,11 +99,10 @@ const SidebarLayout = ({ t, onLogout }) => {
                         </div>
                         {
                             arrSidebar.map((item, index) => {
-
                                 let isActive = false;
                                 if(location.pathname === "/"){
                                     isActive = true;
-                                }else if(location.pathname.includes(item.path)){
+                                }else if(location.pathname.startsWith(`${item.path}`) && item.path !== '/'){
                                     isActive = true
                                 }
 
@@ -110,9 +111,10 @@ const SidebarLayout = ({ t, onLogout }) => {
                                         <button
                                             className={classNames(
                                                 "text-base font-normal",
-                                                location.pathname !== item.path
-                                                    ? "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row"
-                                                    : "btn btn-base justify-start font-medium",
+                                                    isActive && location.pathname?.toLocaleLowerCase().includes(item.path)
+                                                    ? "btn btn-base justify-start font-medium"
+                                                    : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
+
                                             )}
                                             onClick={() => {
                                                 if(!item.rightIcon){
@@ -124,7 +126,7 @@ const SidebarLayout = ({ t, onLogout }) => {
                                                 <IconBase
                                                     icon={item.icon}
                                                     iconActivated={item.iconActive}
-                                                    isActive={location.pathname === item.path && isActive}
+                                                    isActive={isActive}
                                                 />
                                                 <p className="pl-2">{item.label}</p>
                                             </div>
@@ -142,9 +144,9 @@ const SidebarLayout = ({ t, onLogout }) => {
                             "hover:text-white hover:bg-primary",
                             "flex justify-start rounded-none z-10",
                         )}
-                        onClick={onLogout}
+                        onClick={handleLogout}
                     >
-                        <IconBase icon="/icons/icons/logout-outline.svg" alt="logout-icon" className="" />
+                        <IconBase icon="/icons/icons/logout-outline.svg" alt="logout-icon" className="mr-4" />
                         {t("auth.logout")}
                     </a>
                 </div>
@@ -153,5 +155,5 @@ const SidebarLayout = ({ t, onLogout }) => {
     );
 };
 
-export default withTranslation()(SidebarLayout);
+export default SidebarLayout;
 

@@ -109,3 +109,12 @@ export const addComment = async (roomUudi, body) => {
 
     return null;
 }
+
+export const lockRoom = async (uuid, type = 'lock') => {
+    try {
+        const res = await client.post(`/${uuid}/${type}`)
+        return res?.data;
+    }catch (err){}
+
+    return null;
+}

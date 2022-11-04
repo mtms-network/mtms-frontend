@@ -83,7 +83,13 @@ const PopuplarRoom = ({ roomType, keyword }) => {
                 {
                     loading ? <BrandLogoLoading /> :
                         <>
-                            <ListRoom listRooms={rooms} id={Date.now()} />
+                            {
+                                rooms?.length ?  <ListRoom listRooms={rooms} id={Date.now()} /> : (
+                                    <div className="pb-6 pt-4 text-center">
+                                        No data
+                                    </div>
+                                )
+                            }
                         </>
                 }
 

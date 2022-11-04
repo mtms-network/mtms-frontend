@@ -26,6 +26,10 @@ import Discussion from "./components/Discussion";
 import BtnBlockRoom from "./components/Button/BtnBlockRoom";
 import BtnMyGift from "./components/Button/BtnMyGift";
 import LiveTopic from "./components/LiveTopic";
+import {getUser} from "../../../../helpers";
+import BtnRoomFull from "./components/Button/BtnRoomFull";
+import BtnGiftToHost from "./components/Button/BtnGiftToHost";
+import ShareRoom from "./components/Button/ShareRoom";
 
 const ViewLiveRoom = ({ t }) => {
     const params = useParams();
@@ -89,9 +93,15 @@ const ViewLiveRoom = ({ t }) => {
     };
 
     useEffect(() => {
-        fetchData();
+        fetchData().then();
     }, [params.meetingId]);
 
+    const checkOwner = () => {
+        const user = getUser();
+        return user?.uuid?.toUpperCase() === meeting?.user?.uuid?.toUpperCase();
+    }
+
+    console.log(checkOwner());
     return (
         <MainLayout>
             <div className="w-full">
@@ -121,19 +131,33 @@ const ViewLiveRoom = ({ t }) => {
                     <MaximumParticipant t={t} max_participant_count={meetingStore?.meeting?.max_participant_count} />
                 </div>
                 <div className="flex mb-6 flex-wrap items-center">
-                    <BtnStart t={t} meeting={meeting} />
-                    <BtnCopy t={t} meeting={meeting} />
-                    <BtnEdit t={t} meeting={meeting} />
-                    <Button
-                        className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
-                        onClick={() => {
-                            onConfirmDeleteMeeting(meetingStore?.meeting);
-                        }}
-                    >
-                        {t("general.delete")}
-                    </Button>
-                    <BtnBlockRoom />
-                    <BtnMyGift />
+                    {
+                        checkOwner() ? (
+                            <>
+                                <BtnStart t={t} meeting={meeting} isStart={true}/>
+                                <BtnBlockRoom uuid={params?.meetingId} is_blocked={meeting?.is_blocked} />
+                                <BtnCopy t={t} meeting={meeting} />
+                                <BtnEdit t={t} meeting={meeting} />
+                                <Button
+                                    className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
+                                    onClick={() => {
+                                        onConfirmDeleteMeeting(meetingStore?.meeting);
+                                    }}
+                                >
+                                    {t("general.delete")}
+                                </Button>
+                                <BtnMyGift />
+                            </>
+                        ) : (
+                            <>
+                                <BtnStart t={t} meeting={meeting} isStart={false} />
+                                <BtnRoomFull />
+                                <BtnGiftToHost />
+                                <ShareRoom />
+                            </>
+                        )
+                    }
+
                 </div>
                 <hr className="mb-6" />
                 <LiveTopic />

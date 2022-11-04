@@ -2,7 +2,7 @@ import React from "react";
 import {Button} from "../../../../../../components";
 import {routeUrls} from "../../../../../../configs";
 
-const BtnStart = ({t, meeting}) => {
+const BtnStart = ({t, meeting, isStart}) => {
 
     const handleStart = async () => {
         try {
@@ -19,7 +19,7 @@ const BtnStart = ({t, meeting}) => {
             className="btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
             onClick={handleStart}
         >
-            {t("general.start")}
+            { isStart ? t("general.start") : "Join" }
         </Button>
     )
 }

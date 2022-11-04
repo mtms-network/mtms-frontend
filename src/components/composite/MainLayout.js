@@ -118,7 +118,7 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
                         )}
                     </div>
                 </div>
-                <SidebarLayout onLogout={handleLogout} />
+                <SidebarLayout />
             </div>
         </I18nextProvider>
     );

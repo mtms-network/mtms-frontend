@@ -5,7 +5,7 @@ const Duration = ({ period, t }) => {
         <div className="flex space-x-[8px] items-center">
             <img src="/images/icon/clock.svg" alt="" />
             <span>{t("config.ui.duration")}: </span>
-            <span className="font-[700] text-[16px]">
+            <span className="font-[700]">
               {`${period} `} {t("list.general.durations.minutes")}
             </span>
         </div>
