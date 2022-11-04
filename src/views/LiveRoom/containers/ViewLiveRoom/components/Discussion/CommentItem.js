@@ -2,7 +2,8 @@ import React, { useState, createElement } from "react";
 import {Avatar, Comment, Tooltip } from "antd";
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
 import "../../index.css";
-import moment from "moment";
+import moment from "moment-timezone";
+import {getTimezone} from "../../../../../../helpers/i18nLocal";
 
 const CommentItem = (props) => {
     const { item, children } = props;
@@ -38,6 +39,8 @@ const CommentItem = (props) => {
         <span key="comment-basic-reply-to">Reply to</span>,
     ];
 
+    const time = moment.utc(item?.created_at).tz(getTimezone())
+
     return (
         <Comment
             actions={actions}
@@ -49,8 +52,8 @@ const CommentItem = (props) => {
                 </p>
             }
             datetime={
-                <Tooltip title={ item?.created_at }>
-                    <span>{ moment(item?.created_at).endOf('day').fromNow() }</span>
+                <Tooltip title={ time.format("hh:mm:ss a DD/MM/YYYY") }>
+                    <span>{ time.endOf('hour').fromNow() }</span>
                 </Tooltip>
             }
         >
