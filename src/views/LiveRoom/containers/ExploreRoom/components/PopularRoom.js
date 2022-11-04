@@ -6,8 +6,8 @@ import {BrandLogoLoading, GroupTitle, Pagination} from "../../../../../component
 const PopuplarRoom = ({ roomType, keyword }) => {
     const [filter, setFilter] = useState({
         page: 1,
-        limit: 12,
-        status: 'schedule',
+        limit: 20,
+        status: 'scheduled',
         roomType: roomType,
         keyword: '',
         sort_by: 'total_likes'

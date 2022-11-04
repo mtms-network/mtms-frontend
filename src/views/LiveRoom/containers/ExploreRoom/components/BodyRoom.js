@@ -6,7 +6,7 @@ import {BrandLogoLoading, GroupTitle, Pagination} from "../../../../../component
 const BodyRoom = ({ roomType, keyword }) => {
     const [filter, setFilter] = useState({
         page: 1,
-        limit: 12,
+        limit: 20,
         status: 'live',
         roomType: roomType,
         keyword: '',

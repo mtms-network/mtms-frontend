@@ -53,7 +53,7 @@ const CommentItem = (props) => {
             }
             datetime={
                 <Tooltip title={ time.format("hh:mm:ss a DD/MM/YYYY") }>
-                    <span>{ time.endOf('hour').fromNow() }</span>
+                    <span>{ time.startOf('minute').fromNow() }</span>
                 </Tooltip>
             }
         >

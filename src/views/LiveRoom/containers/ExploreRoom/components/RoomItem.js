@@ -69,12 +69,12 @@ const RoomItem = ({item}) => {
             </div>
             <div
                 className={`h-full flex flex-col justify-between rounded w-full my-2 p-4 cursor-pointer ${styles.wrapper}`}
-                style={{ height: '68%'}}
+                style={{ height: '68%', backgroundImage: `url(${ item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`}}
                 onClick={() => {
                     navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`)
                 }}
             >
-                <img src={item?.cover || '../../images/bg-crypto.png'} alt="icon" className={ styles.wrapperBackground } />
+                {/* <img src={item?.thumbnail || '../../images/bg-crypto.png'} alt="icon" className={ styles.wrapperBackground } /> */}
                 <div className={` h-1/3 flex justify-center gap-1 w-full items-center p-1.5 w-auto ${styles.roomItemBodyLive}`}>
                     <span className="w-20 font-bold">Live on</span>
                     <span className="font-size-small text-red-500">

@@ -98,6 +98,22 @@ const ViewLiveRoom = ({ t }) => {
         return user?.uuid?.toUpperCase() === meeting?.user?.uuid?.toUpperCase();
     }
 
+    const renderLoop = () => {
+        if(meeting?.live_time?.loop === 'd'){
+            return 'Daily'
+        }
+
+        if(meeting?.live_time?.loop === 'w'){
+            return 'Weekly'
+        }
+
+        if(meeting?.live_time?.loop === 'm'){
+            return 'Monthly'
+        }
+
+        return '';
+    }
+
     return (
         <MainLayout>
             <div className="w-full">
@@ -122,11 +138,12 @@ const ViewLiveRoom = ({ t }) => {
                 <div className="flex flex-wrap gap-x-5 gap-y-3 mb-[24px]">
                     <LiveTime
                         t={t}
-                        start_date_time={meetingStore?.meeting?.start_date_time}
-                        user_timezone={meetingStore?.meeting?.user_timezone}
+                        start_date_time={meeting?.live_time?.date}
+                        user_timezone={meeting?.user_timezone}
                     />
-                    <Duration t={t} period={meetingStore?.meeting?.period} />
-                    <MaximumParticipant t={t} max_participant_count={meetingStore?.meeting?.max_participant_count} />
+                    <Duration t={t} period={meeting?.period} />
+                    <MaximumParticipant t={t} max_participant_count={meeting?.max_participant_count} />
+                    { renderLoop() }
                 </div>
                 <div className="flex mb-6 flex-wrap items-center">
                     {
@@ -151,7 +168,9 @@ const ViewLiveRoom = ({ t }) => {
                                 {
                                     meeting?.started_at ? <BtnStart t={t} meeting={meeting} isStart={false} /> : null
                                 }
-                                <BtnRoomFull />
+                                {
+                                    meeting?.is_full ? <BtnRoomFull /> : null
+                                }
                                 <BtnGiftToHost />
                                 <ShareRoom />
                             </>
@@ -166,11 +185,11 @@ const ViewLiveRoom = ({ t }) => {
                 <div>
                     <GroupTitle icon={<IoTv />} title={t("general.agenda") + " Update"} />
                 </div>
-                <p className="mb-6 truncate flex-wrap">{meetingStore?.meeting?.agenda}</p>
+                <p className="mb-6 truncate flex-wrap">{meeting?.agenda}</p>
                 <div>
                     <GroupTitle icon={<IoTv />} title="Room Update" />
                 </div>
-                <p dangerouslySetInnerHTML={{ __html: meetingStore?.meeting?.description }} />
+                <p dangerouslySetInnerHTML={{ __html: meeting?.description }} />
                 <DeleteMeetingModal
                     onRefresh={() => {
                         navigate(`/${routeUrls.scheduleMeeting.path}`);

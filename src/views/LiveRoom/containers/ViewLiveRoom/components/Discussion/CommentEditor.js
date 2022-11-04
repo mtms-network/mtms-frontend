@@ -4,10 +4,11 @@ import {Avatar, Comment } from "antd";
 import Editor from "./Editor";
 import {getUser} from "../../../../../../helpers";
 import {addComment} from "../../../../../../services";
+import {useLiveRoomStore} from "../../../../../../stores/liveroom.store";
+import {API_RESPONSE_STATUS} from "../../../../../../configs";
 
 const CommentEditor = ({uuid}) => {
-
-    const [comments, setComments] = useState([]);
+    const [liveRoomStore, updateLiveRoomStore] = useLiveRoomStore();
     const [submitting, setSubmitting] = useState(false);
     const [value, setValue] = useState('');
 
@@ -26,7 +27,13 @@ const CommentEditor = ({uuid}) => {
                 parent_id: null
             })
 
-            console.log('res', res);
+            if(res?.status === API_RESPONSE_STATUS.success){
+                updateLiveRoomStore((r) => {
+                    let clone = [res.comment];
+                    clone = clone.concat(liveRoomStore.comments)
+                    r.comments = clone;
+                })
+            }
         }, 1000);
     };
 
@@ -37,7 +44,7 @@ const CommentEditor = ({uuid}) => {
     return (
         <div className="mtms-comment-discussion">
             <Comment
-                avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+                avatar={<Avatar src={ user?.profile?.avatar } alt="avatar" />}
                 content={
                     <Editor
                         onChange={handleChange}
