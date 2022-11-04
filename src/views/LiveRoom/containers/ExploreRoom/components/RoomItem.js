@@ -71,7 +71,7 @@ const RoomItem = ({item}) => {
                 className={`h-full flex flex-col justify-between rounded w-full my-2 p-4 cursor-pointer ${styles.wrapper}`}
                 style={{ height: '68%'}}
                 onClick={() => {
-                    navigate(`/${routeUrls.liveRoom.path}/view/${item.uuid}`)
+                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`)
                 }}
             >
                 <img src={item?.cover || '../../images/bg-crypto.png'} alt="icon" className={ styles.wrapperBackground } />

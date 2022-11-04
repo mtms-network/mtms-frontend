@@ -2,9 +2,10 @@ import React, { useState, createElement } from "react";
 import {Avatar, Comment, Tooltip } from "antd";
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
 import "../../index.css";
+import moment from "moment";
 
-const CommentItem = ({children}) => {
-
+const CommentItem = (props) => {
+    const { item, children } = props;
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const [action, setAction] = useState(null);
@@ -40,17 +41,16 @@ const CommentItem = ({children}) => {
     return (
         <Comment
             actions={actions}
-            author={<a>Han Solo</a>}
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+            author={<a>{ item?.user?.profile?.name }</a>}
+            avatar={<Avatar src={item?.user?.profile?.avatar} alt={item?.user?.profile?.name} />}
             content={
                 <p>
-                    We supply a series of design principles, practical patterns and high quality design
-                    resources (Sketch and Axure).
+                    { item?.body }
                 </p>
             }
             datetime={
-                <Tooltip title="2016-11-22 11:22:33">
-                    <span>8 hours ago</span>
+                <Tooltip title={ item?.created_at }>
+                    <span>{ moment(item?.created_at).endOf('day').fromNow() }</span>
                 </Tooltip>
             }
         >

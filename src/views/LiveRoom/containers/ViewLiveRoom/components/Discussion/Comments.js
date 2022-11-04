@@ -10,7 +10,7 @@ const Comments = ({comments, ...children}) => {
                 comments?.map((comment, index) => {
 
                     return (
-                        <CommentItem key={index} />
+                        <CommentItem key={index} item={comment}  />
                     )
                 })
             }

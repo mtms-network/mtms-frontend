@@ -96,9 +96,9 @@ const Routers = () => {
                 <Route path={`/${routeUrls.calendar.path}`} element={<Calendar />} />
                 <Route path={`/${routeUrls.liveRoom.path}`} element={<ListLiveRoom />} />
                 <Route path={`/${routeUrls.newLiveRoom.path}`} element={<NewLiveRoom />} />
-                <Route path={`/${routeUrls.liveRoom.path}/view/:meetingId`} element={<ViewLiveRoom />} />
+                <Route path={`/${routeUrls.exploreRoom.path}/view/:meetingId`} element={<ViewLiveRoom />} />
                 <Route path={`/${routeUrls.liveRoom.path}/:id/duplicate`} element={<DuplicateLiveRoom />} />
-                <Route path={`/${routeUrls.liveRoom.path}/:id/edit`} element={<EditLiveRoom />} />
+                <Route path={`/${routeUrls.exploreRoom.path}/:id/edit`} element={<EditLiveRoom />} />
                 <Route path={`/${routeUrls.exploreRoom.path}`} element={<ExploreRoom />} />
 
                 <Route path="/" element={<Overview />} />

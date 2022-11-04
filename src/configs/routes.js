@@ -90,7 +90,7 @@ export const routeUrls = {
         path: "live-room",
     },
     newLiveRoom: {
-        path: "explore-room/new",
+        path: "live-room/new",
     },
     exploreRoom: {
         path: "explore-room",

@@ -10,7 +10,7 @@ const BtnEdit = ({t, meeting}) => {
         <Button
             className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
             onClick={() => {
-                navigate(`/${routeUrls.liveRoom.path}/${meeting?.uuid}/edit`);
+                navigate(`/${routeUrls.exploreRoom.path}/${meeting?.uuid}/edit`);
             }}
         >
             {t("general.edit")}

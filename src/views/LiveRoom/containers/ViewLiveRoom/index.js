@@ -66,9 +66,6 @@ const ViewLiveRoom = ({ t }) => {
         try {
             const res = await getMeetingDetail(params.meetingId);
             if (res) {
-                updateMeetingStore((draft) => {
-                    draft.meeting = res;
-                });
                 setMeeting(res);
             }
         } catch (error) {
@@ -101,7 +98,6 @@ const ViewLiveRoom = ({ t }) => {
         return user?.uuid?.toUpperCase() === meeting?.user?.uuid?.toUpperCase();
     }
 
-    console.log(checkOwner());
     return (
         <MainLayout>
             <div className="w-full">
@@ -118,7 +114,8 @@ const ViewLiveRoom = ({ t }) => {
                 />
             </div>
             <GroupLayout className="flex flex-col justify-between">
-                <img src={ meeting?.cover } alt="bg" className="mb-2"/>
+                { meeting?.cover && <img src={ meeting?.cover } alt="bg" className="mb-2"/> }
+
                 <h1 className="font-[700] text-[32px] truncate">{meetingStore?.meeting?.title}</h1>
                 <div className="text-[16px] text-gray mb-[24px]">{meetingStore?.meeting?.type?.name}</div>
 
@@ -136,7 +133,7 @@ const ViewLiveRoom = ({ t }) => {
                         checkOwner() ? (
                             <>
                                 <BtnStart t={t} meeting={meeting} isStart={true}/>
-                                <BtnBlockRoom uuid={params?.meetingId} is_blocked={meeting?.is_blocked} />
+                                <BtnBlockRoom uuid={params?.meetingId} meeting={meeting} />
                                 <BtnCopy t={t} meeting={meeting} />
                                 <BtnEdit t={t} meeting={meeting} />
                                 <Button
@@ -151,7 +148,9 @@ const ViewLiveRoom = ({ t }) => {
                             </>
                         ) : (
                             <>
-                                <BtnStart t={t} meeting={meeting} isStart={false} />
+                                {
+                                    meeting?.started_at ? <BtnStart t={t} meeting={meeting} isStart={false} /> : null
+                                }
                                 <BtnRoomFull />
                                 <BtnGiftToHost />
                                 <ShareRoom />
@@ -165,11 +164,11 @@ const ViewLiveRoom = ({ t }) => {
                 <Attendees t={t} meeting={meeting} />
 
                 <div>
-                    <GroupTitle icon={<IoTv />} title={t("general.agenda")} />
+                    <GroupTitle icon={<IoTv />} title={t("general.agenda") + " Update"} />
                 </div>
                 <p className="mb-6 truncate flex-wrap">{meetingStore?.meeting?.agenda}</p>
                 <div>
-                    <GroupTitle icon={<IoTv />} title="Room Description" />
+                    <GroupTitle icon={<IoTv />} title="Room Update" />
                 </div>
                 <p dangerouslySetInnerHTML={{ __html: meetingStore?.meeting?.description }} />
                 <DeleteMeetingModal

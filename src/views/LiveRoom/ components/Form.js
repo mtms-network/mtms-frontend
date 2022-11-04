@@ -13,7 +13,7 @@ import {ALERT_TYPE, routeUrls} from "configs";
 import { useNavigate } from "react-router-dom";
 import {
     getRequirePreMeeting,
-    getMeetingContact, createInstantMeeting,
+    getMeetingContact, createInstantMeeting, getMeetingDetail,
 } from "services";
 import {useTranslation} from "react-i18next";
 import { Formik } from "formik";
@@ -122,61 +122,73 @@ const Form = ({ action , id }) => {
             await fetchContact();
             await fetchType();
 
-            // if(action > 1)
-            // {
-            //     const res = await getMeetingDetail(id);
-            //
-            //     setInitialValues(res);
-            //     if(res)
-            //     {
-            //         setType(res.type.uuid);
-            //         setValue("agenda", res.agenda);
-            //         setRoomType( res?.roomType || null);
-            //         setValue("title", res.title);
-            //         if (action !== 3) {
-            //             setValue("identifier", res.identifier);
-            //         }
-            //         setValue("max_participant_count", res.max_participant_count);
-            //         const startDate = moment(res.start_date_time, "YYYY-MM-DD");
-            //         const time = moment(res.start_date_time);
-            //
-            //         if (action === 3) {
-            //             const now = moment();
-            //             const diffDays = startDate.diff(now.startOf("day"), "days");
-            //             if (diffDays <= 0) {
-            //                 const diffHours = time.diff(now.startOf("hour"), "hours");
-            //                 if (diffHours <= 0) {
-            //                     setStartTime(moment());
-            //                 } else {
-            //                     setStartTime(time);
-            //                 }
-            //                 setStartDateTime(now);
-            //             } else {
-            //                 setStartDateTime(startDate);
-            //             }
-            //         } else {
-            //             setStartDateTime(startDate);
-            //             setStartTime(time);
-            //         }
-            //
-            //         setDescription(
-            //             EditorState.createWithContent(
-            //                 ContentState.createFromBlockArray(convertFromHTML(res?.description || "")),
-            //             ),
-            //         );
-            //
-            //         const currentContacts = [];
-            //         res.invitees.map((item) => {
-            //             currentContacts.push({
-            //                 ...item,
-            //                 key: item.contact.uuid,
-            //                 value: item.contact.name || item.contact.email,
-            //             });
-            //             return 1;
-            //         });
-            //         setContacts(currentContacts);
-            //     }
-            // }
+            if(action > 1)
+            {
+                const res = await getMeetingDetail(id);
+                console.log('res', res);
+                if(res){
+                    const init = {...initialValues};
+
+                    init.title = res?.title;
+                    init.live_topic = res?.live_topic;
+                    init.type = res?.type;
+                    init.roomType = res?.roomType?.uuid;
+                    init.max_participant_count = res?.max_participant_count;
+                    init.meeting_code = res?.identifier;
+                    setInitialValues(init);
+                }
+
+                // setInitialValues(res);
+                // if(res)
+                // {
+                //     setType(res.type.uuid);
+                //     setValue("agenda", res.agenda);
+                //     setRoomType( res?.roomType || null);
+                //     setValue("title", res.title);
+                //     if (action !== 3) {
+                //         setValue("identifier", res.identifier);
+                //     }
+                //     setValue("max_participant_count", res.max_participant_count);
+                //     const startDate = moment(res.start_date_time, "YYYY-MM-DD");
+                //     const time = moment(res.start_date_time);
+                //
+                //     if (action === 3) {
+                //         const now = moment();
+                //         const diffDays = startDate.diff(now.startOf("day"), "days");
+                //         if (diffDays <= 0) {
+                //             const diffHours = time.diff(now.startOf("hour"), "hours");
+                //             if (diffHours <= 0) {
+                //                 setStartTime(moment());
+                //             } else {
+                //                 setStartTime(time);
+                //             }
+                //             setStartDateTime(now);
+                //         } else {
+                //             setStartDateTime(startDate);
+                //         }
+                //     } else {
+                //         setStartDateTime(startDate);
+                //         setStartTime(time);
+                //     }
+                //
+                //     setDescription(
+                //         EditorState.createWithContent(
+                //             ContentState.createFromBlockArray(convertFromHTML(res?.description || "")),
+                //         ),
+                //     );
+                //
+                //     const currentContacts = [];
+                //     res.invitees.map((item) => {
+                //         currentContacts.push({
+                //             ...item,
+                //             key: item.contact.uuid,
+                //             value: item.contact.name || item.contact.email,
+                //         });
+                //         return 1;
+                //     });
+                //     setContacts(currentContacts);
+                //}
+            }
 
             setFetchLoading(false);
         } catch (error) {
@@ -295,7 +307,7 @@ const Form = ({ action , id }) => {
                                             />
                                             <FormBase
                                                 className={''}
-                                                label={"Room type"}
+                                                label={"Type"}
                                             >
                                                 <div>
                                                     {types &&
@@ -351,7 +363,7 @@ const Form = ({ action , id }) => {
                                                 mgsError={formik.errors?.live_topic}
                                                 value={formik.values?.live_topic}
                                                 onChange={formik.handleChange}
-                                                placeholder={t("schedule_meeting.enter_title_meeting")}
+                                                placeholder={"Enter live topic"}
                                             />
 
                                             <div className="w-full sm:flex sm:flex-row sm:justify-between">

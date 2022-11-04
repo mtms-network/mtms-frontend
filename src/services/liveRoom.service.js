@@ -25,7 +25,7 @@ export const getListLiveRoom = async (filter) => {
 export const getPublicLiveRoom = async (filter) => {
     try {
         const defaultFilters = {
-            sort_by: "start_date_time",
+            sort_by: filter?.sort_by || 'start_date_time',
             order: "desc",
             room: true,
             name: "",
@@ -113,6 +113,15 @@ export const addComment = async (roomUudi, body) => {
 export const lockRoom = async (uuid, type = 'lock') => {
     try {
         const res = await client.post(`/${uuid}/${type}`)
+        return res?.data;
+    }catch (err){}
+
+    return null;
+}
+
+export const startRoom = async (uuid) => {
+    try {
+        const res = await client.post(`/${uuid}/start`);
         return res?.data;
     }catch (err){}
 

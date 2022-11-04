@@ -10,6 +10,7 @@ const PopuplarRoom = ({ roomType, keyword }) => {
         status: 'schedule',
         roomType: roomType,
         keyword: '',
+        sort_by: 'total_likes'
     })
     const [pagination, setPagination] = useState({})
     const [rooms, setRooms] = useState([]);

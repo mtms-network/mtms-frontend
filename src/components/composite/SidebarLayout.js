@@ -52,21 +52,21 @@ const SidebarLayout = ({ onLogout }) => {
             icon: '/icons/icons/task-outline.svg',
             iconActive: '/icons/icons/task-fill.svg',
         },
-        // {
-        //     label: 'My Room',
-        //     path: `/${routeUrls.liveRoom.path}`,
-        //     icon: '/icons/icons/live-room-outline.svg',
-        //     iconActive: '/icons/icons/live-room-fill.svg',
-        // },
         {
             label: 'Explore Live Room',
             path: `/${routeUrls.exploreRoom.path}`,
             icon: '/icons/icons/live-room-outline.svg',
             iconActive: '/icons/icons/live-room-fill.svg',
-            rightIcon: <button
-                className="bg-primary w-8 h-8 flex items-center justify-center rounded ml-2"
+        },
+        {
+            label: 'New room',
+            path: `/${routeUrls.liveRoom.path}/new`,
+            icon: '',
+            iconActive: '',
+            leftIcon: <button
+                className="bg-primary w-8 h-8 flex items-center justify-center rounded"
                 onClick={() => {
-                    navigate(`/${routeUrls.newLiveRoom.path}`)
+                    navigate(`/${routeUrls.liveRoom.path}/new`)
                 }}
             >
                 <div className={"flex items-center justify-center bg-white rounded-full p-1"}>
@@ -102,7 +102,9 @@ const SidebarLayout = ({ onLogout }) => {
                                 let isActive = false;
                                 if(location.pathname === "/"){
                                     isActive = true;
-                                }else if(location.pathname.startsWith(`${item.path}`) && item.path !== '/'){
+                                }else if(location.pathname === item.path){
+                                    isActive = true
+                                } else if(location.pathname.startsWith(`${item.path}`) && item.path !== '/'){
                                     isActive = true
                                 }
 
@@ -117,17 +119,20 @@ const SidebarLayout = ({ onLogout }) => {
 
                                             )}
                                             onClick={() => {
-                                                if(!item.rightIcon){
-                                                    navigate(item.path)
-                                                }
+                                                navigate(item.path)
                                             }}
                                         >
+                                            { item?.leftIcon }
                                             <div className="flex items-center" onClick={() => navigate(item.path)}>
-                                                <IconBase
-                                                    icon={item.icon}
-                                                    iconActivated={item.iconActive}
-                                                    isActive={isActive}
-                                                />
+                                                {
+                                                    item?.icon ? (
+                                                        <IconBase
+                                                            icon={item.icon}
+                                                            iconActivated={item.iconActive}
+                                                            isActive={isActive}
+                                                        />
+                                                    ) : null
+                                                }
                                                 <p className="pl-2">{item.label}</p>
                                             </div>
                                             { item?.rightIcon }
@@ -142,7 +147,7 @@ const SidebarLayout = ({ onLogout }) => {
                             "btn btn-block btn-primary",
                             "bg-white border-0 text-black",
                             "hover:text-white hover:bg-primary",
-                            "flex justify-start rounded-none z-10",
+                            "flex justify-start rounded-none z-10 border-t border-gray-200",
                         )}
                         onClick={handleLogout}
                     >

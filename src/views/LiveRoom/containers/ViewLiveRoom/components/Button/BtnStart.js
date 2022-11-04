@@ -1,25 +1,61 @@
 import React from "react";
 import {Button} from "../../../../../../components";
-import {routeUrls} from "../../../../../../configs";
+import {API_RESPONSE_STATUS, routeUrls} from "../../../../../../configs";
+import {startRoom} from "../../../../../../services";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Modal, Space } from 'antd';
 
 const BtnStart = ({t, meeting, isStart}) => {
+    const { confirm } = Modal;
 
     const handleStart = async () => {
-        try {
-            if (meeting) {
-                window.open(`/${routeUrls.meetingRedirect.path}/${meeting?.identifier}`);
+        let start = true;
+        if(isStart)
+        {
+            const res = await startRoom(meeting?.uuid);
+            if(res?.status !== API_RESPONSE_STATUS.success){
+                isStart = false;
             }
-        } catch (error) {
-            console.log("start meeting error");
         }
+
+        if(start){
+            try {
+                if (meeting) {
+                    window.open(`/${routeUrls.meetingRedirect.path}/${meeting?.identifier}`);
+                }
+            } catch (error) {
+                console.log("start meeting error");
+            }
+        }
+    };
+
+    const showConfirm = () => {
+        confirm({
+            title: 'Question',
+            icon: <ExclamationCircleOutlined />,
+            content: `Do you want ${ isStart ? 'start' : 'end' } room?`,
+            okText: 'Yes',
+            onOk() {
+                handleStart().then()
+            },
+            onCancel() {
+
+            },
+        });
     };
 
     return (
         <Button
-            className="btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4"
-            onClick={handleStart}
+            className={`btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4 ${ meeting?.started_at ? 'cursor-not-allowed' : '' }`}
+            onClick={() => {
+                if(!meeting?.started_at){
+                    showConfirm();
+                }
+            }}
         >
-            { isStart ? t("general.start") : "Join" }
+            { isStart ? (
+                meeting?.started_at ? "Started" : t("general.start")
+            ) : "Join" }
         </Button>
     )
 }
