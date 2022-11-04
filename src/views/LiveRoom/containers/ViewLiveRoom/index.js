@@ -118,6 +118,7 @@ const ViewLiveRoom = ({ t }) => {
                 />
             </div>
             <GroupLayout className="flex flex-col justify-between">
+                <img src={ meeting?.cover } alt="bg" className="mb-2"/>
                 <h1 className="font-[700] text-[32px] truncate">{meetingStore?.meeting?.title}</h1>
                 <div className="text-[16px] text-gray mb-[24px]">{meetingStore?.meeting?.type?.name}</div>
 
