@@ -51,62 +51,60 @@ const RoomItem = ({item}) => {
     };
 
     return (
-        <div className={`w-full border-1 shadow-lg rounded-2xl p-3 ${styles.container}`}>
-            <div className={ styles.header }>
-                <div className={`font-size-small rounded border-1 border-red-500 ${styles.headerLiveTime}`}>
-                    <span className="whitespace-nowrap text-red-500 font-bold">LIVE ON</span>
-                    <span>8:24 PM, 28/04/2022 Melbourne/Aus</span>
+        <div className="w-full h-80 border-1 shadow-lg rounded-2xl p-3">
+            <div className={`${ styles.roomItemTitle } font-size-small gap-6`}>
+                <div className="flex gap-2 items-center">
+                    <div className={`${styles.roomItemTitleItem} rounded`}>{ item?.type?.name }</div>
+                    { item?.roomType?.name ? (
+                        <div className={`${styles.roomItemTitleItem} rounded-2xl`}>{ item?.roomType?.name }</div>
+                    ) : null }
+
                 </div>
-            </div>
-            <div
-                className={`flex flex-col justify-between rounded w-full my-2 p-2 ${styles.wrapper}`}
-                style={{ height: '40%', backgroundImage: `url(${ item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`}}
-                onClick={() => {
-                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`)
-                }}
-            >
-            </div>
-            <div
-                onClick={() => {
-                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`)
-                }}
-                className="cursor-pointer"
-            >
-                <div className="h-1/3 flex items-center gap-2">
-                    <div style={{width: '50px'}}>
-                        <img src={ item?.user?.profile?.avatar || "../../../../images/logo.png" } alt="" className={`${styles.hexagon} rounded-full`}/>
-                    </div>
-                    <div className={`font-bold w-4/5 ${styles.profileName}`}>
-                        <div className={styles.threeDot}>
-                            Room: { item.title }
-                        </div>
-                        <div className={styles.threeDot}>
-                            Host: { item?.user?.profile?.name }
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className={`pt-2 ${styles.description}`}>
-                <span className="font-bold font-size-small">Live Topic: </span>
-                <span className={`font-size-small`}>
-                            {/* <p dangerouslySetInnerHTML={{ __html: item?.description }} /> */}
-                    { item?.live_topic }
-                </span>
-            </div>
-            <div className="flex justify-between py-0.5">
                 <button
-                    className="btn-primary p-1 px-4 rounded text-white font-bold"
+                    className="rounded-full w-8 h-8 bg-red-600 text-white font-bold"
                     onClick={onJoin}
                 >
                     Join
                 </button>
-                <div>
-                    { item?.roomType?.name ? (
-                        <div className={`${styles.roomItemTitleItem} rounded-2xl`}>{ item?.roomType?.name }</div>
-                    ) : null }
+            </div>
+            <div
+                className={`h-full flex flex-col justify-between rounded w-full my-2 p-4 cursor-pointer ${styles.wrapper}`}
+                style={{ height: '68%', backgroundImage: `url(${ item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`}}
+                onClick={() => {
+                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`)
+                }}
+            >
+                {/* <img src={item?.thumbnail || '../../images/bg-crypto.png'} alt="icon" className={ styles.wrapperBackground } /> */}
+                <div className={` h-1/3 flex justify-center gap-1 w-full items-center p-1.5 w-auto ${styles.roomItemBodyLive}`}>
+                    <span className="w-20 font-bold">Live on</span>
+                    <span className="font-size-small text-red-500">
+                       { renderLiveTime() }
+                    </span>
+                </div>
+
+                <div className="h-1/3">
+                    <div className={`pt-2 ${styles.description}`}>
+                        <span className="font-bold font-size-small">Live Topic: </span>
+                        <span className={`font-size-small`}>
+                            {/* <p dangerouslySetInnerHTML={{ __html: item?.description }} /> */}
+                            { item?.live_topic }
+                        </span>
+                    </div>
+                </div>
+
+                <div className="h-1/3 flex items-center justify-between gap-2">
+                    <div className={`font-bold ${styles.profileName}`}>
+                        Join with: { item?.user?.profile?.name }
+                    </div>
+                    <div style={{width: '50px'}}>
+                        <img src={ item?.user?.profile?.avatar || "../../../../images/logo.png" } alt="" className={`${styles.hexagon} rounded-full`}/>
+                    </div>
                 </div>
             </div>
-            <div className="flex items-center justify-between mt-0.5">
+            <div className={`title font-bold mb-1 ${styles.threeDot}`}>
+                Room: { item.title }
+            </div>
+            <div className="flex items-center justify-between">
                 <div className="flex items-center font-size-small gap-1">
                     <IconChat size={16} />{ item?.total_comments } DISCUSSION
                 </div>
