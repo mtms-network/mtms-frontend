@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {useTranslation, withTranslation} from "react-i18next";
 import {Button, IconBase} from "components/base";
 import UserInfo from "./UserInfo";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusCircleFilled } from "@ant-design/icons";
 import {resetUserToken} from "../../helpers";
 import {useAppStore} from "../../stores/app.store";
 const SidebarLayout = ({ onLogout }) => {
@@ -61,18 +61,9 @@ const SidebarLayout = ({ onLogout }) => {
         {
             label: 'New room',
             path: `/${routeUrls.liveRoom.path}/new`,
-            icon: '',
-            iconActive: '',
-            leftIcon: <button
-                className="bg-primary w-8 h-8 flex items-center justify-center rounded"
-                onClick={() => {
-                    navigate(`/${routeUrls.liveRoom.path}/new`)
-                }}
-            >
-                <div className={"flex items-center justify-center bg-white rounded-full p-1"}>
-                    <PlusOutlined style={{fontSize: 12}} className={"text-primary"} />
-                </div>
-            </button>
+            icon: '/icons/icons/add-square-outline-green.svg',
+            iconActive: '/icons/icons/add-square-outline-green.svg',
+            className: 'text-[#233a09ee]'
         },
     ]
 
@@ -100,9 +91,7 @@ const SidebarLayout = ({ onLogout }) => {
                         {
                             arrSidebar.map((item, index) => {
                                 let isActive = false;
-                                if(location.pathname === "/"){
-                                    isActive = true;
-                                }else if(location.pathname === item.path){
+                                if(location.pathname === item.path){
                                     isActive = true
                                 } else if(location.pathname.startsWith(`${item.path}`) && item.path !== '/'){
                                     isActive = true
@@ -116,6 +105,7 @@ const SidebarLayout = ({ onLogout }) => {
                                                     isActive && location.pathname?.toLocaleLowerCase().includes(item.path)
                                                     ? "btn btn-base justify-start font-medium"
                                                     : "btn btn-ghost btn-block btn-link-dark justify-start flex flex-row",
+                                                    item?.className
 
                                             )}
                                             onClick={() => {
