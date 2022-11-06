@@ -185,18 +185,10 @@ const Overview = ({ t }) => {
                 {t("overview.your_mtms_box")}
               </p>
               <div className="flex justify-center flex-row pt-2">
-                <Button className="btn btn-primary" onClick={onBuyBox}>
-                  <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />
-                  {t("blindBox.buy_box")}
-                </Button>
-
-                <Button className="btn btn-primary ml-2" onClick={() => { mintBox(false) }}>
-                  Mint Common box
-                </Button>
-
-                <Button className="btn btn-primary ml-2" onClick={() => { mintBox(true) }}>
-                  Mint epic box
-                </Button>
+                {/*<Button className="btn btn-primary" onClick={onBuyBox}>*/}
+                {/*  <img src="/icons/icons/add-white-user-fill.svg" alt="buy mtms" className="pr-2" />*/}
+                {/*  {t("blindBox.buy_box")}*/}
+                {/*</Button>*/}
               </div>
             </div>
           </div>
@@ -254,6 +246,9 @@ const Overview = ({ t }) => {
                               { loadingBox && <Loading wrapper={false} title="" /> }
                               {t("overview.open_box")}
                             </Button>
+                              <Button className="btn btn-primary ml-2" onClick={() => { mintBox(box?.sku == 'box-epic') }}>
+                                  Mint
+                              </Button>
                           </div>
                         </div>
                       </div>
