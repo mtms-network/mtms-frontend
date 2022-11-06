@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import styles from "../index.module.css";
 import {IconChat} from "../../../../../components/Icons/IconChat";
 import {IconToggleRight} from "../../../../../components/Icons/IconToggleRight";
-import {likeRoom} from "../../../../../services";
+import {disLikeRoom, likeRoom} from "../../../../../services";
 import {API_RESPONSE_STATUS, routeUrls} from "../../../../../configs";
 import {UserOutlined, LikeOutlined} from "@ant-design/icons";
 
@@ -31,7 +31,7 @@ const RoomItem = ({item}) => {
     };
 
     const onDisLike = async () => {
-        const res = await likeRoom(item?.uuid);
+        const res = await disLikeRoom(item?.uuid);
         if (res?.status === API_RESPONSE_STATUS.success) {
             message.success("Dislike success");
             item.total_likes -= 1;

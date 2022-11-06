@@ -30,6 +30,7 @@ import {getUser} from "../../../../helpers";
 import BtnRoomFull from "./components/Button/BtnRoomFull";
 import BtnGiftToHost from "./components/Button/BtnGiftToHost";
 import ShareRoom from "./components/Button/ShareRoom";
+import LikeRoom from "./components/Button/LikeRoom";
 
 const ViewLiveRoom = ({ t }) => {
     const params = useParams();
@@ -173,6 +174,7 @@ const ViewLiveRoom = ({ t }) => {
                                 }
                                 <BtnGiftToHost />
                                 <ShareRoom />
+                                <LikeRoom meeting={meeting} />
                             </>
                         )
                     }
