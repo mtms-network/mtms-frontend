@@ -7,6 +7,7 @@ import {IconChat} from "../../../../../components/Icons/IconChat";
 import {IconToggleRight} from "../../../../../components/Icons/IconToggleRight";
 import {likeRoom} from "../../../../../services";
 import {API_RESPONSE_STATUS, routeUrls} from "../../../../../configs";
+import {UserOutlined, LikeOutlined} from "@ant-design/icons";
 
 const RoomItem = ({item}) => {
     const navigate = useNavigate();
@@ -19,24 +20,24 @@ const RoomItem = ({item}) => {
 
     const onLike = async () => {
         const res = await likeRoom(item?.uuid);
-        if(res?.status === API_RESPONSE_STATUS.success){
+        if (res?.status === API_RESPONSE_STATUS.success) {
             message.success("Liked success");
             item.total_likes += 1;
             item.liked = true;
             setIsReload(!isReload);
-        }else{
+        } else {
             message.error("Liked fail");
         }
     };
 
     const onDisLike = async () => {
         const res = await likeRoom(item?.uuid);
-        if(res?.status === API_RESPONSE_STATUS.success){
+        if (res?.status === API_RESPONSE_STATUS.success) {
             message.success("Dislike success");
             item.total_likes -= 1;
             item.liked = false;
             setIsReload(!isReload);
-        }else{
+        } else {
             message.error("Dislike fail");
         }
     };
@@ -50,22 +51,25 @@ const RoomItem = ({item}) => {
             console.log("start meeting error");
         }
     };
-    
+
     return (
         <div className={`w-full border-1 shadow-lg rounded-2xl p-3 ${styles.container}`}>
-            <div className={ styles.header }>
-                <div className={`font-size-small rounded border-1 border-red-500 ${styles.headerLiveTime}`}>
+            <div className={styles.header}>
+                <div className={`font-size-small rounded ${styles.headerLiveTime}`}>
                     <span className="whitespace-nowrap text-red-500 font-bold">LIVE ON</span>
                     <span>8:24 PM, 28/04/2022 Melbourne/Aus</span>
                 </div>
             </div>
             <div
                 className={`flex flex-col justify-between rounded w-full my-2 p-2 ${styles.wrapper}`}
-                style={{ height: '40%', backgroundImage: `url(${ item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`}}
+                style={{
+                    height: '40%',
+                    backgroundImage: `url(${item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`
+                }}
                 onClick={() => {
                     navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
                 }}
-             />
+            />
             <div
                 onClick={() => {
                     navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
@@ -74,23 +78,25 @@ const RoomItem = ({item}) => {
             >
                 <div className="h-1/3 flex items-center gap-2">
                     <div style={{width: '50px'}}>
-                        <img src={ item?.user?.profile?.avatar || "../../../../images/logo.png" } alt="" className={`${styles.hexagon} rounded-full`}/>
+                        <img src={item?.user?.profile?.avatar || "../../../../images/logo.png"} alt=""
+                             className={`${styles.hexagon} rounded-full`}/>
                     </div>
-                    <div className={`font-bold w-4/5 ${styles.profileName}`}>
-                        <div className={styles.threeDot}>
-                            Room: { item.title }
+                    <div className={`w-4/5 ${styles.profileName}`}>
+                        <div className={`font-bold ` + styles.threeDot}>
+                            {item.title}
                         </div>
-                        <div className={styles.threeDot}>
-                            Host: { item?.user?.profile?.name }
+                        <div className={`flex items-center ` + styles.threeDot}>
+                            <UserOutlined/>
+                            <span className={`pl-1`}>{item?.user?.profile?.name}</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div className={`pt-2 ${styles.description}`}>
-                <span className="font-bold font-size-small">Live Topic: </span>
+                <span className="font-size-small">Live Topic: </span>
                 <span className="font-size-small">
                             {/* <p dangerouslySetInnerHTML={{ __html: item?.description }} /> */}
-                    { item?.live_topic }
+                    {item?.live_topic}
                 </span>
             </div>
             <div className="flex justify-between py-0.5">
@@ -99,28 +105,31 @@ const RoomItem = ({item}) => {
                     onClick={onJoin}
                 >
                     <span>Join</span>
-                    <IconToggleRight />
+                    <IconToggleRight/>
                 </a>
 
             </div>
             <div className="flex items-center justify-between mt-1">
                 <div className="flex items-center font-size-small gap-1">
-                    <IconChat size={16} />{ item?.total_comments } DISCUSSION
+                    <IconChat size={16}/>{item?.total_comments} discussions
                 </div>
                 <div className="flex items-center font-size-small gap-1">
                     <div
-                        className={`rounded px-1 py-0.5 border-1 cursor-pointer ${ item?.liked ? "border-primary" : "" }`}
-                        onClick={ async () => {
-                            if(item?.liked){
+                        title={item?.liked ? 'You liked this room' : 'Clicks to like this room'}
+                        className={`rounded px-1 py-0.5 border-1 cursor-pointer hover:border-info ${item?.liked ? "border-primary text-primary" : ""}`}
+                        onClick={async () => {
+                            if (item?.liked) {
                                 await onDisLike();
-                            }else{
+                            } else {
                                 await onLike();
                             }
                         }}
                     >
-                        { item?.liked ? "Liked" : "Like" }
+                        <div className={`flex items-center`}>
+                            <LikeOutlined/>
+                            <span className={`px-1`}>{item?.total_likes}</span>
+                        </div>
                     </div>
-                    <div className="rounded px-1 py-0.5 border-1">{ item?.total_likes }</div>
                 </div>
             </div>
         </div>
