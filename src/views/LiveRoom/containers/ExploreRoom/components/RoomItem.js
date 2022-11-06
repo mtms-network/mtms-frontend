@@ -64,7 +64,8 @@ const RoomItem = ({item}) => {
                 className={`flex flex-col justify-between rounded w-full my-2 p-2 ${styles.wrapper}`}
                 style={{
                     height: '40%',
-                    backgroundImage: `url(${item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`
+                    backgroundImage: `url(${item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`,
+                    backgroundSize: 'cover'
                 }}
                 onClick={() => {
                     navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
