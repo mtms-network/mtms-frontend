@@ -65,7 +65,7 @@ const RoomItem = ({item}) => {
                 style={{
                     height: '40%',
                     backgroundImage: `url(${item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`,
-                    backgroundSize: 'cover'
+                    backgroundSize: '100% 100%'
                 }}
                 onClick={() => {
                     navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
