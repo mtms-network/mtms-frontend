@@ -1,20 +1,21 @@
 import React, {useState} from "react";
-import styles from "../index.module.css";
-import {IconChat} from "../../../../../components/Icons/IconChat";
 import moment from "moment";
-import {likeRoom} from "../../../../../services";
-import {API_RESPONSE_STATUS, routeUrls} from "../../../../../configs";
 import {message} from "antd";
 import {useNavigate} from "react-router-dom";
+import styles from "../index.module.css";
+import {IconChat} from "../../../../../components/Icons/IconChat";
+import {IconToggleRight} from "../../../../../components/Icons/IconToggleRight";
+import {likeRoom} from "../../../../../services";
+import {API_RESPONSE_STATUS, routeUrls} from "../../../../../configs";
 
 const RoomItem = ({item}) => {
     const navigate = useNavigate();
     const [isReload, setIsReload] = useState(false);
     const renderLiveTime = () => {
-        const time = moment(item?.live_time?.time).format("LT")
-        const date = moment(item?.live_time?.date).format("DD-MM-YYYY")
+        const time = moment(item?.live_time?.time).format("LT");
+        const date = moment(item?.live_time?.date).format("DD-MM-YYYY");
         return `${item?.live_time?.time}, ${date}, ${item?.user_timezone}`;
-    }
+    };
 
     const onLike = async () => {
         const res = await likeRoom(item?.uuid);
@@ -26,7 +27,7 @@ const RoomItem = ({item}) => {
         }else{
             message.error("Liked fail");
         }
-    }
+    };
 
     const onDisLike = async () => {
         const res = await likeRoom(item?.uuid);
@@ -38,7 +39,7 @@ const RoomItem = ({item}) => {
         }else{
             message.error("Dislike fail");
         }
-    }
+    };
 
     const onJoin = async () => {
         try {
@@ -49,7 +50,6 @@ const RoomItem = ({item}) => {
             console.log("start meeting error");
         }
     };
-
     
     return (
         <div className={`w-full border-1 shadow-lg rounded-2xl p-3 ${styles.container}`}>
@@ -63,13 +63,12 @@ const RoomItem = ({item}) => {
                 className={`flex flex-col justify-between rounded w-full my-2 p-2 ${styles.wrapper}`}
                 style={{ height: '40%', backgroundImage: `url(${ item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`}}
                 onClick={() => {
-                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`)
+                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
                 }}
-            >
-            </div>
+             />
             <div
                 onClick={() => {
-                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`)
+                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
                 }}
                 className="cursor-pointer"
             >
@@ -89,25 +88,22 @@ const RoomItem = ({item}) => {
             </div>
             <div className={`pt-2 ${styles.description}`}>
                 <span className="font-bold font-size-small">Live Topic: </span>
-                <span className={`font-size-small`}>
+                <span className="font-size-small">
                             {/* <p dangerouslySetInnerHTML={{ __html: item?.description }} /> */}
                     { item?.live_topic }
                 </span>
             </div>
             <div className="flex justify-between py-0.5">
-                <button
-                    className="btn-primary p-1 px-4 rounded text-white font-bold"
+                <a
+                    className="btn-primary p-1 px-5 rounded text-white font-bold w-full flex justify-between"
                     onClick={onJoin}
                 >
-                    Join
-                </button>
-                <div>
-                    { item?.roomType?.name ? (
-                        <div className={`${styles.roomItemTitleItem} rounded-2xl`}>{ item?.roomType?.name }</div>
-                    ) : null }
-                </div>
+                    <span>Join</span>
+                    <IconToggleRight />
+                </a>
+
             </div>
-            <div className="flex items-center justify-between mt-0.5">
+            <div className="flex items-center justify-between mt-1">
                 <div className="flex items-center font-size-small gap-1">
                     <IconChat size={16} />{ item?.total_comments } DISCUSSION
                 </div>
@@ -116,9 +112,9 @@ const RoomItem = ({item}) => {
                         className={`rounded px-1 py-0.5 border-1 cursor-pointer ${ item?.liked ? "border-primary" : "" }`}
                         onClick={ async () => {
                             if(item?.liked){
-                                await onDisLike()
+                                await onDisLike();
                             }else{
-                                await onLike()
+                                await onLike();
                             }
                         }}
                     >
@@ -128,7 +124,7 @@ const RoomItem = ({item}) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default RoomItem;
