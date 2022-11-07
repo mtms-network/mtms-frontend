@@ -5,3 +5,17 @@
     overflow: hidden;
     width: 250px;
 }
+
+.closeModalDonat {
+    padding: 6px;
+    display: flex;
+    color: rgba(56, 56, 56, 1);
+}
+
+.closeModalDonat:hover {
+    padding: 6px;
+    display: flex;
+    border-radius: 100%;
+    background-color: rgba(56, 56, 56, .6);
+    color: white;
+}

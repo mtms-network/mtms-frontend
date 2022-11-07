@@ -13,6 +13,7 @@ import erc20abi from "../../../../../../abi/mtms-erc20.json";
 import {WALLET_ADDRESS} from "../../../../../../configs";
 import {useTranslation} from "react-i18next";
 import styles from "../../index.module.css";
+import {giftToHost} from "../../../../../../services";
 
 const BtnGiftToHost = ({ meeting }) => {
     const { t } = useTranslation();
@@ -21,24 +22,9 @@ const BtnGiftToHost = ({ meeting }) => {
     const [token, setToken] = useState(0.02);
     const [open, setOpen] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [modalText, setModalText] = useState('Content of the modal');
     const [error, setError] = useState("");
 
     const user = getUser();
-
-    const showModal = () => {
-        setOpen(true);
-    };
-
-    const handleOk = () => {
-        setModalText('The modal will be closed after two seconds');
-        setConfirmLoading(true);
-        setTimeout(() => {
-            setOpen(false);
-            setConfirmLoading(false);
-        }, 2000);
-    };
 
     const handleSendToHost = async () => {
         await setLoadingSubmit(true);
@@ -81,21 +67,27 @@ const BtnGiftToHost = ({ meeting }) => {
                     gas: gas,
                 };
 
+                let transactionHash = null;
                 const txResult = await web3.eth.sendTransaction(tx)
                                 .then((res) => {
                                     console.log('res', res);
-
+                                    transactionHash = res?.transactionHash;
                                 })
                                 .catch((err) => {
                                     console.log('err', err);
                                 });
 
-                const transactionHash = txResult?.transactionHash;
-                console.log('result', txResult);
+                let sendConfirm = null;
+                if(transactionHash){
+                    sendConfirm = await giftToHost(meeting?.uuid, transactionHash);
+                }
+
+                console.log('transactionHash', transactionHash);
+                console.log('send', sendConfirm);
             }
         }catch (err){
             console.log('err', err);
-            message.error("Fail");
+            message.error(`Thank for ${meeting?.user?.profile?.name} fail`);
         }
 
         await setLoadingSubmit(false)
@@ -113,6 +105,7 @@ const BtnGiftToHost = ({ meeting }) => {
             </Button>
 
             <Modal
+                maskClosable={false}
                 closable={false}
                 visible={open}
                 onCancel={() => { setOpen(!open) }}
@@ -123,7 +116,17 @@ const BtnGiftToHost = ({ meeting }) => {
                 <div>
                     <div className="flex items-center justify-between font-size-lager font-bold">
                         <span className={"flex gap-1"}>Thank <span className={styles.nowrap}> { meeting?.user?.profile?.name }</span></span>
-                        <CloseOutlined className={"cursor-pointer"} onClick={() => { setOpen(!open) }} />
+                        <div className={`${styles.closeModalDonat} ${ loadingSubmit ? 'cursor-not-allowed' : 'cursor-pointer' }`}>
+                            <CloseOutlined
+                                style={{ fontSize: '16px' }}
+                                onClick={() => {
+                                    if(!loadingSubmit){
+                                        setOpen(!open)
+                                    }
+
+                                }}
+                            />
+                        </div>
                     </div>
 
                     {

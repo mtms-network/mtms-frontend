@@ -131,3 +131,14 @@ export const startRoom = async (uuid) => {
 
     return null;
 }
+
+export const giftToHost = async (uuid, transactionHash) => {
+    try {
+        const res = await client.post(`/${uuid}/confirm-gift`, {transactionHash: transactionHash});
+        return res?.data;
+    }catch (err){
+        console.log('err', err);
+    }
+
+    return null;
+}
