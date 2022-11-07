@@ -102,7 +102,7 @@ const Routers = () => {
                 <Route path={`/${routeUrls.exploreRoom.path}`} element={<ExploreRoom />} />
 
                 <Route path="/" element={<Overview />} />
-                <Route path="*" element={<Navigate to="/meeting" />} />
+                <Route path="*" element={<Navigate to={`/${routeUrls.exploreRoom.path}`} />} />
             </Routes>
         </Suspense>
     );
