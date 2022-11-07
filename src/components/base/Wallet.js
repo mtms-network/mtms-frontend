@@ -5,7 +5,7 @@ import { useMetaMask } from "metamask-react";
 import {getMessageKey, signInWallet} from "services";
 import {routeUrls, WALLET_ADDRESS, WALLET_NETWORK, WALLET_PROVIDER} from "configs";
 import { useNavigate } from "react-router-dom";
-import {checkMatchNetwork, setTokenLoginSucceeded} from "helpers";
+import {checkMatchNetwork, connectMetaMaskWallet, setTokenLoginSucceeded} from "helpers";
 import { useAppStore } from "stores/app.store";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
@@ -25,8 +25,6 @@ const Wallet = () => {
   const [, updateAppStore] = useAppStore();
   const { t } = useTranslation();
 
-  const walletMessageKey = "wallet_message_key";
-
   const handleValidWallet = (data) => {
     try {
       setTokenLoginSucceeded({ accessToken: data?.token, user: data?.user });
@@ -38,41 +36,14 @@ const Wallet = () => {
     } catch (error) {}
   };
 
-  const handleConnectBinanceWallet = async () => {
-    const res = await connectBinance("bsc");
-    console.log("res", res);
-  };
-
   const handleConnectMetaMaskWallet = async () => {
     try {
-      const web3 = new Web3(window.web3.currentProvider);
-
-      if(!checkMatchNetwork()){
-        message.error("You must connect Renkeby network");
-        return "";
-      }
-
-      let accounts = await web3.eth.getAccounts();
-      if(!accounts || accounts?.length === 0){
-        accounts = await connectMetaMask();
-      }
-
-      const resMessageKey = await getMessageKey();
-
-      if(!resMessageKey?.data_sign){
-        message.error({ content: "Cannot get message key", key: walletMessageKey });
-        return "";
-      }
-
-      const sign = await web3.eth.personal.sign(resMessageKey?.data_sign, accounts[0], resMessageKey?.data_sign);
-
-      message.loading({ content: `${t("global.loading")} ...`, key: walletMessageKey });
-      const res = await connectMetaMask();
-      if (res.length) {
+      const res = await connectMetaMaskWallet(t, connectMetaMask);
+      if (res?.data?.length) {
         const data = await signInWallet({
-          walletAddress: resMessageKey.id,
+          walletAddress: res?.resMessageKey?.id,
           provider: WALLET_PROVIDER.metamask.type,
-          signId: sign
+          signId: res?.sign
         });
         await handleValidWallet(data);
       } else {
@@ -81,7 +52,7 @@ const Wallet = () => {
 
       return "";
     } catch (error) {
-      message.error({ content: error.message, key: walletMessageKey });
+      message.error({ content: error.message, key: "Connect to wallet fail" });
     }
   };
 

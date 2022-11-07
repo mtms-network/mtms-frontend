@@ -52,12 +52,14 @@ const RoomItem = ({item}) => {
         }
     };
 
+    console.log('item', item);
+
     return (
         <div className={`w-full border-1 shadow-lg rounded-2xl p-3 ${styles.container}`}>
             <div className={styles.header}>
                 <div className={`font-size-small rounded ${styles.headerLiveTime}`}>
                     <span className="whitespace-nowrap text-red-500 font-bold">LIVE ON</span>
-                    <span>8:24 PM, 28/04/2022 Melbourne/Aus</span>
+                    <span>{ item?.live_time?.time }, { moment(item?.live_time?.date).format("DD-MM-YYYY") }, { item?.user_timezone }</span>
                 </div>
             </div>
             <div

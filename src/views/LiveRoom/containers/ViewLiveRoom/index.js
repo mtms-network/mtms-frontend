@@ -172,7 +172,7 @@ const ViewLiveRoom = ({ t }) => {
                                 {
                                     meeting?.is_full ? <BtnRoomFull /> : null
                                 }
-                                <BtnGiftToHost />
+                                <BtnGiftToHost meeting={meeting} />
                                 <ShareRoom />
                                 <LikeRoom meeting={meeting} />
                             </>

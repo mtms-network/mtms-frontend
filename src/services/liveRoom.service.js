@@ -35,6 +35,10 @@ export const getPublicLiveRoom = async (filter) => {
             roomType: filter?.roomType || null,
         };
 
+        if(filter?.status){
+            defaultFilters.status = filter.status;
+        }
+
         const query = QueryString.stringify({ ...defaultFilters });
         const res = await client.get(`/live-room?${query}`);
         return res?.data;
