@@ -24,7 +24,7 @@ const ListRoom = ({id = 'listLiveRoom', listRooms = []}) => {
                 cls = 'grid grid-cols-2';
             }
 
-            if(width < 544){
+            if(width < 400){
                 cls = 'grid grid-cols-1';
             }
             if(cls){

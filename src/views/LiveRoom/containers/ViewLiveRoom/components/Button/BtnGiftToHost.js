@@ -58,10 +58,11 @@ const BtnGiftToHost = ({ meeting }) => {
                     WALLET_ADDRESS.MTMS
                 );
 
-                const getBalance = await web3.eth.getBalance(accounts[0]);
-                const balance = web3.utils.fromWei(getBalance, 'ether');
+                const balance = await contract.methods.balanceOf(accounts[0]).call();
 
-                if(balance < token){
+                const amount = token  * 10**6;
+
+                if(balance < amount){
                     setError("The number of tokens in your account is not sufficient")
                     return null;
                 }else{
@@ -72,14 +73,25 @@ const BtnGiftToHost = ({ meeting }) => {
                     from: accounts[0]
                 });
 
-                console.log('token * 10**', token * 10**6);
 
-                const result = await contract.methods.transferFrom(accounts[0], meeting?.user?.wallets[0]?.wallet_address, token * 10**6).send({
+                const tx = {
                     from: accounts[0],
+                    to: WALLET_ADDRESS.MTMS,
+                    data: contract.methods.transfer(meeting?.user?.wallets[0]?.wallet_address, amount).encodeABI(),
                     gas: gas,
-                });
+                };
 
-                console.log('result', result);
+                const txResult = await web3.eth.sendTransaction(tx)
+                                .then((res) => {
+                                    console.log('res', res);
+
+                                })
+                                .catch((err) => {
+                                    console.log('err', err);
+                                });
+
+                const transactionHash = txResult?.transactionHash;
+                console.log('result', txResult);
             }
         }catch (err){
             console.log('err', err);

@@ -277,7 +277,7 @@ const Form = ({ action , id }) => {
                         const res = await createInstantMeeting(clone);
                         if (res?.status === 200) {
                             message.success(res?.data?.message);
-                            navigate(`/${routeUrls.liveRoom.path}`);
+                            navigate(`/${routeUrls.exploreRoom.path}`);
                         } else if (res?.request) {
                             const errorData = handleHttpError(res);
                             message.error(errorData.messageDetail);

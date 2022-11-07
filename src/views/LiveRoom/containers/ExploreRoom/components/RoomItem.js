@@ -57,7 +57,7 @@ const RoomItem = ({item}) => {
             <div className={styles.header}>
                 <div className={`font-size-small rounded ${styles.headerLiveTime}`}>
                     <span className="whitespace-nowrap text-red-500 font-bold">LIVE ON</span>
-                    <span>{ item?.live_time?.time }, { moment(item?.live_time?.date).format("DD-MM-YYYY") }, { item?.user_timezone }</span>
+                    <span>{ moment(item?.live_time?.date).format("LLL") } { item?.user_timezone }</span>
                 </div>
             </div>
             <div
@@ -87,8 +87,10 @@ const RoomItem = ({item}) => {
                             {item.title}
                         </div>
                         <div className={`flex items-center ` + styles.threeDot}>
-                            <UserOutlined/>
-                            <span className={`pl-1`}>{item?.user?.profile?.name}</span>
+                            <div className="flex">
+                                <UserOutlined/>
+                            </div>
+                            <div className={`pl-1 mt-1`}>{item?.user?.profile?.name}</div>
                         </div>
                     </div>
                 </div>

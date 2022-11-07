@@ -10,7 +10,7 @@ const LiveTime = ({ t, start_date_time, user_timezone }) => {
 
             <p className="text-md font-bold">
                 {start_date_time &&
-                    `${moment(start_date_time).format("HH:mm a DD/MM/YYYY")}, ${
+                    `${moment(start_date_time).format("LLL")} ${
                         user_timezone || ""
                     }`}
             </p>

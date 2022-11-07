@@ -31,6 +31,7 @@ import BtnRoomFull from "./components/Button/BtnRoomFull";
 import BtnGiftToHost from "./components/Button/BtnGiftToHost";
 import ShareRoom from "./components/Button/ShareRoom";
 import LikeRoom from "./components/Button/LikeRoom";
+import MeetingCode from "./components/MeetingCode";
 
 const ViewLiveRoom = ({ t }) => {
     const params = useParams();
@@ -144,7 +145,10 @@ const ViewLiveRoom = ({ t }) => {
                     />
                     <Duration t={t} period={meeting?.period} />
                     <MaximumParticipant t={t} max_participant_count={meeting?.max_participant_count} />
-                    { renderLoop() }
+                    { checkOwner() ? <MeetingCode identifier={meeting?.identifier} /> : null}
+                    <div className="flex items-center">
+                        { renderLoop() }
+                    </div>
                 </div>
                 <div className="flex mb-6 flex-wrap items-center">
                     {
@@ -200,7 +204,12 @@ const ViewLiveRoom = ({ t }) => {
                 />
             </GroupLayout>
 
-            <Discussion uuid={params.meetingId} />
+            <Discussion
+                uuid={params.meetingId}
+                isOwner={checkOwner()}
+                live_time={meeting?.live_time?.date}
+                timeZone={meeting?.user_timezone}
+            />
         </MainLayout>
     );
 };
