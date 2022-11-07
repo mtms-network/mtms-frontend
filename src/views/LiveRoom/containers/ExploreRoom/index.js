@@ -5,6 +5,7 @@ import BodyRoom from "./components/BodyRoom";
 import PopuplarRoom from "./components/PopularRoom";
 import { Tabs } from 'antd';
 import LiveRoomToDay from "../ListLiveRoom/LiveRoomToDay";
+import MyRoom from "./components/MyRoom";
 
 const ExploreRoom = () => {
 
@@ -42,7 +43,10 @@ const ExploreRoom = () => {
                         />
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="My rooms" key="3">
-                        <LiveRoomToDay />
+                        <MyRoom
+                            roomType={roomType}
+                            keyword={keyword}
+                        />
                     </Tabs.TabPane>
                 </Tabs>
             </div>

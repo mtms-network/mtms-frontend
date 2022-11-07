@@ -60,6 +60,7 @@ export const getMyRoom = async (filter) => {
             start_date: filter.start_date,
             end_date: filter.end_date,
             roomType: filter?.roomType || null,
+            keyword: filter?.keyword,
         };
 
         const query = QueryString.stringify({ ...defaultFilters });
@@ -137,7 +138,7 @@ export const giftToHost = async (uuid, transactionHash) => {
         const res = await client.post(`/${uuid}/confirm-gift`, {transactionHash: transactionHash});
         return res?.data;
     }catch (err){
-        console.log('err', err);
+        console.log('giftToHost fail');
     }
 
     return null;

@@ -10,7 +10,7 @@ import { Slider, Switch } from 'antd';
 import {connectMetaMaskWallet, getUser} from "../../../../../../helpers";
 import {useMetaMask} from "metamask-react";
 import erc20abi from "../../../../../../abi/mtms-erc20.json";
-import {WALLET_ADDRESS} from "../../../../../../configs";
+import {API_RESPONSE_STATUS, WALLET_ADDRESS} from "../../../../../../configs";
 import {useTranslation} from "react-i18next";
 import styles from "../../index.module.css";
 import {giftToHost} from "../../../../../../services";
@@ -82,11 +82,15 @@ const BtnGiftToHost = ({ meeting }) => {
                     sendConfirm = await giftToHost(meeting?.uuid, transactionHash);
                 }
 
-                console.log('transactionHash', transactionHash);
-                console.log('send', sendConfirm);
+                if(sendConfirm?.status === API_RESPONSE_STATUS.success){
+                    message.success(`Thank for ${meeting?.user?.profile?.name} success`);
+                    setOpen(!open);
+                }else{
+                    message.error(`Thank for ${meeting?.user?.profile?.name} fail`);
+                }
+
             }
         }catch (err){
-            console.log('err', err);
             message.error(`Thank for ${meeting?.user?.profile?.name} fail`);
         }
 

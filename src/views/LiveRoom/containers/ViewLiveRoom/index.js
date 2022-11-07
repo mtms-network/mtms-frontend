@@ -166,7 +166,7 @@ const ViewLiveRoom = ({ t }) => {
                                 >
                                     {t("general.delete")}
                                 </Button>
-                                <BtnMyGift />
+                                <BtnMyGift total={meeting?.total_gifts || 0} />
                             </>
                         ) : (
                             <>
