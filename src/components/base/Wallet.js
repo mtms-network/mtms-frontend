@@ -32,7 +32,7 @@ const Wallet = () => {
         draft.isAuthenticated = true;
         draft.user = data?.user;
       });
-      navigate("/");
+      navigate(routeUrls.exploreRoom.path);
     } catch (error) {}
   };
 

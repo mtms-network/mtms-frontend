@@ -51,9 +51,7 @@ const RoomItem = ({item}) => {
             console.log("start meeting error");
         }
     };
-
-    console.log('item', item);
-
+    
     return (
         <div className={`w-full border-1 shadow-lg rounded-2xl p-3 ${styles.container}`}>
             <div className={styles.header}>

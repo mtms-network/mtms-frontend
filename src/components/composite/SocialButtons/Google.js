@@ -34,7 +34,7 @@ export function GoogleButton({
                             name: data?.google_calendar_info?.name,
                         };
                     });
-                    navigate(`/${routeUrls.meeting.path}`);
+                    navigate(`/${routeUrls.exploreRoom.path}`);
                 }
             } catch (error) {
                 console.log("GoogleButton:: error:", error);

@@ -1,4 +1,4 @@
-import { Modal,Alert } from 'antd';
+import {Modal, Alert, message} from 'antd';
 import Web3 from 'web3';
 import React, {useState} from "react";
 import {Button} from "../../../../../../components";
@@ -18,8 +18,9 @@ const BtnGiftToHost = ({ meeting }) => {
     const { t } = useTranslation();
     const { connect: connectMetaMask, account: accountMetaMask } = useMetaMask();
 
-    const [token, setToken] = useState(0.2);
+    const [token, setToken] = useState(0.02);
     const [open, setOpen] = useState(false);
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [modalText, setModalText] = useState('Content of the modal');
     const [error, setError] = useState("");
@@ -40,44 +41,52 @@ const BtnGiftToHost = ({ meeting }) => {
     };
 
     const handleSendToHost = async () => {
-        const web3 = new Web3(window.web3.currentProvider);
-        let accounts = await web3.eth.getAccounts();
-        if (accounts?.length === 0) {
-            const login = await connectMetaMaskWallet(t, connectMetaMask);
-            if(login?.accounts?.length){
-                accounts = login.accounts;
-            }
-        }
-
-        if(accounts?.length){
-            const contract = new web3.eth.Contract(
-                erc20abi,
-                "0xB7E3373EAA064703cB9608a218daeED349C60DfD"
-            );
-
-            const getBalance = await web3.eth.getBalance(accounts[0]);
-            const balance = web3.utils.fromWei(getBalance, 'ether');
-
-            if(balance < token){
-                setError("The number of tokens in your account is not sufficient")
-                return null;
-            }else{
-                setError("");
+        await setLoadingSubmit(true);
+        try {
+            const web3 = new Web3(window.web3.currentProvider);
+            let accounts = await web3.eth.getAccounts();
+            if (accounts?.length === 0) {
+                const login = await connectMetaMaskWallet(t, connectMetaMask);
+                if(login?.accounts?.length){
+                    accounts = login.accounts;
+                }
             }
 
-            const gas = await web3.eth.estimateGas({
-                from: accounts[0]
-            });
+            if(accounts?.length){
+                const contract = new web3.eth.Contract(
+                    erc20abi,
+                    WALLET_ADDRESS.MTMS
+                );
 
-            console.log('token * 10**', token * 10**6);
+                const getBalance = await web3.eth.getBalance(accounts[0]);
+                const balance = web3.utils.fromWei(getBalance, 'ether');
 
-            const result = await contract.methods.transferFrom(accounts[0], meeting?.user?.wallets[0]?.wallet_address, token * 10**6).send({
-                from: accounts[0],
-                gas: gas,
-            });
+                if(balance < token){
+                    setError("The number of tokens in your account is not sufficient")
+                    return null;
+                }else{
+                    setError("");
+                }
 
-            console.log('result', result);
+                const gas = await web3.eth.estimateGas({
+                    from: accounts[0]
+                });
+
+                console.log('token * 10**', token * 10**6);
+
+                const result = await contract.methods.transferFrom(accounts[0], meeting?.user?.wallets[0]?.wallet_address, token * 10**6).send({
+                    from: accounts[0],
+                    gas: gas,
+                });
+
+                console.log('result', result);
+            }
+        }catch (err){
+            console.log('err', err);
+            message.error("Fail");
         }
+
+        await setLoadingSubmit(false)
 
     }
 
@@ -136,9 +145,9 @@ const BtnGiftToHost = ({ meeting }) => {
                     </div>
                     <div className="pb-1 pt-2">
                         <Slider
-                            step={0.1}
-                            min={0.1}
-                            max={10}
+                            step={0.01}
+                            min={0.01}
+                            max={1}
                             defaultValue={token}
                             disabled={false}
                             onChange={(event) => {
@@ -153,7 +162,12 @@ const BtnGiftToHost = ({ meeting }) => {
                 <div className="mt-2 flex justify-end">
                     <Button
                         className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 flex items-center justify-end gap-0.5"
-                        onClick={handleSendToHost}
+                        onClick={ async () => {
+                            if(!loadingSubmit){
+                               await handleSendToHost()
+                            }
+                        }}
+                        isLoading={loadingSubmit}
                     >
                         Thanks host
                         <img src="../../../images/logo.png" alt="logo" className="W-5 h-5"/>
