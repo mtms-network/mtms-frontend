@@ -1,6 +1,7 @@
 import QueryString from "qs";
 import {createPrivateInstance} from "./base";
 import {BASE_API} from "../configs";
+import {handleHttpError} from "../helpers";
 
 const client = createPrivateInstance(BASE_API.meeting);
 
@@ -139,6 +140,22 @@ export const giftToHost = async (uuid, transactionHash) => {
         return res?.data;
     }catch (err){
         console.log('giftToHost fail');
+    }
+
+    return null;
+}
+
+export const giftWithDraw = async (uuid, amount) => {
+    try {
+        const res = await client.post(`/${uuid}/gift`, {tokenAmount: amount});
+        return res?.data;
+    }catch (err){
+        let mes = "";
+        try {
+            mes = err?.response?.data?.errors?.message[0];
+        }catch (err){}
+
+        return mes
     }
 
     return null;

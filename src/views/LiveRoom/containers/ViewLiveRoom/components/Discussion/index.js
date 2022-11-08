@@ -9,7 +9,7 @@ const Discussion = ({uuid, isOwner, timeZone, live_time}) => {
     return (
         <LiveRoomStoreProvider>
             <GroupLayout className="flex flex-col justify-between mt-4">
-                <UpdateComing isOwner={isOwner} timeZone={timeZone} live_time={live_time}/>
+                <UpdateComing uuid={uuid} isOwner={isOwner} timeZone={timeZone} live_time={live_time}/>
                 <CommentEditor uuid={uuid} />
                 <Comments uuid={uuid} />
             </GroupLayout>

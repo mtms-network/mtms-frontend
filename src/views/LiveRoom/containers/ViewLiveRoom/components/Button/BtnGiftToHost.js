@@ -6,20 +6,20 @@ import {
     CloseOutlined,
     HeartOutlined
 } from '@ant-design/icons';
-import { Slider, Switch } from 'antd';
-import {connectMetaMaskWallet, getUser} from "../../../../../../helpers";
+import { Slider, Checkbox } from 'antd';
+import {connectMetaMaskWallet, getUser, handleHttpError} from "../../../../../../helpers";
 import {useMetaMask} from "metamask-react";
 import erc20abi from "../../../../../../abi/mtms-erc20.json";
 import {API_RESPONSE_STATUS, WALLET_ADDRESS} from "../../../../../../configs";
 import {useTranslation} from "react-i18next";
 import styles from "../../index.module.css";
-import {giftToHost} from "../../../../../../services";
+import {giftToHost, giftWithDraw} from "../../../../../../services";
 
 const BtnGiftToHost = ({ meeting }) => {
     const { t } = useTranslation();
     const { connect: connectMetaMask, account: accountMetaMask } = useMetaMask();
-
-    const [token, setToken] = useState(0.02);
+    const [sendWithDraw, setSendWithDraw] = useState(true);
+    const [token, setToken] = useState(0.2);
     const [open, setOpen] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [error, setError] = useState("");
@@ -70,7 +70,6 @@ const BtnGiftToHost = ({ meeting }) => {
                 let transactionHash = null;
                 const txResult = await web3.eth.sendTransaction(tx)
                                 .then((res) => {
-                                    console.log('res', res);
                                     transactionHash = res?.transactionHash;
                                 })
                                 .catch((err) => {
@@ -96,6 +95,32 @@ const BtnGiftToHost = ({ meeting }) => {
 
         await setLoadingSubmit(false)
 
+    }
+
+    const handleSendWithDraw = async () => {
+        await setLoadingSubmit(true);
+        try {
+            const res = await giftWithDraw(meeting?.uuid, token);
+            if(res?.status === API_RESPONSE_STATUS.success){
+                message.success(res?.message);
+                setOpen(!open);
+            }else{
+                message.error(res)
+            }
+        }catch (err){
+            message.error(err);
+        }
+
+        await setLoadingSubmit(false);
+
+    }
+
+    const renderStep = () => {
+        return token >= 10 ? 1 : .1;
+    }
+
+    const renderMin = () => {
+        return token >= 10 ? 1 : .1;
     }
 
     return (
@@ -164,9 +189,17 @@ const BtnGiftToHost = ({ meeting }) => {
                     </div>
                     <div className="pb-1 pt-2">
                         <Slider
-                            step={0.01}
-                            min={0.01}
-                            max={1}
+                            marks={{
+                                0: 0,
+                                10: 10,
+                                20: 20,
+                                30: 30,
+                                40: 40,
+                                50: 50,
+                            }}
+                            step={renderStep()}
+                            min={renderMin()}
+                            max={50}
                             defaultValue={token}
                             disabled={false}
                             onChange={(event) => {
@@ -178,12 +211,28 @@ const BtnGiftToHost = ({ meeting }) => {
                         As an added bonus, the above public comment will be published on your behalf (subject to Community Guidelines).
                     </div>
                 </div>
+
+                <div className="py-1">
+                    <Checkbox
+                        checked={sendWithDraw}
+                        onChange={() => {
+                            setSendWithDraw(!sendWithDraw);
+                        }}
+                    >
+                        Send with draw
+                    </Checkbox>
+                </div>
+
                 <div className="mt-2 flex justify-end">
                     <Button
                         className="btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0 flex items-center justify-end gap-0.5"
                         onClick={ async () => {
                             if(!loadingSubmit){
-                               await handleSendToHost()
+                               if(sendWithDraw){
+                                   await handleSendWithDraw();
+                               }else{
+                                   await handleSendToHost();
+                               }
                             }
                         }}
                         isLoading={loadingSubmit}

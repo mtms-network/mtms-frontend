@@ -54,63 +54,65 @@ const RoomItem = ({item}) => {
     
     return (
         <div className={`w-full border-1 shadow-lg rounded-2xl p-3 ${styles.container}`}>
-            <div className={styles.header}>
-                <div className={`font-size-small rounded ${styles.headerLiveTime}`}>
-                    <span className="whitespace-nowrap text-red-500 font-bold">LIVE ON</span>
-                    <span>{ moment(item?.live_time?.date).format("LLL") } { item?.user_timezone }</span>
-                </div>
-            </div>
-            <div
-                className={`flex flex-col justify-between rounded w-full my-2 p-2 ${styles.wrapper}`}
-                style={{
-                    height: '40%',
-                    backgroundImage: `url(${item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`,
-                    backgroundSize: '100% 100%'
-                }}
-                onClick={() => {
-                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
-                }}
-            />
-            <div
-                onClick={() => {
-                    navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
-                }}
-                className="cursor-pointer"
-            >
-                <div className="h-1/3 flex items-center gap-2">
-                    <div style={{width: '50px'}}>
-                        <img src={item?.user?.profile?.avatar || "../../../../images/logo.png"} alt=""
-                             className={`${styles.hexagon} rounded-full`}/>
-                    </div>
-                    <div className={`w-4/5 ${styles.profileName}`}>
-                        <div className={`font-bold ` + styles.threeDot}>
-                            {item.title}
-                        </div>
-                        <div className={`flex items-center ` + styles.threeDot}>
-                            <div className="flex">
-                                <UserOutlined/>
-                            </div>
-                            <div className={`pl-1 mt-1`}>{item?.user?.profile?.name}</div>
-                        </div>
+            <div className="flex flex-col gap-2" style={{height: '92%'}}>
+                <div className={styles.header}>
+                    <div className={`font-size-small rounded ${styles.headerLiveTime}`}>
+                        <span className="whitespace-nowrap text-red-500 font-bold">LIVE ON</span>
+                        <span>{ moment(item?.live_time?.date).format("LLL") } { item?.user_timezone }</span>
                     </div>
                 </div>
-            </div>
-            <div className={`pt-2 ${styles.description}`}>
-                <span className="font-size-small">Live Topic: </span>
-                <span className="font-size-small">
-                            {/* <p dangerouslySetInnerHTML={{ __html: item?.description }} /> */}
-                    {item?.live_topic}
-                </span>
-            </div>
-            <div className="flex justify-between py-0.5">
-                <a
-                    className="btn-primary p-1 px-5 rounded text-white font-bold w-full flex justify-between"
-                    onClick={onJoin}
+                <div
+                    className={`flex flex-col justify-between rounded w-full p-2 ${styles.wrapper}`}
+                    style={{
+                        height: '40%',
+                        backgroundImage: `url(${item?.thumbnail ? item?.thumbnail : '../../images/bg-crypto.png'})`,
+                        backgroundSize: '100% 100%'
+                    }}
+                    onClick={() => {
+                        navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
+                    }}
+                />
+                <div
+                    onClick={() => {
+                        navigate(`/${routeUrls.exploreRoom.path}/view/${item.uuid}`);
+                    }}
+                    className="cursor-pointer"
                 >
-                    <span>Join</span>
-                    <IconToggleRight/>
-                </a>
+                    <div className="flex items-center gap-2">
+                        <div style={{width: '50px'}}>
+                            <img src={item?.user?.profile?.avatar || "../../../../images/logo.png"} alt=""
+                                 className={`${styles.hexagon} rounded-full`}/>
+                        </div>
+                        <div className={`w-4/5 ${styles.profileName}`}>
+                            <div className={`font-bold ` + styles.threeDot}>
+                                {item.title}
+                            </div>
+                            <div className={`flex items-center ` + styles.threeDot}>
+                                <div className="flex">
+                                    <UserOutlined/>
+                                </div>
+                                <div className={`pl-1 mt-1`}>{item?.user?.profile?.name}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className={`${styles.description}`}>
+                    <span className="font-size-small">Live Topic: </span>
+                    <span className="font-size-small">
+                            {/* <p dangerouslySetInnerHTML={{ __html: item?.description }} /> */}
+                        {item?.live_topic}
+                </span>
+                </div>
+                <div className="flex justify-between">
+                    <a
+                        className="btn-primary p-1 px-5 rounded text-white font-bold w-full flex justify-between"
+                        onClick={onJoin}
+                    >
+                        <span>Join</span>
+                        <IconToggleRight/>
+                    </a>
 
+                </div>
             </div>
             <div className="flex items-center justify-between mt-1">
                 <div className="flex items-center font-size-small gap-1">
