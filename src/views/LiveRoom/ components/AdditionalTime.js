@@ -70,6 +70,11 @@ const AdditionalTime = ({ formik }) => {
                                         onChange={(time) => {
                                             const time_slot = [...formik.values.time_slot]
                                             time_slot[index].time = time;
+
+                                            if(time_slot[index]?.date){
+                                                time_slot[index].date.set({hour: time.hour(), minute: time.minutes()});
+                                            }
+
                                             formik.setFieldValue("time_slot", time_slot);
                                         }}                                    />
                                     <Select
@@ -80,6 +85,7 @@ const AdditionalTime = ({ formik }) => {
                                         onChange={(option) => {
                                             const time_slot = [...formik.values.time_slot]
                                             time_slot[index].loop = option;
+
                                             formik.setFieldValue("time_slot", time_slot);
                                         }}
                                     />

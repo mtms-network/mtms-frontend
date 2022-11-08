@@ -40,6 +40,10 @@ const LiveTime = ({ formik }) => {
                         onChange={(time) => {
                             const live_time = {...formik.values.live_time}
                             live_time.time = time;
+                            if(live_time?.date){
+                                live_time.date.set({hour: time.hour(), minute: time.minutes()});
+                            }
+
                             formik.setFieldValue("live_time", live_time);
                         }}
                     />

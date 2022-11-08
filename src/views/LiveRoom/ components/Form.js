@@ -125,7 +125,6 @@ const Form = ({ action , id }) => {
             if(action > 1)
             {
                 const res = await getMeetingDetail(id);
-                console.log('res', res);
                 if(res){
                     const init = {...initialValues};
 
@@ -135,6 +134,30 @@ const Form = ({ action , id }) => {
                     init.roomType = res?.roomType?.uuid;
                     init.max_participant_count = res?.max_participant_count;
                     init.meeting_code = res?.identifier;
+
+                    if(res?.description){
+                        init.description = EditorState.createWithContent(
+                                    ContentState.createFromBlockArray(convertFromHTML(res?.description || "")),
+                                )
+                    }
+
+                    if(Array.isArray(res?.time_slot)){
+                        init.time_slot = res?.time_slot?.map((item) => {
+                            if(item?.date){
+                                item.date = moment(item.date);
+                                item.time = moment(item.date);
+                            }
+
+                            return item;
+                        })
+                    }
+
+                    if(res?.live_time?.date){
+                        init.live_time.date = moment(res?.live_time?.date);
+                        init.live_time.time = moment(res?.live_time?.date);
+                        init.live_time.loop = res?.live_time?.loop || 'd';
+                    }
+
                     setInitialValues(init);
                 }
 
@@ -269,7 +292,7 @@ const Form = ({ action , id }) => {
                         if(action === 1){ // action
                             clone.uuid = null;
                         }else if(action === 2){ // update
-
+                            clone.uuid = id;
                         }else if(action === 3){ // duplicate
                             clone.uuid = null;
                         }
