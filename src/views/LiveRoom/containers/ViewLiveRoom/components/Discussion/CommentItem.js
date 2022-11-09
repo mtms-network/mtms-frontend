@@ -1,10 +1,12 @@
-import React, {useState, createElement, useCallback} from "react";
+import React, {useState, createElement, useCallback, useEffect} from "react";
 import {Avatar, Comment, Tooltip } from "antd";
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
 import "../../index.css";
 import moment from "moment-timezone";
 import {getTimezone} from "../../../../../../helpers/i18nLocal";
 import CommentEditor from "./CommentEditor";
+import {likeComment} from "../../../../../../services";
+import {API_RESPONSE_STATUS} from "../../../../../../configs";
 
 const CommentItem = (props) => {
     const { item, children, uuid, level } = props;
@@ -13,31 +15,49 @@ const CommentItem = (props) => {
     const [action, setAction] = useState(null);
     const [isReply, setIsReply] = useState(false);
 
-    const like = () => {
-        setLikes(1);
-        setDislikes(0);
-        setAction('liked');
+    useEffect(() => {
+        if(item.total_likes){
+            setLikes(item?.total_likes || 0);
+        }
+
+        if(item?.liked){
+            setAction('liked');
+        }
+    }, [item])
+
+    const like = async () => {
+        const res = await likeComment(uuid, item?.uuid, 'like');
+
+        if(res?.status === API_RESPONSE_STATUS.success){
+            await setAction('liked');
+            await setLikes(likes + 1);
+        }
     };
 
-    const dislike = () => {
-        setLikes(0);
-        setDislikes(1);
-        setAction('disliked');
-    };
+    const dislike = async () => {
+        const res = await likeComment(uuid, item?.uuid, 'unlike');
+
+        if(res?.status === API_RESPONSE_STATUS.success){
+            await setAction('unlike');
+            await setLikes(likes - 1);
+        }
+    }
 
     const actions = [
-        <Tooltip key="comment-basic-like" title="Like">
-          <span onClick={like}>
+        <Tooltip key="comment-basic-like" title={ action === 'liked' ? 'Unlike' : 'Like' }>
+          <span onClick={() => {
+              action === 'liked' ? dislike() : like();
+          }}>
             {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
               <span className="comment-action">{likes}</span>
           </span>
         </Tooltip>,
-        <Tooltip key="comment-basic-dislike" title="Dislike">
-            <span onClick={dislike}>
-            {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
-              <span className="comment-action">{dislikes}</span>
-            </span>
-        </Tooltip>,
+        // <Tooltip key="comment-basic-dislike" title="Dislike">
+        //     <span onClick={dislike}>
+        //     {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
+        //       <span className="comment-action">{dislikes}</span>
+        //     </span>
+        // </Tooltip>,
         !level && <span key="comment-basic-reply-to" onClick={() => { setIsReply(!isReply) }}>Reply to</span>,
     ];
 

@@ -161,6 +161,10 @@ export const giftWithDraw = async (uuid, amount) => {
     return null;
 }
 
-export const likeComment = async () => {
-
+export const likeComment = async (meetingUuid, commentUuid, type = 'like') => {
+    try {
+        const res = await client.post(`/${ meetingUuid }/comments/${commentUuid}/${type}`)
+        return res?.data;
+    }catch (err){}
+    return false;
 }
