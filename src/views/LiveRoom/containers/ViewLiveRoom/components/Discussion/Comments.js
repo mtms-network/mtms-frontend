@@ -25,7 +25,7 @@ const Comments = ({uuid}) => {
                 liveRoomStore?.comments?.map((comment, index) => {
 
                     return (
-                        <CommentItem key={index} item={comment}  />
+                        <CommentItem key={index} item={comment} uuid={uuid} />
                     )
                 })
             }

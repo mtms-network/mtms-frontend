@@ -3,13 +3,22 @@ import { Button, Form, Input } from 'antd';
 
 const { TextArea } = Input;
 
-const Editor = ({onChange, onSubmit, submitting, value }) => {
+const Editor = ({onChange, onSubmit, submitting, value, rows = 4, parentId, setIsReply }) => {
     return (
         <>
             <Form.Item>
-                <TextArea rows={4} onChange={onChange} value={value} />
+                <TextArea rows={rows} onChange={onChange} value={value} />
             </Form.Item>
             <Form.Item>
+
+                {
+                    parentId > 0 && (
+                        <Button htmlType="submit" loading={submitting} onClick={setIsReply} type="" className={"mr-2"}>
+                            Cancel
+                        </Button>
+                    )
+                }
+
                 <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary" className={"btn-primary"}>
                     Add Comment
                 </Button>

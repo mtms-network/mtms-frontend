@@ -171,7 +171,7 @@ const ViewLiveRoom = ({ t }) => {
                         ) : (
                             <>
                                 {
-                                    meeting?.started_at ? <BtnStart t={t} meeting={meeting} isStart={false} /> : null
+                                    meeting?.status === 'live' ? <BtnStart t={t} meeting={meeting} isStart={false} /> : null
                                 }
                                 {
                                     meeting?.is_full ? <BtnRoomFull /> : null

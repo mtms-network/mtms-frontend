@@ -1,15 +1,17 @@
-import React, { useState, createElement } from "react";
+import React, {useState, createElement, useCallback} from "react";
 import {Avatar, Comment, Tooltip } from "antd";
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
 import "../../index.css";
 import moment from "moment-timezone";
 import {getTimezone} from "../../../../../../helpers/i18nLocal";
+import CommentEditor from "./CommentEditor";
 
 const CommentItem = (props) => {
-    const { item, children } = props;
+    const { item, children, uuid, level } = props;
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const [action, setAction] = useState(null);
+    const [isReply, setIsReply] = useState(false);
 
     const like = () => {
         setLikes(1);
@@ -36,10 +38,14 @@ const CommentItem = (props) => {
               <span className="comment-action">{dislikes}</span>
             </span>
         </Tooltip>,
-        <span key="comment-basic-reply-to">Reply to</span>,
+        !level && <span key="comment-basic-reply-to" onClick={() => { setIsReply(!isReply) }}>Reply to</span>,
     ];
 
     const time = moment.utc(item?.created_at).tz(getTimezone())
+
+    const handleSetReply = useCallback(() => {
+        setIsReply(!isReply);
+    }, [isReply])
 
     return (
         <Comment
@@ -57,6 +63,16 @@ const CommentItem = (props) => {
                 </Tooltip>
             }
         >
+            {
+                isReply === true && <CommentEditor uuid={uuid} parentId={item?.id} setIsReply={handleSetReply}/>
+            }
+
+            {
+                item?.replies?.map((c, index) => {
+                    return <CommentItem key={index} item={c} uuid={uuid} level={2} />
+                })
+            }
+
             {children}
         </Comment>
     )
