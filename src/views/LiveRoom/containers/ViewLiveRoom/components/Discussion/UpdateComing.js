@@ -25,12 +25,6 @@ const UpdateComing = ({isOwner, live_time, timeZone, uuid}) => {
                     </Button>
                 ) : null
             }
-
-            <Button
-                className=" inline-flex m-1.5 btn btn-outline btn-primary rounded-5 h-10 min-h-10 !mt-0"
-            >
-                Vote New Live: 100
-            </Button>
         </div>
     )
 }

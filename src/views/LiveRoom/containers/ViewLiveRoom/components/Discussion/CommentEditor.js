@@ -68,7 +68,7 @@ const CommentEditor = ({uuid, parentId = null, setIsReply}) => {
                 content={
                     <Editor
                         parentId={parentId}
-                        rows={3}
+                        rows={2}
                         onChange={handleChange}
                         onSubmit={handleSubmit}
                         submitting={submitting}

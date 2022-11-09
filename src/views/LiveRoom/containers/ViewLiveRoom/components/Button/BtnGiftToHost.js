@@ -163,13 +163,12 @@ const BtnGiftToHost = ({ meeting }) => {
                     }
 
                     <div className="py-1">
-                        Buy a Super Thanks, which directly supports { meeting?.user?.profile?.name }.
+                        Send MTMS token, which directly supports { meeting?.user?.profile?.name }.
                     </div>
                     <div>
-                        <fieldset className="border border-solid border-gray-300 px-3 pb-3 rounded">
-                            <legend className="text-sm w-auto px-1">Bonus</legend>
+                        <fieldset className="border border-solid border-gray-300 p-3 rounded">
                             <div className="flex gap-4">
-                                <div className="w-14 h-14 rounded-full">
+                                <div className="w-14 h-14 rounded-lg avatar overflow-hidden">
                                     <img src={user?.profile?.avatar} alt={"avatar"} />
                                 </div>
                                 <div>
@@ -208,7 +207,7 @@ const BtnGiftToHost = ({ meeting }) => {
                         />
                     </div>
                     <div className="py-1">
-                        As an added bonus, the above public comment will be published on your behalf (subject to Community Guidelines).
+                        As an added bonus, the above public comment will be published on your behalf.
                     </div>
                 </div>
 
@@ -219,7 +218,7 @@ const BtnGiftToHost = ({ meeting }) => {
                             setSendWithDraw(!sendWithDraw);
                         }}
                     >
-                        Send with draw
+                        Send with available gift credit
                     </Checkbox>
                 </div>
 
