@@ -44,6 +44,10 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
     }
   }, [filter.page]);
 
+  const nftEarned = (voucher) => {
+    return +((voucher.estimated_token || 0) / (voucher.voucher?.power || 1)).toFixed(3);
+  }
+
   return (
     <div className="">
       <div className="flex flex-row w-full items-center pb-5">
@@ -88,7 +92,7 @@ const YourVoucher = ({isLoadData, setIsLoadData, isLoadDataNft}) => {
                           <div>{item?.voucher?.name}</div>
                           <div className="text-[#0190fe] text-xs">{ renderCode(item?.user_nft?.id) }</div>
                         </td>
-                        <td className="bg-white text-center">{ item?.estimated_token || 0 }</td>
+                        <td className="bg-white text-center">{ nftEarned(item) }</td>
                         <td className="bg-white text-center">{item?.voucher?.power}</td>
                         <td className="bg-white text-center">{ item?.estimated_token || 0 }</td>
                         <td className="bg-white text-right flex justify-center">

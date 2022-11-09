@@ -46,6 +46,10 @@ const Vouchers = ({vouchers, reload}) => {
     }
   };
 
+  const nftEarned = (voucher) => {
+    return +((voucher.earn_all || 0) / (voucher.user_voucher?.power || 1)).toFixed(3);
+  }
+
   return (
     <div className="">
       <AlertError
@@ -85,7 +89,7 @@ const Vouchers = ({vouchers, reload}) => {
                         <div>{item?.user_voucher?.name}</div>
                         <div className="text-[#0190fe] text-xs">{ renderCode(item?.user_voucher?.user_nft_id) }</div>
                       </td>
-                      <td className="bg-white text-center">{ item?.earn_all || 0 }</td>
+                      <td className="bg-white text-center">{ nftEarned(item) }</td>
                       <td className="bg-white text-center">{ Number(item?.earn_all) }</td>
                       <td className="bg-white text-center">
                         { renderExpired(item?.user_voucher?.end_at, "") }

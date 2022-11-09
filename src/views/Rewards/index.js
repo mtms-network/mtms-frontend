@@ -350,9 +350,17 @@ const Rewards = () => {
               <div className="flex flex-col justify-center items-center">
                 <div className="bg-slate-base flex justify-center items-center px-3 py-4 rounded-xl w-[100%]">
                   <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
-                  <span className="text-base text-gray ml-2 font-medium">{ t("rewards.total_credit")}</span>
+                  <span className="text-base text-gray ml-2 font-medium">{ t("rewards.your_credit")}</span>
                   <span className="font-bold text-xl ml-2">
                     {totalCredit()} MTMS
+                  </span>
+                </div>
+
+                <div className="bg-slate-base flex justify-center items-center px-3 py-4 rounded-xl w-[100%] mt-2">
+                  <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
+                  <span className="text-base text-gray ml-2 font-medium">{ t("rewards.gift_available")}</span>
+                  <span className="font-bold text-xl ml-2">
+                    {walletStore?.wallet?.user?.total_token || 0} MTMS
                   </span>
                 </div>
 
