@@ -160,3 +160,7 @@ export const giftWithDraw = async (uuid, amount) => {
 
     return null;
 }
+
+export const likeComment = async () => {
+
+}

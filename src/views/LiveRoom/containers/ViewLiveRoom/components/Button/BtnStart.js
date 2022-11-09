@@ -46,10 +46,12 @@ const BtnStart = ({t, meeting, isStart}) => {
 
     return (
         <Button
-            className={`btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4 ${ meeting?.status === 'live' ? 'cursor-not-allowed' : '' }`}
+            className={`btn btn-primary rounded-5 h-10 min-h-10 !mt-0 !mb-4 !mr-4 ${ meeting?.status !== 'live' ? 'cursor-not-allowed' : '' }`}
             onClick={() => {
-                if(!meeting?.started_at){
+                if(meeting?.status !== 'live' ){
                     showConfirm();
+                }else{
+                    handleStart();
                 }
             }}
         >
