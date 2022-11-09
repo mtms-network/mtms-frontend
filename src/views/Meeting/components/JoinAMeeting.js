@@ -64,11 +64,11 @@ const JoinAMeeting = ({ className, t }) => {
         <div className="flex flex-col pb-4">
           <p className="label-base">{t("meeting.join_a_meeting_desc")}</p>
         </div>
-        <p className="label-base font-bold">{t("meeting.meeting_code")}</p>
+        <p className="label-base font-bold">{t("meeting.meeting_id")}</p>
         <div className="flex flex-row">
           <div className="w-full flex-1">
             <Input
-              placeholder={t("meeting.enter_meeting_code")}
+              placeholder={t("meeting.enter_meeting_id")}
               className="bg-gray-base-100 border-0"
               value={code}
               onChange={(e) => setCode(e.target.value)}

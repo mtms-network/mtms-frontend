@@ -9,6 +9,7 @@ import { withTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { handleHttpError } from "helpers";
 import { message } from "antd";
+import { getRequirePreMeeting } from "services";
 
 const StartInstantMeeting = ({ className, t }) => {
   const [meetingStore, updateMeetingStore] = useMeetingStore();
@@ -56,6 +57,24 @@ const StartInstantMeeting = ({ className, t }) => {
       setLoading(false);
     }
   };
+
+  const getTypes = async () => {
+    const res = await getRequirePreMeeting();
+
+    if (res) {
+        updateMeetingStore((draft) => {
+            draft.types = res?.types;
+        });
+
+        setType(res.types[0]);
+    }
+  }
+
+  useEffect(() => {
+    if (!meetingStore.types) {
+        getTypes();
+    }
+  }, []);
 
   useEffect(() => {
     if (meetingStore?.types?.length) {
@@ -113,10 +132,10 @@ const StartInstantMeeting = ({ className, t }) => {
             />
           </div>
           <div className="basis-full sm:basis-1/2">
-            <p className="label-base font-bold">{t("meeting.meeting_code")}</p>
+            <p className="label-base font-bold">{t("meeting.meeting_id")}</p>
             <Input
-              placeholder={t("meeting.create_meeting_code")}
-              className="bg-gray-base-100 border-0 placeholder-black"
+              placeholder={t("meeting.enter_meeting_id")}
+              className="bg-gray-base-100 border-0"
               value={code}
               onChange={(e) => {
                 setCode(e.target.value);

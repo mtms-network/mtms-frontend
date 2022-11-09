@@ -316,8 +316,8 @@ const ScheduleMeetingItem = ({ t }) => {
                   </div>
                   <div className="flex-1">
                     <Input
-                      label={t("meeting.meeting_code")}
-                      placeholder={t("meeting.enter_meeting_code")}
+                      label={t("meeting.meeting_id")}
+                      placeholder={t("meeting.enter_meeting_id")}
                       register={register("identifier")}
                     />
                   </div>

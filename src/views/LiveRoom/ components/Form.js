@@ -62,7 +62,7 @@ const Form = ({ action , id }) => {
         live_topic: "",
         contacts: [],
         max_participant_count: 50,
-        meeting_code: "",
+        identifier: "",
         room: true,
         is_paid: false,
         is_pam: false,
@@ -133,7 +133,7 @@ const Form = ({ action , id }) => {
                     init.type = res?.type;
                     init.roomType = res?.roomType?.uuid;
                     init.max_participant_count = res?.max_participant_count;
-                    init.meeting_code = res?.identifier;
+                    init.identifier = res?.identifier;
 
                     if(res?.description){
                         init.description = EditorState.createWithContent(
@@ -402,9 +402,9 @@ const Form = ({ action , id }) => {
                                                 </div>
                                                 <div className="flex-1">
                                                     <FormInput
-                                                        label={"Meeting code"}
-                                                        name={"meeting_code"}
-                                                        value={formik.values?.meeting_code}
+                                                        label={"Meeting ID"}
+                                                        name={"identifier"}
+                                                        value={formik.values?.identifier}
                                                         onChange={formik.handleChange}
                                                     />
                                                 </div>
