@@ -29,7 +29,7 @@ const ExploreRoom = () => {
             />
 
             <div className="mt-4">
-                <Tabs defaultActiveKey="1">
+                <Tabs defaultActiveKey="2">
                     <Tabs.TabPane tab="Live rooms" key="1">
                         <BodyRoom
                             roomType={roomType}

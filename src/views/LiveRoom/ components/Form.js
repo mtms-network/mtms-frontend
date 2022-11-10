@@ -13,7 +13,7 @@ import {ALERT_TYPE, routeUrls} from "configs";
 import { useNavigate } from "react-router-dom";
 import {
     getRequirePreMeeting,
-    getMeetingContact, createInstantMeeting, getMeetingDetail,
+    getMeetingContact, createInstantMeeting, getMeetingDetail, updateInstantMeeting,
 } from "services";
 import {useTranslation} from "react-i18next";
 import { Formik } from "formik";
@@ -292,12 +292,20 @@ const Form = ({ action , id }) => {
                         if(action === 1){ // action
                             clone.uuid = null;
                         }else if(action === 2){ // update
+                            //delete clone.identifier;
                             clone.uuid = id;
                         }else if(action === 3){ // duplicate
                             clone.uuid = null;
                         }
 
-                        const res = await createInstantMeeting(clone);
+                        let res = null;
+
+                        if(action === 2){
+                            res = await updateInstantMeeting(id, clone);
+                        }else{
+                            res = await createInstantMeeting(clone);
+                        }
+
                         if (res?.status === 200) {
                             message.success(res?.data?.message);
                             navigate(`/${routeUrls.exploreRoom.path}`);

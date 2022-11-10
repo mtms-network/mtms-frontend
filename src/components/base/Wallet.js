@@ -63,21 +63,21 @@ const Wallet = () => {
         src="/icons/metamask-logo.png"
         onClick={handleConnectMetaMaskWallet}
       />
-      <WalletButton
-        name="Binance"
-        src="/icons/binance-logo.png"
-        className="opacity-20 hover:border-transparent"
-      />
-      <WalletButton
-        name="Oasis"
-        src="/icons/oasis-logo.png"
-        className="opacity-20 hover:border-transparent"
-      />
-      <WalletButton
-        name="Avalanche"
-        src="/icons/avalanche-logo.png"
-        className="opacity-20 hover:border-transparent"
-      />
+      {/* <WalletButton */}
+      {/*   name="Binance" */}
+      {/*   src="/icons/binance-logo.png" */}
+      {/*   className="opacity-20 hover:border-transparent" */}
+      {/* /> */}
+      {/* <WalletButton */}
+      {/*   name="Oasis" */}
+      {/*   src="/icons/oasis-logo.png" */}
+      {/*   className="opacity-20 hover:border-transparent" */}
+      {/* /> */}
+      {/* <WalletButton */}
+      {/*   name="Avalanche" */}
+      {/*   src="/icons/avalanche-logo.png" */}
+      {/*   className="opacity-20 hover:border-transparent" */}
+      {/* /> */}
     </>
   );
 };

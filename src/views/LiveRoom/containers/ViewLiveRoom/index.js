@@ -143,12 +143,12 @@ const ViewLiveRoom = ({ t }) => {
                         start_date_time={meeting?.live_time?.date}
                         user_timezone={meeting?.user_timezone}
                     />
-                    <Duration t={t} period={meeting?.period} />
-                    <MaximumParticipant t={t} max_participant_count={meeting?.max_participant_count} />
-                    { checkOwner() ? <MeetingCode identifier={meeting?.identifier} /> : null}
                     <div className="flex items-center">
                         { renderLoop() }
                     </div>
+                    <Duration t={t} period={meeting?.period} />
+                    <MaximumParticipant t={t} max_participant_count={meeting?.max_participant_count} />
+                    { checkOwner() ? <MeetingCode identifier={meeting?.identifier} /> : null}
                 </div>
                 <div className="flex mb-6 flex-wrap items-center">
                     {
