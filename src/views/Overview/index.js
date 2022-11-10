@@ -152,7 +152,12 @@ const Overview = ({ t }) => {
       erc20abi,
       WALLET_ADDRESS.MUMBOA
     );
-    await contract.methods.mint(isEpicBox, 3).send({from: walletAddress});
+
+      const gas = await web3.eth.estimateGas({
+          from: accounts[0]
+      });
+
+    await contract.methods.mint(isEpicBox, 3).send({from: walletAddress, gas: gas});
   };
 
   useEffect(() => {

@@ -8,7 +8,7 @@ const LiveTopic = ({ meeting, t }) => {
             <div>
                 <GroupTitle className={""} icon={<IoTv />} title="Live Topic" />
             </div>
-            <p className="mb-6 truncate flex-wrap">About Vocabulary</p>
+            <p className="mb-6 truncate flex-wrap">{ meeting?.live_topic }</p>
         </>
     )
 }

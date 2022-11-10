@@ -2,11 +2,12 @@ import React from "react";
 import {Button} from "../../../../../../components";
 import {message} from "antd";
 import {useTranslation} from "react-i18next";
+import {routeUrls} from "../../../../../../configs";
 
-const ShareRoom = ({identifier}) => {
+const ShareRoom = ({uuid}) => {
     const { t } = useTranslation();
     const handleCopyLink = () => {
-        const meetingUrl = `${window.location.origin}/m/${identifier}`;
+        const meetingUrl = `${window.location.origin}/${routeUrls.exploreRoom.path}/view/${uuid}`;
         navigator.clipboard.writeText(meetingUrl);
         message.success(t("home.copied"));
     };

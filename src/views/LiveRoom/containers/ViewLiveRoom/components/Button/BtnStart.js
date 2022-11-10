@@ -31,7 +31,7 @@ const BtnStart = ({t, meeting, isStart}) => {
 
     const showConfirm = () => {
         confirm({
-            title: 'Question',
+            title: 'Information',
             icon: <ExclamationCircleOutlined />,
             content: `Do you want ${ isStart ? 'start' : 'end' } room?`,
             okText: 'Yes',

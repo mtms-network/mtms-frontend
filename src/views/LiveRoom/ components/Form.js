@@ -67,6 +67,7 @@ const Form = ({ action , id }) => {
         is_paid: false,
         is_pam: false,
         fee: 0,
+        speaker: "",
     });
     const [listContacts, setListContacts] = useState([]);
 
@@ -134,6 +135,7 @@ const Form = ({ action , id }) => {
                     init.roomType = res?.roomType?.uuid;
                     init.max_participant_count = res?.max_participant_count;
                     init.identifier = res?.identifier;
+                    init.speaker = res?.speaker;
 
                     if(res?.description){
                         init.description = EditorState.createWithContent(
@@ -336,6 +338,16 @@ const Form = ({ action , id }) => {
                                                 onChange={formik.handleChange}
                                                 placeholder={t("schedule_meeting.enter_title_meeting")}
                                             />
+
+                                            <FormInput
+                                                isRequired={false}
+                                                label={"Speaker"}
+                                                name={"speaker"}
+                                                value={formik.values?.speaker}
+                                                onChange={formik.handleChange}
+                                                placeholder={"Enter speaker"}
+                                            />
+
                                             <FormBase
                                                 className={''}
                                                 label={"Type"}

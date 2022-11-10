@@ -177,7 +177,7 @@ const ViewLiveRoom = ({ t }) => {
                                     meeting?.is_full ? <BtnRoomFull /> : null
                                 }
                                 <BtnGiftToHost meeting={meeting} />
-                                <ShareRoom identifier={meeting?.identifier} />
+                                <ShareRoom uuid={meeting?.uuid} />
                                 <LikeRoom meeting={meeting} />
                             </>
                         )

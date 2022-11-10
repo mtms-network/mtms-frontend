@@ -21,7 +21,7 @@ const BtnBlockRoom = ({uuid, meeting}) => {
 
     const showConfirm = () => {
         confirm({
-            title: 'Question',
+            title: 'Information',
             icon: <ExclamationCircleOutlined />,
             content: `Do you want ${ meeting?.is_full ? 'unlock' : 'lock' } room?`,
             okText: 'Yes',
