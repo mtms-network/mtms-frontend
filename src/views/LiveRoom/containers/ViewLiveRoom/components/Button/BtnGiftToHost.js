@@ -207,7 +207,7 @@ const BtnGiftToHost = ({ meeting }) => {
                         />
                     </div>
                     <div className="py-1">
-                        As an added bonus, the above public comment will be published on your behalf.
+                        As an gifted MTMS Token, the above public comment will be published on your behalf.
                     </div>
                 </div>
 
