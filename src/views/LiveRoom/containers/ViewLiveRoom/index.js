@@ -187,7 +187,12 @@ const ViewLiveRoom = ({ t }) => {
                 <hr className="mb-6" />
                 <LiveTopic />
                 <Attendees t={t} meeting={meeting} />
-
+                <div>
+                    <div>
+                        <GroupTitle className={""} icon={<IoTv />} title="Speaker" />
+                    </div>
+                    <p className="mb-6 truncate flex-wrap">{ meeting?.speaker }</p>
+                </div>
                 <div>
                     <GroupTitle icon={<IoTv />} title={t("general.agenda") + " Update"} />
                 </div>

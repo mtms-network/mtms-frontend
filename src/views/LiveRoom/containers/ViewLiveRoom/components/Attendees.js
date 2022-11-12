@@ -16,7 +16,7 @@ const Attendees = ({t, meeting}) => {
 
     return (
         <div>
-            <GroupTitle className="!pb-0" icon={<IoTv />} title={"Speaker"} />
+            <GroupTitle className="!pb-0" icon={<IoTv />} title={"Attendees"} />
             <GroupLayout className="flex flex-wrap gap-[12px] !px-0 !pt-2 !pb-6">
                 {
                     <Avatar.Group
