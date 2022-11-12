@@ -1,162 +1,93 @@
-import React, { useMemo } from "react";
-import classNames from "classnames";
-import { Button, GroupLayout } from "components";
-import { Link, useNavigate } from "react-router-dom";
-import { LIVE_MEETING_URL, MEETING_STATUS, routeParts, routeUrls } from "configs";
-import { t } from "i18next";
-import { message } from "antd";
-import moment from "moment";
+import React, {useEffect, useRef} from "react";
+import {IconToggleRight} from "../../../components/Icons/IconToggleRight";
+import {Button, IconBase} from "../../../components";
+import moment from "moment/moment";
+import {t} from "i18next";
+import styles from "../index.module.css";
+import {useNavigate} from "react-router-dom";
+import {routeUrls} from "../../../configs";
 
-const MeetingItem = ({ data, className, onDelete }) => {
-  const navigate = useNavigate();
+const MeetingItem = ({ data }) => {
+    const navigate = useNavigate();
 
-  const canModify = useMemo(
-    () => data.status === MEETING_STATUS.scheduled && !data.is_blocked,
-    [data],
-  );
+    const dimensions = useRef({
+        width: 0,
+        height: 0,
+    });
+    const id = data?.uuid
 
-  const handleStart = async () => {
-    try {
-      if (data) {
-        window.open(`/${routeUrls.meetingRedirect.path}/${data?.identifier}`);
-      }
-    } catch (error) {
-      console.log("start meeting error");
+    useEffect(() => {
+
+    }, [])
+
+    const onGoToDetail = () => {
+        navigate(`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`)
     }
-  };
 
-  const handleDuplicate = () => {
-    if (data?.uuid) {
-      navigate(`/${routeUrls.scheduleMeeting.path}/${data?.uuid}/${routeParts.duplicate.path}`);
-    }
-  };
+    return (
+        <div className="w-full flex justify-center" id={id}>
+            <div
+                 // style={{width: 529}}
+                className="bg-white rounded-xl shadow-2xl w-full p-2 flex flex-col gap-2"
+            >
+                <div className={"h-48 cursor-pointer"} onClick={onGoToDetail}>
+                    <img className="h-full rounded" src={"https://api-dev.mtms.live/images/meeting-cover/Crypto.png"} alt={"Thumbnail"}/>
+                </div>
+                <div className="flex items-center gap-4 px-2 cursor-pointer" onClick={onGoToDetail}>
+                    <div className="w-12 h-12">
+                        <img src="https://api-dev.mtms.live/storage/avatar/8zmtmRfw6Z180AyGNU9v5vgW8E8OEx7mCLEwwkk3.png" alt={"avatar"}/>
+                    </div>
+                    <div className="font-bold cursor-pointer" onClick={onGoToDetail}>
+                        <div className={ styles.nowrap }>{ data?.title }</div>
+                        <div className={ styles.nowrap }>Host: { data?.user?.profile?.name }</div>
+                    </div>
+                </div>
+                <div className={`px-2 ${styles.meetingItemDesc} cursor-pointer`} onClick={onGoToDetail}>
+                    <span>Meeting topic:</span>
+                    {data?.agenda}
+                    {/* <div> */}
+                    {/*     <span dangerouslySetInnerHTML={{ __html: data?.description }} /> */}
+                    {/* </div> */}
+                </div>
+                <div className="flex w-full justify-between px-2">
+                    <div className="font-size-small">
+                        <div className="flex flex-row space-x-2 items-start group-hover:text-primary">
+                            <img src="/images/icon/calender.svg" alt="" />
+                            <div className="flex flex-col">
+                                <p className="label-base p-0 group-hover:text-primary">
+                                    {data?.start_date_time &&
+                                        `${moment(data?.start_date_time).format("MMM,DD YYYY HH:mm")} ${
+                                            data?.user_timezone || ""
+                                        }`}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex flex-row space-x-2 items-center mt-1 group-hover:text-primary">
+                            <img src="/images/icon/clock.svg" alt="" />
+                            <p className="label-base p-0 group-hover:text-primary">
+                                {`${data?.period || 0} `}
+                                {t("list.general.durations.minutes")}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center">
+                        <button className="btn btn-primary btn-outlined-base">
+                            Pink
+                        </button>
+                    </div>
+                </div>
+                <div className="flex justify-between">
+                    <a
+                        className="btn-primary py-1.5 px-5 rounded text-white font-bold w-full flex justify-center"
+                        onClick={() => {}}
+                    >
+                        <span>Join</span>
+                    </a>
 
-  const handleCopyLink = () => {
-    if (data?.identifier) {
-      const meetingUrl = `${LIVE_MEETING_URL}/${data.identifier}`;
-      navigator.clipboard.writeText(meetingUrl);
-      message.success(t("home.copied"));
-    }
-  };
-
-  return (
-    <GroupLayout
-      className={classNames(
-        "flex flex-col flex-1 justify-between",
-        "min-h-[160px]",
-        "hover:border-primary hover:bg-light-primary",
-        className,
-      )}
-    >
-      <div className="flex flex-col w-full flex-1 h-full">
-        <div className="flex justify-between">
-          <Link to={`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`} key={data?.uuid}>
-            <div className="label-base text-lg font-semibold group-hover:text-primary overflow-hidden">
-              {data?.title}
+                </div>
             </div>
-          </Link>
-          <div className="relative">
-            <div className="dropdown dropdown-end">
-              <label tabIndex="0" className="m-1">
-                <img className="cursor-pointer" src="/images/icon/more.svg" alt="" />
-              </label>
-              <ul
-                tabIndex="0"
-                className="dropdown-content menu py-6 shadow-lg bg-white rounded-box w-52"
-              >
-                <li>
-                  <a
-                    onClick={handleCopyLink}
-                    className={classNames(
-                      "bg-white border-0 text-black",
-                      "hover:text-white hover:bg-primary",
-                      "flex justify-start rounded-none",
-                    )}
-                  >
-                    {t("general.share_url")}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={handleDuplicate}
-                    className={classNames(
-                      "bg-white border-0 text-black",
-                      "hover:text-white hover:bg-primary",
-                      "flex justify-start rounded-none",
-                    )}
-                  >
-                    {t("meeting.config.duplicate_meeting")}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={onDelete}
-                    className={classNames(
-                      "bg-white border-0 text-black",
-                      "hover:text-white hover:bg-primary",
-                      "flex justify-start rounded-none",
-                    )}
-                  >
-                    {t("meeting.config.delete_meeting")}
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
-        <div
-          className="text-gray cursor-pointer"
-          onClick={() => {
-            navigate(`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`);
-          }}
-        >
-          {data?.type.name}
-        </div>
-        <div
-          className="flex justify-between items-center flex-row cursor-pointer"
-          onClick={() => {
-            navigate(`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`);
-          }}
-        >
-          <div>
-            <div className="flex flex-row space-x-2 items-start pt-2 group-hover:text-primary">
-              <img src="/images/icon/calender.svg" alt="" />
-              <div className="flex flex-col">
-                <p className="label-base p-0 group-hover:text-primary">
-                  {data?.start_date_time &&
-                    `${moment(data?.start_date_time).format("MMM,DD YYYY HH:mm")} ${
-                      data?.user_timezone || ""
-                    }`}
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-row space-x-2 items-center pt-2 group-hover:text-primary">
-              <img src="/images/icon/clock.svg" alt="" />
-              <p className="label-base p-0 group-hover:text-primary">
-                {`${data?.period || 0} `}
-                {t("list.general.durations.minutes")}
-              </p>
-            </div>
-          </div>
-          {canModify && (
-            <div>
-              <Button
-                className={classNames(
-                  "rounded-[20px] px-[12px] py-[6px]",
-                  "!h-[32px] !min-h-[32px]",
-                  "border-0 bg-secondary hover:bg-primary hover:text-white",
-                  "text-primary z-50",
-                )}
-                onClick={handleStart}
-              >
-                {t("home.join_meeting_now")}
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-    </GroupLayout>
-  );
-};
+    )
+}
 
 export default MeetingItem;

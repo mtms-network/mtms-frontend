@@ -44,7 +44,7 @@ const UserInfo = ({ onLogout, className }) => {
             "btn btn-block btn-primary",
             "bg-white border-0 text-black",
             "hover:text-white hover:bg-primary",
-            "flex justify-start rounded-none z-10",
+            "flex justify-start rounded-none z-10 rounded-3xl",
           )}
         >
           {t("profile.edit")}
@@ -55,7 +55,7 @@ const UserInfo = ({ onLogout, className }) => {
             "btn btn-block btn-primary",
             "bg-white border-0 text-black",
             "hover:text-white hover:bg-primary",
-            "flex justify-start rounded-none z-10",
+            "flex justify-start rounded-none z-10 rounded-3xl",
           )}
         >
           {t("user.change_password")}
@@ -66,7 +66,7 @@ const UserInfo = ({ onLogout, className }) => {
             "btn btn-block btn-primary",
             "bg-white border-0 text-black",
             "hover:text-white hover:bg-primary",
-            "flex justify-start rounded-none z-10",
+            "flex justify-start rounded-none z-10 rounded-3xl",
           )}
         >
           Connect Wallet
@@ -76,7 +76,7 @@ const UserInfo = ({ onLogout, className }) => {
             "btn btn-block btn-primary",
             "bg-white border-0 text-black",
             "hover:text-white hover:bg-primary",
-            "flex justify-start rounded-none z-10",
+            "flex justify-start rounded-none z-10 rounded-3xl",
           )}
           onClick={onLogout}
         >

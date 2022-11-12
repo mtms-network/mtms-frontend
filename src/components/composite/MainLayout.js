@@ -1,4 +1,3 @@
-/* eslint-disable no-empty */
 import React, { useEffect, useState } from "react";
 import { getLanguage, resetUserToken, setLanguage } from "helpers";
 import { useAuth, useDimensions } from "hooks";

@@ -72,6 +72,29 @@ export const getMyRoom = async (filter) => {
     return null
 }
 
+export const getMyFavorite = async (filter) => {
+    try {
+        const defaultFilters = {
+            sort_by: "start_date_time",
+            order: "desc",
+            room: true,
+            name: "",
+            current_page: filter.page || 1,
+            per_page: filter.limit || 10,
+            start_date: filter.start_date,
+            end_date: filter.end_date,
+            roomType: filter?.roomType || null,
+            keyword: filter?.keyword,
+        };
+
+        const query = QueryString.stringify({ ...defaultFilters });
+        const res = await client.get(`/live-room/interested?${query}`);
+        return res?.data;
+    }catch (err){}
+
+    return null
+}
+
 export const likeRoom = async (uuid) => {
     try {
         const res = await client.post(`/${uuid}/like`);

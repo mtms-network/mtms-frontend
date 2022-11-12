@@ -4,8 +4,8 @@ import HeaderRoom from "./components/HeaderRoom";
 import BodyRoom from "./components/BodyRoom";
 import PopuplarRoom from "./components/PopularRoom";
 import { Tabs } from 'antd';
-import LiveRoomToDay from "../ListLiveRoom/LiveRoomToDay";
 import MyRoom from "./components/MyRoom";
+import MyFavorite from "./components/MyFavorite";
 
 const ExploreRoom = () => {
 
@@ -44,6 +44,12 @@ const ExploreRoom = () => {
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="My rooms" key="3">
                         <MyRoom
+                            roomType={roomType}
+                            keyword={keyword}
+                        />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="My Favorites" key="4">
+                        <MyFavorite
                             roomType={roomType}
                             keyword={keyword}
                         />

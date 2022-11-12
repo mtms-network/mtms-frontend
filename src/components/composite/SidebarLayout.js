@@ -137,7 +137,8 @@ const SidebarLayout = ({ onLogout }) => {
                             "btn btn-block btn-primary",
                             "bg-white border-0 text-black",
                             "hover:text-white hover:bg-primary",
-                            "flex justify-start rounded-none z-10 border-t border-gray-200",
+                            // "border-t border-gray-200",
+                            "flex justify-start rounded-none z-10 rounded-3xl",
                         )}
                         onClick={handleLogout}
                     >
