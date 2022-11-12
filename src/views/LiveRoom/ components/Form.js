@@ -354,7 +354,7 @@ const Form = ({ action , id }) => {
                                             >
                                                 <div>
                                                     {types &&
-                                                        types.map((item, key) => {
+                                                        types.slice(0, 1).map((item, key) => {
                                                             return (
                                                                 <span
                                                                     key={key}

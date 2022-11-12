@@ -63,7 +63,7 @@ const StartInstantMeeting = ({ className, t }) => {
 
     if (res) {
         updateMeetingStore((draft) => {
-            draft.types = res?.types;
+            draft.types = res?.types || [];
         });
 
         setType(res.types[0]);
@@ -94,7 +94,7 @@ const StartInstantMeeting = ({ className, t }) => {
           <div className="flex-1">
             <p className="label-base font-bold">{t("meeting.select_meeting_type")}</p>
             <div className="flex-wrap flex gap-2 w-full">
-              {meetingStore?.types?.map((item) => {
+              {meetingStore?.types?.slice(0, 1).map((item) => {
                 return (
                   <button
                     className={classNames(
