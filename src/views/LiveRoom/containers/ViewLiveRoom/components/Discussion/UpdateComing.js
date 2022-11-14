@@ -13,6 +13,7 @@ const UpdateComing = ({isOwner, live_time, timeZone, uuid, time_slot}) => {
         <Menu>
             {
                 time_slot?.map((item, index) => {
+                    if(index === 0) return null;
                     return (
                         <Menu.Item key={index}>
                             Upcoming Live Meeting: { moment(item?.date).format("LLL") } { timeZone }
