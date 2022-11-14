@@ -46,6 +46,7 @@ const Layout = ({ children, bottom, contentClassName = "" }) => {
                             draft.categories = res?.categories;
                             draft.types = res?.types;
                             draft.statuses = res?.statuses;
+                            draft.meetingTypes = res?.meetingTypes;
                             draft.isForceLoadMeetingHistories = true;
                         });
                     }

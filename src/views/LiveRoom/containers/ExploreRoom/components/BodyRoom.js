@@ -85,7 +85,7 @@ const BodyRoom = ({ roomType, keyword }) => {
                    loading ? <BrandLogoLoading /> :
                        <>
                            {
-                               rooms?.length ?  <ListRoom listRooms={rooms} id={'listRooms'} /> : (
+                               rooms?.length ?  <ListRoom listRooms={rooms} id={'listRooms'} isLive={true}/> : (
                                    <div className="pb-6 pt-4 text-center">
                                        No data
                                    </div>

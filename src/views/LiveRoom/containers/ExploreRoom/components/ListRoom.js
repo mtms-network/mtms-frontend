@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import RoomItem from "./RoomItem";
 import {getPublicLiveRoom} from "../../../../../services";
 
-const ListRoom = ({id = 'listLiveRoom', listRooms = []}) => {
+const ListRoom = ({id = 'listLiveRoom', listRooms = [], isLive}) => {
 
     const [gridClass, setGridClass] = useState('grid grid-cols-4');
 
@@ -52,7 +52,7 @@ const ListRoom = ({id = 'listLiveRoom', listRooms = []}) => {
             <div id={id} className={`${gridClass} gap-4 px-4 pb-4`}>
                 {
                     listRooms?.map((item, index) => {
-                        return <RoomItem key={index} item={item} />
+                        return <RoomItem key={index} item={item} isLive={isLive} />
                     })
                 }
             </div>

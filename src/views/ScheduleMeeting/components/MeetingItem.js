@@ -5,10 +5,15 @@ import moment from "moment/moment";
 import {t} from "i18next";
 import styles from "../index.module.css";
 import {useNavigate} from "react-router-dom";
-import {routeUrls} from "../../../configs";
+import {API_RESPONSE_STATUS, routeUrls} from "../../../configs";
+import {pinMeeting} from "../../../services";
+import {message} from "antd";
+import {useDispatch} from "react-redux";
+import {setIsReloadPin, setIsReloadToDay, setIsReloadUpcoming} from "../../../redux/reducers/ScheduleMeetingReducer";
 
-const MeetingItem = ({ data }) => {
+const MeetingItem = ({ data, isPinAction }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const dimensions = useRef({
         width: 0,
@@ -24,6 +29,18 @@ const MeetingItem = ({ data }) => {
         navigate(`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`)
     }
 
+    const pin = async () => {
+        const res = await pinMeeting(data?.uuid);
+        if(res?.status === API_RESPONSE_STATUS.success){
+            message.success(res?.message || "");
+            await dispatch(setIsReloadPin(true));
+            await dispatch(setIsReloadToDay(true));
+            await dispatch(setIsReloadUpcoming(true));
+        }else{
+            message.error("Pin fail");
+        }
+    }
+
     return (
         <div className="w-full flex justify-center" id={id}>
             <div
@@ -31,7 +48,7 @@ const MeetingItem = ({ data }) => {
                 className="bg-white rounded-xl shadow-2xl w-full p-2 flex flex-col gap-2"
             >
                 <div className={"h-48 cursor-pointer"} onClick={onGoToDetail}>
-                    <img className="h-full rounded" src={"https://api-dev.mtms.live/images/meeting-cover/Crypto.png"} alt={"Thumbnail"}/>
+                    <img className="h-full rounded" src={ data?.thumbnail || "https://api-dev.mtms.live/images/meeting-cover/Crypto.png"} alt={"Thumbnail"}/>
                 </div>
                 <div className="flex items-center gap-4 px-2 cursor-pointer" onClick={onGoToDetail}>
                     <div className="w-12 h-12">
@@ -71,8 +88,8 @@ const MeetingItem = ({ data }) => {
                         </div>
                     </div>
                     <div className="flex items-center">
-                        <button className="btn btn-primary btn-outlined-base">
-                            Pink
+                        <button className="btn btn-primary btn-outlined-base" onClick={pin}>
+                            { isPinAction ? "Pin" : "Unpin" }
                         </button>
                     </div>
                 </div>

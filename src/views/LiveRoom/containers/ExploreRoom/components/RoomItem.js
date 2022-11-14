@@ -9,7 +9,7 @@ import {disLikeRoom, likeRoom} from "../../../../../services";
 import {API_RESPONSE_STATUS, routeUrls} from "../../../../../configs";
 import {UserOutlined, LikeOutlined} from "@ant-design/icons";
 
-const RoomItem = ({item}) => {
+const RoomItem = ({item, isLive}) => {
     const navigate = useNavigate();
     const [isReload, setIsReload] = useState(false);
     const renderLiveTime = () => {
@@ -57,8 +57,16 @@ const RoomItem = ({item}) => {
             <div className="flex flex-col gap-2" style={{height: '92%'}}>
                 <div className={styles.header}>
                     <div className={`font-size-small rounded ${styles.headerLiveTime}`}>
-                        <span className="whitespace-nowrap text-red-500 font-bold">LIVE ON</span>
-                        <span>{ moment(item?.live_time?.date).format("LLL") } { item?.user_timezone }</span>
+                        {
+                            isLive ? (
+                                <span className="whitespace-nowrap text-red-500 font-bold">LIVE NOW</span>
+                            ) : (
+                                <>
+                                    <span className="whitespace-nowrap text-red-500 font-bold">LIVE ON</span>
+                                    <span>{ moment(item?.live_time?.date).format("LLL") } { item?.user_timezone }</span>
+                                </>
+                            )
+                        }
                     </div>
                 </div>
                 <div

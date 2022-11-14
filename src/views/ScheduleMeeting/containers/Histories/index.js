@@ -11,6 +11,7 @@ import { UpcomingMeeting } from "./UpcomingMeeting";
 import {useAppStore} from "../../../../stores/app.store";
 import {connectGoogleCalendar} from "../../../../services";
 import {getAccessToken} from "../../../../helpers";
+import {PinMeeting} from "./PinMeeting";
 
 const ScheduleMeetingHistories = ({ t }) => {
     const navigate = useNavigate();
@@ -71,6 +72,7 @@ const ScheduleMeetingHistories = ({ t }) => {
                     </div>
                 </div>
             </div>
+            <PinMeeting />
             <TodayMeeting />
             <UpcomingMeeting />
         </MainLayout>

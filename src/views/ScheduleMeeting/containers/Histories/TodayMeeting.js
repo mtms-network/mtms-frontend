@@ -7,9 +7,13 @@ import { t } from "i18next";
 import { MeetingItem } from "views/ScheduleMeeting/components";
 import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
 import {useNavigate} from "react-router-dom";
+import {setIsReloadPin} from "../../../../redux/reducers/ScheduleMeetingReducer";
+import {useDispatch, useSelector} from "react-redux";
 
 export const TodayMeeting = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const [loading, setLoading] = useState(false);
     const [histories, setHistories] = useState({
         data: [],
@@ -26,6 +30,8 @@ export const TodayMeeting = () => {
         startDate: moment().format("YYYY-MM-DD"),
         endDate: moment().format("YYYY-MM-DD"),
     });
+    const scheduleMeetingSlice = useSelector(state => state.ScheduleMeetingReducer)
+
     const deleteMeetingModalRef = useRef(null);
 
     const fetchData = async () => {
@@ -49,8 +55,14 @@ export const TodayMeeting = () => {
         fetchData();
     }, [filter]);
 
+    useEffect(() => {
+        fetchData().then(() => {
+            dispatch(setIsReloadPin(false))
+        });
+    }, [scheduleMeetingSlice.isReloadPin])
+
     return (
-        <div className="flex flex-col gap-4 relative">
+        <div className="flex flex-col gap-4 relative pt-8">
             <div className="flex justify-center sm:justify-between items-center flex-col sm:flex-row">
                 <GroupTitle
                     className="sm:pb-0 pb-4 flex justify-center"
@@ -96,6 +108,7 @@ export const TodayMeeting = () => {
                                     }}
                                     data={item}
                                     key={item?.uuid}
+                                    isPinAction={true}
                                 />
                             ))}
                     </div>

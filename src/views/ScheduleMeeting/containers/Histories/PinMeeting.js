@@ -5,12 +5,11 @@ import {MEETING_STATUS, routeUrls} from "configs";
 import { BrandLogoLoading, GroupTitle, Pagination } from "components";
 import { t } from "i18next";
 import { MeetingItem } from "views/ScheduleMeeting/components";
-import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setIsReloadPin} from "../../../../redux/reducers/ScheduleMeetingReducer";
 
-export const UpcomingMeeting = () => {
+export const PinMeeting = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -19,8 +18,8 @@ export const UpcomingMeeting = () => {
         data: [],
         pagination: null,
     });
-    const scheduleMeetingSlice = useSelector(state => state.ScheduleMeetingReducer)
 
+    const scheduleMeetingSlice = useSelector(state => state.ScheduleMeetingReducer)
 
     const [filter, setFilter] = useState({
         limit: 6,
@@ -29,10 +28,8 @@ export const UpcomingMeeting = () => {
         sort_by: "start_date_time",
         title: "",
         status: MEETING_STATUS.scheduled,
-        startDate: moment().add(1, "days").format("YYYY-MM-DD"),
-        endDate: moment().add(1, "days").add(1, "years").format("YYYY-MM-DD"),
+        pinned: true,
     });
-    const deleteMeetingModalRef = useRef(null);
 
     const fetchData = async () => {
         try {
@@ -47,10 +44,6 @@ export const UpcomingMeeting = () => {
         }
     };
 
-    const onConfirmDeleteMeeting = (item) => {
-        deleteMeetingModalRef.current?.show(item);
-    };
-
     useEffect(() => {
         fetchData();
     }, [filter]);
@@ -62,14 +55,14 @@ export const UpcomingMeeting = () => {
     }, [scheduleMeetingSlice.isReloadPin])
 
     return (
-        <div className="flex flex-col gap-4 relative pt-8">
+        <div className="flex flex-col gap-4 relative">
             <div className="flex justify-center sm:justify-between items-center flex-col sm:flex-row">
                 <GroupTitle
                     className="sm:pb-0 pb-4 flex justify-center"
-                    title={t("schedule_meeting.upcoming_meetings")}
+                    title={"Pin meeting"}
                 />
                 {
-                    histories.data?.length > 0 && <Pagination
+                    histories?.data?.length > 0 && <Pagination
                         page={histories.pagination?.current_page}
                         totalPage={histories.pagination?.last_page}
                         total={histories.pagination?.total}
@@ -95,12 +88,11 @@ export const UpcomingMeeting = () => {
                         }}
                     />
                 }
-
             </div>
             {loading && <BrandLogoLoading />}
             {
-                histories.data?.length ? (
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+                histories?.data?.length ? (
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {!loading &&
                             histories.data?.map((item) => (
                                 <MeetingItem
@@ -115,21 +107,20 @@ export const UpcomingMeeting = () => {
                 ): (
                     <div className="flex">
             <span>
-              {"You have no upcoming meetings. "}
+              {"You have no meetings today. "}
                 <span
                     className="text-[#0190fe] cursor-pointer"
                     onClick={() => {
                         navigate(`/${routeUrls.scheduleMeeting.path}/new`)
                     }}
                 >
-              Plan and schedule that next meeting.
+              Schedule your meeting now
             </span>
             </span>
 
                     </div>
                 )
             }
-            <DeleteMeetingModal onRefresh={fetchData} ref={deleteMeetingModalRef} />
         </div>
     );
 };
