@@ -214,6 +214,7 @@ const ViewLiveRoom = ({ t }) => {
                 isOwner={checkOwner()}
                 live_time={meeting?.live_time?.date}
                 timeZone={meeting?.user_timezone}
+                time_slot={meeting?.time_slot || []}
             />
         </MainLayout>
     );

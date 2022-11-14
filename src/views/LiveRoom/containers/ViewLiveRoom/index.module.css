@@ -25,3 +25,26 @@
     background-color: rgba(56, 56, 56, .6);
     color: white;
 }
+
+.btnGroupDropdown button:first-child{
+    border-bottom-left-radius: 12px !important;
+    border-top-left-radius: 12px !important;
+}
+
+.btnGroupDropdown button:last-child{
+    border-bottom-right-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
+.btnGroupDropdown button {
+    color: white;
+    background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+    height: 48px;
+}
+
+.btnGroupDropdown button:hover, .btnGroupDropdown button:active, .btnGroupDropdown button:focus{
+    background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+    border-color: rgb(239 68 68 / var(--tw-bg-opacity));
+    /*border-color: transparent;*/
+    color: white;
+}
