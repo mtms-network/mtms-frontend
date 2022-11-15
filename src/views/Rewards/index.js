@@ -292,7 +292,7 @@ const Rewards = () => {
           <Nfts NFTs={walletStore?.wallet?.nfts || []} reload={reload}/>
           <Vouchers vouchers={walletStore?.wallet?.vouchers || []} reload={reload}/>
           <div className="flex flex-col sm:flex-row w-full sm:space-x-5">
-            <div className="basis-2/3 bg-white rounded-3xl py-6 px-8 grow">
+            <div className="basis-1/3 bg-white rounded-3xl py-6 px-8 grow">
               <div className="flex flex-1 flex-row justify-between">
                 <div style={{lineBreak: 'anywhere'}}>
                   <div className="flex flex-row">
@@ -346,32 +346,36 @@ const Rewards = () => {
                 </div>
               </div>
             </div>
-            <div className="basis-1/3 bg-white rounded-3xl py-6 px-8 mt-10 sm:mt-0">
+            <div className="bg-white rounded-3xl py-6 px-8 mt-10 sm:mt-0">
               <div className="flex flex-col justify-center items-center">
-                <div className="bg-slate-base flex justify-center items-center px-3 py-4 rounded-xl w-[100%]">
-                  <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
-                  <span className="text-base text-gray ml-2 font-medium">{ t("rewards.your_credit")}</span>
-                  <span className="font-bold text-xl ml-2">
+                <div className="bg-slate-base flex justify-between items-center px-3 py-4 rounded-xl w-[100%]">
+                  <div className="flex justify-between items-center">
+                    <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
+                    <span className="text-base text-gray ml-2 font-medium">{ t("rewards.your_credit")}</span>
+                  </div>
+                  <span className="font-bold text-xl ml-3">
                     {totalCredit()} MTMS
                   </span>
                 </div>
 
-                <div className="bg-slate-base flex justify-center items-center px-3 py-4 rounded-xl w-[100%] mt-2">
-                  <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
-                  <span className="text-base text-gray ml-2 font-medium">{ t("rewards.gift_available")}</span>
-                  <span className="font-bold text-xl ml-2">
+                <div className="bg-slate-base flex justify-between items-center px-3 py-4 rounded-xl w-[100%] mt-2">
+                  <div className="flex justify-between items-center">
+                    <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
+                    <span className="text-base text-gray ml-2 font-medium">{ t("rewards.gift_available")}</span>
+                  </div>
+                  <span className="font-bold text-xl ml-3">
                     {walletStore?.wallet?.user?.total_token || 0} MTMS
                   </span>
                 </div>
 
-                <div className="bg-slate-base flex flex-col justify-center items-center px-3 py-4 rounded-xl w-[100%] mt-2">
-                  <span className="text-gray font-medium">{t("rewards.withdraw_available")}</span>
-                  <div className="flex items-center">
+                <div className="bg-slate-base flex justify-between items-center px-3 py-4 rounded-xl w-[100%] mt-2">
+                  <div className="flex justify-between items-center">
                     <img src="/images/mtms-token.png" className="w-[25px] h-[25px]" alt="logo mtms" />
-                    <span className="font-bold text-2xl ml-2">
-                        {withdrawAmount || 0} MTMS
-                    </span>
+                    <span className="text-base text-gray ml-2 font-medium">{ t("rewards.withdraw_available")}</span>
                   </div>
+                  <span className="font-bold text-xl ml-3">
+                    {withdrawAmount || 0} MTMS
+                  </span>
                 </div>
 
                 <Button
