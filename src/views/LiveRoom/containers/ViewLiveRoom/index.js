@@ -150,7 +150,7 @@ const ViewLiveRoom = ({ t }) => {
                     <MaximumParticipant t={t} max_participant_count={meeting?.max_participant_count} />
                     { checkOwner() ? <MeetingCode identifier={meeting?.identifier} /> : null}
                 </div>
-                <div className="flex mb-6 flex-wrap items-center">
+                <div className="flex flex-wrap items-center">
                     {
                         checkOwner() ? (
                             <>

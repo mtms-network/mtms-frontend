@@ -25,7 +25,7 @@ const UpdateComing = ({isOwner, live_time, timeZone, uuid, time_slot}) => {
     );
 
     return (
-        <div className="p-2 mb-2 gap-4">
+        <div className="py-2 gap-4">
             {
                 time_slot?.length >= 2 ? (
                     <Dropdown.Button

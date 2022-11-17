@@ -90,7 +90,6 @@ const SidebarLayout = ({ onLogout }) => {
 
     useEffect(() => {
         checkActive();
-        console.log('location.pathname', location.pathname);
     }, [])
 
     return (
