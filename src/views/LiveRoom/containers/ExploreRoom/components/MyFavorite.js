@@ -45,7 +45,7 @@ const MyFavorite = ({ keyword, roomType }) => {
             <div className="flex justify-between">
                 <GroupTitle
                     className="sm:pb-0 pb-4 flex justify-center"
-                    title={"Live Rooms"}
+                    title={"My favorites"}
                 />
                 {
                     rooms?.length > 0 && <Pagination
