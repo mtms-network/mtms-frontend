@@ -8,11 +8,12 @@ import { MeetingItem } from "views/ScheduleMeeting/components";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setIsReloadPin} from "../../../../redux/reducers/ScheduleMeetingReducer";
+import ListMeetingItem from "../../components/ListMeetingItem";
 
 export const PinMeeting = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const uuid = 'PinMeeting'
     const [loading, setLoading] = useState(false);
     const [histories, setHistories] = useState({
         data: [],
@@ -92,17 +93,13 @@ export const PinMeeting = () => {
             {loading && <BrandLogoLoading />}
             {
                 histories?.data?.length ? (
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {!loading &&
-                            histories.data?.map((item) => (
-                                <MeetingItem
-                                    onDelete={() => {
-                                        onConfirmDeleteMeeting(item);
-                                    }}
-                                    data={item}
-                                    key={item?.uuid}
-                                />
-                            ))}
+                    <div id={uuid}>
+                        <ListMeetingItem
+                            uuid={uuid}
+                            loading={loading}
+                            onConfirmDeleteMeeting={null}
+                            meetings={histories.data}
+                        />
                     </div>
                 ): (
                     <div className="flex">

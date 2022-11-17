@@ -9,11 +9,12 @@ import DeleteMeetingModal from "components/composite/DeleteMeetingModal";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setIsReloadPin} from "../../../../redux/reducers/ScheduleMeetingReducer";
+import ListMeetingItem from "../../components/ListMeetingItem";
 
 export const UpcomingMeeting = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const uuid = 'UpcomingMeeting';
     const [loading, setLoading] = useState(false);
     const [histories, setHistories] = useState({
         data: [],
@@ -100,17 +101,13 @@ export const UpcomingMeeting = () => {
             {loading && <BrandLogoLoading />}
             {
                 histories.data?.length ? (
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-                        {!loading &&
-                            histories.data?.map((item) => (
-                                <MeetingItem
-                                    onDelete={() => {
-                                        onConfirmDeleteMeeting(item);
-                                    }}
-                                    data={item}
-                                    key={item?.uuid}
-                                />
-                            ))}
+                    <div id={uuid}>
+                        <ListMeetingItem
+                            uuid={uuid}
+                            loading={loading}
+                            onConfirmDeleteMeeting={onConfirmDeleteMeeting}
+                            meetings={histories.data}
+                        />
                     </div>
                 ): (
                     <div className="flex">

@@ -1,6 +1,4 @@
 import React, {useEffect, useRef} from "react";
-import {IconToggleRight} from "../../../components/Icons/IconToggleRight";
-import {Button, IconBase} from "../../../components";
 import moment from "moment/moment";
 import {t} from "i18next";
 import styles from "../index.module.css";
@@ -14,16 +12,7 @@ import {setIsReloadPin, setIsReloadToDay, setIsReloadUpcoming} from "../../../re
 const MeetingItem = ({ data, isPinAction }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const dimensions = useRef({
-        width: 0,
-        height: 0,
-    });
     const id = data?.uuid
-
-    useEffect(() => {
-
-    }, [])
 
     const onGoToDetail = () => {
         navigate(`/${routeUrls.scheduleMeeting.path}/view/${data?.uuid}`)
@@ -47,16 +36,16 @@ const MeetingItem = ({ data, isPinAction }) => {
                  // style={{width: 529}}
                 className="bg-white rounded-xl shadow-2xl w-full p-2 flex flex-col gap-2"
             >
-                <div className={"h-48 cursor-pointer"} onClick={onGoToDetail}>
-                    <img className="h-full rounded" src={ data?.thumbnail || "https://api-dev.mtms.live/images/meeting-cover/Crypto.png"} alt={"Thumbnail"}/>
+                <div className={"h-32 w-full cursor-pointer"} onClick={onGoToDetail}>
+                    <img className="h-full w-full rounded" src={ data?.thumbnail || "https://api-dev.mtms.live/images/meeting-cover/Crypto.png"} alt={"Thumbnail"}/>
                 </div>
                 <div className="flex items-center gap-4 px-2 cursor-pointer" onClick={onGoToDetail}>
-                    <div className="w-12 h-12">
-                        <img src="https://api-dev.mtms.live/storage/avatar/8zmtmRfw6Z180AyGNU9v5vgW8E8OEx7mCLEwwkk3.png" alt={"avatar"}/>
+                    <div className="w-12 h-12 flex">
+                        <img src={data?.user?.profile?.avatar} alt={"avatar"} className="rounded-full"/>
                     </div>
                     <div className="font-bold cursor-pointer" onClick={onGoToDetail}>
-                        <div className={ styles.nowrap }>{ data?.title }</div>
-                        <div className={ styles.nowrap }>Host: { data?.user?.profile?.name }</div>
+                        <div className={ styles.nowrap + ' truncate w-40'}>{ data?.title }</div>
+                        <div className={ styles.nowrap + ' truncate w-40'}>Host: { data?.user?.profile?.name }</div>
                     </div>
                 </div>
                 <div className={`px-2 ${styles.meetingItemDesc} cursor-pointer`} onClick={onGoToDetail}>
