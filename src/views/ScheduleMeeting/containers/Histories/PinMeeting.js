@@ -60,7 +60,7 @@ export const PinMeeting = () => {
             <div className="flex justify-center sm:justify-between items-center flex-col sm:flex-row">
                 <GroupTitle
                     className="sm:pb-0 pb-4 flex justify-center"
-                    title={"Pin meeting"}
+                    title={"Pinned Meeting"}
                 />
                 {
                     histories?.data?.length > 0 && <Pagination

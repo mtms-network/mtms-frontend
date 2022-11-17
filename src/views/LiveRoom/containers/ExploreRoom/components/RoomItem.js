@@ -5,9 +5,10 @@ import {useNavigate} from "react-router-dom";
 import styles from "../index.module.css";
 import {IconChat} from "../../../../../components/Icons/IconChat";
 import {IconToggleRight} from "../../../../../components/Icons/IconToggleRight";
-import {disLikeRoom, likeRoom} from "../../../../../services";
+import {disLikeRoom, likeRoom, startRoom} from "../../../../../services";
 import {API_RESPONSE_STATUS, routeUrls} from "../../../../../configs";
 import {UserOutlined, LikeOutlined} from "@ant-design/icons";
+import {getUser} from "../../../../../helpers";
 
 const RoomItem = ({item, isLive}) => {
     const navigate = useNavigate();
@@ -42,9 +43,23 @@ const RoomItem = ({item, isLive}) => {
         }
     };
 
+    const checkOwner = () => {
+        const user = getUser();
+        return user?.uuid?.toUpperCase() === item?.user?.uuid?.toUpperCase();
+    }
+
     const onJoin = async () => {
         try {
-            if (item?.identifier) {
+
+            let start = true;
+            if(checkOwner()){
+                const res = await startRoom(item?.uuid);
+                if(res?.status !== API_RESPONSE_STATUS.success){
+                    start = false;
+                }
+            }
+
+            if (item?.identifier && start) {
                 window.open(`/${routeUrls.meetingRedirect.path}/${item?.identifier}`);
             }
         } catch (error) {
