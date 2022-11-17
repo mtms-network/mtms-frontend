@@ -228,6 +228,10 @@ export const pinMeeting = async (uuid) => {
         const res = await client.post(`/${uuid}/pin`);
         return res?.data;
     } catch (error) {
-        return null;
+        let mgs = "Pin fail";
+        try {
+            mgs = error?.response?.data?.errors.message[0];
+        }catch (err){};
+        return mgs;
     }
 }

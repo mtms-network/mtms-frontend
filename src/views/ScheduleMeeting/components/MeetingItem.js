@@ -19,14 +19,18 @@ const MeetingItem = ({ data, isPinAction }) => {
     }
 
     const pin = async () => {
-        const res = await pinMeeting(data?.uuid);
-        if(res?.status === API_RESPONSE_STATUS.success){
-            message.success(res?.message || "");
-            await dispatch(setIsReloadPin(true));
-            await dispatch(setIsReloadToDay(true));
-            await dispatch(setIsReloadUpcoming(true));
-        }else{
-            message.error("Pin fail");
+        try {
+            const res = await pinMeeting(data?.uuid);
+            if(res?.status === API_RESPONSE_STATUS.success){
+                message.success(res?.message || "");
+                await dispatch(setIsReloadPin(true));
+                await dispatch(setIsReloadToDay(true));
+                await dispatch(setIsReloadUpcoming(true));
+            }else{
+                message.error(res);
+            }
+        }catch (err){
+
         }
     }
 
@@ -78,7 +82,7 @@ const MeetingItem = ({ data, isPinAction }) => {
                     </div>
                     <div className="flex items-center">
                         <button className="btn btn-primary btn-outlined-base" onClick={pin}>
-                            { isPinAction ? "Pin" : "Unpin" }
+                            { !data?.is_pinned ? "Pin" : "Unpin" }
                         </button>
                     </div>
                 </div>
