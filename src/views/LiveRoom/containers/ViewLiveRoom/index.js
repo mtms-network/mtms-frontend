@@ -186,7 +186,7 @@ const ViewLiveRoom = ({ t }) => {
                 </div>
                 <hr className="mb-6" />
                 <LiveTopic />
-                <Attendees t={t} meeting={meeting} />
+                {/* <Attendees t={t} meeting={meeting} /> */}
                 <div>
                     <div>
                         <GroupTitle className={""} icon={<IoTv />} title="Speaker" />

@@ -348,30 +348,30 @@ const Form = ({ action , id }) => {
                                                 placeholder={"Enter speaker"}
                                             />
 
-                                            <FormBase
-                                                className={''}
-                                                label={"Type"}
-                                            >
-                                                <div>
-                                                    {types &&
-                                                        types.slice(0, 1).map((item, key) => {
-                                                            return (
-                                                                <span
-                                                                    key={key}
-                                                                    className={`inline-flex mr-2 my-1 rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${
-                                                                        formik.values.type?.uuid === item.uuid ? " bg-secondary text-primary" : ""
-                                                                    }`}
-                                                                    onClick={() => {
-                                                                        formik.setFieldValue("type", item)
-                                                                    }}
-                                                                >
-                                                    {item.name}
-                                                </span>
-                                                            );
-                                                        })
-                                                    }
-                                                </div>
-                                            </FormBase>
+                                            {/* <FormBase */}
+                                            {/*     className={''} */}
+                                            {/*     label={"Type"} */}
+                                            {/* > */}
+                                            {/*     <div> */}
+                                            {/*         {types && */}
+                                            {/*             types.slice(0, 1).map((item, key) => { */}
+                                            {/*                 return ( */}
+                                            {/*                     <span */}
+                                            {/*                         key={key} */}
+                                            {/*                         className={`inline-flex mr-2 my-1 rounded-[20px] px-[12px] py-[6px] bg-slate-base cursor-pointer${ */}
+                                            {/*                             formik.values.type?.uuid === item.uuid ? " bg-secondary text-primary" : "" */}
+                                            {/*                         }`} */}
+                                            {/*                         onClick={() => { */}
+                                            {/*                             formik.setFieldValue("type", item) */}
+                                            {/*                         }} */}
+                                            {/*                     > */}
+                                            {/*         {item.name} */}
+                                            {/*     </span> */}
+                                            {/*                 ); */}
+                                            {/*             }) */}
+                                            {/*         } */}
+                                            {/*     </div> */}
+                                            {/* </FormBase> */}
 
                                             <FormBase
                                                 className={''}
