@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { routeUrls } from "configs";
-import React from "react";
+import React, {useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {useTranslation, withTranslation} from "react-i18next";
 import {Button, IconBase} from "components/base";
@@ -73,6 +73,25 @@ const SidebarLayout = ({ onLogout }) => {
             draft.isAuthenticated = false;
         });
     };
+
+    const checkActive = () => {
+        const sidebar = arrSidebar.find((item) => {
+            if(location.pathname === item.path){
+                return item;
+            } else if(location.pathname.startsWith(`${item.path}`) && item.path !== '/'){
+                return item;
+            }
+        })
+
+        if(sidebar){
+            document.title = "MTMS | " + sidebar?.label;
+        }
+    }
+
+    useEffect(() => {
+        checkActive();
+        console.log('location.pathname', location.pathname);
+    }, [])
 
     return (
         <div className="drawer-side">
