@@ -4,6 +4,7 @@
 @import "tailwindcss/utilities";
 @import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
+
 :root {
     --border-radius-buttom: 12px;
     --white: #ffffff;
