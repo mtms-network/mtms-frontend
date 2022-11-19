@@ -8,7 +8,7 @@ const envs = {
   production: 'prod',
 };
 
-// const env = envs[process.env.NODE_ENV || 'development'];
-const env = envs.development;
+const env = envs[process.env.NODE_ENV || 'development'];
+// const env = envs.development;
 const envConfig = require(`./config/webpack/webpack.${env}.babel`);
 module.exports = merge(common, envConfig);

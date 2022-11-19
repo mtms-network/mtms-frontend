@@ -11,25 +11,25 @@ const envKeys = Object.keys(env || {}).reduce((prev, next) => {
 
 module.exports = {
   mode: "development",
-  // output: {
-  //   filename: "[name].js",
-  //   path: paths.outputPath,
-  //   chunkFilename: "[name].js",
-  //   publicPath: "/",
-  // },
-  // performance: {
-  //   hints: "warning",
-  //   maxAssetSize: 20000000,
-  //   maxEntrypointSize: 85000000,
-  //   assetFilter: (assetFilename) => {
-  //     return assetFilename.endsWith(".css") || assetFilename.endsWith(".js");
-  //   },
-  // },
-  // optimization: {
-  //   splitChunks: {
-  //     chunks: "all",
-  //   },
-  // },
+  output: {
+    filename: "[name].js",
+    path: paths.outputPath,
+    chunkFilename: "[name].js",
+    publicPath: "/",
+  },
+  performance: {
+    hints: "warning",
+    maxAssetSize: 20000000,
+    maxEntrypointSize: 85000000,
+    assetFilter: (assetFilename) => {
+      return assetFilename.endsWith(".css") || assetFilename.endsWith(".js");
+    },
+  },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
+  },
   devServer: {
     port: 8080,
     compress: true,
