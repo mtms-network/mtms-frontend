@@ -28,7 +28,7 @@ export const PinMeeting = () => {
         order: "asc",
         sort_by: "start_date_time",
         title: "",
-        status: MEETING_STATUS.scheduled,
+        status: '',
         pinned: true,
     });
 
