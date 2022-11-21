@@ -9,7 +9,7 @@ import { MetaMaskProvider } from "metamask-react";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/#">
       <AppContextProvider>
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
           <WalletProvider>
