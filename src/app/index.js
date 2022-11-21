@@ -1,7 +1,7 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "configs";
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import {BrowserRouter, HashRouter} from "react-router-dom";
 import Routers from "routes";
 import { AppContextProvider } from "stores";
 import { WalletProvider } from "react-binance-wallet";
@@ -9,7 +9,7 @@ import { MetaMaskProvider } from "metamask-react";
 
 const App = () => {
   return (
-    <BrowserRouter basename="/#">
+    <HashRouter basename="/">
       <AppContextProvider>
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
           <WalletProvider>
@@ -19,7 +19,7 @@ const App = () => {
           </WalletProvider>
         </GoogleOAuthProvider>
       </AppContextProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
