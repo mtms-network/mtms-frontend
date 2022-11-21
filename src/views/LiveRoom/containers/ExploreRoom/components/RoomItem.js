@@ -60,7 +60,7 @@ const RoomItem = ({item, isLive}) => {
             }
 
             if (item?.identifier && start) {
-                window.open(`/${routeUrls.meetingRedirect.path}/${item?.identifier}`);
+                window.open(`#/${routeUrls.meetingRedirect.path}/${item?.identifier}`);
             }
         } catch (error) {
             console.log("start meeting error");

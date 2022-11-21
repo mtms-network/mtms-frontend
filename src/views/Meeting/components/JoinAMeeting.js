@@ -30,7 +30,7 @@ const JoinAMeeting = ({ className, t }) => {
       okType: "danger",
       cancelText: t("meeting.props.no"),
       onOk() {
-        window.open(`${routeUrls.meetingRedirect.path}/${meetingCode}`);
+        window.open(`#/${routeUrls.meetingRedirect.path}/${meetingCode}`);
       },
       onCancel() {},
     });
@@ -42,7 +42,7 @@ const JoinAMeeting = ({ className, t }) => {
         setLoading(true);
         const res = await joinMeetingByCode({ code });
         if (res?.data?.uuid) {
-          window.open(`${routeUrls.meetingRedirect.path}/${res?.data?.identifier}`);
+          window.open(`#/${routeUrls.meetingRedirect.path}/${res?.data?.identifier}`);
         } else {
           handleConfirmMeetingCodeNotExist(code);
         }

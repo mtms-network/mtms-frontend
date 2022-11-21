@@ -61,7 +61,7 @@ const ScheduleMeetingView = ({ t }) => {
     };
 
     const handleCopyLink = () => {
-        const meetingUrl = `${window.location.origin}/m/${meetingStore?.meeting?.identifier}`;
+        const meetingUrl = `${window.location.origin}/#/${routeUrls.meetingRedirect.path}/${meetingStore?.meeting?.identifier}`;
         navigator.clipboard.writeText(meetingUrl);
         message.success(t("home.copied"));
     };
@@ -71,7 +71,7 @@ const ScheduleMeetingView = ({ t }) => {
             // eslint-disable-next-line no-shadow
             const { meeting } = meetingStore;
             if (meeting) {
-                window.open(`/${routeUrls.meetingRedirect.path}/${meeting.identifier}`);
+                window.open(`#/${routeUrls.meetingRedirect.path}/${meeting.identifier}`);
             }
         } catch (error) {
             console.log("start meeting error");

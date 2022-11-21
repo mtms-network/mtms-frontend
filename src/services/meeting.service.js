@@ -91,7 +91,7 @@ export const getScheduleMeetings = async ({
 
 export const joinMeetingByCode = async ({ code }) => {
     try {
-        const res = await client.get(`/m/${code}`);
+        const res = await client.get(`#/${routeUrls.meetingRedirect.path}/${code}`);
         return res;
     } catch (error) {
         console.error("joinMeetingByCode", error);
@@ -205,7 +205,7 @@ export const checkMeetingExist = async (meetingId) => {
 
 export const joinMeeting = async (identifer) => {
     try {
-        const res = await client.get(`/m/${identifer}`);
+        const res = await client.get(`#/${routeUrls.meetingRedirect.path}/${identifer}`);
         return res?.data;
     } catch (error) {
         console.error("joinMeeting", error);

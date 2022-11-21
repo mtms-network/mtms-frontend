@@ -18,7 +18,7 @@ const MeetingItem = ({ data, className, onDelete }) => {
   const handleStart = async () => {
     try {
       if (data) {
-        window.open(`/${routeUrls.meetingRedirect.path}/${data?.identifier}`);
+        window.open(`#/${routeUrls.meetingRedirect.path}/${data?.identifier}`);
       }
     } catch (error) {
       console.log("start meeting error");

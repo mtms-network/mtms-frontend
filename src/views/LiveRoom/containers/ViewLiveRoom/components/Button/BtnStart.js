@@ -21,7 +21,7 @@ const BtnStart = ({t, meeting, isStart}) => {
         if(start){
             try {
                 if (meeting) {
-                    window.open(`/${routeUrls.meetingRedirect.path}/${meeting?.identifier}`);
+                    window.open(`#/${routeUrls.meetingRedirect.path}/${meeting?.identifier}`);
                 }
             } catch (error) {
                 console.log("start meeting error");

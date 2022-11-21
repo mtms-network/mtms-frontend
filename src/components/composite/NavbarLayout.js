@@ -33,7 +33,7 @@ const NavbarLayout = ({ width, onLogout }) => {
                 instant: true,
             });
             if (res?.data?.meeting?.uuid) {
-                window.open(`/${routeUrls.meetingRedirect.path}/${res?.data?.meeting?.identifier}`);
+                window.open(`#/${routeUrls.meetingRedirect.path}/${res?.data?.meeting?.identifier}`);
             }
         } catch (error) {}
     }, []);

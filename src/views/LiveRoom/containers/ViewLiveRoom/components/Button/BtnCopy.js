@@ -5,7 +5,8 @@ import {message} from "antd";
 const BtnCopy = ({t, meeting}) => {
 
     const handleCopyLink = () => {
-        const meetingUrl = `${window.location.origin}/m/${meeting?.identifier}`;
+
+        const meetingUrl = `${window.location.origin}/#/${routeUrls.meetingRedirect.path}/${meeting?.identifier}`;
         navigator.clipboard.writeText(meetingUrl);
         message.success(t("home.copied"));
     };
